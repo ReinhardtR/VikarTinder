@@ -1,4 +1,7 @@
 ﻿@page "/"
+@using HttpClients.Services
+@using HttpClients
+@inject UserService UserService
 
 <PageTitle>Index</PageTitle>
 
@@ -6,4 +9,31 @@
 
 Welcome to your new app.
 
-<SurveyPrompt Title="How is Blazor working for you?"/>
+<p>Response: @responseLabel</p>
+
+<button onclick="@ClickHandler">Click lol</button>
+<button onclick="@CreateHandler">Create</button>
+
+@code
+{
+    String responseLabel = "Nothing yet";
+    
+    private async Task ClickHandler()
+    {
+        User response = await UserService.FindByIdAsync(2);
+        responseLabel = response.Id;
+    }
+
+    private async Task CreateHandler()
+    {
+        User userToCreate = new()
+        {
+            Id = "Yo"
+        };
+
+        User user = await UserService.CreateAsync(userToCreate);
+        
+        responseLabel = user.Id;
+    }
+    
+}

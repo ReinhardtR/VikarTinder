@@ -3,7 +3,7 @@ using Persistence;
 
 namespace Persistence.Services;
 
-public class GreeterService : Greeter.GreeterBase
+public class GreeterService : UserService.UserServiceBase
 {
     private readonly ILogger<GreeterService> _logger;
 
@@ -14,9 +14,10 @@ public class GreeterService : Greeter.GreeterBase
 
     public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
     {
+        Console.WriteLine("ID: " + request.Id);
         return Task.FromResult(new HelloReply
         {
-            Message = "Hello " + request.Name
+            Message = "Hello " + request.Id
         });
     }
 }
