@@ -9,6 +9,9 @@ package UserService;
 service UserService {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply);
+  rpc SendMessage (SendMessageRequest) returns (SendMessageReply);
+  rpc CreateChat (CreateChatRequest) returns (CreateChatReply);
+  rpc FetchChatHistory (FetchChatHistoryRequest) returns (FetchChatHistoryReply);
 }
 
 // The request message containing the user's name.
@@ -19,4 +22,38 @@ message HelloRequest {
 // The response message containing the greetings.
 message HelloReply {
   string message = 1;
+}
+
+message FetchChatHistoryRequest{
+  int32 chatId = 1;
+}
+
+message FetchChatHistoryReply{
+  repeated MessageObject messages = 1;
+}
+
+message CreateChatRequest {
+  repeated int32 userIds = 1;
+}
+
+message CreateChatReply{
+  int32 id = 1;
+}
+
+
+message SendMessageRequest {
+  int32 authorId = 1;
+  int32 chatId = 2;
+  string content = 3;
+}
+
+message SendMessageReply {
+  MessageObject message = 1;
+}
+
+message MessageObject {
+  int32 id = 1; 
+  int32 authorId = 2;
+  int32 chatId = 3;
+  string content = 4;
 }
