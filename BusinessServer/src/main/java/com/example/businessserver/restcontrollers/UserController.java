@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class UserController {
 
-	@Autowired
+	/*@Autowired
 	private UserDAO userDAO;
-
+*/
 	@Autowired
 	private UserServiceImpl userService;
 
