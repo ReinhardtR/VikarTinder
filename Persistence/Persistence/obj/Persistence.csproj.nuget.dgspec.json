@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {}
+    "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
+    "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
+        "projectUniqueName": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
         "projectName": "Persistence",
-        "projectPath": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
-        "packagesPath": "C:\\Users\\Simon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\obj\\",
+        "projectPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
+        "packagesPath": "C:\\Users\\miloA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Simon\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\miloA\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"

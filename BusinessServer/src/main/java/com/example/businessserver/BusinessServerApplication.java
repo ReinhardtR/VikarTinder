@@ -11,9 +11,5 @@ public class BusinessServerApplication {
 		SpringApplication.run(BusinessServerApplication.class, args);
 	}
 
-	@Bean
-	UserDAO userDAO()
-	{
-		return new UserDAO();
-	}
+
 }

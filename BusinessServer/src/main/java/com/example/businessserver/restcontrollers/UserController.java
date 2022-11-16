@@ -1,5 +1,7 @@
-package com.example.businessserver;
+package com.example.businessserver.restcontrollers;
 
+import com.example.businessserver.dtos.SubstituteDTO;
+import com.example.businessserver.services.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,16 +17,16 @@ public class UserController {
 	private UserServiceImpl userService;
 
 	@GetMapping("/{id}")
-	public User findById(@PathVariable long id) {
+	public SubstituteDTO findById(@PathVariable long id) {
 		String responseMessage = userService.receiveGreeting(String.valueOf(id));
-		return new User(responseMessage);
+		return new SubstituteDTO(responseMessage);
 	}
 
 	@PostMapping
-	public User createUser(@RequestBody User user) {
+	public SubstituteDTO createUser(@RequestBody SubstituteDTO user) {
 		// userDAO.createUser(user);
 		System.out.println("User created: " + user);
-		return new User(userService.receiveGreeting(user.getId()));
+		return new SubstituteDTO(userService.receiveGreeting(user.getId()));
 	}
 
 }
