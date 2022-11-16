@@ -17,7 +17,6 @@
     <ItemGroup>
       <Folder Include="DAOs" />
       <Folder Include="Logic" />
-      <Folder Include="Models" />
     </ItemGroup>
 
 </Project>

@@ -20,3 +20,38 @@ message HelloRequest {
 message HelloReply {
   string message = 1;
 }
+
+service MatchingService{
+  rpc GetSubstitutes (EmployerId) returns (SubstitutesForMatching);
+  rpc GetEmployers (SubstituteId) returns (EmployersForMatching);
+  rpc MatchForSub(SendSubAndWorkp) returns (Validation);
+}
+
+message SendSubAndWorkp {
+  SubstituteId substitute = 1;
+  WorkpId workp = 2;
+}
+
+message SubstitutesForMatching{
+  repeated SubstituteId substitutes = 1;
+}
+
+message EmployersForMatching{
+  repeated EmployerId employers = 1;
+}
+
+message Validation{
+  bool confirmation = 1;
+}
+
+message SubstituteId {
+  int32 id = 1;
+}
+
+message EmployerId{
+  int32 id = 1;
+}
+
+message WorkpId {
+  int32 id = 1;
+}
