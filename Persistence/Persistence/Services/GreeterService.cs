@@ -17,6 +17,7 @@ public class GreeterService : UserService.UserServiceBase
         Console.WriteLine("ID: " + request.Id);
         return Task.FromResult(new HelloReply
         {
+            
             Message = "Hello " + request.Id
         });
     }
