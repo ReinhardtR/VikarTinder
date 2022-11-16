@@ -1,4 +1,4 @@
-package com.example.businessserver;
+package com.example.businessserver.services;
 
 import UserService.HelloRequest;
 import UserService.UserServiceGrpc;
