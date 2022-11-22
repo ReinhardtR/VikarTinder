@@ -24,6 +24,8 @@ message HelloReply {
 service MatchingService{
   rpc GetSubstitutes (EmployerId) returns (SubstitutesForMatching);
   rpc GetEmployers (SubstituteId) returns (EmployersForMatching);
+  
+  //Eventuelt lave om så den returnerer de matchede objekter, nok også godt for future reference
   rpc MatchForSub(SendSubAndWorkp) returns (Validation);
 }
 

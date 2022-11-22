@@ -7,7 +7,7 @@ public class MatchDao : IMatchDao
 {
     public Action MakeMatch(Substitute sub, WorkPosition workp)
     {
-        throw new NotImplementedException();
+        return null;
     }
 
     public Task<Substitute> GetSubstituteById(int id)
