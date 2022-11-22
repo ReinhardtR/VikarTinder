@@ -1,14 +1,13 @@
 package com.example.businessserver.services.interfaces;
 
-import com.example.businessserver.dtos.EmployerDTO;
-import com.example.businessserver.dtos.SubstituteDTO;
-import com.example.businessserver.dtos.WorkPositionDTO;
-import org.springframework.stereotype.Service;
+import com.example.businessserver.dtos.*;
 
-import java.util.List;
 
-@Service
 public interface MatchingService {
-    List<SubstituteDTO> GetSubstitutesByEmployerId(EmployerDTO employerDTO);
-    List<WorkPositionDTO> GetWorkPositionsBySubstituteId(SubstituteDTO substituteDTO);
+    SubstituteDatesDTO getSubstitutesByEmployerId(DatingSearchParametersEmployee parameters);
+    WorkPositionDatesDTO getWorkPositionsBySubstituteId(DatingSearchParametersSubstitute parameters);
+
+    void sendMatchRequestSubstitute(MatchRequestSubstituteDTO request);
+
+    void sendMatchRequestEmployer(MatchRequestEmployerDTO request);
 }
