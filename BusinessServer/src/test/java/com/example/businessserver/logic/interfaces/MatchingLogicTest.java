@@ -1,7 +1,7 @@
 package com.example.businessserver.logic.interfaces;
 
-import com.example.businessserver.dtos.DatingSearchParametersEmployee;
-import com.example.businessserver.dtos.DatingSearchParametersSubstitute;
+import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
+import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import com.example.businessserver.logic.MatchingLogicImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,24 +21,24 @@ class MatchingLogicTest {
     @Test
     void testGetSubstitutesByEmployerId()
     {
-        assertThrows(NullPointerException.class, () -> logic.getSubstitutesByEmployerId(new DatingSearchParametersEmployee(1)));
+        assertThrows(NullPointerException.class, () -> logic.getSubstitutes(new SubstituteSearchParametersDTO(1)));
     }
 
     @Test
     void testGetSubstitutesByEmployerIdOutOfBoundsId()
     {
-        assertThrows(DTOOutOfBoundsException.class, () -> logic.getSubstitutesByEmployerId(new DatingSearchParametersEmployee(-1)));
+        assertThrows(DTOOutOfBoundsException.class, () -> logic.getSubstitutes(new SubstituteSearchParametersDTO(-1)));
     }
 
     @Test
     void testGetSubstitutesBySubstituteId()
     {
-        assertThrows(NullPointerException.class, () -> logic.getWorkPositionsBySubstituteId(new DatingSearchParametersSubstitute(1)));
+        assertThrows(NullPointerException.class, () -> logic.getGigs(new GigSearchParametersDTO(1)));
     }
 
     @Test
     void testGetSubstitutesBySubstituteIdOutOfBoundsId()
     {
-        assertThrows(DTOOutOfBoundsException.class, () -> logic.getWorkPositionsBySubstituteId(new DatingSearchParametersSubstitute(-1)));
+        assertThrows(DTOOutOfBoundsException.class, () -> logic.getGigs(new GigSearchParametersDTO(-1)));
     }
 }

@@ -1,22 +1,25 @@
 package com.example.businessserver.dtos;
 
+import com.example.businessserver.dtos.matching.GigMatchingDTO;
+import com.example.businessserver.dtos.matching.SubstituteMatchingDTO;
+
 public class MatchRequestSubstituteDTO {
-    private SubstituteDatingDTO currentSubstitute;
-    private WorkPositionDatingDTO positionToMatch;
+    private SubstituteMatchingDTO currentSubstitute;
+    private GigMatchingDTO positionToMatch;
 
     public MatchRequestSubstituteDTO() {
     }
 
-    public MatchRequestSubstituteDTO(SubstituteDatingDTO currentSubstitute, WorkPositionDatingDTO wantingToMatch) {
+    public MatchRequestSubstituteDTO(SubstituteMatchingDTO currentSubstitute, GigMatchingDTO wantingToMatch) {
         this.currentSubstitute = currentSubstitute;
         this.positionToMatch = wantingToMatch;
     }
 
-    public SubstituteDatingDTO getCurrentSubstitute() {
+    public SubstituteMatchingDTO getCurrentSubstitute() {
         return currentSubstitute;
     }
 
-    public WorkPositionDatingDTO getPositionToMatch() {
+    public GigMatchingDTO getPositionToMatch() {
         return positionToMatch;
     }
 }

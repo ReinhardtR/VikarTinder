@@ -1,9 +1,8 @@
-package com.example.businessserver.services.builders.dto;
+package com.example.businessserver.services.builders.interfaces.dto;
 
 import UserService.SubstituteId;
 import UserService.SubstitutesForMatching;
-import com.example.businessserver.dtos.DatingSearchParametersSubstitute;
-import com.example.businessserver.dtos.SubstituteDatingDTO;
+import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
 import com.example.businessserver.services.builders.DTOBuilder;
 import com.example.businessserver.services.builders.GRPCBuilder;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MatchingDTOBuilderTest {
-    DTOBuilder dtoBuilder = new DTOBuilder();
+    MatchingDTOBuilder dtoBuilder = new DTOBuilder();
     GRPCBuilder grpcBuilder = new GRPCBuilder();
 
     @Test
@@ -23,24 +22,24 @@ class MatchingDTOBuilderTest {
         assertAll(
                 () -> assertEquals(
                         0,
-                        dtoBuilder.buildSubstituteDates(
-                                createSubstitutesForMatching(0)
-                        )
-                                .getDates().size()
+                        dtoBuilder.substituteMatchingDTOs(
+                                        createSubstitutesForMatching(0)
+                                )
+                                .getPossibleMatches().size()
                 ),
                 () -> assertEquals(
                         1,
-                        dtoBuilder.buildSubstituteDates(
-                                createSubstitutesForMatching(1)
-                        )
-                                .getDates().size()
+                        dtoBuilder.substituteMatchingDTOs(
+                                        createSubstitutesForMatching(1)
+                                )
+                                .getPossibleMatches().size()
                 ),
                 () -> assertEquals(
                         5,
-                        dtoBuilder.buildSubstituteDates(
-                                createSubstitutesForMatching(5)
-                        )
-                                .getDates().size()
+                        dtoBuilder.substituteMatchingDTOs(
+                                        createSubstitutesForMatching(5)
+                                )
+                                .getPossibleMatches().size()
                 )
         );
     }
@@ -66,13 +65,13 @@ class MatchingDTOBuilderTest {
     {
         List<SubstituteId> toReturn = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-             toReturn.add(getSubstituteId(i));
+            toReturn.add(getSubstituteId(i));
         }
         return toReturn;
     }
 
     private SubstituteId getSubstituteId(int id)
     {
-        return grpcBuilder.buildSubstituteId(new DatingSearchParametersSubstitute(id));
+        return grpcBuilder.buildSubstituteId(new GigSearchParametersDTO(id));
     }
 }

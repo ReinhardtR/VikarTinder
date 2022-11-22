@@ -1,6 +1,10 @@
 package com.example.businessserver.logic;
 
 import com.example.businessserver.dtos.*;
+import com.example.businessserver.dtos.matching.GigMatchingDTO;
+import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
+import com.example.businessserver.dtos.matching.SubstituteMatchingDTO;
+import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
 import com.example.businessserver.exceptions.DTONullPointerException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import com.example.businessserver.logic.interfaces.MatchingLogic;
@@ -21,37 +25,37 @@ class MatchingLogicImplTest {
     @Test
     void testGetSubstitutesByEmployerId()
     {
-        assertThrows(NullPointerException.class, () -> logic.getSubstitutesByEmployerId(new DatingSearchParametersEmployee(1)));
+        assertThrows(NullPointerException.class, () -> logic.getSubstitutes(new SubstituteSearchParametersDTO(1)));
     }
 
     @Test
     void testGetSubstitutesByEmployerIdOutOfBoundsId()
     {
-        assertThrows(DTOOutOfBoundsException.class, () -> logic.getSubstitutesByEmployerId(new DatingSearchParametersEmployee(0)));
+        assertThrows(DTOOutOfBoundsException.class, () -> logic.getSubstitutes(new SubstituteSearchParametersDTO(0)));
     }
 
     @Test
     void testGetSubstitutesByEmployerIdNullPointer()
     {
-        assertThrows(DTONullPointerException.class, () -> logic.getSubstitutesByEmployerId(null));
+        assertThrows(DTONullPointerException.class, () -> logic.getSubstitutes(null));
     }
 
     @Test
     void testGetSubstitutesBySubstituteId()
     {
-        assertThrows(NullPointerException.class, () -> logic.getWorkPositionsBySubstituteId(new DatingSearchParametersSubstitute(1)));
+        assertThrows(NullPointerException.class, () -> logic.getGigs(new GigSearchParametersDTO(1)));
     }
 
     @Test
     void testGetSubstitutesBySubstituteIdOutOfBoundsId()
     {
-        assertThrows(DTOOutOfBoundsException.class, () -> logic.getWorkPositionsBySubstituteId(new DatingSearchParametersSubstitute(0)));
+        assertThrows(DTOOutOfBoundsException.class, () -> logic.getGigs(new GigSearchParametersDTO(0)));
     }
 
     @Test
     void testGetSubstitutesBySubstituteNullPointer()
     {
-        assertThrows(DTONullPointerException.class, () -> logic.getWorkPositionsBySubstituteId(null));
+        assertThrows(DTONullPointerException.class, () -> logic.getGigs(null));
     }
 
     @Test
@@ -59,8 +63,8 @@ class MatchingLogicImplTest {
     {
         assertThrows(NullPointerException.class, () -> logic.sendMatchRequestSubstitute(
                 new MatchRequestSubstituteDTO(
-                        new SubstituteDatingDTO(1),
-                        new WorkPositionDatingDTO(1)
+                        new SubstituteMatchingDTO(1),
+                        new GigMatchingDTO(1)
                 )
         ));
     }
@@ -71,14 +75,14 @@ class MatchingLogicImplTest {
         assertAll(
                 ()-> assertThrows(DTOOutOfBoundsException.class, () -> logic.sendMatchRequestSubstitute(
                         new MatchRequestSubstituteDTO(
-                                new SubstituteDatingDTO(0),
-                                new WorkPositionDatingDTO(5)
+                                new SubstituteMatchingDTO(0),
+                                new GigMatchingDTO(5)
                         )
                 ), "Testing if SubstituteDatingDTO id is caught as < 1"),
                 () -> assertThrows(DTOOutOfBoundsException.class, () -> logic.sendMatchRequestSubstitute(
                         new MatchRequestSubstituteDTO(
-                                new SubstituteDatingDTO(5),
-                                new WorkPositionDatingDTO(0)
+                                new SubstituteMatchingDTO(5),
+                                new GigMatchingDTO(0)
                         )
                 ), "Testing if WorkPositionDatingDTO id is caught as < 1")
         );
@@ -92,12 +96,12 @@ class MatchingLogicImplTest {
                 () -> assertThrows(DTONullPointerException.class, () -> logic.sendMatchRequestSubstitute(
                         new MatchRequestSubstituteDTO(
                                 null,
-                                new WorkPositionDatingDTO(1)
+                                new GigMatchingDTO(1)
                         )
                 ), "Testing if SubstituteDatingDTO is caught as null"),
                 () -> assertThrows(DTONullPointerException.class, () -> logic.sendMatchRequestSubstitute(
                         new MatchRequestSubstituteDTO(
-                                new SubstituteDatingDTO(1),
+                                new SubstituteMatchingDTO(1),
                                 null)
                 ), "Testing if WorkPositionDatingDTO is caught as null")
         );
@@ -109,7 +113,7 @@ class MatchingLogicImplTest {
         assertThrows(NullPointerException.class, () -> logic.sendMatchRequestEmployer(
                 new MatchRequestEmployerDTO(
                         new EmployerDatingDTO(1),
-                        new SubstituteDatingDTO(1)
+                        new SubstituteMatchingDTO(1)
                 )
         ));
     }
@@ -121,13 +125,13 @@ class MatchingLogicImplTest {
                 ()-> assertThrows(DTOOutOfBoundsException.class, () -> logic.sendMatchRequestEmployer(
                         new MatchRequestEmployerDTO(
                                 new EmployerDatingDTO(0),
-                                new SubstituteDatingDTO(5)
+                                new SubstituteMatchingDTO(5)
                         )
                 ), "Testing if EmployerDatingDTO id is caught as < 1"),
                 () -> assertThrows(DTOOutOfBoundsException.class, () -> logic.sendMatchRequestEmployer(
                         new MatchRequestEmployerDTO(
                                 new EmployerDatingDTO(5),
-                                new SubstituteDatingDTO(0)
+                                new SubstituteMatchingDTO(0)
                         )
                 ), "Testing if SubstituteDatingDTO id is caught as < 1")
         );
@@ -141,7 +145,7 @@ class MatchingLogicImplTest {
                 () -> assertThrows(DTONullPointerException.class, () -> logic.sendMatchRequestEmployer(
                         new MatchRequestEmployerDTO(
                                 null,
-                                new SubstituteDatingDTO(1)
+                                new SubstituteMatchingDTO(1)
                         )
                 ), "Testing if EmployerDatingDTO is caught as null"),
                 () -> assertThrows(DTONullPointerException.class, () -> logic.sendMatchRequestEmployer(

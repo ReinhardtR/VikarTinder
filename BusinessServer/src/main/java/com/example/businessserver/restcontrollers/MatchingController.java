@@ -1,6 +1,10 @@
 package com.example.businessserver.restcontrollers;
 
 import com.example.businessserver.dtos.*;
+import com.example.businessserver.dtos.matching.GigMatchingDTOs;
+import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
+import com.example.businessserver.dtos.matching.SubstituteMatchingDTOs;
+import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.logic.interfaces.MatchingLogic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,41 +18,41 @@ public class MatchingController {
     @Autowired
     private MatchingLogic logic;
 
-    @GetMapping("/Substitutes")
-    public SubstituteDatesDTO getSubstitutesFromEmployeeId(@RequestBody DatingSearchParametersEmployee parameters)
+    @GetMapping("/substitutes")
+    public SubstituteMatchingDTOs getSubstitutes(@RequestBody SubstituteSearchParametersDTO searchParameters)
     {
         try {
-            return logic.getSubstitutesByEmployerId(parameters);
+            return logic.getSubstitutes(searchParameters);
         } catch (DTOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @PostMapping("/Substitutes")
-    public void MatchRequestFromEmployer(@RequestBody MatchRequestEmployerDTO request)
+    @PostMapping("/substitutes")
+    public void matchRequestFromEmployer(@RequestBody MatchRequestEmployerDTO matchRequest)
     {
         try {
-            logic.sendMatchRequestEmployer(request);
+            logic.sendMatchRequestEmployer(matchRequest);
         } catch (DTOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @GetMapping("/WorkPositions")
-    public WorkPositionDatesDTO getWorkPositionsFromSubstituteId(@RequestBody DatingSearchParametersSubstitute parameters)
+    @GetMapping("/gigs")
+    public GigMatchingDTOs getGigs(@RequestBody GigSearchParametersDTO searchParameters)
     {
         try {
-            return logic.getWorkPositionsBySubstituteId(parameters);
+            return logic.getGigs(searchParameters);
         } catch (DTOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    @PostMapping("/WorkPositions")
-    public void MatchRequestFromSubstitutes(@RequestBody MatchRequestSubstituteDTO request)
+    @PostMapping("/gigs")
+    public void matchRequestFromSubstitutes(@RequestBody MatchRequestSubstituteDTO matchRequest)
     {
         try {
-            logic.sendMatchRequestSubstitute(request);
+            logic.sendMatchRequestSubstitute(matchRequest);
         } catch (DTOException e) {
             throw new RuntimeException(e);
         }

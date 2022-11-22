@@ -4,14 +4,16 @@ import UserService.MatchingServiceGrpc;
 import UserService.SubstitutesForMatching;
 import UserService.WorkpIds;
 import com.example.businessserver.dtos.*;
+import com.example.businessserver.dtos.matching.GigMatchingDTOs;
+import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
+import com.example.businessserver.dtos.matching.SubstituteMatchingDTOs;
+import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
 import com.example.businessserver.services.builders.DTOBuilder;
 import com.example.businessserver.services.builders.GRPCBuilder;
 import com.example.businessserver.services.interfaces.MatchingService;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 @Service
 public class MatchingServiceImpl implements MatchingService {
     @GrpcClient("grpc-server")
@@ -21,22 +23,20 @@ public class MatchingServiceImpl implements MatchingService {
     private DTOBuilder dtoBuilder = new DTOBuilder();
 
     @Override
-    public SubstituteDatesDTO getSubstitutesByEmployerId(DatingSearchParametersEmployee parameters)
+    public SubstituteMatchingDTOs getSubstitutes(SubstituteSearchParametersDTO searchParameters)
     {
         SubstitutesForMatching possibleMatches = userServiceBlockingStub.getSubstitutes(
-               grpcBuilder.buildEmployerId(parameters)
+               grpcBuilder.buildEmployerId(searchParameters)
         );
-
-        return dtoBuilder.buildSubstituteDates(possibleMatches);
+        return dtoBuilder.substituteMatchingDTOs(possibleMatches);
     }
 
     @Override
-    public WorkPositionDatesDTO getWorkPositionsBySubstituteId(DatingSearchParametersSubstitute parameters) {
+    public GigMatchingDTOs getGigs(GigSearchParametersDTO searchParameters) {
         WorkpIds possibleMatches = userServiceBlockingStub.getWorkPositions(
-                grpcBuilder.buildSubstituteId(parameters)
+                grpcBuilder.buildSubstituteId(searchParameters)
         );
-
-        return dtoBuilder.workPositionDates(possibleMatches);
+        return dtoBuilder.gigMatchingDTOs(possibleMatches);
     }
 
     @Override

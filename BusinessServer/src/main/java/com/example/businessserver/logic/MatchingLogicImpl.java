@@ -1,6 +1,10 @@
 package com.example.businessserver.logic;
 
 import com.example.businessserver.dtos.*;
+import com.example.businessserver.dtos.matching.GigMatchingDTOs;
+import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
+import com.example.businessserver.dtos.matching.SubstituteMatchingDTOs;
+import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.exceptions.DTONullPointerException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
@@ -14,24 +18,18 @@ public class MatchingLogicImpl implements MatchingLogic {
     @Autowired
     MatchingService service;
 
-    /*public MatchingLogicImpl(MatchingService service) {
-        this.service = service;
-    }
-*/
     @Override
-    public SubstituteDatesDTO getSubstitutesByEmployerId(DatingSearchParametersEmployee parameters) throws DTOException {
-        if (parameters == null)
-            throw new DTONullPointerException("Parameters cannot be Null!"); //Kan laves til fælles metode ved brug af parent eller interface eller reflection
-        checkId(parameters.getCurrentEmployerId());
-        return service.getSubstitutesByEmployerId(parameters);
+    public SubstituteMatchingDTOs getSubstitutes(SubstituteSearchParametersDTO searchParameters) throws DTOException {
+        objectNullCheck(searchParameters, "Substitute Search Parameters");
+        checkId(searchParameters.getCurrentEmployerId());
+        return service.getSubstitutes(searchParameters);
     }
 
     @Override
-    public WorkPositionDatesDTO getWorkPositionsBySubstituteId(DatingSearchParametersSubstitute parameters) throws DTOException {
-        if (parameters == null)
-            throw new DTONullPointerException("Parameters cannot be Null!"); //Kan laves til fælles metode ved brug af parent eller interface eller reflection
-        checkId(parameters.getCurrentSubstituteId());
-        return service.getWorkPositionsBySubstituteId(parameters);
+    public GigMatchingDTOs getGigs(GigSearchParametersDTO searchParameters) throws DTOException {
+        objectNullCheck(searchParameters, "Gig Search Parameters");
+        checkId(searchParameters.getCurrentSubstituteId());
+        return service.getGigs(searchParameters);
     }
 
     @Override
@@ -63,5 +61,10 @@ public class MatchingLogicImpl implements MatchingLogic {
     private void checkId(int id) throws DTOOutOfBoundsException {
         if (id < 1)
             throw new DTOOutOfBoundsException("Id cannot be < 1!");
+    }
+
+    private void objectNullCheck(Object obj, String subjectName) throws DTONullPointerException {
+        if (obj == null)
+            throw new DTONullPointerException(subjectName +" cannot be Null!");
     }
 }

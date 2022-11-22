@@ -1,13 +1,15 @@
 package com.example.businessserver.dtos;
 
+import com.example.businessserver.dtos.matching.SubstituteMatchingDTO;
+
 public class MatchRequestEmployerDTO {
     private EmployerDatingDTO currentEmployer;
-    private SubstituteDatingDTO substituteToMatch;
+    private SubstituteMatchingDTO substituteToMatch;
 
     public MatchRequestEmployerDTO() {
     }
 
-    public MatchRequestEmployerDTO(EmployerDatingDTO currentEmployer, SubstituteDatingDTO substituteToMatch) {
+    public MatchRequestEmployerDTO(EmployerDatingDTO currentEmployer, SubstituteMatchingDTO substituteToMatch) {
         this.currentEmployer = currentEmployer;
         this.substituteToMatch = substituteToMatch;
     }
@@ -16,7 +18,7 @@ public class MatchRequestEmployerDTO {
         return currentEmployer;
     }
 
-    public SubstituteDatingDTO getSubstituteToMatch() {
+    public SubstituteMatchingDTO getSubstituteToMatch() {
         return substituteToMatch;
     }
 }
