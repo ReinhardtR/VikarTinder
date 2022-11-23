@@ -7,7 +7,7 @@ package ChatService;
 
 service ChatService {
     rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
-    rpc GetAllChats (GetAllChatsRequest) returns (GetAllChatsResponse);
+    rpc GetChatOverview (GetChatOverviewRequest) returns (GetChatOverviewResponse);
     rpc GetChatHistory (GetChatHistoryRequest) returns (GetChatHistoryResponse);
     rpc CreateChat (CreateChatRequest) returns (CreateChatResponse);
 }
@@ -23,11 +23,11 @@ message SendMessageResponse {
   MessageObject message = 1;
 }
 //Get all chats
-message GetAllChatsRequest{
+message GetChatOverviewRequest{
   int32 user_id = 1;
 }
 
-message GetAllChatsResponse{ //Skal indeholder en liste af usernames for dem som er i chatten
+message GetChatOverviewResponse{ //Skal indeholder en liste af usernames for dem som er i chatten
   repeated ChatObject chats = 1;
 }
 
