@@ -3,12 +3,12 @@ package com.example.businessserver.dtos.chat;
 public class SendMessageDTO {
 	private int chatId;
 	private int authorId;
-	private String message;
+	private String content;
 
-	public SendMessageDTO(int chatId, int authorId, String message) {
+	public SendMessageDTO(int chatId, int authorId, String content) {
 		this.chatId = chatId;
 		this.authorId = authorId;
-		this.message = message;
+		this.content = content;
 	}
 
 	public int getChatId() {
@@ -19,7 +19,7 @@ public class SendMessageDTO {
 		return authorId;
 	}
 
-	public String getMessage() {
-		return message;
+	public String getContent() {
+		return content;
 	}
 }

@@ -1,0 +1,24 @@
+@page "/Chat"
+@using HttpClients.Services
+@inject ChatService ChatService
+<h3>Chat</h3>
+
+<PageTitle>Chat</PageTitle>
+
+@code {
+    // replace with auth stuff
+    private int _userId = 1;
+
+    private ICollection<string> _chats;
+    private string? _errorLabel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+    }
+
+    public async Task FetchChats()
+    {
+       // do stuff
+    }
+}

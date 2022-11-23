@@ -11,17 +11,17 @@
     }
   ],
   "paths": {
-    "/api/tinder": {
+    "/chat/message": {
       "post": {
         "tags": [
-          "user-controller"
+          "chat-controller"
         ],
-        "operationId": "createUser",
+        "operationId": "sendMessage",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/SendMessageDTO"
               }
             }
           },
@@ -33,7 +33,95 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/MessageDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat/": {
+      "get": {
+        "tags": [
+          "chat-controller"
+        ],
+        "operationId": "getChatHistory",
+        "parameters": [
+          {
+            "name": "dto",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/GetChatHistoryDTO"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatHistoryDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "chat-controller"
+        ],
+        "operationId": "createChat",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateChatDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tinder": {
+      "post": {
+        "tags": [
+          "user-controller"
+        ],
+        "operationId": "createUser",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubstituteDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubstituteDTO"
                 }
               }
             }
@@ -64,7 +152,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/SubstituteDTO"
                 }
               }
             }
@@ -75,11 +163,94 @@
   },
   "components": {
     "schemas": {
-      "User": {
+      "SendMessageDTO": {
+        "type": "object",
+        "properties": {
+          "chatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "authorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "MessageDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "chatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "authorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "string"
+          }
+        }
+      },
+      "CreateChatDTO": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
+      "ChatDTO": {
+        "type": "object",
+        "properties": {
+          "chatId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SubstituteDTO": {
         "type": "object",
         "properties": {
           "id": {
             "type": "string"
+          }
+        }
+      },
+      "GetChatHistoryDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MessageDTO"
+            }
+          }
+        }
+      },
+      "ChatHistoryDTO": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MessageDTO"
+            }
           }
         }
       }
