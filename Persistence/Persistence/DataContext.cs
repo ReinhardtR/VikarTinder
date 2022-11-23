@@ -16,4 +16,6 @@ public class DataContext : DbContext
     {
         optionsBuilder.UseSqlite("Data Source = Data.db");
     }
+    
+    
 }

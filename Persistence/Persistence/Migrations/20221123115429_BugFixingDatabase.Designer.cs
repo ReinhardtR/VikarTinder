@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,27 +11,13 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221123115429_BugFixingDatabase")]
+    partial class BugFixingDatabase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
-
-            modelBuilder.Entity("ChatUser", b =>
-                {
-                    b.Property<int>("ChatsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ParticipantsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ChatsId", "ParticipantsId");
-
-                    b.HasIndex("ParticipantsId");
-
-                    b.ToTable("ChatUser");
-                });
 
             modelBuilder.Entity("Persistence.Models.Chat", b =>
                 {
@@ -78,24 +65,14 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("ChatId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("ChatId");
+
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("ChatUser", b =>
-                {
-                    b.HasOne("Persistence.Models.Chat", null)
-                        .WithMany()
-                        .HasForeignKey("ChatsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Persistence.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("ParticipantsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Persistence.Models.Message", b =>
@@ -117,9 +94,18 @@ namespace Persistence.Migrations
                     b.Navigation("Chat");
                 });
 
+            modelBuilder.Entity("Persistence.Models.User", b =>
+                {
+                    b.HasOne("Persistence.Models.Chat", null)
+                        .WithMany("Participants")
+                        .HasForeignKey("ChatId");
+                });
+
             modelBuilder.Entity("Persistence.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
+
+                    b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618
         }
