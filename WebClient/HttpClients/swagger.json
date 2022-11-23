@@ -275,12 +275,6 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          "messages": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/MessageDTO"
-            }
           }
         }
       },

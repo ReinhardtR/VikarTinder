@@ -50,6 +50,6 @@ public class ChatDAO : IChatDAO
 
     public Task<List<Chat>> GetAllChatsAsync(int userId)
     {
-        return _dataContext.Chats.Where(c => c.Participants.Any(u => u.Id == userId)).ToListAsync();
+        return _dataContext.Chats.Where((c) => c.Participants.Any(u => u.Id == userId)).Include((c) => c.Participants).ToListAsync();
     }
 }

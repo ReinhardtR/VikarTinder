@@ -63,13 +63,8 @@ public class ChatServiceFactory {
 	}
 
 	// Shared Methods
-	public static BasicChatDTO toBasicChatDTO(ChatObject chat) {
-		List<MessageDTO> messages = chat.getMessagesList()
-						.stream()
-						.map(ChatServiceFactory::toMessageDTO)
-						.toList();
-
-		return new BasicChatDTO(chat.getId(), chat.getUserIdsList(), messages);
+	public static BasicChatDTO toBasicChatDTO(ChatOverviewObject chat) {
+		return new BasicChatDTO(chat.getId(), chat.getUserIdsList());
 	}
 
 	public static MessageDTO toMessageDTO(MessageObject message) {
