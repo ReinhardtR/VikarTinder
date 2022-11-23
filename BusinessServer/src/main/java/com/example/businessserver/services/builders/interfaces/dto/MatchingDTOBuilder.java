@@ -1,11 +1,11 @@
 package com.example.businessserver.services.builders.interfaces.dto;
 
-import UserService.SubstitutesForMatching;
-import UserService.WorkpIds;
+import MatchingService.MatchingGigs;
+import MatchingService.MatchingSubstitutes;
 import com.example.businessserver.dtos.matching.SubstituteMatchingDTOs;
 import com.example.businessserver.dtos.matching.GigMatchingDTOs;
 
 public interface MatchingDTOBuilder {
-    SubstituteMatchingDTOs substituteMatchingDTOs(SubstitutesForMatching possibleMatches);
-    GigMatchingDTOs gigMatchingDTOs(WorkpIds possibleMatches);
+    SubstituteMatchingDTOs substituteMatchingDTOs(MatchingSubstitutes possibleMatches);
+    GigMatchingDTOs gigMatchingDTOs(MatchingGigs possibleMatches);
 }

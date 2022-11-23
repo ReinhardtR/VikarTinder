@@ -1,9 +1,9 @@
 package com.example.businessserver.services.builders;
 
-import UserService.SubstituteId;
-import UserService.SubstitutesForMatching;
-import UserService.WorkpId;
-import UserService.WorkpIds;
+import MatchingService.GigToBeMatched;
+import MatchingService.MatchingGigs;
+import MatchingService.MatchingSubstitutes;
+import MatchingService.SubstituteToBeMatched;
 import com.example.businessserver.dtos.matching.SubstituteMatchingDTOs;
 import com.example.businessserver.dtos.matching.SubstituteMatchingDTO;
 import com.example.businessserver.dtos.matching.GigMatchingDTOs;
@@ -15,21 +15,21 @@ import java.util.List;
 
 public class DTOBuilder implements MatchingDTOBuilder {
     @Override
-    public SubstituteMatchingDTOs substituteMatchingDTOs(SubstitutesForMatching possibleMatches)
+    public SubstituteMatchingDTOs substituteMatchingDTOs(MatchingSubstitutes possibleMatches)
     {
-        List<SubstituteMatchingDTO> substituteDatingDTOS = new ArrayList<>();
-        for (SubstituteId id:possibleMatches.getSubstitutesList()) {
-            substituteDatingDTOS.add(new SubstituteMatchingDTO(id.getId()));
+        List<SubstituteMatchingDTO> substituteDatingDTOs = new ArrayList<>();
+        for (SubstituteToBeMatched id:possibleMatches.getSubstitutesList()) {
+            substituteDatingDTOs.add(new SubstituteMatchingDTO(id.getId()));
         }
-        return new SubstituteMatchingDTOs(substituteDatingDTOS);
+        return new SubstituteMatchingDTOs(substituteDatingDTOs);
     }
 
     @Override
-    public GigMatchingDTOs gigMatchingDTOs(WorkpIds possibleMatches) {
-        List<GigMatchingDTO> workpDatingDTOS = new ArrayList<>();
-        for (WorkpId id:possibleMatches.getWorkpIdsList()) {
-            workpDatingDTOS.add(new GigMatchingDTO(id.getId()));
+    public GigMatchingDTOs gigMatchingDTOs(MatchingGigs possibleMatches) {
+        List<GigMatchingDTO> gigMatchingDTOs = new ArrayList<>();
+        for (GigToBeMatched id:possibleMatches.getGigsList()) {
+            gigMatchingDTOs.add(new GigMatchingDTO(id.getId()));
         }
-        return new GigMatchingDTOs(workpDatingDTOS);
+        return new GigMatchingDTOs(gigMatchingDTOs);
     }
 }

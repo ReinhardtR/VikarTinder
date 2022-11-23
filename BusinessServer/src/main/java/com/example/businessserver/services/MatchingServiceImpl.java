@@ -1,8 +1,5 @@
 package com.example.businessserver.services;
 
-import UserService.MatchingServiceGrpc;
-import UserService.SubstitutesForMatching;
-import UserService.WorkpIds;
 import com.example.businessserver.dtos.*;
 import com.example.businessserver.dtos.matching.GigMatchingDTOs;
 import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
@@ -13,6 +10,10 @@ import com.example.businessserver.services.builders.GRPCBuilder;
 import com.example.businessserver.services.interfaces.MatchingService;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
+import MatchingService.MatchingSubstitutes;
+import MatchingService.MatchingGigs;
+import MatchingService.MatchingServiceGrpc;
+
 
 @Service
 public class MatchingServiceImpl implements MatchingService {
@@ -25,16 +26,16 @@ public class MatchingServiceImpl implements MatchingService {
     @Override
     public SubstituteMatchingDTOs getSubstitutes(SubstituteSearchParametersDTO searchParameters)
     {
-        SubstitutesForMatching possibleMatches = userServiceBlockingStub.getSubstitutes(
-               grpcBuilder.buildEmployerId(searchParameters)
+        MatchingSubstitutes possibleMatches = userServiceBlockingStub.getSubstitutes(
+               grpcBuilder.buildSubstituteSearchParameters(searchParameters)
         );
         return dtoBuilder.substituteMatchingDTOs(possibleMatches);
     }
 
     @Override
     public GigMatchingDTOs getGigs(GigSearchParametersDTO searchParameters) {
-        WorkpIds possibleMatches = userServiceBlockingStub.getWorkPositions(
-                grpcBuilder.buildSubstituteId(searchParameters)
+        MatchingGigs possibleMatches = userServiceBlockingStub.getGigs(
+                grpcBuilder.buildGigsSearchParameters(searchParameters)
         );
         return dtoBuilder.gigMatchingDTOs(possibleMatches);
     }
