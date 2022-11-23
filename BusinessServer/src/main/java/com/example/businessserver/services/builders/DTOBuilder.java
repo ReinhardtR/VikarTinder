@@ -1,13 +1,7 @@
 package com.example.businessserver.services.builders;
 
-import MatchingService.GigToBeMatched;
-import MatchingService.MatchingGigs;
-import MatchingService.MatchingSubstitutes;
-import MatchingService.SubstituteToBeMatched;
-import com.example.businessserver.dtos.matching.SubstituteMatchingDTOs;
-import com.example.businessserver.dtos.matching.SubstituteMatchingDTO;
-import com.example.businessserver.dtos.matching.GigMatchingDTOs;
-import com.example.businessserver.dtos.matching.GigMatchingDTO;
+import MatchingProto.*;
+import com.example.businessserver.dtos.matching.*;
 import com.example.businessserver.services.builders.interfaces.dto.MatchingDTOBuilder;
 
 import java.util.ArrayList;
@@ -31,5 +25,10 @@ public class DTOBuilder implements MatchingDTOBuilder {
             gigMatchingDTOs.add(new GigMatchingDTO(id.getId()));
         }
         return new GigMatchingDTOs(gigMatchingDTOs);
+    }
+
+    @Override
+    public MatchValidationDTO matchValidationDTO(MatchValidation validation) {
+        return new MatchValidationDTO(validation.getIsMatched(), validation.getMatchId());
     }
 }

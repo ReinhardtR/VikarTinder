@@ -1,10 +1,6 @@
 package com.example.businessserver.restcontrollers;
 
-import com.example.businessserver.dtos.*;
-import com.example.businessserver.dtos.matching.GigMatchingDTOs;
-import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
-import com.example.businessserver.dtos.matching.SubstituteMatchingDTOs;
-import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
+import com.example.businessserver.dtos.matching.*;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.logic.interfaces.MatchingLogic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +25,10 @@ public class MatchingController {
     }
 
     @PostMapping("/substitutes")
-    public void matchRequestFromEmployer(@RequestBody MatchRequestEmployerDTO matchRequest)
+    public MatchValidationDTO substitutesMatchRequest(@RequestBody MatchRequestDTO matchRequest)
     {
         try {
-            logic.sendMatchRequestEmployer(matchRequest);
+            return logic.substitutesMatchRequest(matchRequest);
         } catch (DTOException e) {
             throw new RuntimeException(e);
         }
@@ -49,10 +45,10 @@ public class MatchingController {
     }
 
     @PostMapping("/gigs")
-    public void matchRequestFromSubstitutes(@RequestBody MatchRequestSubstituteDTO matchRequest)
+    public MatchValidationDTO gigsMatchRequest(@RequestBody MatchRequestDTO matchRequest)
     {
         try {
-            logic.sendMatchRequestSubstitute(matchRequest);
+            return logic.gigsMatchRequest(matchRequest);
         } catch (DTOException e) {
             throw new RuntimeException(e);
         }

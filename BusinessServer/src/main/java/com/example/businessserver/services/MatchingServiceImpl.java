@@ -1,18 +1,16 @@
 package com.example.businessserver.services;
 
-import com.example.businessserver.dtos.*;
-import com.example.businessserver.dtos.matching.GigMatchingDTOs;
-import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
-import com.example.businessserver.dtos.matching.SubstituteMatchingDTOs;
-import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
+import MatchingProto.MatchValidation;
+import MatchingProto.MatchingGigs;
+import MatchingProto.MatchingServiceGrpc;
+import MatchingProto.MatchingSubstitutes;
+import com.example.businessserver.dtos.matching.*;
 import com.example.businessserver.services.builders.DTOBuilder;
 import com.example.businessserver.services.builders.GRPCBuilder;
 import com.example.businessserver.services.interfaces.MatchingService;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
-import MatchingService.MatchingSubstitutes;
-import MatchingService.MatchingGigs;
-import MatchingService.MatchingServiceGrpc;
+
 
 
 @Service
@@ -41,12 +39,18 @@ public class MatchingServiceImpl implements MatchingService {
     }
 
     @Override
-    public void sendMatchRequestSubstitute(MatchRequestSubstituteDTO request) {
-
+    public MatchValidationDTO gigsMatchRequest(MatchRequestDTO matchRequest) {
+        MatchValidation validation = userServiceBlockingStub.sendMatchFromSubstitute(
+                grpcBuilder.buildMatchRequest(matchRequest)
+        );
+        return dtoBuilder.matchValidationDTO(validation);
     }
 
     @Override
-    public void sendMatchRequestEmployer(MatchRequestEmployerDTO request) {
-
+    public MatchValidationDTO substitutesMatchRequest(MatchRequestDTO matchRequest) {
+        MatchValidation validation = userServiceBlockingStub.sendMatchFromEmployer(
+                grpcBuilder.buildMatchRequest(matchRequest)
+        );
+        return dtoBuilder.matchValidationDTO(validation);
     }
 }

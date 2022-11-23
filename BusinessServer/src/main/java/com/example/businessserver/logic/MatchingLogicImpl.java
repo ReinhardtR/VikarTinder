@@ -1,10 +1,6 @@
 package com.example.businessserver.logic;
 
-import com.example.businessserver.dtos.*;
-import com.example.businessserver.dtos.matching.GigMatchingDTOs;
-import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
-import com.example.businessserver.dtos.matching.SubstituteMatchingDTOs;
-import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
+import com.example.businessserver.dtos.matching.*;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.exceptions.DTONullPointerException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
@@ -33,29 +29,21 @@ public class MatchingLogicImpl implements MatchingLogic {
     }
 
     @Override
-    public void sendMatchRequestSubstitute(MatchRequestSubstituteDTO request) throws DTOException {
-        if (request == null)
-            throw new DTONullPointerException("Request cannot be null!");
-        if (request.getCurrentSubstitute() == null)
-            throw new DTONullPointerException("Substitute cannot be null!");
-        if (request.getPositionToMatch() == null)
-            throw new DTONullPointerException("Position cannot be null!");
-        checkId(request.getCurrentSubstitute().getId());
-        checkId(request.getPositionToMatch().getId());
-        service.sendMatchRequestSubstitute(request);
+    public MatchValidationDTO gigsMatchRequest(MatchRequestDTO matchRequest) throws DTOException {
+        checkMatch(matchRequest);
+        return service.gigsMatchRequest(matchRequest);
     }
 
     @Override
-    public void sendMatchRequestEmployer(MatchRequestEmployerDTO request) throws DTOException {
-        if (request == null)
-            throw new DTONullPointerException("Request cannot be null!");
-        if (request.getCurrentEmployer() == null)
-            throw new DTONullPointerException("Employer cannot be null!");
-        if (request.getSubstituteToMatch() == null)
-            throw new DTONullPointerException("Substitute cannot be null!");
-        checkId(request.getCurrentEmployer().getId());
-        checkId(request.getSubstituteToMatch().getId());
-        service.sendMatchRequestEmployer(request);
+    public MatchValidationDTO substitutesMatchRequest(MatchRequestDTO matchRequest) throws DTOException {
+        checkMatch(matchRequest);
+        return service.substitutesMatchRequest(matchRequest);
+    }
+
+    private void checkMatch(MatchRequestDTO matchRequest) throws DTOException {
+        objectNullCheck(matchRequest, "Request");
+        checkId(matchRequest.getCurrentUser());
+        checkId(matchRequest.getMatchId());
     }
 
     private void checkId(int id) throws DTOOutOfBoundsException {

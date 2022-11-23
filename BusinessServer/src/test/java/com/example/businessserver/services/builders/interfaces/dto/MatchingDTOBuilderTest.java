@@ -1,8 +1,10 @@
 package com.example.businessserver.services.builders.interfaces.dto;
 
 
-import MatchingService.MatchingSubstitutes;
-import MatchingService.SubstituteToBeMatched;
+
+import MatchingProto.MatchValidation;
+import MatchingProto.MatchingSubstitutes;
+import MatchingProto.SubstituteToBeMatched;
 import com.example.businessserver.services.builders.DTOBuilder;
 import com.example.businessserver.services.builders.GRPCBuilder;
 import org.junit.jupiter.api.Test;
@@ -14,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class MatchingDTOBuilderTest {
     MatchingDTOBuilder dtoBuilder = new DTOBuilder();
-    GRPCBuilder grpcBuilder = new GRPCBuilder();
 
     @Test
     void testBuildSubstituteDatesLength()
@@ -51,6 +52,25 @@ class MatchingDTOBuilderTest {
         for (int i = 0; i < test.getSubstitutesList().size(); i++) {
             assertEquals(i, test.getSubstitutes(i).getId());
         }
+    }
+
+
+    @Test
+    void testMatchValidationDTO()
+    {
+        MatchValidation validation = MatchValidation.newBuilder()
+                .setIsMatched(true)
+                .setMatchId(25).build();
+        assertAll(
+                () -> assertEquals(
+                        25,
+                        validation.getMatchId()
+                ),
+                () -> assertEquals(
+                        true,
+                        validation.getIsMatched()
+                )
+        );
     }
 
     private MatchingSubstitutes createSubstitutesForMatching(int length)

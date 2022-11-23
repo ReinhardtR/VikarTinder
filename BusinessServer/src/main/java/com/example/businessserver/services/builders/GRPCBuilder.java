@@ -1,11 +1,12 @@
 package com.example.businessserver.services.builders;
 
-import MatchingService.GigSearchParameters;
-import MatchingService.MatchRequest;
-import MatchingService.SubstituteSearchParameters;
+import MatchingProto.GigSearchParameters;
+import MatchingProto.MatchRequest;
+import MatchingProto.SubstituteSearchParameters;
+
+import com.example.businessserver.dtos.matching.MatchRequestDTO;
 import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
 import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
-import com.example.businessserver.dtos.MatchRequestSubstituteDTO;
 import com.example.businessserver.services.builders.interfaces.grpc.MatchingGRPCBuilder;
 
 public class GRPCBuilder implements MatchingGRPCBuilder {
@@ -23,7 +24,9 @@ public class GRPCBuilder implements MatchingGRPCBuilder {
     }
 
     @Override
-    public MatchRequest buildMatchRequest(MatchRequestSubstituteDTO request) {
-        return null;
+    public MatchRequest buildMatchRequest(MatchRequestDTO request) {
+        return MatchRequest.newBuilder()
+                .setCurrentUser(request.getCurrentUser())
+                .setToBeMatchedId(request.getMatchId()).build();
     }
 }
