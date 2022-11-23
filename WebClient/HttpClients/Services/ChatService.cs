@@ -19,8 +19,13 @@ public class ChatService
         return await _client.SendMessageAsync(dto);
     }
     
-    public async Task<ChatHistoryDTO> GetChatHistoryAsync(GetChatHistoryDTO dto)
+    public async Task<ChatHistoryDTO> GetChatHistoryAsync(int id)
     {
-        return await _client.GetChatHistoryAsync(dto);
+        return await _client.GetChatHistoryAsync(id);
+    }
+    
+    public async Task<ChatOverviewDTO> GetChatOverviewAsync(int id)
+    {
+        return await _client.GetChatOverviewAsync(id);
     }
 }

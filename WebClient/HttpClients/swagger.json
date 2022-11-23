@@ -42,34 +42,6 @@
       }
     },
     "/chat/": {
-      "get": {
-        "tags": [
-          "chat-controller"
-        ],
-        "operationId": "getChatHistory",
-        "parameters": [
-          {
-            "name": "dto",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/GetChatHistoryDTO"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/ChatHistoryDTO"
-                }
-              }
-            }
-          }
-        }
-      },
       "post": {
         "tags": [
           "chat-controller"
@@ -122,6 +94,68 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/SubstituteDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat/{id}": {
+      "get": {
+        "tags": [
+          "chat-controller"
+        ],
+        "operationId": "getChatOverview",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatOverviewDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat/history": {
+      "get": {
+        "tags": [
+          "chat-controller"
+        ],
+        "operationId": "getChatHistory",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatHistoryDTO"
                 }
               }
             }
@@ -228,17 +262,35 @@
           }
         }
       },
-      "GetChatHistoryDTO": {
+      "BasicChatDTO": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
             "format": "int32"
           },
+          "userIds": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
           "messages": {
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/MessageDTO"
+            }
+          }
+        }
+      },
+      "ChatOverviewDTO": {
+        "type": "object",
+        "properties": {
+          "chats": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BasicChatDTO"
             }
           }
         }
