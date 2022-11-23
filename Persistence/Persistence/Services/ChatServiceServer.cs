@@ -1,3 +1,4 @@
+using Google.Protobuf.Collections;
 using Grpc.Core;
 using Persistence.DAOs;
 using Persistence.Models;
@@ -14,9 +15,7 @@ public class ChatServiceServer : ChatService.ChatServiceBase
         _logger = logger;
         _chatDao = chatDao;
     }
-
-  
-
+    
     public override async Task<SendMessageResponse> SendMessage(SendMessageRequest request, ServerCallContext context)
     {
         Message message = await _chatDao.SendMessageAsync(request.Content,request.AuthorId,request.ChatId);
@@ -51,23 +50,31 @@ public class ChatServiceServer : ChatService.ChatServiceBase
     {
         List<Chat> chats = await _chatDao.GetAllChatsAsync(request.UserId);
 
-        GetChatOverviewResponse reply = new GetChatOverviewResponse();
+        Console.WriteLine("Chats: " + chats.Count);
+
+        RepeatedField<ChatOverviewObject> chatOverviewObjects = new RepeatedField<ChatOverviewObject>();
 
         foreach (Chat chat in chats)
         {
-            reply.Chats.Add(new ChatObject()
+            RepeatedField<int> userIds = new RepeatedField<int>();
+            
+            Console.WriteLine("Participants: " + chat.Participants);
+            foreach (User participant in chat.Participants)
             {
-                Id = chat.Id,
-                UserIds = {chat.Participants.Select(p => p.Id)},
-                Messages = { chat.Messages.Select(message => new MessageObject()
-                {
-                    Id = message.Id,
-                    AuthorId = message.AuthorId,
-                    ChatId = message.ChatId,
-                    Content = message.Content
-                })}
-            });
+                userIds.Add(participant.Id);
+            }
+
+           chatOverviewObjects.Add(new ChatOverviewObject()
+           {
+               Id = chat.Id,
+               UserIds = { userIds }
+           });
         }
+        
+        GetChatOverviewResponse reply = new()
+        {
+            Chats = { chatOverviewObjects }
+        };
 
         return reply;
     }
