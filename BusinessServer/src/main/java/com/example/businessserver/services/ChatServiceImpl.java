@@ -35,4 +35,7 @@ public class ChatServiceImpl implements ChatServiceClient {
 
 		return ChatServiceFactory.toMessageDTO(response.getMessage());
 	}
+
+	@Override
+	public
 }

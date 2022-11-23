@@ -5,6 +5,22 @@
 
 <PageTitle>Chat</PageTitle>
 
+@if (_chats == null && _errorLabel == null)
+{
+    <p>Loading...</p>
+} else if (_errorLabel != null)
+{
+    <p>Error: @_errorLabel</p>
+} else if (_chats != null)
+{
+    <li>
+        @foreach (string chat in _chats)
+        {
+            <p>@chat</p>
+        }
+    </li>
+}
+
 @code {
     // replace with auth stuff
     private int _userId = 1;
