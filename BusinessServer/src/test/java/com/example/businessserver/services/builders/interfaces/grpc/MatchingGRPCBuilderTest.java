@@ -15,9 +15,9 @@ class MatchingGRPCBuilderTest {
     {
         assertEquals(
                 1,
-                matchingBuilder.buildEmployerId(
+                matchingBuilder.buildSubstituteSearchParameters(
                                 new SubstituteSearchParametersDTO(1))
-                        .getId()
+                        .getCurrentUserId()
         );
     }
 
@@ -26,9 +26,9 @@ class MatchingGRPCBuilderTest {
     {
         assertEquals(
                 1,
-                matchingBuilder.buildSubstituteId(
+                matchingBuilder.buildGigsSearchParameters(
                                 new GigSearchParametersDTO(1))
-                        .getId()
+                        .getCurrentUserId()
         );
     }
 }

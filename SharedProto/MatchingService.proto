@@ -44,8 +44,8 @@ message MatchValidation {
 }
 
 service MatchingService {
-  rpc GetSubstitutes(SubstituteSearchParameters) returns (MatchingGigs);
-  rpc GetGigs(GigSearchParameters) returns (MatchingSubstitutes);
+  rpc GetSubstitutes(SubstituteSearchParameters) returns (MatchingSubstitutes);
+  rpc GetGigs(GigSearchParameters) returns (MatchingGigs);
   rpc SendMatch(MatchRequest) returns (MatchValidation);
 }
 

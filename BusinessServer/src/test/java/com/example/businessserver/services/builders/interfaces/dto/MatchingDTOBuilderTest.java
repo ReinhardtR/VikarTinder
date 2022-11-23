@@ -1,8 +1,8 @@
 package com.example.businessserver.services.builders.interfaces.dto;
 
-import UserService.SubstituteId;
-import UserService.SubstitutesForMatching;
-import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
+
+import MatchingService.MatchingSubstitutes;
+import MatchingService.SubstituteToBeMatched;
 import com.example.businessserver.services.builders.DTOBuilder;
 import com.example.businessserver.services.builders.GRPCBuilder;
 import org.junit.jupiter.api.Test;
@@ -47,31 +47,32 @@ class MatchingDTOBuilderTest {
     @Test
     void testBuildSubstituteDatesCorrectBuildupId()
     {
-        SubstitutesForMatching test = createSubstitutesForMatching(10);
+        MatchingSubstitutes test = createSubstitutesForMatching(10);
         for (int i = 0; i < test.getSubstitutesList().size(); i++) {
             assertEquals(i, test.getSubstitutes(i).getId());
         }
     }
 
-    private SubstitutesForMatching createSubstitutesForMatching(int length)
+    private MatchingSubstitutes createSubstitutesForMatching(int length)
     {
-        return SubstitutesForMatching.newBuilder().
+        return MatchingSubstitutes.newBuilder().
                 addAllSubstitutes(
                         sunnyListOfSubstitutes(length)
                 ).build();
     }
 
-    private List<SubstituteId> sunnyListOfSubstitutes(int length)
+    private List<SubstituteToBeMatched> sunnyListOfSubstitutes(int length)
     {
-        List<SubstituteId> toReturn = new ArrayList<>();
+        List<SubstituteToBeMatched> toReturn = new ArrayList<>();
         for (int i = 0; i < length; i++) {
             toReturn.add(getSubstituteId(i));
         }
         return toReturn;
     }
 
-    private SubstituteId getSubstituteId(int id)
+    private SubstituteToBeMatched getSubstituteId(int id)
     {
-        return grpcBuilder.buildSubstituteId(new GigSearchParametersDTO(id));
+        return SubstituteToBeMatched.newBuilder()
+                .setId(id).build();
     }
 }
