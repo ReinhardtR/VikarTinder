@@ -13,27 +13,26 @@ public class ChatController {
 	@Autowired
 	private ChatLogic chatLogic;
 
+	@GetMapping("/{id}")
+	public ChatOverviewDTO getChatOverview(@PathVariable int id) {
+		return chatLogic.getChatOverview(new GetChatOverviewDTO(id));
+	}
+
 	@PostMapping("/")
 	public ChatDTO createChat(@RequestBody CreateChatDTO dto) {
 		System.out.println("CREATE CHAT");
 		return chatLogic.createChat(dto);
 	}
 
-	@GetMapping("/")
-	public ChatHistoryDTO getChatHistory(@RequestBody GetChatHistoryDTO dto) {
+	@GetMapping("/history")
+	public ChatHistoryDTO getChatHistory(@PathVariable int id) {
 		System.out.println("GET CHAT HISTORY");
-		return chatLogic.getChatHistory(dto);
+		return chatLogic.getChatHistory(new GetChatHistoryDTO(id));
 	}
 
 	@PostMapping("/message")
 	public MessageDTO sendMessage(@RequestBody SendMessageDTO dto) {
 		System.out.println("SEND MESSAGE");
 		return chatLogic.sendMessage(dto);
-	}
-
-	@GetMapping("/overview")
-	public ChatOverviewDTO getChatOverview(@RequestBody GetChatOverviewDTO dto) {
-		System.out.println("GET CHAT OVERVIEW");
-		return chatLogic.getChatOverview(dto);
 	}
 }
