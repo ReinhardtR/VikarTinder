@@ -15,12 +15,12 @@ public class MatchDao : IMatchDao
         throw new NotImplementedException();
     }
 
-    public Task<Substitute> GetSubstituteById(int id)
+    public Task<List<Substitute>> GetSubstituteById(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Gig> GetWorkPositionBtId(int id)
+    public Task<List<Gig>> GetGigById(int id)
     {
         throw new NotImplementedException();
     }

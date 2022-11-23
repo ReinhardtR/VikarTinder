@@ -29,5 +29,43 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
 
         return val;
     }
+    
+    public override async Task<MatchValidation> SendMatchFromEmployer(MatchRequest request, ServerCallContext context)
+    {
+        Console.WriteLine("IDs: [Employer]:" + request.CurrentUser + " [Substitute]:" + request.ToBeMatchedId);
+        
+        //DatabaseKald for at matche
+        Substitute matchedSubstitute = await _dao.MatchWithSubstitute(request.CurrentUser, request.ToBeMatchedId);
+
+        //Convert tilbage til reqly
+        MatchValidation val = _converter.SubstituteConverter(matchedSubstitute, request.CurrentUser);
+
+        return val;
+    }
+
+    public override async Task<MatchingSubstitutes> GetSubstitutes(SubstituteSearchParameters request,
+        ServerCallContext context)
+    {
+        //Databasekald for at få en liste af substitutes til matching
+        List<Substitute> subsFromDatabase = await _dao.GetSubstituteById(request.CurrentUserId);
+
+
+        //Convert til en reply
+        MatchingSubstitutes subs =_converter.ConvertSubList(subsFromDatabase);
+
+        return subs;
+    }
+
+    public override async Task<MatchingGigs> GetGigs(GigSearchParameters request, ServerCallContext context)
+    {
+        //Databasekald for at få en liste af substitutes til matching
+        List<Gig> gigsFromDatabase = await _dao.GetGigById(request.CurrentUserId);
+
+        //Convert til en reply
+        MatchingGigs  gigs = _converter.ConvertGigList(gigsFromDatabase);
+
+        return gigs;
+    }
+
 
 }

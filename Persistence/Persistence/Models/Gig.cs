@@ -2,7 +2,7 @@
 
 public class Gig
 {
-    public int Id { get; private set; }
+    public int Id { get; set; }
     public Employer Employer { get; set; }
 
     public Gig(Employer employer)

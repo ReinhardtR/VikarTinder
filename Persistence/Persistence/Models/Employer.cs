@@ -2,10 +2,10 @@
 
 public class Employer
 {
-    public int Id { get; private set; }
+    public int Id { get; set; }
     public List<Substitute> Substitutes { get; set; }
 
-    private Employer()
+    public Employer()
     {
     }
 }

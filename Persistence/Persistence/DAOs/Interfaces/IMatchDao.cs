@@ -8,6 +8,6 @@ public interface IMatchDao
     Task<Substitute> MatchWithSubstitute(int currentUserId, int matchId);
 
 
-    Task<Substitute> GetSubstituteById(int id);
-    Task<Gig> GetWorkPositionBtId(int id);
+    Task<List<Substitute>> GetSubstituteById(int id);
+    Task<List<Gig>> GetGigById(int id);
 }
