@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+option csharp_namespace = "Persistence";
+option java_multiple_files = true;
+
+package MatchingService;
+
+
+
+message GigToBeMatched {
+  int32 id = 1;
+}
+message SubstituteToBeMatched {
+  int32 id = 1;
+}
+message GigSearchParameters {
+  int32 currentUserId = 1;
+}
+message SubstituteSearchParameters {
+  int32 currentUserId = 1;
+}
+
+//
+
+message MatchingGigs {
+  repeated GigToBeMatched gigs = 1;
+}
+message MatchingSubstitutes {
+  repeated SubstituteToBeMatched substitutes = 1;
+}
+
+//
+
+message MatchRequest {
+  int32 currentUser = 1;
+  int32 toBeMatchedId =2 ;
+}
+
+//
+
+message MatchValidation {
+  bool isMatched = 1;
+  int32 matchId = 2;
+}
+
+service MatchingService {
+  rpc GetSubstitutes(SubstituteSearchParameters) returns (MatchingGigs);
+  rpc GetGigs(GigSearchParameters) returns (MatchingSubstitutes);
+  rpc SendMatch(MatchRequest) returns (MatchValidation);
+}
+
+
+
