@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+option csharp_namespace = "Persistence";
+option java_multiple_files = true;
+
+package ChatService;
+
+service ChatService {
+    rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
+    rpc GetChatHistory (GetChatHistoryRequest) returns (GetChatHistoryResponse);
+    rpc CreateChat (CreateChatRequest) returns (CreateChatResponse);
+}
+
+// Send Message
+message SendMessageRequest {
+  int32 author_id = 1;
+  int32 chat_id = 2;
+  string content = 3;
+}
+
+message SendMessageResponse {
+  MessageObject message = 1;
+}
+
+// Get Chat History
+message GetChatHistoryRequest{
+  int32 chatId = 1;
+}
+
+message GetChatHistoryResponse{
+  repeated MessageObject messages = 1;
+}
+
+// Create Chat
+message CreateChatRequest {
+  repeated int32 user_ids = 1;
+}
+
+message CreateChatResponse{
+  int32 id = 1;
+}
+
+// Shared objects
+message MessageObject {
+  int32 id = 1; 
+  int32 author_id = 2;
+  int32 chat_id = 3;
+  string content = 4;
+}
