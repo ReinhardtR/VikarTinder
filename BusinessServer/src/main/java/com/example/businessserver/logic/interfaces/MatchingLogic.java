@@ -1,12 +1,16 @@
 package com.example.businessserver.logic.interfaces;
 
-import com.example.businessserver.dtos.EmployerDTO;
-import com.example.businessserver.dtos.SubstituteDTO;
-import com.example.businessserver.dtos.WorkPositionDTO;
-
-import java.util.List;
+import com.example.businessserver.dtos.*;
+import com.example.businessserver.dtos.matching.GigMatchingDTOs;
+import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
+import com.example.businessserver.dtos.matching.SubstituteMatchingDTOs;
+import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
+import com.example.businessserver.exceptions.DTOException;
 
 public interface MatchingLogic {
-    List<SubstituteDTO> getSubstitutesByEmployerId(EmployerDTO employerDTO);
-    List<WorkPositionDTO> getWorkPositionsBySubstituteId(SubstituteDTO substituteDTO);
+    SubstituteMatchingDTOs getSubstitutes(SubstituteSearchParametersDTO searchParameters) throws DTOException;
+    GigMatchingDTOs getGigs(GigSearchParametersDTO searchParameters) throws DTOException;
+    void sendMatchRequestSubstitute(MatchRequestSubstituteDTO request) throws DTOException;
+    void sendMatchRequestEmployer(MatchRequestEmployerDTO request) throws DTOException;
+
 }
