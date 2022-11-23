@@ -4,12 +4,12 @@ using Persistence.Models;
 
 namespace Persistence.Services;
 
-public class ChatServiceReceiver : ChatService.ChatServiceBase
+public class ChatServiceServer : ChatService.ChatServiceBase
 {
-    private readonly ILogger<ChatServiceReceiver> _logger;
+    private readonly ILogger<ChatServiceServer> _logger;
     private readonly IChatDAO _chatDao;
     
-    public ChatServiceReceiver(ILogger<ChatServiceReceiver> logger, IChatDAO chatDao)
+    public ChatServiceServer(ILogger<ChatServiceServer> logger, IChatDAO chatDao)
     {
         _logger = logger;
         _chatDao = chatDao;
