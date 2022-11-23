@@ -47,11 +47,11 @@ public class ChatServiceServer : ChatService.ChatServiceBase
         return reply;
     }
 
-    public override async Task<GetAllChatsResponse> GetAllChats(GetAllChatsRequest request, ServerCallContext context)
+    public override async Task<GetChatOverviewResponse> GetChatOverview(GetChatOverviewRequest request, ServerCallContext context)
     {
         List<Chat> chats = await _chatDao.GetAllChatsAsync(request.UserId);
 
-        GetAllChatsResponse reply = new GetAllChatsResponse();
+        GetChatOverviewResponse reply = new GetChatOverviewResponse();
 
         foreach (Chat chat in chats)
         {
