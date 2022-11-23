@@ -1,26 +1,33 @@
-﻿using Persistence.Logic.Interfaces;
+﻿using Persistence.Converter.Interfaces;
+using Persistence.DAOs.Interfaces;
+using Persistence.Models;
 
 namespace Persistence.Services;
 using Grpc.Core;
 
 public class MatchingService : Persistence.MatchingService.MatchingServiceBase
 {
-    private readonly IMatchAdapter Adapter;
 
-    public MatchingService(IMatchAdapter adapter)
+    private readonly IMatchConverter _converter;
+    private readonly IMatchDao _dao;
+    public MatchingService(IMatchConverter converter, IMatchDao dao)
     {
-        Adapter = adapter;
+        _converter = converter;
+        _dao = dao;
     }
-    
-    public override Task<Validation> MatchForSub(SendSubAndWorkp request, ServerCallContext context)
+
+
+    public override async Task<MatchValidation> SendMatchFromSubstitute(MatchRequest request, ServerCallContext context)
     {
-        Console.WriteLine("IDs: [Client]:" + request.Substitute.Id + " [WorkP]:" + request.Workp.Id);
+        Console.WriteLine("IDs: [Sub]:" + request.CurrentUser + " [Gig]:" + request.ToBeMatchedId);
         
-        Adapter.MatchForSub(request);
+        //DatabaseKald for at matche
+        Employer matchedEmployer = await _dao.MatchWithEmployer(request.CurrentUser, request.ToBeMatchedId);
 
-        return Task.FromResult(new Validation
-        {
-            Confirmation = true
-        });
+        //Convert tilbage til reqly
+        MatchValidation val = _converter.EmployerConverter(matchedEmployer, request.CurrentUser);
+
+        return val;
     }
+
 }

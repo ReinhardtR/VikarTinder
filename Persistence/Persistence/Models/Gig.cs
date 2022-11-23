@@ -1,16 +1,16 @@
 ﻿namespace Persistence.Models;
 
-public class WorkPosition
+public class Gig
 {
     public int Id { get; private set; }
     public Employer Employer { get; set; }
 
-    public WorkPosition(Employer employer)
+    public Gig(Employer employer)
     {
         Employer = employer;
     }
 
-    private WorkPosition()
+    private Gig()
     {
     }
 }

@@ -3,9 +3,7 @@ syntax = "proto3";
 option csharp_namespace = "Persistence";
 option java_multiple_files = true;
 
-package MatchingService;
-
-
+package MatchingProto;
 
 message GigToBeMatched {
   int32 id = 1;
@@ -40,13 +38,16 @@ message MatchRequest {
 
 message MatchValidation {
   bool isMatched = 1;
+  
+  //Evt kommende match
   int32 matchId = 2;
 }
 
 service MatchingService {
-  rpc GetSubstitutes(SubstituteSearchParameters) returns (MatchingGigs);
-  rpc GetGigs(GigSearchParameters) returns (MatchingSubstitutes);
-  rpc SendMatch(MatchRequest) returns (MatchValidation);
+  rpc GetSubstitutes(SubstituteSearchParameters) returns (MatchingSubstitutes);
+  rpc GetGigs(GigSearchParameters) returns (MatchingGigs);
+  rpc SendMatchFromSubstitute(MatchRequest) returns (MatchValidation);
+  rpc SendMatchFromEmployer(MatchRequest) returns (MatchValidation);
 }
 
 

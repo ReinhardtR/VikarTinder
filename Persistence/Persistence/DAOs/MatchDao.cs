@@ -5,9 +5,14 @@ namespace Persistence.DAOs;
 
 public class MatchDao : IMatchDao
 {
-    public Action MakeMatch(Substitute sub, WorkPosition workp)
+    public Task<Employer> MatchWithEmployer(int currentUserId, int matchId)
     {
-        return null;
+        throw new NotImplementedException();
+    }
+
+    public Task<Substitute> MatchWithSubstitute(int currentUserId, int matchId)
+    {
+        throw new NotImplementedException();
     }
 
     public Task<Substitute> GetSubstituteById(int id)
@@ -15,7 +20,7 @@ public class MatchDao : IMatchDao
         throw new NotImplementedException();
     }
 
-    public Task<WorkPosition> GetWorkPositionBtId(int id)
+    public Task<Gig> GetWorkPositionBtId(int id)
     {
         throw new NotImplementedException();
     }

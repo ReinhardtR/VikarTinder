@@ -4,7 +4,10 @@ namespace Persistence.DAOs.Interfaces;
 
 public interface IMatchDao
 {
-    Action MakeMatch(Substitute sub, WorkPosition workp);
+    Task<Employer> MatchWithEmployer(int currentUserId, int matchId);
+    Task<Substitute> MatchWithSubstitute(int currentUserId, int matchId);
+
+
     Task<Substitute> GetSubstituteById(int id);
-    Task<WorkPosition> GetWorkPositionBtId(int id);
+    Task<Gig> GetWorkPositionBtId(int id);
 }
