@@ -9,7 +9,6 @@ package UserService;
 service UserService {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply);
-  rpc SendMessage (SendMessageRequest) returns (SendMessageReply);
 }
 
 // The request message containing the user's name.
