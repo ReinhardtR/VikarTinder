@@ -2,7 +2,6 @@ package com.example.businessserver.restcontrollers;
 
 import com.example.businessserver.dtos.chat.*;
 import com.example.businessserver.logic.ChatLogic;
-import com.example.businessserver.services.ChatServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,5 +29,11 @@ public class ChatController {
 	public MessageDTO sendMessage(@RequestBody SendMessageDTO dto) {
 		System.out.println("SEND MESSAGE");
 		return chatLogic.sendMessage(dto);
+	}
+
+	@GetMapping("/overview")
+	public ChatOverviewDTO getChatOverview(@RequestBody GetChatOverviewDTO dto) {
+		System.out.println("GET CHAT OVERVIEW");
+		return chatLogic.getChatOverview(dto);
 	}
 }

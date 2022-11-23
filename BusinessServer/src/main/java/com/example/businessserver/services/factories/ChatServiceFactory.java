@@ -45,7 +45,33 @@ public class ChatServiceFactory {
 						.build();
 	}
 
+	// Chat Overview
+	public static GetChatOverviewRequest toGetChatOverviewRequest(GetChatOverviewDTO dto) {
+		return GetChatOverviewRequest
+						.newBuilder()
+						.setUserId(dto.getUserId())
+						.build();
+	}
+
+	public static ChatOverviewDTO toChatOverviewDTO(GetChatOverviewResponse response) {
+		List<BasicChatDTO> chats = response.getChatsList()
+						.stream()
+						.map(ChatServiceFactory::toBasicChatDTO)
+						.toList();
+
+		return new ChatOverviewDTO(chats);
+	}
+
 	// Shared Methods
+	public static BasicChatDTO toBasicChatDTO(ChatObject chat) {
+		List<MessageDTO> messages = chat.getMessagesList()
+						.stream()
+						.map(ChatServiceFactory::toMessageDTO)
+						.toList();
+
+		return new BasicChatDTO(chat.getId(), chat.getUserIdsList(), messages);
+	}
+
 	public static MessageDTO toMessageDTO(MessageObject message) {
 		return new MessageDTO(
 						message.getId(),

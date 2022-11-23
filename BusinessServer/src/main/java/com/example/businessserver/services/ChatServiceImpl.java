@@ -37,5 +37,10 @@ public class ChatServiceImpl implements ChatServiceClient {
 	}
 
 	@Override
-	public
+	public ChatOverviewDTO getChatOverview(GetChatOverviewDTO dto) {
+		GetChatOverviewRequest request = ChatServiceFactory.toGetChatOverviewRequest(dto);
+		GetChatOverviewResponse response = chatServiceBlockingStub.getChatOverview(request);
+
+		return ChatServiceFactory.toChatOverviewDTO(response);
+	}
 }

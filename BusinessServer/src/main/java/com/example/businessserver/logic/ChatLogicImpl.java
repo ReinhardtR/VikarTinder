@@ -25,4 +25,9 @@ public class ChatLogicImpl implements ChatLogic {
 	public MessageDTO sendMessage(SendMessageDTO dto) {
 		return chatServiceClient.sendMessage(dto);
 	}
+
+	@Override
+	public ChatOverviewDTO getChatOverview(GetChatOverviewDTO dto) {
+		return chatServiceClient.getChatOverview(dto);
+	}
 }
