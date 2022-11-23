@@ -10,5 +10,6 @@ public interface IChatDAO
     public Task<Chat> CreateChatAsync(List<int> userIds);
 
     public Task<Message> SendMessageAsync(string content, int authorId, int chatId);
-    
+
+    Task<List<Chat>> GetAllChatsAsync(int userId);
 }

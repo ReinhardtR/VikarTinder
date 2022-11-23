@@ -47,4 +47,9 @@ public class ChatDAO : IChatDAO
 
        return sentMessage.Entity;
     }
+
+    public Task<List<Chat>> GetAllChatsAsync(int userId)
+    {
+        return _dataContext.Chats.Where(c => c.Participants.Any(u => u.Id == userId)).ToListAsync();
+    }
 }

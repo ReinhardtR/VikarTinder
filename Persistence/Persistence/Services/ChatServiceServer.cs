@@ -47,7 +47,32 @@ public class ChatServiceServer : ChatService.ChatServiceBase
         return reply;
     }
 
+    public override async Task<GetAllChatsResponse> GetAllChats(GetAllChatsRequest request, ServerCallContext context)
+    {
+        List<Chat> chats = await _chatDao.GetAllChatsAsync(request.UserId);
 
+        GetAllChatsResponse reply = new GetAllChatsResponse();
+
+        foreach (Chat chat in chats)
+        {
+            reply.Chats.Add(new ChatObject()
+            {
+                Id = chat.Id,
+                UserIds = {chat.Participants.Select(p => p.Id)},
+                Messages = { chat.Messages.Select(message => new MessageObject()
+                {
+                    Id = message.Id,
+                    AuthorId = message.AuthorId,
+                    ChatId = message.ChatId,
+                    Content = message.Content
+                })}
+            });
+        }
+
+        return reply;
+    }
+    
+    
     public override async Task<GetChatHistoryResponse> GetChatHistory(GetChatHistoryRequest request,
         ServerCallContext context)
     {
