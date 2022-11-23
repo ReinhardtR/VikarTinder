@@ -10,7 +10,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<HttpClient>();
 
-builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<Client>();
 
 await builder.Build().RunAsync();
