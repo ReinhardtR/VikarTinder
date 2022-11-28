@@ -4,8 +4,8 @@ namespace Persistence.Converter.Interfaces;
 
 public interface IMatchConverter
 {
-    MatchValidation EmployerConverter(Employer employer, int userId);
-    MatchValidation SubstituteConverter(Substitute substitute, int userId);
+    MatchValidation EmployerConverter(EmployerEFC employer, int userId);
+    MatchValidation SubstituteConverter(SubstituteEFC substitute, int userId);
 
     MatchingSubstitutes ConvertSubList(List<Substitute> substitutes);
     MatchingGigs ConvertGigList(List<Gig> gigs);
