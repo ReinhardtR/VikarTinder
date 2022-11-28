@@ -40,18 +40,18 @@ public class MatchingLogicImpl implements MatchingLogic {
         return service.substitutesMatchRequest(matchRequest);
     }
 
-    private void checkMatch(MatchRequestDTO matchRequest) throws DTOException {
+    public void checkMatch(MatchRequestDTO matchRequest) throws DTOException {
         objectNullCheck(matchRequest, "Request");
         checkId(matchRequest.getCurrentUser());
         checkId(matchRequest.getMatchId());
     }
 
-    private void checkId(int id) throws DTOOutOfBoundsException {
+    public void checkId(int id) throws DTOOutOfBoundsException {
         if (id < 1)
             throw new DTOOutOfBoundsException("Id cannot be < 1!");
     }
 
-    private void objectNullCheck(Object obj, String subjectName) throws DTONullPointerException {
+    public void objectNullCheck(Object obj, String subjectName) throws DTONullPointerException {
         if (obj == null)
             throw new DTONullPointerException(subjectName +" cannot be Null!");
     }

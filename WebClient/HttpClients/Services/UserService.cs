@@ -9,13 +9,13 @@ public class UserService
         _client = client;   
     }
     
-    public async Task<User> FindByIdAsync(long id)
+    /*public async Task<User> FindByIdAsync(long id)
     {   
         return await _client.FindByIdAsync(id);
-    }
+    }*/
     
-    public async Task<User> CreateAsync(User user)
+    /*public async Task<User> CreateAsync(User user)
     {
         return await _client.CreateUserAsync(user);
-    }
+    }*/
 }

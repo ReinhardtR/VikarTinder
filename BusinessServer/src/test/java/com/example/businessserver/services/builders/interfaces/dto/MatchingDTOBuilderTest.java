@@ -6,9 +6,7 @@ import MatchingProto.MatchValidation;
 import MatchingProto.MatchingSubstitutes;
 import MatchingProto.SubstituteToBeMatched;
 import com.example.businessserver.services.builders.DTOBuilder;
-import com.example.businessserver.services.builders.GRPCBuilder;
 import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +16,7 @@ class MatchingDTOBuilderTest {
     MatchingDTOBuilder dtoBuilder = new DTOBuilder();
 
     @Test
-    void testBuildSubstituteDatesLength()
+    void testBuildSubstituteMatchingDTOsLength()
     {
         assertAll(
                 () -> assertEquals(
@@ -46,7 +44,7 @@ class MatchingDTOBuilderTest {
     }
 
     @Test
-    void testBuildSubstituteDatesCorrectBuildupId()
+    void testBuildSubstituteDTOsCorrectBuildupId()
     {
         MatchingSubstitutes test = createSubstitutesForMatching(10);
         for (int i = 0; i < test.getSubstitutesList().size(); i++) {
