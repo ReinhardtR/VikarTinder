@@ -47,6 +47,7 @@ message CreateChatRequest {
 
 message CreateChatResponse{
   int32 id = 1;
+  repeated int32 user_ids = 2;
 }
 
 // Shared objects
