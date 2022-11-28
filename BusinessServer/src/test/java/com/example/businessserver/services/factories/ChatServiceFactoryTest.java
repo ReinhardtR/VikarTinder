@@ -117,9 +117,8 @@ class ChatServiceFactoryTest
     //Check if all fields in class GetChatOverviewResponse and ChatOverviewDTO are equal
     //Null check
     assertNotNull(chatOverviewDTO.getChats(), "ChatOverviewDTO.getChats is null");
-    //List of messages work
-    assertEquals(getChatOverviewResponse.getChatsList(), chatOverviewDTO.getChats(), "ChatOverviewDTO is not equal to GetChatOverviewResponse");
-    //Specific messages are equal
+
+    //Specific chats check
     assertEquals(getChatOverviewResponse.getChatsList().get(0).getId(), chatOverviewDTO.getChats().get(0).getId(), "Specific message in ChatOverviewDTO is not equal to GetChatOverviewResponse");
   }
 
