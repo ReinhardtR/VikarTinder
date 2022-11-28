@@ -48,7 +48,7 @@ public class ConverterTest
     [Test, Description("Testing for creating matchValidation with null gigs list")]
     public void GigsListIsNull()
     {
-        Assert.Catch<ConverterNullReference>(() => _converter.SubstituteConverter(new SubstituteEFC() { Id = 1 }, userId));
+        Assert.Catch<ConverterNullReference>(() => _converter.SubstituteConverter(new Substitute() { Id = 1 }, userId));
     }
 
     [Test, Description("Testing for throwing if substitute is null")]
@@ -62,7 +62,7 @@ public class ConverterTest
     {
         int notMatchingUserId = 99;
         
-        MatchValidation val = _converter.SubstituteConverter(new SubstituteEFC() { Id = idOnSubMatch , Positions = _gigsForTest}, notMatchingUserId);
+        MatchValidation val = _converter.SubstituteConverter(new Substitute() { Id = idOnSubMatch , Positions = _gigsForTest}, notMatchingUserId);
 
         Assert.That(idOnSubMatch, Is.EqualTo(val.MatchId));
         Assert.That(matchMatchedYou, Is.EqualTo(val.IsMatched));
@@ -74,7 +74,7 @@ public class ConverterTest
     {
         bool expectedMatch = true;
 
-        MatchValidation val = _converter.SubstituteConverter(new SubstituteEFC() { Id = idOnSubMatch , Positions = _gigsForTest}, userId);
+        MatchValidation val = _converter.SubstituteConverter(new Substitute() { Id = idOnSubMatch , Positions = _gigsForTest}, userId);
 
         Assert.That(idOnSubMatch, Is.EqualTo(val.MatchId));
         Assert.That(expectedMatch, Is.EqualTo(val.IsMatched));

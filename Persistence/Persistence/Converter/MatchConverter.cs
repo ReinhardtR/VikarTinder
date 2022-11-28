@@ -6,7 +6,7 @@ namespace Persistence.Converter;
 
 public class MatchConverter : IMatchConverter
 {
-    public MatchValidation EmployerConverter(EmployerEFC employer, int userId)
+    public MatchValidation EmployerConverter(Employer employer, int userId)
     {
         if (employer == null)
             throw new ConverterNullReference("Substitute");
@@ -27,7 +27,7 @@ public class MatchConverter : IMatchConverter
         return val;
     }
 
-    public MatchValidation SubstituteConverter(SubstituteEFC substitute, int userId)
+    public MatchValidation SubstituteConverter(Substitute substitute, int userId)
     {
         if (substitute == null)
             throw new ConverterNullReference("Substitute");

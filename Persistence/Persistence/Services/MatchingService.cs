@@ -22,7 +22,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         Console.WriteLine("IDs: [Sub]:" + request.CurrentUser + " [Gig]:" + request.ToBeMatchedId);
         
         //DatabaseKald for at matche
-        EmployerEFC matchedEmployer = await _dao.MatchWithEmployer(request.CurrentUser, request.ToBeMatchedId);
+        Employer matchedEmployer = await _dao.MatchWithEmployer(request.CurrentUser, request.ToBeMatchedId);
         Console.WriteLine("Employer Id = " + matchedEmployer.Id);
         
         //Convert tilbage til reqly
@@ -36,7 +36,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         Console.WriteLine("IDs: [Employer]:" + request.CurrentUser + " [Substitute]:" + request.ToBeMatchedId);
         
         //DatabaseKald for at matche
-        SubstituteEFC matchedSubstitute = await _dao.MatchWithSubstitute(request.CurrentUser, request.ToBeMatchedId);
+        Substitute matchedSubstitute = await _dao.MatchWithSubstitute(request.CurrentUser, request.ToBeMatchedId);
 
         //Convert tilbage til reqly
         MatchValidation val = _converter.SubstituteConverter(matchedSubstitute, request.CurrentUser);

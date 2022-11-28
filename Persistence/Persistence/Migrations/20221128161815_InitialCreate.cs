@@ -15,8 +15,7 @@ namespace Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Discriminator = table.Column<string>(type: "TEXT", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true)
                 },
                 constraints: table =>
                 {
@@ -29,15 +28,14 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Discriminator = table.Column<string>(type: "TEXT", nullable: false),
-                    EmployerEFCId = table.Column<int>(type: "INTEGER", nullable: true)
+                    EmployerId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Substitutes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Substitutes_Employers_EmployerEFCId",
-                        column: x => x.EmployerEFCId,
+                        name: "FK_Substitutes_Employers_EmployerId",
+                        column: x => x.EmployerId,
                         principalTable: "Employers",
                         principalColumn: "Id");
                 });
@@ -49,7 +47,7 @@ namespace Persistence.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     EmployerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SubstituteEFCId = table.Column<int>(type: "INTEGER", nullable: true)
+                    SubstituteId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,8 +59,8 @@ namespace Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Gigs_Substitutes_SubstituteEFCId",
-                        column: x => x.SubstituteEFCId,
+                        name: "FK_Gigs_Substitutes_SubstituteId",
+                        column: x => x.SubstituteId,
                         principalTable: "Substitutes",
                         principalColumn: "Id");
                 });
@@ -73,14 +71,14 @@ namespace Persistence.Migrations
                 column: "EmployerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Gigs_SubstituteEFCId",
+                name: "IX_Gigs_SubstituteId",
                 table: "Gigs",
-                column: "SubstituteEFCId");
+                column: "SubstituteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Substitutes_EmployerEFCId",
+                name: "IX_Substitutes_EmployerId",
                 table: "Substitutes",
-                column: "EmployerEFCId");
+                column: "EmployerId");
         }
 
         /// <inheritdoc />

@@ -23,17 +23,9 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
 
                     b.ToTable("Employers");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Employer");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Persistence.Models.Gig", b =>
@@ -45,14 +37,14 @@ namespace Persistence.Migrations
                     b.Property<int>("EmployerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SubstituteEFCId")
+                    b.Property<int?>("SubstituteId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EmployerId");
 
-                    b.HasIndex("SubstituteEFCId");
+                    b.HasIndex("SubstituteId");
 
                     b.ToTable("Gigs");
                 });
@@ -63,36 +55,14 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("EmployerEFCId")
+                    b.Property<int?>("EmployerId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployerEFCId");
+                    b.HasIndex("EmployerId");
 
                     b.ToTable("Substitutes");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Substitute");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Persistence.Models.EmployerEFC", b =>
-                {
-                    b.HasBaseType("Persistence.Models.Employer");
-
-                    b.HasDiscriminator().HasValue("EmployerEFC");
-                });
-
-            modelBuilder.Entity("Persistence.Models.SubstituteEFC", b =>
-                {
-                    b.HasBaseType("Persistence.Models.Substitute");
-
-                    b.HasDiscriminator().HasValue("SubstituteEFC");
                 });
 
             modelBuilder.Entity("Persistence.Models.Gig", b =>
@@ -103,26 +73,26 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Persistence.Models.SubstituteEFC", null)
+                    b.HasOne("Persistence.Models.Substitute", null)
                         .WithMany("Positions")
-                        .HasForeignKey("SubstituteEFCId");
+                        .HasForeignKey("SubstituteId");
 
                     b.Navigation("Employer");
                 });
 
             modelBuilder.Entity("Persistence.Models.Substitute", b =>
                 {
-                    b.HasOne("Persistence.Models.EmployerEFC", null)
+                    b.HasOne("Persistence.Models.Employer", null)
                         .WithMany("Substitutes")
-                        .HasForeignKey("EmployerEFCId");
+                        .HasForeignKey("EmployerId");
                 });
 
-            modelBuilder.Entity("Persistence.Models.EmployerEFC", b =>
+            modelBuilder.Entity("Persistence.Models.Employer", b =>
                 {
                     b.Navigation("Substitutes");
                 });
 
-            modelBuilder.Entity("Persistence.Models.SubstituteEFC", b =>
+            modelBuilder.Entity("Persistence.Models.Substitute", b =>
                 {
                     b.Navigation("Positions");
                 });

@@ -11,17 +11,14 @@ public class MatchDao : IMatchDao
     public MatchDao(DatabaseContext databaseContext)
     {
         _databaseContext = databaseContext;
-        
-        _databaseContext.Add(new Substitute());
-        _databaseContext.Add(new Gig(new Employer()));
     }
-    public async Task<EmployerEFC> MatchWithEmployer(int currentUserId, int matchId)
+    public async Task<Employer> MatchWithEmployer(int currentUserId, int matchId)
     {
         //Finder sit eget user domæne objekt
-        SubstituteEFC user = await GetSubstituteById(currentUserId);
+        Substitute user = await GetSubstituteById(currentUserId);
         
         //Finder domæneobjeketet på ejeren af gigget man har matchet
-        EmployerEFC employer = await GetEmployerById(matchId);
+        Employer employer = await GetEmployerById(matchId);
         
         
         //Adder den valgte gig sammen med tilhørende employer under sig
@@ -29,22 +26,22 @@ public class MatchDao : IMatchDao
 
         //Opdateringen og gemning
         _databaseContext.ChangeTracker.Clear();
-        _databaseContext.SubstituteEfcs.Update(user);
+        _databaseContext.Substitutes.Update(user);
         await _databaseContext.SaveChangesAsync();
 
         return employer;
     }
 
-    public async Task<SubstituteEFC> MatchWithSubstitute(int currentUserId, int matchId)
+    public async Task<Substitute> MatchWithSubstitute(int currentUserId, int matchId)
     {
-        EmployerEFC employer = await GetEmployerById(matchId);
+        Employer employer = await GetEmployerById(matchId);
 
-        SubstituteEFC substituteEfc = await GetSubstituteById(currentUserId);
+        Substitute substituteEfc = await GetSubstituteById(currentUserId);
         
         employer.Substitutes.Add(substituteEfc);
         
         _databaseContext.ChangeTracker.Clear();
-        _databaseContext.EmployerEfcs.Update(employer);
+        _databaseContext.Employers.Update(employer);
         await _databaseContext.SaveChangesAsync();
 
         return substituteEfc;
@@ -78,17 +75,17 @@ public class MatchDao : IMatchDao
         return gigs;
     }
 
-    public async Task<EmployerEFC> GetEmployerById(int id)
+    public async Task<Employer> GetEmployerById(int id)
     {
-        EmployerEFC? employer = await _databaseContext.EmployerEfcs.FirstOrDefaultAsync(emp =>
+        Employer? employer = await _databaseContext.Employers.FirstOrDefaultAsync(emp =>
             emp.Id == id);
         
         return employer;
     }
 
-    public async Task<SubstituteEFC> GetSubstituteById(int id)
+    public async Task<Substitute> GetSubstituteById(int id)
     {
-        SubstituteEFC? substitute = await _databaseContext.SubstituteEfcs.FirstOrDefaultAsync(sub =>
+        Substitute? substitute = await _databaseContext.Substitutes.FirstOrDefaultAsync(sub =>
             sub.Id == id);
         return substitute;
     }
