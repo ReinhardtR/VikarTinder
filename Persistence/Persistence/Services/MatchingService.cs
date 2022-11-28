@@ -22,8 +22,9 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         Console.WriteLine("IDs: [Sub]:" + request.CurrentUser + " [Gig]:" + request.ToBeMatchedId);
         
         //DatabaseKald for at matche
-        Employer matchedEmployer = await _dao.MatchWithEmployer(request.CurrentUser, request.ToBeMatchedId);
-
+        EmployerEFC matchedEmployer = await _dao.MatchWithEmployer(request.CurrentUser, request.ToBeMatchedId);
+        Console.WriteLine("Employer Id = " + matchedEmployer.Id);
+        
         //Convert tilbage til reqly
         MatchValidation val = _converter.EmployerConverter(matchedEmployer, request.CurrentUser);
 
@@ -35,7 +36,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         Console.WriteLine("IDs: [Employer]:" + request.CurrentUser + " [Substitute]:" + request.ToBeMatchedId);
         
         //DatabaseKald for at matche
-        Substitute matchedSubstitute = await _dao.MatchWithSubstitute(request.CurrentUser, request.ToBeMatchedId);
+        SubstituteEFC matchedSubstitute = await _dao.MatchWithSubstitute(request.CurrentUser, request.ToBeMatchedId);
 
         //Convert tilbage til reqly
         MatchValidation val = _converter.SubstituteConverter(matchedSubstitute, request.CurrentUser);
@@ -47,7 +48,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         ServerCallContext context)
     {
         //Databasekald for at få en liste af substitutes til matching
-        List<Substitute> subsFromDatabase = await _dao.GetSubstituteById(request.CurrentUserId);
+        List<Substitute> subsFromDatabase = await _dao.GetSubstitutesForMatching(request.CurrentUserId);
 
 
         //Convert til en reply
@@ -59,7 +60,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
     public override async Task<MatchingGigs> GetGigs(GigSearchParameters request, ServerCallContext context)
     {
         //Databasekald for at få en liste af substitutes til matching
-        List<Gig> gigsFromDatabase = await _dao.GetGigById(request.CurrentUserId);
+        List<Gig> gigsFromDatabase = await _dao.GetGigsForMatching(request.CurrentUserId);
 
         //Convert til en reply
         MatchingGigs  gigs = _converter.ConvertGigList(gigsFromDatabase);

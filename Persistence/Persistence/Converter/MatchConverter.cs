@@ -6,7 +6,7 @@ namespace Persistence.Converter;
 
 public class MatchConverter : IMatchConverter
 {
-    public MatchValidation EmployerConverter(Employer employer, int userId)
+    public MatchValidation EmployerConverter(EmployerEFC employer, int userId)
     {
         if (employer == null)
             throw new ConverterNullReference("Substitute");
@@ -27,7 +27,7 @@ public class MatchConverter : IMatchConverter
         return val;
     }
 
-    public MatchValidation SubstituteConverter(Substitute substitute, int userId)
+    public MatchValidation SubstituteConverter(SubstituteEFC substitute, int userId)
     {
         if (substitute == null)
             throw new ConverterNullReference("Substitute");
@@ -50,15 +50,43 @@ public class MatchConverter : IMatchConverter
             return val;
     }
 
+    
+    
     public MatchingSubstitutes ConvertSubList(List<Substitute> substitutes)
     {
-        throw new NotImplementedException();
-    }
+        if (substitutes == null || substitutes.Count.Equals(0))
+            throw new ConverterNullReference("Substitute list");
+        
+        MatchingSubstitutes subs = new MatchingSubstitutes();
 
+        foreach (var sub in substitutes)
+        {
+            subs.Substitutes.Add(new SubstituteToBeMatched
+            {
+                Id = sub.Id
+            });
+        }
+
+        return subs;
+    }
+    
     public MatchingGigs ConvertGigList(List<Gig> gigs)
     {
-        throw new NotImplementedException();
+        MatchingGigs gigsGrpc = new MatchingGigs();
+
+        foreach (var gig in gigs)
+        {
+            gigsGrpc.Gigs.Add(new GigToBeMatched()
+            {
+                Id = gig.Id
+            });
+        }
+
+        return gigsGrpc;
     }
+    
+    
+    
 
     private MatchValidation CreateMatchValidation(int id)
     {

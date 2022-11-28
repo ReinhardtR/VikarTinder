@@ -4,10 +4,15 @@ namespace Persistence.DAOs.Interfaces;
 
 public interface IMatchDao
 {
-    Task<Employer> MatchWithEmployer(int currentUserId, int matchId);
-    Task<Substitute> MatchWithSubstitute(int currentUserId, int matchId);
+    Task<EmployerEFC> MatchWithEmployer(int currentUserId, int matchId);
+    Task<SubstituteEFC> MatchWithSubstitute(int currentUserId, int matchId);
 
 
-    Task<List<Substitute>> GetSubstituteById(int id);
-    Task<List<Gig>> GetGigById(int id);
+    Task<List<Substitute>> GetSubstitutesForMatching(int id);
+    Task<List<Gig>> GetGigsForMatching(int id);
+
+    Task<EmployerEFC> GetEmployerById(int id);
+    Task<SubstituteEFC> GetSubstituteById(int id);
+
+
 }
