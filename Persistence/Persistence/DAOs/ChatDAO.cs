@@ -23,7 +23,7 @@ public class ChatDAO : IChatDAO
     {
        List<User> users =  await _dataContext.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
         
-        Chat chatToCreate = new Chat
+        Chat chatToCreate = new()
         {
             Participants = users
         };
@@ -36,14 +36,15 @@ public class ChatDAO : IChatDAO
 
     public async Task<Message> SendMessageAsync(string content, int authorId, int chatId)
     {
-        Message messagetoSend = new Message()
+        Message messageToSend = new()
         {
             Content = content,
             AuthorId = authorId,
             ChatId = chatId
         };
         
-       EntityEntry<Message> sentMessage = _dataContext.Messages.Add(messagetoSend);
+       EntityEntry<Message> sentMessage = _dataContext.Messages.Add(messageToSend);
+        await _dataContext.SaveChangesAsync();
 
        return sentMessage.Entity;
     }
