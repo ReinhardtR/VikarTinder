@@ -20,20 +20,20 @@ Welcome to your new app.
     
     private async Task ClickHandler()
     {
-        User response = await UserService.FindByIdAsync(2);
-        responseLabel = response.Id;
+        /*User response = await UserService.FindByIdAsync(2);
+        responseLabel = response.Id;*/
     }
 
     private async Task CreateHandler()
     {
-        User userToCreate = new()
+        /*User userToCreate = new()
         {
             Id = "Yo"
         };
 
         User user = await UserService.CreateAsync(userToCreate);
         
-        responseLabel = user.Id;
+        responseLabel = user.Id;*/
     }
     
 }
