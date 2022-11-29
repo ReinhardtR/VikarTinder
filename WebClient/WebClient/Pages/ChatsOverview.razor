@@ -1,0 +1,69 @@
+@page "/chats"
+@using HttpClients.Services
+@using HttpClients
+@inject ChatService ChatService
+
+<PageTitle>Chat</PageTitle>
+
+<div>
+    <h1>Create Chat Form</h1>
+    <CreateChatForm />
+</div>
+
+@if (_chats == null && _errorLabel == null)
+{
+    <p>Loading...</p>
+} 
+else if (_errorLabel != null)
+{
+    <p>Error: @_errorLabel</p>
+} 
+else if (_chats != null)
+{
+    <div>
+        <h1>Chats</h1>
+        <div>
+            @foreach (BasicChatDTO chat in _chats)
+            {
+                <div>
+                    <h3>Chat: @chat.Id</h3>
+                    <ul>
+                        @foreach (int userId in chat.UserIds)
+                        {
+                            <li>User: @userId</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    // replace with auth stuff
+    private readonly int _userId = 2;
+
+    private ICollection<BasicChatDTO>? _chats;
+    private string? _errorLabel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchChats();
+    }
+
+    private async Task FetchChats()
+    {
+        try
+        {
+            _errorLabel = null;
+            ChatOverviewDTO chatOverview = await ChatService.GetChatOverviewAsync(_userId);
+
+            _chats = chatOverview.Chats;
+        }
+        catch (Exception e)
+        {
+            _errorLabel = e.Message;
+            _chats = null;
+        }
+    }
+}

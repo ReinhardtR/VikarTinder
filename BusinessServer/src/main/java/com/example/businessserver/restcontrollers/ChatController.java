@@ -2,6 +2,7 @@ package com.example.businessserver.restcontrollers;
 
 import com.example.businessserver.dtos.chat.*;
 import com.example.businessserver.logic.ChatLogic;
+import com.example.businessserver.websockets.SocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,9 @@ public class ChatController {
 
 	@Autowired
 	private ChatLogic chatLogic;
+
+	@Autowired
+	private SocketHandler socketHandler;
 
 	@GetMapping("/{id}")
 	public ChatOverviewDTO getChatOverview(@PathVariable int id) {
@@ -24,7 +28,7 @@ public class ChatController {
 		return chatLogic.createChat(dto);
 	}
 
-	@GetMapping("/history")
+	@GetMapping("/history/{id}")
 	public ChatHistoryDTO getChatHistory(@PathVariable int id) {
 		System.out.println("GET CHAT HISTORY");
 		return chatLogic.getChatHistory(new GetChatHistoryDTO(id));
@@ -33,6 +37,11 @@ public class ChatController {
 	@PostMapping("/message")
 	public MessageDTO sendMessage(@RequestBody SendMessageDTO dto) {
 		System.out.println("SEND MESSAGE");
-		return chatLogic.sendMessage(dto);
+		MessageDTO messageDTO = chatLogic.sendMessage(dto);
+
+		// Send message to websocket for real-time message receiving
+		socketHandler.sendMessage(messageDTO);
+
+		return messageDTO;
 	}
 }

@@ -132,7 +132,7 @@
         }
       }
     },
-    "/chat/history": {
+    "/chat/history/{id}": {
       "get": {
         "tags": [
           "chat-controller"
