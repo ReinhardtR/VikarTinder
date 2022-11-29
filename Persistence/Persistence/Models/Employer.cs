@@ -7,5 +7,6 @@ public class Employer
 
     public Employer()
     {
+        Substitutes = new List<Substitute>();
     }
 }

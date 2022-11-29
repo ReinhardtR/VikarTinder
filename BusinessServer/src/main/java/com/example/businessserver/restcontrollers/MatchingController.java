@@ -14,7 +14,7 @@ public class MatchingController {
     @Autowired
     private MatchingLogic logic;
 
-    @GetMapping("/substitutes")
+    @PostMapping("/substitutes")
     public SubstituteMatchingDTOs getSubstitutes(@RequestBody SubstituteSearchParametersDTO searchParameters)
     {
         try {
@@ -24,7 +24,7 @@ public class MatchingController {
         }
     }
 
-    @PostMapping("/substitutes")
+    @PostMapping("/substitutes/request")
     public MatchValidationDTO substitutesMatchRequest(@RequestBody MatchRequestDTO matchRequest)
     {
         try {
@@ -34,7 +34,7 @@ public class MatchingController {
         }
     }
 
-    @GetMapping("/gigs")
+    @PostMapping("/gigs")
     public GigMatchingDTOs getGigs(@RequestBody GigSearchParametersDTO searchParameters)
     {
         try {
@@ -44,7 +44,7 @@ public class MatchingController {
         }
     }
 
-    @PostMapping("/gigs")
+    @PostMapping("/gigs/request")
     public MatchValidationDTO gigsMatchRequest(@RequestBody MatchRequestDTO matchRequest)
     {
         try {

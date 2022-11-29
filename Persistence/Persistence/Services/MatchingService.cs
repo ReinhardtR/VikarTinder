@@ -7,6 +7,11 @@ using Grpc.Core;
 
 public class MatchingService : Persistence.MatchingService.MatchingServiceBase
 {
+    /*
+     insert into Gigs values (1, 1), (2,1), (3,1), (4, 1), (5,1);
+insert into Employers values (1);
+insert into Substitutes values (1, null);  
+     */
 
     private readonly IMatchConverter _converter;
     private readonly IMatchDao _dao;
@@ -22,11 +27,12 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         Console.WriteLine("IDs: [Sub]:" + request.CurrentUser + " [Gig]:" + request.ToBeMatchedId);
         
         //DatabaseKald for at matche
-        Employer matchedEmployer = await _dao.MatchWithEmployer(request.CurrentUser, request.ToBeMatchedId);
-        Console.WriteLine("Employer Id = " + matchedEmployer.Id);
+        Gig matchedGig = await _dao.MatchWithGig(request.CurrentUser, request.ToBeMatchedId);
+        Console.WriteLine("Gig Id = " + matchedGig.Id);
         
         //Convert tilbage til reqly
-        MatchValidation val = _converter.EmployerConverter(matchedEmployer, request.CurrentUser);
+        MatchValidation val = _converter.GigConverter(matchedGig, request.CurrentUser);
+        Console.WriteLine("Conversion success");
 
         return val;
     }

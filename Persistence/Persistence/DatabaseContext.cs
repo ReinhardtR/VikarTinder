@@ -12,7 +12,7 @@ public class DatabaseContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source = VikarTinderDataCenter.db");
+        optionsBuilder.UseSqlite("Data Source = VikarTinder.db");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

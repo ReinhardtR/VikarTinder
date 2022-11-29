@@ -53,23 +53,21 @@ namespace HttpClients
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<SubstituteMatchingDTOs> GetSubstitutesAsync(SubstituteSearchParametersDTO searchParameters)
+        public virtual System.Threading.Tasks.Task<SubstituteMatchingDTOs> GetSubstitutesAsync(SubstituteSearchParametersDTO body)
         {
-            return GetSubstitutesAsync(searchParameters, System.Threading.CancellationToken.None);
+            return GetSubstitutesAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<SubstituteMatchingDTOs> GetSubstitutesAsync(SubstituteSearchParametersDTO searchParameters, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<SubstituteMatchingDTOs> GetSubstitutesAsync(SubstituteSearchParametersDTO body, System.Threading.CancellationToken cancellationToken)
         {
-            if (searchParameters == null)
-                throw new System.ArgumentNullException("searchParameters");
+            if (body == null)
+                throw new System.ArgumentNullException("body");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/matching/substitutes?");
-            foreach (var item_ in searchParameters.AdditionalProperties) { urlBuilder_.Append(System.Uri.EscapeDataString(item_.Key) + "=").Append(System.Uri.EscapeDataString(ConvertToString(item_.Value, System.Globalization.CultureInfo.InvariantCulture))).Append("&"); }
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/matching/substitutes");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -77,7 +75,11 @@ namespace HttpClients
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("*/*"));
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -146,7 +148,7 @@ namespace HttpClients
                 throw new System.ArgumentNullException("body");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/matching/substitutes");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/matching/substitutes/request");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -213,23 +215,21 @@ namespace HttpClients
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<GigMatchingDTOs> GetGigsAsync(GigSearchParametersDTO searchParameters)
+        public virtual System.Threading.Tasks.Task<GigMatchingDTOs> GetGigsAsync(GigSearchParametersDTO body)
         {
-            return GetGigsAsync(searchParameters, System.Threading.CancellationToken.None);
+            return GetGigsAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<GigMatchingDTOs> GetGigsAsync(GigSearchParametersDTO searchParameters, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GigMatchingDTOs> GetGigsAsync(GigSearchParametersDTO body, System.Threading.CancellationToken cancellationToken)
         {
-            if (searchParameters == null)
-                throw new System.ArgumentNullException("searchParameters");
+            if (body == null)
+                throw new System.ArgumentNullException("body");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/matching/gigs?");
-            foreach (var item_ in searchParameters.AdditionalProperties) { urlBuilder_.Append(System.Uri.EscapeDataString(item_.Key) + "=").Append(System.Uri.EscapeDataString(ConvertToString(item_.Value, System.Globalization.CultureInfo.InvariantCulture))).Append("&"); }
-            urlBuilder_.Length--;
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/matching/gigs");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -237,7 +237,11 @@ namespace HttpClients
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
-                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("*/*"));
 
                     PrepareRequest(client_, request_, urlBuilder_);
@@ -306,7 +310,7 @@ namespace HttpClients
                 throw new System.ArgumentNullException("body");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/matching/gigs");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/matching/gigs/request");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -475,46 +479,6 @@ namespace HttpClients
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class MatchRequestDTO
-    {
-        [Newtonsoft.Json.JsonProperty("currentUser", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int CurrentUser { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("matchId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int MatchId { get; set; }
-
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
-
-        [Newtonsoft.Json.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class MatchValidationDTO
-    {
-        [Newtonsoft.Json.JsonProperty("matchId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int MatchId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("matched", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool Matched { get; set; }
-
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
-
-        [Newtonsoft.Json.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class SubstituteSearchParametersDTO
     {
         [Newtonsoft.Json.JsonProperty("currentEmployerId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -553,6 +517,46 @@ namespace HttpClients
     {
         [Newtonsoft.Json.JsonProperty("possibleMatches", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<SubstituteMatchingDTO> PossibleMatches { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class MatchRequestDTO
+    {
+        [Newtonsoft.Json.JsonProperty("currentUser", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int CurrentUser { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("matchId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int MatchId { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class MatchValidationDTO
+    {
+        [Newtonsoft.Json.JsonProperty("matchId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int MatchId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("matched", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool Matched { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 

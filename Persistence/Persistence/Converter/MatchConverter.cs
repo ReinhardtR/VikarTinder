@@ -6,17 +6,17 @@ namespace Persistence.Converter;
 
 public class MatchConverter : IMatchConverter
 {
-    public MatchValidation EmployerConverter(Employer employer, int userId)
+    public MatchValidation GigConverter(Gig gig, int userId)
     {
-        if (employer == null)
+        if (gig == null)
             throw new ConverterNullReference("Substitute");
         
-        MatchValidation val = CreateMatchValidation(employer.Id);
+        MatchValidation val = CreateMatchValidation(gig.Id);
         
-        if (employer.Substitutes == null)
+        if (gig.Substitutes == null)
             throw new ConverterNullReference("Gigs");
         
-        foreach (Substitute subs in employer.Substitutes)
+        foreach (Substitute subs in gig.Substitutes)
         {
             if (subs.Id == userId)
             {

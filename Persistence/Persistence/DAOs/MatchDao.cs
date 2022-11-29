@@ -12,24 +12,24 @@ public class MatchDao : IMatchDao
     {
         _databaseContext = databaseContext;
     }
-    public async Task<Employer> MatchWithEmployer(int currentUserId, int matchId)
+    public async Task<Gig> MatchWithGig(int currentUserId, int matchId)
     {
         //Finder sit eget user domæne objekt
         Substitute user = await GetSubstituteById(currentUserId);
         
         //Finder domæneobjeketet på ejeren af gigget man har matchet
-        Employer employer = await GetEmployerById(matchId);
+        Gig gig = await GetGigById(matchId);
         
         
         //Adder den valgte gig sammen med tilhørende employer under sig
-        user.Positions.Add(new Gig(employer));
+        user.Positions.Add(gig);
 
         //Opdateringen og gemning
         _databaseContext.ChangeTracker.Clear();
         _databaseContext.Substitutes.Update(user);
         await _databaseContext.SaveChangesAsync();
 
-        return employer;
+        return gig;
     }
 
     public async Task<Substitute> MatchWithSubstitute(int currentUserId, int matchId)
@@ -88,5 +88,12 @@ public class MatchDao : IMatchDao
         Substitute? substitute = await _databaseContext.Substitutes.FirstOrDefaultAsync(sub =>
             sub.Id == id);
         return substitute;
+    }
+
+    public async Task<Gig> GetGigById(int id)
+    {
+        Gig? gigs = await _databaseContext.Gigs.FirstOrDefaultAsync(gig => gig.Id == id);
+        
+        return gigs;
     }
 }
