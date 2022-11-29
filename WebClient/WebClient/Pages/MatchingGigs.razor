@@ -1,15 +1,11 @@
-﻿@page "/Matching"
+﻿@page "/Matching/Gigs"
 @using HttpClients.Services
 @using HttpClients
-@inject MatchingService _matchingService;
+@inject MatchingService MatchingService;
 
-<h3>Matching</h3>
+<h3>Gigs</h3>
 <div>
     <MudGrid Justify="Justify.Center" Spacing="2">
-        <MudItem xs="12" Class="d-flex align-content-center justify-content-center">
-            <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Tertiary">Vikar</MudButton>
-            <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Tertiary">Arbejdsgiver</MudButton>
-        </MudItem>
         <MudItem xs="12" Class="d-flex align-content-center justify-content-center">
             <MudPaper Class="represent">
                 <MudPaper class="infoBox">
@@ -25,13 +21,13 @@
 
 </div>
 @code {
-    private int _userId = 1; 
+    private readonly int _userId = 1; 
     private int _currentDateId;
     private Stack<GigMatchingDTO> _gigs;
-    
+
     protected override async Task OnInitializedAsync()
     {
-        GigMatchingDTOs gigsAsync = await _matchingService.GetGigsAsync(new GigSearchParametersDTO
+        GigMatchingDTOs gigsAsync = await MatchingService.GetGigsAsync(new GigSearchParametersDTO
         {
             CurrentSubstituteId = _userId
         });
@@ -41,7 +37,7 @@
 
     private async void SendGigMatchRequest()
     {
-        MatchValidationDTO dto = await _matchingService.SendGigsMatchRequestAsync(new MatchRequestDTO()
+        MatchValidationDTO dto = await MatchingService.SendGigsMatchRequestAsync(new MatchRequestDTO()
         {
             CurrentUser = _userId,
             MatchId = _currentDateId
@@ -53,7 +49,7 @@
     {
         _currentDateId = _gigs.Pop().Id;
     }
-
+    
 }
 
 <style>
@@ -66,7 +62,7 @@
     height: auto;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 1%;
+    margin-top: 5%;
     
     }
     
