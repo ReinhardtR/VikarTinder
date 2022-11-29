@@ -1,11 +1,13 @@
 package com.example.businessserver.dtos.chat;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 public class CreateChatDTO {
-	private List<Integer> ids;
+	private final List<Integer> ids;
 
-	public CreateChatDTO(List<Integer> ids) {
+	public CreateChatDTO(@JsonProperty("ids") List<Integer> ids) {
 		this.ids = ids;
 	}
 

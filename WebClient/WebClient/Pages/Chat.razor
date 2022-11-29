@@ -1,63 +1,115 @@
-@page "/Chat"
-@using HttpClients.Services
+@page "/Chat/{ChatId:int}"
+@using HttpClients.Services        
 @using HttpClients
-@inject ChatService ChatService
-<h3>Chat</h3>
+@using System.ComponentModel.DataAnnotations
+@using WebSockets
+@inject ChatService ChatService    
 
-<PageTitle>Chat</PageTitle>
-
-@if (_chats == null && _errorLabel == null)
+@if (chatHistory == null && errorLabel == null)
 {
     <p>Loading...</p>
-} else if (_errorLabel != null)
+} else if (errorLabel != null)
 {
-    <p>Error: @_errorLabel</p>
-} else if (_chats != null)
+    <p>Error: @errorLabel</p>
+} else if (chatHistory != null)
 {
     <div>
-        <h1>Messages</h1>
+        <h1>Chat: @ChatId</h1>
         <div>
-            @foreach (BasicChatDTO chat in _chats)
-            {
-                <div>
-                    <h1>@chat.Id</h1>
-                    <ul>
-                        @foreach (int userId in chat.UserIds)
-                        {
-                            <li>@userId</li>
-                        }
-                    </ul>
-                </div>
-            }
+            <ul>
+                @foreach (var message in chatHistory.Messages)
+                {
+                    <li>
+                        <div>
+                            <p>Author Id: @message.AuthorId</p>
+                            <p>Message Id: @message.Id</p>
+                            <p>Content: @message.Content</p>
+                        </div>
+                    </li>
+                }
+            </ul>
         </div>
+        <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+            <InputText id="content" @bind-Value="@formModel.Content"/>
+
+            <button type="submit">Send</button>
+        </EditForm>
     </div>
 }
 
 @code {
-    // replace with auth stuff
-    private readonly int _userId = 1;
-
-    private ICollection<BasicChatDTO>? _chats;
-    private string? _errorLabel;
+    
+    [Parameter]
+    public int ChatId { get; set; }
+    
+    private ChatHistoryDTO? chatHistory;
+    private string? errorLabel;
 
     protected override async Task OnInitializedAsync()
     {
-        await FetchChats();
+        ChatHistoryDTO newChatHistory = await ChatService.GetChatHistoryAsync(ChatId);
+
+        if (newChatHistory == null)
+        {
+            throw new Exception("Chat not found");
+        }
+        
+        chatHistory = newChatHistory;
+        ListenToChatSocket();
     }
 
-    private async Task FetchChats()
+    private class FormModel
+    {
+        [Required]
+        [StringLength(1000, MinimumLength = 1)]
+        public string Content { get; set; } = "";
+    }
+    
+    private FormModel formModel = new();
+
+    private async void ListenToChatSocket()
     {
         try
         {
-            _errorLabel = null;
-            ChatOverviewDTO chatOverview = await ChatService.GetChatOverviewAsync(_userId);
+            ChatSocket chatSocket = new();
+            IAsyncEnumerable<MessageDTO> messages = chatSocket.ConnectAsync(ChatId, CancellationToken.None);
 
-            _chats = chatOverview.Chats;
+            await foreach (MessageDTO message in messages)
+            {
+                chatHistory?.Messages.Add(message);
+                StateHasChanged();
+            }
         }
         catch (Exception e)
         {
-            _errorLabel = e.Message;
-            _chats = null;
+            errorLabel = e.Message;
+            StateHasChanged();
         }
+    }
+    
+    private async void HandleValidSubmit()
+    {
+        try
+        {
+            // replace with auth stuff
+            int authorId = 1;
+            
+            SendMessageDTO sendMessageDto = new()
+            {
+                ChatId = ChatId,
+                AuthorId = authorId,
+                Content = formModel.Content
+            };
+            
+            MessageDTO messageDto = await ChatService.SendMessageAsync(sendMessageDto);
+            
+            // error handling?
+        }
+        catch (Exception e)
+        {
+            errorLabel = e.Message;
+        }
+        
+        StateHasChanged();
     }
 }

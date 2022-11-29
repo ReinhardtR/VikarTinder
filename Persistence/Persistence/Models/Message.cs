@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Persistence.Models;
 
-public class Message
+public class Message : DateTrackingEntity
 {
     [Key]
     public int Id { get; set; }
@@ -15,9 +15,4 @@ public class Message
     public int ChatId { get; set; }
     
     public string Content { get; set; }
-
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public DateTime SentAt { get; set; }
-    
-    
 }

@@ -14,10 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class ChatServiceFactoryTest
 {
 
-  @BeforeEach void setUp()
-  {
-    ChatServiceFactory ChatServiceFactory = new ChatServiceFactory();
-  }
 
   @Test void toCreateChatRequest()
   {

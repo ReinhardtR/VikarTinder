@@ -1,0 +1,57 @@
+@using HttpClients.Services
+@using HttpClients
+@using System.ComponentModel.DataAnnotations
+@inject ChatService ChatService
+                    
+<div>
+<EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />    
+    <ValidationSummary /> 
+    
+    <InputNumber id="user1Id" @bind-Value="@formModel.User1Id" />
+    <InputNumber id="user2Id" @bind-Value="@formModel.User2Id" />    
+    
+    <button type="submit">Create Chat</button>
+</EditForm>
+
+<p>@responseLabel</p>  
+</div> 
+
+@code {
+    // Using this component to test creating chats,
+    // so this shouldn't be used by the user.
+
+    private class FormModel
+    {
+        [Required]
+        public int User1Id { get; set; }
+        
+        [Required]
+        public int User2Id { get; set; }
+    }
+    
+    private FormModel formModel = new FormModel();
+
+    private string responseLabel = "";
+    
+    private async void HandleValidSubmit()
+    {
+        try
+        {
+            CreateChatDTO createChatDto = new()
+            {
+                Ids = new List<int> { formModel.User1Id, formModel.User2Id }
+            };
+
+            ChatDTO createdChat = await ChatService.CreateChatAsync(createChatDto);
+            
+            responseLabel = $"Created a chat with id {createdChat.ChatId}";
+        }
+        catch (Exception e)
+        {
+            responseLabel = e.Message;
+        }
+        
+        StateHasChanged();
+    }
+}

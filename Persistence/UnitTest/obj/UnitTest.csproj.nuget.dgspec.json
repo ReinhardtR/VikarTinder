@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj": {}
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj": {}
   },
   "projects": {
-    "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
+        "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj",
         "projectName": "Persistence",
-        "projectPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
-        "packagesPath": "C:\\Users\\miloA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\obj\\",
+        "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj",
+        "packagesPath": "/Users/reinhardt/.nuget/packages/",
+        "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\miloA\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -76,21 +76,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj": {
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
+        "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
         "projectName": "UnitTest",
-        "projectPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
-        "packagesPath": "C:\\Users\\miloA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\obj\\",
+        "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
+        "packagesPath": "/Users/reinhardt/.nuget/packages/",
+        "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\miloA\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -102,8 +102,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
-                "projectPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj"
+              "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj": {
+                "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj"
               }
             }
           }
@@ -118,6 +118,10 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore.InMemory": {
+              "target": "Package",
+              "version": "[6.0.11, )"
+            },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
               "version": "[17.1.0, )"
@@ -155,7 +159,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
         }
       }
     }
