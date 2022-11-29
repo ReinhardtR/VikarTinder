@@ -10,6 +10,7 @@ public class ChatServiceServer : ChatService.ChatServiceBase
     private readonly ILogger<ChatServiceServer> _logger;
     private readonly IChatDAO _chatDao;
     
+    
     public ChatServiceServer(ILogger<ChatServiceServer> logger, IChatDAO chatDao)
     {
         _logger = logger;
@@ -20,16 +21,7 @@ public class ChatServiceServer : ChatService.ChatServiceBase
     {
         Message message = await _chatDao.SendMessageAsync(request.Content,request.AuthorId,request.ChatId);
 
-        SendMessageResponse reply = new SendMessageResponse()
-        {
-            Message = new MessageObject()
-            {
-                Id = message.Id,
-                AuthorId = message.AuthorId,
-                ChatId = message.ChatId,
-                Content = message.Content
-            }
-        };
+        SendMessageResponse reply = ChatServiceFactory.ToSendMessageResponse(message);
         
         return reply;
     }
@@ -38,10 +30,7 @@ public class ChatServiceServer : ChatService.ChatServiceBase
     {
         Chat chat = await _chatDao.CreateChatAsync(request.UserIds.ToList());
 
-        CreateChatResponse reply = new CreateChatResponse()
-        {
-            Id = chat.Id
-        };
+        CreateChatResponse reply = ChatServiceFactory.ToCreateChatResponse(chat);
 
         return reply;
     }
@@ -51,30 +40,8 @@ public class ChatServiceServer : ChatService.ChatServiceBase
         List<Chat> chats = await _chatDao.GetAllChatsAsync(request.UserId);
 
         Console.WriteLine("Chats: " + chats.Count);
-
-        RepeatedField<ChatOverviewObject> chatOverviewObjects = new RepeatedField<ChatOverviewObject>();
-
-        foreach (Chat chat in chats)
-        {
-            RepeatedField<int> userIds = new RepeatedField<int>();
-            
-            Console.WriteLine("Participants: " + chat.Participants);
-            foreach (User participant in chat.Participants)
-            {
-                userIds.Add(participant.Id);
-            }
-
-           chatOverviewObjects.Add(new ChatOverviewObject()
-           {
-               Id = chat.Id,
-               UserIds = { userIds }
-           });
-        }
         
-        GetChatOverviewResponse reply = new()
-        {
-            Chats = { chatOverviewObjects }
-        };
+        GetChatOverviewResponse reply = ChatServiceFactory.ToGetChatOverviewResponse(chats);
 
         return reply;
     }
@@ -85,18 +52,7 @@ public class ChatServiceServer : ChatService.ChatServiceBase
     {
         List<Message> messages = await _chatDao.GetChatHistoryAsync(request.ChatId);
 
-        IEnumerable<MessageObject> messageObjects = messages.Select((m) => new MessageObject
-        {
-            Id = m.Id,
-            Content = m.Content,
-            AuthorId = m.AuthorId,
-            ChatId = m.ChatId
-        });
-
-        GetChatHistoryResponse reply = new GetChatHistoryResponse()
-        {
-            Messages = { messageObjects }
-        };
+        GetChatHistoryResponse reply = ChatServiceFactory.ToGetChatHistoryResponse(messages);
         
         return reply;
     }

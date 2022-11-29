@@ -18,5 +18,14 @@ public class BasicChatDTO {
 	public List<Integer> getUserIds() {
 		return userIds;
 	}
-	
+
+	@Override public String toString()
+	{
+		StringBuilder userids = new StringBuilder();
+		for (int i = 0; i < userIds.size(); i++)
+		{
+			userids = new StringBuilder(userids.append("user_ids: " + userIds.get(i) + "\n"));
+		}
+		return "id: " + id + "\n" + userids;
+	}
 }

@@ -12,4 +12,9 @@ public class ChatOverviewDTO {
 	public List<BasicChatDTO> getChats() {
 		return chats;
 	}
+
+	@Override public String toString()
+	{
+		return "[" + chats + "]";
+	}
 }
