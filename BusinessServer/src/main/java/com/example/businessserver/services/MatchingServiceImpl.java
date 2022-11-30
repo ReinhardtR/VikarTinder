@@ -40,7 +40,8 @@ public class MatchingServiceImpl implements MatchingService {
 
     @Override
     public MatchValidationDTO gigsMatchRequest(MatchRequestDTO matchRequest) {
-        MatchValidation validation = userServiceBlockingStub.sendMatchFromSubstitute(
+        MatchValidation validation = userServiceBlockingStub.
+                sendMatchFromSubstitute(
                 grpcBuilder.buildMatchRequest(matchRequest)
         );
         return dtoBuilder.matchValidationDTO(validation);
