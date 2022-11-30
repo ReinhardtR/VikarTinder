@@ -36,8 +36,9 @@ message GetChatHistoryRequest{
   int32 chatId = 1;
 }
 
-message GetChatHistoryResponse{ //Skal senere indeholde en liste af usernames for dem som er i chatten
+message GetChatHistoryResponse{ 
   repeated MessageObject messages = 1;
+  repeated ChatUserObject participants = 2;
 }
 
 // Create Chat
@@ -67,4 +68,9 @@ message ChatObject {
   int32 id = 1;
   repeated int32 user_ids = 2;
   repeated MessageObject messages = 3;
+}
+
+message ChatUserObject{
+  int32 id = 1;
+ 
 }
