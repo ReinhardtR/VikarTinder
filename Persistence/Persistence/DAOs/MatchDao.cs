@@ -68,10 +68,16 @@ public class MatchDao : IMatchDao
         //Gigs må ikke have været swipet nej til før
         //IKKE IMPLEMENTERET ENDNU
         
-        List<Gig>? gigs = new List<Gig>();
-        await _databaseContext.Gigs.ForEachAsync(gig =>
-            gigs.Add(gig));
 
+        //Hope it works :3
+        IQueryable<Gig> gigsQuery = _databaseContext.Gigs.AsQueryable();
+
+        gigsQuery = gigsQuery.Where(gig => 
+            gig.Substitutes.Exists(substitute => substitute.Id != id));
+
+        List<Gig> gigs = await gigsQuery.ToListAsync();
+        Console.WriteLine("Gigs left not matched with: " + gigs.Count);
+        
         return gigs;
     }
 
