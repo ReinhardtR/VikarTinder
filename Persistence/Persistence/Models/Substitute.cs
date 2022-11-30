@@ -6,6 +6,7 @@ public class Substitute
     public ICollection<Gig> Positions { get; set; }
     public List<GigSubstitute> GigSubstitutes { get; set; }
     public List<Employer> Employers { get; set; }
+    public List<EmployerSubstitute> EmployerSubstitutes { get; set; }
 
     public Substitute()
     {
