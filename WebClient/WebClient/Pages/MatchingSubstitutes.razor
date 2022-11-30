@@ -37,7 +37,7 @@
  
     private async void SendSubstituteMatchRequest()
     {
-        MatchValidationDTO dto = await MatchingService.SendGigsMatchRequestAsync(new MatchRequestDTO()
+        MatchValidationDTO dto = await MatchingService.SendSubstituteMatchRequestAsync(new MatchRequestDTO()
         {
             CurrentUser = _userId,
             MatchId = _currentDateId
