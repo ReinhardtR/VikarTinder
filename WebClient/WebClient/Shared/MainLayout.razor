@@ -16,7 +16,13 @@
         
         <MudSpacer />
         
-        <MudText>Nothing here yet!</MudText>
+        <MudButton OnClick="@NavigateToChatOverview" Variant="Variant.Text" Style="color: white">Chat</MudButton>
+        
+        <MudSpacer />
+        
+        <MudText>
+            <MudButton Variant="Variant.Text" Style="color: white">Reinhardt Rijna</MudButton>
+        </MudText>
     </MudAppBar>
     
     <MudMainContent>
@@ -31,6 +37,11 @@
     private void NavigateToHome()
     {
         NavigationManager.NavigateTo("/");
+    }
+
+    private void NavigateToChatOverview()
+    {
+        NavigationManager.NavigateTo("/chat");
     }
 
 }

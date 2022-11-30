@@ -1,4 +1,4 @@
-@page "/chats"
+@page "/chat"
 @using HttpClients.Services
 @using HttpClients
 @inject ChatService ChatService
@@ -10,20 +10,20 @@
     <CreateChatForm />
 </div>
 
-@if (_chats == null && _errorLabel == null)
+@if (chats == null && errorLabel == null)
 {
     <p>Loading...</p>
 } 
-else if (_errorLabel != null)
+else if (errorLabel != null)
 {
-    <p>Error: @_errorLabel</p>
+    <p>Error: @errorLabel</p>
 } 
-else if (_chats != null)
+else if (chats != null)
 {
     <div>
         <h1>Chats</h1>
         <div>
-            @foreach (BasicChatDTO chat in _chats)
+            @foreach (BasicChatDTO chat in chats)
             {
                 <div>
                     <h3>Chat: @chat.Id</h3>
@@ -41,10 +41,10 @@ else if (_chats != null)
 
 @code {
     // replace with auth stuff
-    private readonly int _userId = 2;
+    private readonly int userId = 2;
 
-    private ICollection<BasicChatDTO>? _chats;
-    private string? _errorLabel;
+    private ICollection<BasicChatDTO>? chats;
+    private string? errorLabel;
 
     protected override async Task OnInitializedAsync()
     {
@@ -55,15 +55,15 @@ else if (_chats != null)
     {
         try
         {
-            _errorLabel = null;
-            ChatOverviewDTO chatOverview = await ChatService.GetChatOverviewAsync(_userId);
+            errorLabel = null;
+            ChatOverviewDTO chatOverview = await ChatService.GetChatOverviewAsync(userId);
 
-            _chats = chatOverview.Chats;
+            chats = chatOverview.Chats;
         }
         catch (Exception e)
         {
-            _errorLabel = e.Message;
-            _chats = null;
+            errorLabel = e.Message;
+            chats = null;
         }
     }
 }
