@@ -71,14 +71,12 @@ public class MatchDao : IMatchDao
 
         //Hope it works :3
         IQueryable<Gig> gigsQuery = _databaseContext.Gigs.AsQueryable();
-
-        gigsQuery = gigsQuery.Where(gig => 
-            gig.Substitutes.Exists(substitute => substitute.Id != id));
-
-        List<Gig> gigs = await gigsQuery.ToListAsync();
-        Console.WriteLine("Gigs left not matched with: " + gigs.Count);
         
-        return gigs;
+        gigsQuery = gigsQuery.Where(gig => 
+            gig.Substitutes.Any() == false ||
+            gig.Substitutes.All(substitute => substitute.Id != id) == true);
+        
+            return await gigsQuery.ToListAsync();
     }
 
     public async Task<Employer> GetEmployerById(int id)
