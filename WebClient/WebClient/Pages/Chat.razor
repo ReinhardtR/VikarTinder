@@ -13,34 +13,47 @@
     <p>Error: @errorLabel</p>
 } else if (chatHistory != null)
 {
-    <div>
-        <h1>Chat: @ChatId</h1>
-        <div>
-            <ul>
-                @foreach (var message in chatHistory.Messages)
-                {
-                    <li>
-                        <div>
-                            <p>Author Id: @message.AuthorId</p>
-                            <p>Message Id: @message.Id</p>
-                            <p>Content: @message.Content</p>
-                        </div>
-                    </li>
-                }
-            </ul>
-        </div>
-        <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
-            <InputText id="content" @bind-Value="@formModel.Content"/>
+    @* vh based on the size of the appbar taking up the top part of the screen *@
+    <MudStack Justify="Justify.Center" Spacing="4" Style="height: 83vh">
+        <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
+            <MudAvatar Size="Size.Medium" Color="Color.Secondary">@chatName[0]</MudAvatar>
+            <MudText Typo="Typo.h6">@chatName</MudText>
+        </MudStack>
+        
+        <MudDivider Class="my-2" />
 
-            <button type="submit">Send</button>
+        <MudStack Class="overflow-y-scroll pa-4 flex-grow-1 flex-column-reverse">
+            <MudStack Spacing="4">
+                @foreach (MessageDTO message in chatHistory.Messages)
+                {
+                    <MudPaper Class="@GetMessageClasses(message.AuthorId)" Style="@GetMessageStyles(message.AuthorId)">
+                        @message.Content
+                    </MudPaper>
+                }
+            </MudStack>
+        </MudStack>
+
+        <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator/>
+            
+            <MudStack Row="@true" Spacing="2" Class="px-4" AlignItems="AlignItems.Start" Justify="Justify.Center">
+                <MudTextField Label="Message" AutoFocus="@true" Variant="Variant.Outlined" @bind-Value="@formModel.Content" For="() => formModel.Content" />
+                <MudIconButton Icon="@Icons.Filled.Send" Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit" Class="py-4 px-5 my-1" />
+            </MudStack>
         </EditForm>
-    </div>
+    </MudStack>
 }
 
 @code {
     
     [Parameter]
     public int ChatId { get; set; }
+
+    // replace with auth stuff
+    private int userId = 1;
+    
+    // replace with data from server
+    private string chatName = "John Doe";
     
     private ChatHistoryDTO? chatHistory;
     private string? errorLabel;
@@ -49,23 +62,24 @@
     protected override async Task OnInitializedAsync()
     {
         ChatHistoryDTO newChatHistory = await ChatService.GetChatHistoryAsync(ChatId);
-
-        if (newChatHistory == null)
-        {
-            throw new Exception("Chat not found");
-        }
+        chatHistory = newChatHistory ?? throw new Exception("Chat not found");
         
-        chatHistory = newChatHistory;
         ListenToChatSocket();
     }
 
     private class FormModel
     {
+        private string _content = "";
+        
         [Required]
-        [StringLength(1000, MinimumLength = 1)]
-        public string Content { get; set; } = "";
+        [StringLength(1000, MinimumLength = 1, ErrorMessage = "Message must be between 1 and 1000 characters")]
+        public string Content
+        {
+            get => _content.Trim();
+            set => _content = value;
+        }
     }
-    
+
     private FormModel formModel = new();
 
     private async void ListenToChatSocket()
@@ -103,7 +117,8 @@
             };
             
             MessageDTO messageDto = await ChatService.SendMessageAsync(sendMessageDto);
-            
+
+            formModel = new FormModel();
             // error handling?
         }
         catch (Exception e)
@@ -112,5 +127,19 @@
         }
         
         StateHasChanged();
+    }
+    
+    private String GetMessageClasses(int authorId)
+    {
+        string baseClasses = "pa-3";
+        string uniqueClasses = authorId == userId ? "ml-auto" : "mr-auto";
+        return $"{baseClasses} {uniqueClasses}";
+    }
+    
+    private string GetMessageStyles(int authorId)
+    {
+        string baseStyles = "max-width: 80%; word-break: break-all;";
+        string uniqueStyles = authorId == userId ? "background-color: #ebebeb;" : "background-color: #ff4081; color: white;";
+        return $"{baseStyles} {uniqueStyles}";
     }
 }
