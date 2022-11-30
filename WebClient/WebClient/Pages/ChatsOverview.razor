@@ -2,13 +2,14 @@
 @using HttpClients.Services
 @using HttpClients
 @inject ChatService ChatService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Chat</PageTitle>
-
-<div>
-    <h1>Create Chat Form</h1>
-    <CreateChatForm />
-</div>
+@* *@
+@* <div> *@
+@*     <h1>Create Chat Form</h1> *@
+@*     <CreateChatForm /> *@
+@* </div> *@
 
 @if (chats == null && errorLabel == null)
 {
@@ -20,32 +21,35 @@ else if (errorLabel != null)
 } 
 else if (chats != null)
 {
-    <div>
+    <MudStack class="object-left" Spacing="0" AlignItems="AlignItems.Stretch">
         <h1>Chats</h1>
-        <div>
-            @foreach (BasicChatDTO chat in chats)
-            {
-                <div>
-                    <h3>Chat: @chat.Id</h3>
-                    <ul>
-                        @foreach (int userId in chat.UserIds)
-                        {
-                            <li>User: @userId</li>
-                        }
-                    </ul>
-                </div>
-            }
-        </div>
-    </div>
+        
+        @foreach (BasicChatDTO chat in chats)
+        {
+            <MudButton OnClick="() => MoveToChat(chat.Id)">
+                <MudPaper class="ma-1" Width="100%" >
+                <MudStack Row="true" Class="pa-4" >
+                        <MudAvatar Color="Color.Secondary" >@chat.UserIds.Single(u => u != userId)</MudAvatar>
+                        <MudStack Justify="Justify.Center" Spacing="0">
+                            <MudText Typo="Typo.body1">@chat.UserIds.Single(u => u != userId)</MudText>
+                            <MudText Typo="Typo.body2">Sample Emailgmail.com</MudText>
+                        </MudStack>
+                    </MudStack>
+                </MudPaper>
+            </MudButton>
+            
+        }
+    </MudStack>
 }
 
 @code {
     // replace with auth stuff
-    private readonly int userId = 1;
-
+    private readonly int userId = 2;
+    
     private ICollection<BasicChatDTO>? chats;
     private string? errorLabel;
 
+    private int tempPartnerId;
     protected override async Task OnInitializedAsync()
     {
         await FetchChats();
@@ -66,4 +70,15 @@ else if (chats != null)
             chats = null;
         }
     }
+
+    private void assignPartner(BasicChatDTO chatDto)
+    {
+        tempPartnerId = chatDto.UserIds.Single(u => u != userId);
+    }
+
+    private void MoveToChat(int chatToGoTo)
+    {
+        NavigationManager.NavigateTo($"/chat/{chatToGoTo}");
+    }
+
 }
