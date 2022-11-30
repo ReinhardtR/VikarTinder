@@ -45,6 +45,7 @@
     private ChatHistoryDTO? chatHistory;
     private string? errorLabel;
 
+    // TODO Hvis persistence ikke kører så kommer der ikke en error på client
     protected override async Task OnInitializedAsync()
     {
         ChatHistoryDTO newChatHistory = await ChatService.GetChatHistoryAsync(ChatId);
