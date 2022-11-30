@@ -5,6 +5,7 @@ namespace Persistence.Services;
 
 public class ChatServiceFactory
 {
+
     public static SendMessageResponse ToSendMessageResponse(Message message)
     {
         return new SendMessageResponse
