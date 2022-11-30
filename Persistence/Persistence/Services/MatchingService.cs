@@ -46,7 +46,8 @@ insert into Substitutes values (1, null);
 
         //Convert tilbage til reqly
         MatchValidation val = _converter.SubstituteConverter(matchedSubstitute, request.CurrentUser);
-
+        
+        Console.WriteLine("Conversion success: [SUB ID]"+ val.MatchId + "[ISMATCHED]"+val.IsMatched);
         return val;
     }
 

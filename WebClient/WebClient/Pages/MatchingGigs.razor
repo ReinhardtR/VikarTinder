@@ -21,7 +21,7 @@
 
 </div>
 @code {
-    private readonly int _userId = 1; 
+    private readonly int _userId = 5; 
     private int _currentDateId;
     private Stack<GigMatchingDTO> _gigs;
 
@@ -43,6 +43,8 @@
             MatchId = _currentDateId
         });
         NextMatch();
+        
+        StateHasChanged();
     }
 
     private void NextMatch()

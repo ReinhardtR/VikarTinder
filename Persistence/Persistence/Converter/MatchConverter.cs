@@ -39,6 +39,7 @@ public class MatchConverter : IMatchConverter
         if (substitute.Positions == null)
             throw new ConverterNullReference("Gigs");
 
+            //Hvis substitute har en gig med employer-userens id er det et match!
             foreach (Gig gig in substitute.Positions )
             {
                 if (gig.Employer.Id == userId)
