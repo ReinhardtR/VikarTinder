@@ -4,8 +4,9 @@ public class Gig
 {
     public int Id { get; set; }
     public Employer Employer { get; set; }
-    
-    public List<Substitute> Substitutes { get; set; }
+    public List<GigSubstitute> GigSubstitutes { get; set; }
+
+    public ICollection<Substitute> Substitutes { get; set; }
 
     public Gig(Employer employer)
     {

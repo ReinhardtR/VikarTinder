@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="VikarTinder.db" uuid="051fcdde-033c-4bfd-9ad1-6c93df78b575">
+    <data-source source="LOCAL" name="VikarTinder" uuid="19328b5f-cd39-4dfb-a46c-6e13a77f349b">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\Simon\Documents\GitHub\VikarTinder\Persistence\Persistence\VikarTinder.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\simso\source\repos\VikarTinderSep\VikarTinder\Persistence\Persistence\VikarTinder.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
+      <libraries>
+        <library>
+          <url>file://$APPLICATION_CONFIG_DIR$/jdbc-drivers/Xerial SQLiteJDBC/3.39.2/sqlite-jdbc-3.39.2.jar</url>
+        </library>
+      </libraries>
     </data-source>
   </component>
 </project>
