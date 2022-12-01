@@ -45,7 +45,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        NextMatch();
+        GetGigsAsync();
     }
 
     private async void SendGigMatchRequest(bool wantToMatch)
@@ -85,7 +85,8 @@
             {
                 _areStillGigsToMatch = false;
                 _somethingIsWrongText = "No more matches";
-            }
+            }else
+                _currentDateId = _gigs.Pop().Id;
         }
         catch (Exception e)
         {
