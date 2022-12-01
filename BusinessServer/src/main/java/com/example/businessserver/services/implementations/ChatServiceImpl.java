@@ -1,13 +1,17 @@
-package com.example.businessserver.services;
+package com.example.businessserver.services.implementations;
 
 import ChatService.*;
 import com.example.businessserver.dtos.chat.*;
+import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
+import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.services.ChatServiceClient;
 import com.example.businessserver.services.factories.ChatServiceFactory;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ChatServiceImpl implements ChatServiceClient {
+public class ChatServiceImpl implements ChatServiceClient
+{
 
 	@GrpcClient("grpc-server")
 	private ChatServiceGrpc.ChatServiceBlockingStub chatServiceBlockingStub;

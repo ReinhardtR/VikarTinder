@@ -2,6 +2,8 @@ package com.example.businessserver.services.factories;
 
 import ChatService.*;
 import com.example.businessserver.dtos.chat.*;
+import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
+import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
 
 import java.util.List;
 
