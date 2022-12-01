@@ -27,84 +27,52 @@ public class ChatSocket
         
         while (_webSocket.State == WebSocketState.Open)
         {
-            var buffer = new byte[1024 * 4];
-            var result = await _webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            var message = Encoding.UTF8.GetString(buffer, 0, result.Count);
-            yield return JsonConvert.DeserializeObject<MessageDTO>(message);
+            string? newMessageText = await GetNewMessageAsync();
+            if (newMessageText == null) continue;
+            
+            MessageDTO? messageDto = JsonConvert.DeserializeObject<MessageDTO>(newMessageText);
+            if (messageDto != null) yield return messageDto;
         }
     }
 
     public async IAsyncEnumerable<Object> ListenToJobConfirmation(int chatId, int jobConfirmationId)
     {
-        
-    }
-
-    public async IAsyncEnumerable<MessageDTO> ConnectAsync(int chatId, [EnumeratorCancellation] CancellationToken cancellationToken)
-    {
-        await _webSocket.ConnectAsync(_webSocketUrl, CancellationToken.None);
+        await ConnectAsync();
         await JoinChatAsync(chatId);
-
-        ArraySegment<byte> buffer = new(new byte[2048]);
         
-        while (!cancellationToken.IsCancellationRequested)
+        while (_webSocket.State == WebSocketState.Open)
         {
-            WebSocketReceiveResult result;
-            MemoryStream ms = new();
-            
-            do
-            {
-                result = await _webSocket.ReceiveAsync(buffer, cancellationToken);
-                ms.Write(buffer.Array, buffer.Offset, result.Count);
-            } while (!result.EndOfMessage);
+            string? newMessageText = await GetNewMessageAsync();
+            if (newMessageText == null) continue;
 
-            ms.Seek(0, SeekOrigin.Begin);
-
-            string jsonString = Encoding.UTF8.GetString(ms.ToArray());
-
-            MessageDTO? message = JsonConvert.DeserializeObject<MessageDTO>(jsonString);
-            
-            if (message != null)
-            {
-                yield return message;
-            }
-
-            if (result.MessageType == WebSocketMessageType.Close)
-                break;
+            MessageDTO? messageDto = JsonConvert.DeserializeObject<MessageDTO>(newMessageText);
+            if (messageDto != null) yield return messageDto;
         }
     }
-    
-    public async IAsyncEnumerable<Object> ListenToJobConfirmation(int chatId, int jobConfirmationId)
+
+    private async Task<string?> GetNewMessageAsync()
     {
-        await _webSocket.ConnectAsync(_webSocketUrl, CancellationToken.None);
-        await JoinChatAsync(jobConfirmationId);
+        ArraySegment<byte> buffer = new(new byte[8192]);
 
-        ArraySegment<byte> buffer = new(new byte[2048]);
+        WebSocketReceiveResult? result;
+
+        using MemoryStream ms = new();
         
-        while (!cancellationToken.IsCancellationRequested)
+        do
         {
-            WebSocketReceiveResult result;
-            MemoryStream ms = new();
-            
-            do
-            {
-                result = await _webSocket.ReceiveAsync(buffer, cancellationToken);
-                ms.Write(buffer.Array, buffer.Offset, result.Count);
-            } while (!result.EndOfMessage);
-
-            ms.Seek(0, SeekOrigin.Begin);
-
-            string jsonString = Encoding.UTF8.GetString(ms.ToArray());
-            
-            Object? message = JsonConvert.DeserializeObject<Object>(jsonString);
-            
-            if (message != null)
-            {
-                yield return message;
-            }
-
-            if (result.MessageType == WebSocketMessageType.Close)
-                break;
+            result = await _webSocket.ReceiveAsync(buffer, CancellationToken.None);
+            ms.Write(buffer.Array, buffer.Offset, result.Count);
         }
+        while (!result.EndOfMessage);
+
+        ms.Seek(0, SeekOrigin.Begin);
+
+        if (result.MessageType == WebSocketMessageType.Text)
+        {
+            return Encoding.UTF8.GetString(ms.ToArray());
+        }
+        
+        return null;
     }
 
     private async Task ConnectAsync()
