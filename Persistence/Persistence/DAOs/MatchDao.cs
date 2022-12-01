@@ -24,7 +24,6 @@ public class MatchDao : IMatchDao
         
         //Adder den valgte gig sammen med tilhørende employer under sig
         substitute.Positions.Add(gig);
-        
         //Opdateringen og gemning
         _databaseContext.ChangeTracker.Clear();
         _databaseContext.Substitutes.Update(substitute);

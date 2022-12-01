@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -81,21 +82,22 @@ namespace Persistence.Migrations
                 name: "GigSubstitute",
                 columns: table => new
                 {
-                    PositionsId = table.Column<int>(type: "INTEGER", nullable: false),
-                    SubstitutesId = table.Column<int>(type: "INTEGER", nullable: false)
+                    SubstituteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    GigId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PublicationDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GigSubstitute", x => new { x.PositionsId, x.SubstitutesId });
+                    table.PrimaryKey("PK_GigSubstitute", x => new { x.SubstituteId, x.GigId });
                     table.ForeignKey(
-                        name: "FK_GigSubstitute_Gigs_PositionsId",
-                        column: x => x.PositionsId,
+                        name: "FK_GigSubstitute_Gigs_GigId",
+                        column: x => x.GigId,
                         principalTable: "Gigs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GigSubstitute_Substitutes_SubstitutesId",
-                        column: x => x.SubstitutesId,
+                        name: "FK_GigSubstitute_Substitutes_SubstituteId",
+                        column: x => x.SubstituteId,
                         principalTable: "Substitutes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -112,9 +114,9 @@ namespace Persistence.Migrations
                 column: "EmployerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GigSubstitute_SubstitutesId",
+                name: "IX_GigSubstitute_GigId",
                 table: "GigSubstitute",
-                column: "SubstitutesId");
+                column: "GigId");
         }
 
         /// <inheritdoc />

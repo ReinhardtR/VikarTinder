@@ -10,7 +10,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
     /*
      insert into Gigs values (1, 1), (2,1), (3,1), (4, 1), (5,1);
 insert into Employers values (1);
-insert into Substitutes values (1, null);  
+insert into Substitutes values (1);  
      */
 
     private readonly IMatchConverter _converter;

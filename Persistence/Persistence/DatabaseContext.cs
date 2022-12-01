@@ -17,9 +17,39 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Employer>().HasKey(employer => employer.Id);
-        modelBuilder.Entity<Substitute>().HasKey(substitute => substitute.Id);
-        modelBuilder.Entity<Gig>().HasKey(position => position.Id);
-
+        modelBuilder.Entity<Substitute>()
+            .HasMany(p => p.Positions)
+            .WithMany(p => p.Substitutes)
+            .UsingEntity<GigSubstitute>(
+                j => j
+                    .HasOne(pt => pt.Gig)
+                    .WithMany(t => t.GigSubstitutes)
+                    .HasForeignKey(pt => pt.GigId),
+                j => j
+                    .HasOne(pt => pt.Substitute)
+                    .WithMany(p => p.GigSubstitutes)
+                    .HasForeignKey(pt => pt.SubstituteId),
+                j =>
+                {
+                    j.Property(pt => pt.PublicationDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    j.HasKey(t => new { t.SubstituteId, t.GigId });
+                });
+        modelBuilder.Entity<Employer>()
+            .HasMany(p => p.Substitutes)
+            .WithMany(p => p.Employers)
+            .UsingEntity<EmployerSubstitute>(
+                j => j
+                    .HasOne(pt => pt.Substitute)
+                    .WithMany(t => t.EmployerSubstitutes)
+                    .HasForeignKey(pt => pt.SubstituteId),
+                j => j
+                    .HasOne(pt => pt.Employer)
+                    .WithMany(p => p.EmployerSubstitutes)
+                    .HasForeignKey(pt => pt.EmployerId),
+                j =>
+                {
+                    j.Property(pt => pt.PublicationDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+                    j.HasKey(t => new { t.EmployerId, t.SubstituteId });
+                });
     }
 }
