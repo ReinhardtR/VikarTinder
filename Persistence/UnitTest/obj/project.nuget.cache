@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ly516UtcTzBAMyP49nSbJfaVg/Ih/0Jn+S+1ZzfxWjbFmrlyuUxtr417C+zZ8+WCYUPnB7pgoKjN3DG129cJzQ==",
+  "dgSpecHash": "6TJdD/WSL3dBaqNUixOuZT1mulxAYoIFTGeEbVpORCnrr+kwUE41l3DOuLV/ehylq1YBSqqtcUkuTFUdxUrSrQ==",
   "success": true,
   "projectFilePath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
   "expectedPackageFiles": [
@@ -19,7 +19,7 @@
     "/Users/reinhardt/.nuget/packages/microsoft.data.sqlite.core/6.0.11/microsoft.data.sqlite.core.6.0.11.nupkg.sha512",
     "/Users/reinhardt/.nuget/packages/microsoft.entityframeworkcore/6.0.11/microsoft.entityframeworkcore.6.0.11.nupkg.sha512",
     "/Users/reinhardt/.nuget/packages/microsoft.entityframeworkcore.abstractions/6.0.11/microsoft.entityframeworkcore.abstractions.6.0.11.nupkg.sha512",
-    "/Users/reinhardt/.nuget/packages/microsoft.entityframeworkcore.analyzers/6.0.11/microsoft.entityframeworkcore.analyzers.6.0.11.nupkg.sha512",
+    "/Users/reinhardt/.nuget/packages/microsoft.entityframeworkcore.analyzers/7.0.0/microsoft.entityframeworkcore.analyzers.7.0.0.nupkg.sha512",
     "/Users/reinhardt/.nuget/packages/microsoft.entityframeworkcore.inmemory/6.0.11/microsoft.entityframeworkcore.inmemory.6.0.11.nupkg.sha512",
     "/Users/reinhardt/.nuget/packages/microsoft.entityframeworkcore.relational/6.0.11/microsoft.entityframeworkcore.relational.6.0.11.nupkg.sha512",
     "/Users/reinhardt/.nuget/packages/microsoft.entityframeworkcore.sqlite/6.0.11/microsoft.entityframeworkcore.sqlite.6.0.11.nupkg.sha512",
@@ -91,12 +91,5 @@
     "/Users/reinhardt/.nuget/packages/system.xml.readerwriter/4.0.11/system.xml.readerwriter.4.0.11.nupkg.sha512",
     "/Users/reinhardt/.nuget/packages/system.xml.xdocument/4.0.11/system.xml.xdocument.4.0.11.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "Undefined",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Problem reading the cache file /Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/obj/project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
-    }
-  ]
+  "logs": []
 }
