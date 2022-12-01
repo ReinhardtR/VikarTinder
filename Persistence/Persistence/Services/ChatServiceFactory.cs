@@ -71,5 +71,16 @@ public class ChatServiceFactory
 
         return getChatHistoryResponse;
     }
-    
+
+    public static CreateJobConfirmationResponse ToCreateJobConfirmationResponse(JobConfirmation jobConfirmation)
+    { 
+        return new CreateJobConfirmationResponse
+        {
+            Id = jobConfirmation.id,
+            ChatId = jobConfirmation.chat.Id,
+            SubstituteId = jobConfirmation.substitute.Id,
+            EmployerId = jobConfirmation.employer.Id,
+            IsAccepted = jobConfirmation.isAccepted
+        };
+    }
 }

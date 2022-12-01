@@ -36,6 +36,17 @@ public class ChatServiceImpl implements ChatServiceClient {
 		return ChatServiceFactory.toMessageDTO(response.getMessage());
 	}
 
+
+
+	@Override public JobConfirmationDTO createJobConfirmation(
+			CreateJobConfirmationDTO dto)
+	{
+		CreateJobConfirmationRequest request = ChatServiceFactory.toCreateJobConfirmationRequest(dto);
+		CreateJobConfirmationResponse response = chatServiceBlockingStub.createJobConfirmation(request);
+
+		return ChatServiceFactory.toJobConfirmationDTO(response);
+	}
+
 	@Override
 	public ChatOverviewDTO getChatOverview(GetChatOverviewDTO dto) {
 		GetChatOverviewRequest request = ChatServiceFactory.toGetChatOverviewRequest(dto);
@@ -43,4 +54,6 @@ public class ChatServiceImpl implements ChatServiceClient {
 
 		return ChatServiceFactory.toChatOverviewDTO(response);
 	}
+
+
 }

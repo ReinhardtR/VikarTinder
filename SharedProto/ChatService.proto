@@ -10,6 +10,7 @@ service ChatService {
     rpc GetChatOverview (GetChatOverviewRequest) returns (GetChatOverviewResponse);
     rpc GetChatHistory (GetChatHistoryRequest) returns (GetChatHistoryResponse);
     rpc CreateChat (CreateChatRequest) returns (CreateChatResponse);
+    rpc CreateJobConfirmation (CreateJobConfirmationRequest) returns (CreateJobConfirmationResponse);
 }
 
 // Send Message
@@ -72,5 +73,19 @@ message ChatObject {
 
 message ChatUserObject{
   int32 id = 1;
- 
 }
+
+message CreateJobConfirmationRequest{
+  int32 chat_id = 1;
+  int32 substitute_id = 2;
+  int32 employer_id = 3;
+}
+
+message CreateJobConfirmationResponse{
+  int32 id = 1;
+  int32 chat_id = 2;
+  int32 substitute_id = 3;
+  int32 employer_id = 4;
+  bool is_accepted = 5;
+}
+
