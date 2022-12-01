@@ -29,18 +29,23 @@ message MatchingSubstitutes {
 
 //
 
+//Ja eller Nej bool
 message MatchRequest {
   int32 currentUser = 1;
   int32 toBeMatchedId =2 ;
+  
+  bool wantToMatch = 3;
 }
 
 //
 
+//Tilføj 
 message MatchValidation {
   bool isMatched = 1;
   
-  //Evt kommende match
-  int32 matchId = 2;
+  int32 employerId = 2;
+  int32 substituteId = 3;
+  int32 gigId = 4;
 }
 
 service MatchingService {
