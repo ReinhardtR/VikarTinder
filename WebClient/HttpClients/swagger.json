@@ -11,6 +11,64 @@
     }
   ],
   "paths": {
+    "/job-confirmation": {
+      "post": {
+        "tags": [
+          "job-confirmation-controller"
+        ],
+        "operationId": "createJobConfirmation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJobConfirmationDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobConfirmationDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "job-confirmation-controller"
+        ],
+        "operationId": "answerJobConfirmation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JobConfirmationAnswer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobConfirmationDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/chat/message": {
       "post": {
         "tags": [
@@ -197,6 +255,44 @@
   },
   "components": {
     "schemas": {
+      "CreateJobConfirmationDTO": {
+        "type": "object",
+        "properties": {
+          "chatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "substituteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "employerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "JobConfirmationDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "chatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "substituteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "employerId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "SendMessageDTO": {
         "type": "object",
         "properties": {
@@ -259,6 +355,18 @@
         "properties": {
           "id": {
             "type": "string"
+          }
+        }
+      },
+      "JobConfirmationAnswer": {
+        "type": "object",
+        "properties": {
+          "chatId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "accepted": {
+            "type": "boolean"
           }
         }
       },

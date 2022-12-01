@@ -35,7 +35,7 @@ public class ChatSocket
         }
     }
 
-    public async IAsyncEnumerable<Object> ListenToJobConfirmation(int chatId, int jobConfirmationId)
+    public async IAsyncEnumerable<JobConfirmationDTO> ListenToJobConfirmation(int chatId, int jobConfirmationId)
     {
         await ConnectAsync();
         await JoinChatAsync(chatId);
@@ -45,8 +45,10 @@ public class ChatSocket
             string? newMessageText = await GetNewMessageAsync();
             if (newMessageText == null) continue;
 
-            MessageDTO? messageDto = JsonConvert.DeserializeObject<MessageDTO>(newMessageText);
-            if (messageDto != null) yield return messageDto;
+            JobConfirmationDTO? jobConfirmationDto = JsonConvert.DeserializeObject<JobConfirmationDTO>(newMessageText);
+            if (jobConfirmationDto == null) continue;
+
+            if (jobConfirmationDto.Id.Equals(jobConfirmationId)) yield return jobConfirmationDto;
         }
     }
 
