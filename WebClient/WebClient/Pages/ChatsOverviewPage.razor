@@ -1,0 +1,40 @@
+@page "/chat"
+
+<PageTitle>Chat</PageTitle>
+
+@if (isSubstitute)
+{
+    <ChatsOverview />
+}
+else if (selectedGigId == null)
+{
+    <GigsOverview OnGigSelected="OnGigSelected"/>
+}
+else
+{
+    <MudStack AlignItems="AlignItems.Start">
+        <MudButton OnClick="ResetGigId" StartIcon="@Icons.Filled.ArrowBack">Back</MudButton>
+        <ChatsOverview GigId="@selectedGigId" />
+    </MudStack>
+}
+
+@code {
+
+    // TODO replace with auth stuff
+    private bool isSubstitute = false;
+    
+    private int? selectedGigId;
+
+    private void ResetGigId()
+    {
+        selectedGigId = null;
+        StateHasChanged();
+    }
+    
+    private void OnGigSelected(int gigId)
+    {
+        selectedGigId = gigId;
+        StateHasChanged();
+    }
+
+}
