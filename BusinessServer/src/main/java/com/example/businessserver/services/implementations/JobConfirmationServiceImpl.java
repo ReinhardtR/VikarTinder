@@ -8,6 +8,7 @@ import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationAnswe
 import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
 import com.example.businessserver.services.JobConfirmationServiceClient;
 import com.example.businessserver.services.factories.ChatServiceFactory;
+import com.example.businessserver.services.factories.JobConfirmationServiceFactory;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 
 public class JobConfirmationServiceImpl implements JobConfirmationServiceClient
@@ -19,17 +20,17 @@ public class JobConfirmationServiceImpl implements JobConfirmationServiceClient
   @Override public JobConfirmationDTO CreateJobConfirmation(
       CreateJobConfirmationDTO dto)
   {
-    CreateJobConfirmationRequest request = ChatServiceFactory.toCreateJobConfirmationRequest(dto);
+    CreateJobConfirmationRequest request = JobConfirmationServiceFactory.toCreateJobConfirmationRequest(dto);
     CreateJobConfirmationResponse response = chatServiceBlockingStub.createJobConfirmation(request);
 
-    return ChatServiceFactory.toJobConfirmationDTO(response);
+    return JobConfirmationServiceFactory.toJobConfirmationDTO(response);
   }
 
   @Override public JobConfirmationDTO answerJobConfirmation(JobConfirmationAnswer dto)
   {
-    JobConfirmationAnswerRequest request = ChatServiceFactory.toJobConfirmationAnswerRequest(dto);
+    JobConfirmationAnswerRequest request = JobConfirmationServiceFactory.toJobConfirmationAnswerRequest(dto);
     JobConfirmationAnswerResponse response = chatServiceBlockingStub.answerJobConfirmation(request);
 
-    return ChatServiceFactory.toJobConfirmationDTO(response);
+    return JobConfirmationServiceFactory.toJobConfirmationDTO(response);
   }
 }

@@ -89,28 +89,6 @@ public class ChatServiceFactory {
 
 	}
 
-	public static CreateJobConfirmationRequest toCreateJobConfirmationRequest(
-			CreateJobConfirmationDTO dto)
-	{
-		return CreateJobConfirmationRequest
-						.newBuilder()
-						.setChatId(dto.getChatId())
-						.setSubstituteId(dto.getSubstituteId())
-						.setEmployerId(dto.getEmployerId())
-						.build();
-	}
-
-	public static JobConfirmationDTO toJobConfirmationDTO(
-			CreateJobConfirmationResponse response)
-	{
-		return new JobConfirmationDTO(
-						response.getId(),
-						response.getChatId(),
-						response.getSubstituteId(),
-						response.getEmployerId(),
-						response.getIsAccepted()
-		);
-	}
 
 	private ChatUserObject toChatUserObject(ChatUserDTO dto) {
 		return ChatUserObject
