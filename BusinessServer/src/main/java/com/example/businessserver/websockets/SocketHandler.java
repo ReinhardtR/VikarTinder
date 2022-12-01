@@ -38,7 +38,7 @@ public class SocketHandler extends TextWebSocketHandler {
 
 		MessageType type = MessageType.valueOf((String) json.get("MessageType"));
 
-		if (type == MessageType.JOIN) {
+		if (type == MessageType.JOIN_CHAT) {
 			int chatIdToJoin = getChatId(json);
 
 			joinChat(session, chatIdToJoin);

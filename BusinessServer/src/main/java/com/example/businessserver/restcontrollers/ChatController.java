@@ -21,9 +21,7 @@ public class ChatController {
 	public ChatOverviewDTO getChatOverview(@PathVariable int id) {
 		return chatLogic.getChatOverview(new GetChatOverviewDTO(id));
 	}
-
-
-
+	
 	@PostMapping("/")
 	public ChatDTO createChat(@RequestBody CreateChatDTO dto) {
 		System.out.println("CREATE CHAT");

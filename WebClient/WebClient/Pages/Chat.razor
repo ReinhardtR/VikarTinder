@@ -26,16 +26,13 @@
             <MudStack Spacing="4">
                 @foreach (MessageDTO message in chatHistory.Messages)
                 {
-                    <MudPaper Class="@GetMessageClasses(message.AuthorId)" Style="@GetMessageStyles(message.AuthorId)">
-                        @message.Content
-                    </MudPaper>
+                    <ChatMessage UserId="@userId" AuthorId="@message.AuthorId" Content="@message.Content" />
                 }
+                <JobRequest ChatId="@ChatId" UserId="@userId" AuthorId="2" />
             </MudStack>
         </MudStack>
 
         <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
-            <DataAnnotationsValidator/>
-            
             <MudStack Row="@true" Spacing="2" Class="px-4" AlignItems="AlignItems.Start" Justify="Justify.Center">
                 <MudTextField Label="Message" AutoFocus="@true" Variant="Variant.Outlined" @bind-Value="@formModel.Content" For="() => formModel.Content" />
                 <MudIconButton Icon="@Icons.Filled.Send" Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit" Class="py-4 px-5 my-1" />
@@ -57,22 +54,26 @@
     
     private ChatHistoryDTO? chatHistory;
     private string? errorLabel;
-
-    // TODO Hvis persistence ikke kører så kommer der ikke en error på client
+    
     protected override async Task OnInitializedAsync()
     {
         ChatHistoryDTO newChatHistory = await ChatService.GetChatHistoryAsync(ChatId);
-        chatHistory = newChatHistory ?? throw new Exception("Chat not found");
+        chatHistory = newChatHistory;
         
-        ListenToChatSocket();
+        if (chatHistory == null)
+        {
+            errorLabel = "You are not a member of this chat";
+        }
+        else
+        {
+            ListenToChatSocket();
+        }
     }
 
     private class FormModel
     {
         private string _content = "";
         
-        [Required]
-        [StringLength(1000, MinimumLength = 1, ErrorMessage = "Message must be between 1 and 1000 characters")]
         public string Content
         {
             get => _content.Trim();
@@ -106,8 +107,11 @@
     {
         try
         {
-            // replace with auth stuff
-
+            if (formModel.Content == "")
+            {
+                return;
+            }
+            
             SendMessageDTO sendMessageDto = new()
             {
                 ChatId = ChatId,
@@ -126,19 +130,5 @@
         }
         
         StateHasChanged();
-    }
-    
-    private String GetMessageClasses(int authorId)
-    {
-        string baseClasses = "pa-3";
-        string uniqueClasses = authorId == userId ? "ml-auto" : "mr-auto";
-        return $"{baseClasses} {uniqueClasses}";
-    }
-    
-    private string GetMessageStyles(int authorId)
-    {
-        string baseStyles = "max-width: 80%; word-break: break-all;";
-        string uniqueStyles = authorId == userId ? "background-color: #ebebeb;" : "background-color: #ff4081; color: white;";
-        return $"{baseStyles} {uniqueStyles}";
     }
 }
