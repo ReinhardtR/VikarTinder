@@ -88,7 +88,7 @@
         try
         {
             ChatSocket chatSocket = new();
-            IAsyncEnumerable<MessageDTO> messages = chatSocket.ConnectAsync(ChatId, CancellationToken.None);
+            IAsyncEnumerable<MessageDTO> messages = chatSocket.ListenToChatMessages(ChatId);
 
             await foreach (MessageDTO message in messages)
             {
