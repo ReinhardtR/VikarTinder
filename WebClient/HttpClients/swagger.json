@@ -59,14 +59,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/MatchValidationDTO"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -119,14 +112,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/MatchValidationDTO"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -173,17 +159,8 @@
           "matchId": {
             "type": "integer",
             "format": "int32"
-          }
-        }
-      },
-      "MatchValidationDTO": {
-        "type": "object",
-        "properties": {
-          "matchId": {
-            "type": "integer",
-            "format": "int32"
           },
-          "matched": {
+          "wantToMatch": {
             "type": "boolean"
           }
         }

@@ -29,15 +29,15 @@ public class MatchingLogicImpl implements MatchingLogic {
     }
 
     @Override
-    public MatchValidationDTO gigsMatchRequest(MatchRequestDTO matchRequest) throws DTOException {
+    public void gigsMatchRequest(MatchRequestDTO matchRequest) throws DTOException {
         checkMatch(matchRequest);
-        return service.gigsMatchRequest(matchRequest);
+        service.gigsMatchRequest(matchRequest); //Thread når vi når til samling af besked
     }
 
     @Override
-    public MatchValidationDTO substitutesMatchRequest(MatchRequestDTO matchRequest) throws DTOException {
+    public void substitutesMatchRequest(MatchRequestDTO matchRequest) throws DTOException {
         checkMatch(matchRequest);
-        return service.substitutesMatchRequest(matchRequest);
+        service.substitutesMatchRequest(matchRequest); //Thread når vi når til samling af besked
     }
 
     public void checkMatch(MatchRequestDTO matchRequest) throws DTOException {

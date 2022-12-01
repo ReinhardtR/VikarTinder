@@ -2,21 +2,33 @@ package com.example.businessserver.dtos.matching;
 
 public class MatchValidationDTO {
     private boolean isMatched;
-    private int matchId;
+    private int employerId;
+    private int substituteId;
+    private int gigId;
 
     public MatchValidationDTO() {
     }
 
-    public MatchValidationDTO(boolean isMatched, int matchId) {
+    public MatchValidationDTO(boolean isMatched, int employerId, int substituteId, int gigId) {
         this.isMatched = isMatched;
-        this.matchId = matchId;
+        this.employerId = employerId;
+        this.substituteId = substituteId;
+        this.gigId = gigId;
     }
 
     public boolean isMatched() {
         return isMatched;
     }
 
-    public int getMatchId() {
-        return matchId;
+    public int getEmployerId() {
+        return employerId;
+    }
+
+    public int getSubstituteId() {
+        return substituteId;
+    }
+
+    public int getGigId() {
+        return gigId;
     }
 }

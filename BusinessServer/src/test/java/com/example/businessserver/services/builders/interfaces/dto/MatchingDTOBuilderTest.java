@@ -54,19 +54,29 @@ class MatchingDTOBuilderTest {
 
 
     @Test
-    void testMatchValidationDTO()
+    void testMatchValidationDTOTrueStatement()
     {
         MatchValidation validation = MatchValidation.newBuilder()
                 .setIsMatched(true)
-                .setMatchId(25).build();
+                .setEmployerId(25)
+                .setSubstituteId(5)
+                .setGigId(2)
+                .build();
         assertAll(
-                () -> assertEquals(
-                        25,
-                        validation.getMatchId()
+                () -> assertTrue(
+                        validation.getIsMatched()
                 ),
                 () -> assertEquals(
-                        true,
-                        validation.getIsMatched()
+                        25,
+                        validation.getEmployerId()
+                ),
+                () -> assertEquals(
+                        5,
+                        validation.getSubstituteId()
+                ),
+                () -> assertEquals(
+                        2,
+                        validation.getGigId()
                 )
         );
     }

@@ -48,7 +48,7 @@ class MatchingLogicImplTest {
     void testCheckMatch()
     {
         try {
-            logic.checkMatch(new MatchRequestDTO(1,1));
+            logic.checkMatch(new MatchRequestDTO(1,1, true));
         } catch (DTOException e) {
             fail("Should Not Throw");
         }
@@ -67,87 +67,17 @@ class MatchingLogicImplTest {
                 ()-> assertThrows(DTOOutOfBoundsException.class, () -> logic.checkMatch(
                         new MatchRequestDTO(
                                 0,
-                                5
+                                5,
+                                true
                         )
                 ), "Testing if currentUser id is caught as < 1"),
                 () -> assertThrows(DTOOutOfBoundsException.class, () -> logic.checkMatch(
                         new MatchRequestDTO(
                                 5,
-                                0
-                        )
-                ), "Testing if match id is caught as < 1")
-        );
-    }
-
-/*    @Test
-    void testGetSubstitutes()
-    {
-        assertThrows(NullPointerException.class, () -> logic.getSubstitutes(new SubstituteSearchParametersDTO(1)));
-    }
-
-    @Test
-    void testGetSubstitutesOutOfBoundsId()
-    {
-        assertThrows(DTOOutOfBoundsException.class, () -> logic.getSubstitutes(new SubstituteSearchParametersDTO(0)));
-    }
-
-    @Test
-    void testGetSubstitutesNullPointer()
-    {
-        assertThrows(DTONullPointerException.class, () -> logic.getSubstitutes(null));
-    }
-
-    @Test
-    void testGetGigs()
-    {
-        assertThrows(NullPointerException.class, () -> logic.getGigs(new GigSearchParametersDTO(1)));
-    }
-
-    @Test
-    void testGetGigsIdOutOfBoundsId()
-    {
-        assertThrows(DTOOutOfBoundsException.class, () -> logic.getGigs(new GigSearchParametersDTO(0)));
-    }
-
-    @Test
-    void testGetGigsNullPointer()
-    {
-        assertThrows(DTONullPointerException.class, () -> logic.getGigs(null));
-    }
-
-    @Test
-    void testGigMatchRequest()
-    {
-        assertThrows(NullPointerException.class, () -> logic.gigsMatchRequest(
-                new MatchRequestDTO(
-                        1,
-                        1
-                )
-        ));
-    }
-
-    @Test
-    void testGigMatchRequestIDsOutOfBounds()
-    {
-        assertAll(
-                ()-> assertThrows(DTOOutOfBoundsException.class, () -> logic.gigsMatchRequest(
-                        new MatchRequestDTO(
                                 0,
-                                5
-                        )
-                ), "Testing if currentUser id is caught as < 1"),
-                () -> assertThrows(DTOOutOfBoundsException.class, () -> logic.gigsMatchRequest(
-                        new MatchRequestDTO(
-                                5,
-                                0
+                                true
                         )
                 ), "Testing if match id is caught as < 1")
         );
     }
-
-    @Test
-    void testGigMatchRequestDTONullPointer()
-    {
-        assertThrows(DTONullPointerException.class, () -> logic.gigsMatchRequest(null));
-    }*/
 }

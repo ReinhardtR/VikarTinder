@@ -29,6 +29,11 @@ public class DTOBuilder implements MatchingDTOBuilder {
 
     @Override
     public MatchValidationDTO matchValidationDTO(MatchValidation validation) {
-        return new MatchValidationDTO(validation.getIsMatched(), validation.getMatchId());
+        return new MatchValidationDTO(
+                validation.getIsMatched(),
+                validation.getEmployerId(),
+                validation.getSubstituteId(),
+                validation.getGigId()
+        );
     }
 }

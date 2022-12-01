@@ -38,11 +38,12 @@ class MatchingGRPCBuilderTest {
     void testBuildMatchRequest()
     {
         MatchRequest matchRequest = matchingBuilder.buildMatchRequest(
-          new MatchRequestDTO(1,5)
+          new MatchRequestDTO(1,5, true)
         );
         assertAll(
                 ()-> assertEquals(1, matchRequest.getCurrentUser()),
-                ()-> assertEquals(5, matchRequest.getToBeMatchedId())
+                ()-> assertEquals(5, matchRequest.getToBeMatchedId()),
+                ()-> assertTrue(matchRequest.getWantToMatch())
         );
     }
 }

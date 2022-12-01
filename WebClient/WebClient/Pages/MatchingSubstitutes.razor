@@ -12,11 +12,8 @@
                     <MudText Class="infoText">@_currentDateId</MudText>
                 </MudPaper>
                 <MudItem Class="d-flex align-content-center justify-content-center matchBtns">
-                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" @onclick="SendSubstituteMatchRequest">JA</MudButton>
-                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Error" @onclick="NextMatch">NEJ</MudButton>
-                </MudItem>
-                <MudItem Class="d-flex justify-content-center">
-                    <MudText>@_succesMatch AND @_matchId</MudText>
+                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" @onclick="@(e => SendSubstituteMatchRequest(true)))">JA</MudButton>
+                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Error" @onclick="@(e => SendSubstituteMatchRequest(false))">NEJ</MudButton>
                 </MudItem>
             </MudPaper>
         </MudItem>
@@ -26,8 +23,6 @@
 @code {
     private readonly int _userId = 1; 
     private int _currentDateId;
-    private int _matchId;
-    private bool _succesMatch;
     private Stack<SubstituteMatchingDTO> _substitutes;
 
     protected override async Task OnInitializedAsync()
@@ -40,16 +35,14 @@
         _currentDateId = _substitutes.Pop().Id;
     }
  
-    private async void SendSubstituteMatchRequest()
+    private async void SendSubstituteMatchRequest(bool wantToMatch)
     {
-        MatchValidationDTO dto = await MatchingService.SendSubstituteMatchRequestAsync(new MatchRequestDTO()
+        await MatchingService.SendSubstituteMatchRequestAsync(new MatchRequestDTO()
         {
             CurrentUser = _userId,
-            MatchId = _currentDateId
+            MatchId = _currentDateId,
+            WantToMatch = wantToMatch
         });
-
-        _matchId = dto.MatchId;
-        _succesMatch = dto.Matched;
         
         NextMatch();
         

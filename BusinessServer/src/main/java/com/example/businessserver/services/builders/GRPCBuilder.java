@@ -27,6 +27,7 @@ public class GRPCBuilder implements MatchingGRPCBuilder {
     public MatchRequest buildMatchRequest(MatchRequestDTO request) {
         return MatchRequest.newBuilder()
                 .setCurrentUser(request.getCurrentUser())
-                .setToBeMatchedId(request.getMatchId()).build();
+                .setToBeMatchedId(request.getMatchId())
+                .setWantToMatch(request.isWantToMatch()).build();
     }
 }

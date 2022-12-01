@@ -12,8 +12,8 @@
                     <MudText Class="infoText">@_currentDateId</MudText>
                 </MudPaper>
                 <MudItem Class="d-flex align-content-center justify-content-center matchBtns">
-                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" @onclick="SendGigMatchRequest">JA</MudButton>
-                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Error" @onclick="NextMatch">NEJ</MudButton>
+                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" @onclick="@(e => SendGigMatchRequest(true))">JA</MudButton>
+                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Error" @onclick="@(e => SendGigMatchRequest(true))">NEJ</MudButton>
                 </MudItem>
             </MudPaper>
         </MudItem>
@@ -35,12 +35,13 @@
         _currentDateId = _gigs.Pop().Id;
     }
 
-    private async void SendGigMatchRequest()
+    private async void SendGigMatchRequest(bool wantToMatch)
     {
-        MatchValidationDTO dto = await MatchingService.SendGigsMatchRequestAsync(new MatchRequestDTO()
+        await MatchingService.SendGigsMatchRequestAsync(new MatchRequestDTO()
         {
             CurrentUser = _userId,
-            MatchId = _currentDateId
+            MatchId = _currentDateId,
+            WantToMatch = wantToMatch
         });
         NextMatch();
         

@@ -25,10 +25,10 @@ public class MatchingController {
     }
 
     @PostMapping("/substitutes/request")
-    public MatchValidationDTO substitutesMatchRequest(@RequestBody MatchRequestDTO matchRequest)
+    public void substitutesMatchRequest(@RequestBody MatchRequestDTO matchRequest)
     {
         try {
-            return logic.substitutesMatchRequest(matchRequest);
+            logic.substitutesMatchRequest(matchRequest);
         } catch (DTOException e) {
             throw new RuntimeException(e);
         }
@@ -45,10 +45,10 @@ public class MatchingController {
     }
 
     @PostMapping("/gigs/request")
-    public MatchValidationDTO gigsMatchRequest(@RequestBody MatchRequestDTO matchRequest)
+    public void gigsMatchRequest(@RequestBody MatchRequestDTO matchRequest)
     {
         try {
-            return logic.gigsMatchRequest(matchRequest);
+            logic.gigsMatchRequest(matchRequest);
         } catch (DTOException e) {
             throw new RuntimeException(e);
         }

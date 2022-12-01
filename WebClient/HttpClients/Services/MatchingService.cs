@@ -1,6 +1,6 @@
 ﻿namespace HttpClients.Services;
 
-public class MatchingService
+public class  MatchingService
 {
     private readonly Client _client;
 
@@ -14,9 +14,9 @@ public class MatchingService
         return await _client.GetSubstitutesAsync(parameters);
     }
 
-    public async Task<MatchValidationDTO> SendSubstituteMatchRequestAsync(MatchRequestDTO request)
+    public Task SendSubstituteMatchRequestAsync(MatchRequestDTO request)
     {
-        return await _client.SubstitutesMatchRequestAsync(request);
+        return _client.SubstitutesMatchRequestAsync(request);
     }
 
     public async Task<GigMatchingDTOs> GetGigsAsync(GigSearchParametersDTO parameters)
@@ -24,8 +24,8 @@ public class MatchingService
         return await _client.GetGigsAsync(parameters);
     }
 
-    public async Task<MatchValidationDTO> SendGigsMatchRequestAsync(MatchRequestDTO request)
+    public Task SendGigsMatchRequestAsync(MatchRequestDTO request)
     {
-        return await _client.GigsMatchRequestAsync(request);
+        return _client.GigsMatchRequestAsync(request);
     }
 }
