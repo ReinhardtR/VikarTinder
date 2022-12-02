@@ -1,6 +1,7 @@
 using System.Net.WebSockets;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json.Nodes;
 using HttpClients;
 using Newtonsoft.Json;
 
@@ -35,7 +36,7 @@ public class ChatSocket
         }
     }
 
-    public async IAsyncEnumerable<JobConfirmationDTO> ListenToJobConfirmation(int chatId, int jobConfirmationId)
+    public async IAsyncEnumerable<JobConfirmationDTO> ListenToJobConfirmation(int chatId)
     {
         await ConnectAsync();
         await JoinChatAsync(chatId);
@@ -44,11 +45,9 @@ public class ChatSocket
         {
             string? newMessageText = await GetNewMessageAsync();
             if (newMessageText == null) continue;
-
+            
             JobConfirmationDTO? jobConfirmationDto = JsonConvert.DeserializeObject<JobConfirmationDTO>(newMessageText);
-            if (jobConfirmationDto == null) continue;
-
-            if (jobConfirmationDto.Id.Equals(jobConfirmationId)) yield return jobConfirmationDto;
+            if (jobConfirmationDto != null) yield return jobConfirmationDto;
         }
     }
 
