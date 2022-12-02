@@ -1,12 +1,13 @@
-﻿using Persistence.Models;
+﻿using Persistence.Dto;
+using Persistence.Models;
 
 namespace Persistence.Converter.Interfaces;
 
 public interface IMatchConverter
 {
-    MatchValidation GigConverter(Gig gig, int userId);
-    MatchValidation SubstituteConverter(Substitute substitute, int userId);
 
     MatchingSubstitutes ConvertSubList(List<Substitute> substitutes);
     MatchingGigs ConvertGigList(List<Gig> gigs);
+    MatchValidation ConvertToValidation(IdsForMatchDto dto);
+    ToBeMatchedDto CreateToBeMatchedDto(int requestCurrentUser, int requestToBeMatchedId, bool requestWantToMatch);
 }

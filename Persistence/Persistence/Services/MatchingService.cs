@@ -1,5 +1,6 @@
 ﻿using Persistence.Converter.Interfaces;
 using Persistence.DAOs.Interfaces;
+using Persistence.Dto;
 using Persistence.Models;
 
 namespace Persistence.Services;
@@ -27,11 +28,23 @@ insert into Substitutes values (1);
         Console.WriteLine("IDs: [Sub]:" + request.CurrentUser + " [Gig]:" + request.ToBeMatchedId);
         
         //DatabaseKald for at matche
-        Gig matchedGig = await _dao.MatchWithGig(request.CurrentUser, request.ToBeMatchedId);
-        Console.WriteLine("Gig Id = " + matchedGig.Id);
         
+        IdsForMatchDto matchedGig = await _dao.MatchingGig(
+            _converter.CreateToBeMatchedDto(
+                request.CurrentUser,
+                request.ToBeMatchedId,
+                request.WantToMatch));
+        
+        Console.WriteLine("Gig Id = " + matchedGig.GigId);
+
+        //Finding if matched
+        if (request.WantToMatch)
+        {
+            matchedGig = await _dao.CheckIfMatched(matchedGig);
+        }
+
         //Convert tilbage til reqly
-        MatchValidation val = _converter.GigConverter(matchedGig, request.CurrentUser);
+        MatchValidation val = _converter.ConvertToValidation(matchedGig);
         Console.WriteLine("Conversion success");
 
         return val;
@@ -41,13 +54,24 @@ insert into Substitutes values (1);
     {
         Console.WriteLine("IDs: [Employer]:" + request.CurrentUser + " [Substitute]:" + request.ToBeMatchedId);
         
-        //DatabaseKald for at matche
-        Substitute matchedSubstitute = await _dao.MatchWithSubstitute(request.CurrentUser, request.ToBeMatchedId);
-
-        //Convert tilbage til reqly
-        MatchValidation val = _converter.SubstituteConverter(matchedSubstitute, request.CurrentUser);
         
-        Console.WriteLine("Conversion success: [SUB ID]"+ val.MatchId + "[ISMATCHED]"+val.IsMatched);
+        
+        //DatabaseKald for at matche
+        IdsForMatchDto matchedSubstitute = await _dao.MatchingSubstitute(_converter.CreateToBeMatchedDto(
+            request.CurrentUser,
+            request.ToBeMatchedId,
+            request.WantToMatch));
+        
+        //Setting match
+        if (request.WantToMatch)
+        {
+            matchedSubstitute = await _dao.CheckIfMatched(matchedSubstitute);
+        }
+
+        //Conversion
+        MatchValidation val = _converter.ConvertToValidation(matchedSubstitute);
+        
+        Console.WriteLine("Conversion success: [SUB ID]"+ val.SubstituteId + "[ISMATCHED]"+val.IsMatched);
         return val;
     }
 

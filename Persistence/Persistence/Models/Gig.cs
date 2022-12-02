@@ -11,11 +11,13 @@ public class Gig
     public Gig(Employer employer)
     {
         Substitutes = new List<Substitute>();
+        GigSubstitutes = new List<GigSubstitute>();
         Employer = employer;
     }
 
     private Gig()
     {
         Substitutes = new List<Substitute>();
+        GigSubstitutes = new List<GigSubstitute>();
     }
 }

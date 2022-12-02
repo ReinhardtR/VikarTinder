@@ -1,4 +1,5 @@
 ﻿using Persistence.Converter.Interfaces;
+using Persistence.Dto;
 using Persistence.Exceptions.ConverterExceptions;
 using Persistence.Models;
 
@@ -6,51 +7,6 @@ namespace Persistence.Converter;
 
 public class MatchConverter : IMatchConverter
 {
-    public MatchValidation GigConverter(Gig gig, int userId)
-    {
-        if (gig == null)
-            throw new ConverterNullReference("Substitute");
-        
-        MatchValidation val = CreateMatchValidation(gig.Id);
-        
-        if (gig.Substitutes == null)
-            throw new ConverterNullReference("Gigs");
-        
-        foreach (Substitute subs in gig.Substitutes)
-        {
-            if (subs.Id == userId)
-            {
-                val.IsMatched = true;
-            }
-        }
-
-        return val;
-    }
-
-    public MatchValidation SubstituteConverter(Substitute substitute, int userId)
-    {
-        if (substitute == null)
-            throw new ConverterNullReference("Substitute");
-        
-        
-        MatchValidation val = CreateMatchValidation(substitute.Id);
-        
-        
-        if (substitute.Positions == null)
-            throw new ConverterNullReference("Gigs");
-
-            //Hvis substitute har en gig med employer-userens id er det et match!
-            foreach (Gig gig in substitute.Positions )
-            {
-                if (gig.Employer.Id == userId)
-                {
-                    val.IsMatched = true;
-                }
-            }
-
-            return val;
-    }
-
     
     
     public MatchingSubstitutes ConvertSubList(List<Substitute> substitutes)
@@ -77,7 +33,7 @@ public class MatchConverter : IMatchConverter
 
         foreach (var gig in gigs)
         {
-            gigsGrpc.Gigs.Add(new GigToBeMatched()
+            gigsGrpc.Gigs.Add(new GigToBeMatched
             {
                 Id = gig.Id
             });
@@ -85,18 +41,28 @@ public class MatchConverter : IMatchConverter
 
         return gigsGrpc;
     }
-    
-    
-    
 
-    private MatchValidation CreateMatchValidation(int id)
+    public MatchValidation ConvertToValidation(IdsForMatchDto dto)
     {
         MatchValidation val = new MatchValidation
         {
-            MatchId = id,
-            IsMatched = false
+            EmployerId = dto.EmployerId,
+            GigId = dto.GigId,
+            IsMatched = dto.WasAMatch,
+            SubstituteId = dto.SustituteId
         };
 
         return val;
+    }
+
+    public ToBeMatchedDto CreateToBeMatchedDto(int requestCurrentUser, int requestToBeMatchedId, bool requestWantToMatch)
+    {
+        ToBeMatchedDto dto = new ToBeMatchedDto()
+        {
+            UserId = requestCurrentUser,
+            MatchId = requestToBeMatchedId,
+            WantsToMatch = requestWantToMatch
+        };
+        return dto;
     }
 }

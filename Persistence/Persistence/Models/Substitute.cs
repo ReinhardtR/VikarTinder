@@ -12,5 +12,7 @@ public class Substitute
     {
         Positions = new List<Gig>();
         Employers = new List<Employer>();
+        GigSubstitutes = new List<GigSubstitute>();
+        EmployerSubstitutes = new List<EmployerSubstitute>();
     }
 }

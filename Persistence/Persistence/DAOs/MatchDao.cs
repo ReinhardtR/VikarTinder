@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Persistence.DAOs.Interfaces;
+using Persistence.Dto;
 using Persistence.Models;
 
 namespace Persistence.DAOs;
@@ -7,54 +8,171 @@ namespace Persistence.DAOs;
 public class MatchDao : IMatchDao
 {
     private DatabaseContext _databaseContext;
-    
+
     public MatchDao(DatabaseContext databaseContext)
     {
         _databaseContext = databaseContext;
     }
-    public async Task<Gig> MatchWithGig(int currentUserId, int matchId)
+
+    public async Task<IdsForMatchDto> MatchingGig(ToBeMatchedDto dto)
     {
-        //Finder sit eget user domæne objekt
-        Substitute substitute = await GetSubstituteById(currentUserId);
-        Console.WriteLine("SUB: " + substitute.Id);
+        if (dto.WantsToMatch)
+        {
+            return await MatchWithGig(dto);
+        }
+        else
+        {
+            return await DontWantGig(dto);
+        }
+    }
+
+    private async Task<IdsForMatchDto> DontWantGig(ToBeMatchedDto dto)
+    {
+        Substitute substitute = await GetSubstituteById(dto.UserId);
+        Gig gig = await GetGigById(dto.MatchId);
         
-        //Finder domæneobjeketet på ejeren af gigget man har matchet
-        Gig gig = await GetGigById(matchId);
-        Console.WriteLine("GIG: " + gig.Id);
-        
-        //Adder den valgte gig sammen med tilhørende employer under sig
-        substitute.Positions.Add(gig);
+        IdsForMatchDto toBeReturned = new IdsForMatchDto()
+        {
+            SustituteId = substitute.Id,
+            GigId = gig.Id,
+            //Giver måske en fejl include fix if so
+            EmployerId = gig.Employer.Id
+        };
+
+        //Adder den valgte gig under sig
+        substitute.GigSubstitutes.Add(new GigSubstitute
+        {
+            Gig = gig,
+            GigId = gig.Id,
+            Substitute = substitute,
+            SubstituteId = substitute.Id,
+            WantsToMatch = false
+        });
         //Opdateringen og gemning
         _databaseContext.ChangeTracker.Clear();
         _databaseContext.Substitutes.Update(substitute);
         await _databaseContext.SaveChangesAsync();
 
-        return gig;
+        return toBeReturned;
     }
 
-    public async Task<Substitute> MatchWithSubstitute(int currentUserId, int matchId)
+    private async Task<IdsForMatchDto> MatchWithGig(ToBeMatchedDto dto)
     {
-        Employer employer = await GetEmployerById(currentUserId);
-        Console.WriteLine(employer.Id + " EMPLOYER");
-        
+        //Finder sit eget user domæne objekt
+        Substitute substitute = await GetSubstituteById(dto.UserId);
+        Console.WriteLine("SUB: " + substitute.Id);
 
-        Substitute substitute = await GetSubstituteById(matchId);
-        
-        
-        employer.Substitutes.Add(substitute);
-        
+        //Finder domæneobjeketet på ejeren af gigget man har matchet
+        Gig gig = await GetGigById(dto.MatchId);
+        Console.WriteLine("GIG: " + gig.Id);
+
+
+        IdsForMatchDto toBeReturned = new IdsForMatchDto()
+        {
+            SustituteId = substitute.Id,
+            GigId = gig.Id,
+            //Giver måske en fejl include fix if so
+            EmployerId = gig.Employer.Id
+        };
+
+        //Adder den valgte gig
+        substitute.GigSubstitutes.Add(new GigSubstitute
+        {
+            Gig = gig,
+            GigId = gig.Id,
+            Substitute = substitute,
+            SubstituteId = substitute.Id,
+            WantsToMatch = true
+        });
+        //Opdateringen og gemning
         _databaseContext.ChangeTracker.Clear();
-        _databaseContext.Employers.Update(employer);
-        
+        _databaseContext.Substitutes.Update(substitute);
         await _databaseContext.SaveChangesAsync();
 
-        return substitute;
+
+        return toBeReturned;
+    }
+
+    public async Task<IdsForMatchDto> MatchingSubstitute(ToBeMatchedDto dto)
+    {
+        if (dto.WantsToMatch)
+        {
+            return await MatchWithSubstitute(dto);
+        }
+        else
+        {
+            return await DontWantSubstitute(dto);
+        }
+    }
+
+    private async Task<IdsForMatchDto> DontWantSubstitute(ToBeMatchedDto dto)
+    {
+        Employer employer = await GetEmployerById(dto.UserId);
+        Console.WriteLine(employer.Id + " EMPLOYER");
+
+
+        Substitute substitute = await GetSubstituteById(dto.MatchId);
+
+
+        employer.EmployerSubstitutes.Add(new EmployerSubstitute
+        {
+            Employer = employer,
+            Substitute = substitute,
+            WantsToMatch = false
+        });
+        
+        employer.Substitutes.Add(substitute);
+
+        IdsForMatchDto toBeReturned = new IdsForMatchDto()
+        {
+            SustituteId = substitute.Id,
+            EmployerId = employer.Id
+        };
+
+
+        _databaseContext.ChangeTracker.Clear();
+        _databaseContext.Employers.Update(employer);
+
+        await _databaseContext.SaveChangesAsync();
+
+        return toBeReturned;
+    }
+
+    private async Task<IdsForMatchDto> MatchWithSubstitute(ToBeMatchedDto dto)
+    {
+        Employer employer = await GetEmployerById(dto.UserId);
+        Console.WriteLine(employer.Id + " EMPLOYER");
+
+
+        Substitute substitute = await GetSubstituteById(dto.MatchId);
+
+
+        employer.EmployerSubstitutes.Add(new EmployerSubstitute
+        {
+            Employer = employer,
+            Substitute = substitute,
+            WantsToMatch = true
+        });
+
+        IdsForMatchDto toBeReturned = new IdsForMatchDto()
+        {
+            SustituteId = substitute.Id,
+            EmployerId = employer.Id
+        };
+
+
+        _databaseContext.ChangeTracker.Clear();
+        _databaseContext.Employers.Update(employer);
+
+        await _databaseContext.SaveChangesAsync();
+
+        return toBeReturned;
     }
 
     public async Task<List<Substitute>> GetSubstitutesForMatching(int userId)
     {
         //Få en list af substitutes
-        
+
         //Listen af substitutes skal være en liste der ikke allerede er swipet ja til før
         IQueryable<Substitute> subsQuery = _databaseContext.Substitutes.AsQueryable();
 
@@ -68,26 +186,26 @@ public class MatchDao : IMatchDao
     public async Task<List<Gig>> GetGigsForMatching(int id)
     {
         //Få en list af gigs
-        
+
         //Gigs må ikke have været swipet ja til før
 
         //Hope it works :3
         IQueryable<Gig> gigsQuery = _databaseContext.Gigs.AsQueryable();
-        
-        gigsQuery = gigsQuery.Where(gig => 
+
+        gigsQuery = gigsQuery.Where(gig =>
             gig.Substitutes.Any() == false ||
             gig.Substitutes.All(substitute => substitute.Id != id) == true);
-        
-            return await gigsQuery.ToListAsync();
+
+        return await gigsQuery.ToListAsync();
     }
 
-    
+
     public async Task<Employer> GetEmployerById(int id)
     {
 
         Employer? employer = await _databaseContext.Employers.FirstOrDefaultAsync(emp =>
             emp.Id == id);
-        
+
         return employer;
     }
 
@@ -107,27 +225,61 @@ public class MatchDao : IMatchDao
         return gigToReturn;
     }
 
-    public async Task<bool> CheckIfMatchedEmpSub(int empId, int subId)
+    public async Task<IdsForMatchDto> CheckIfMatched(IdsForMatchDto dto)
     {
-        IQueryable<Employer> employersQ = _databaseContext.Employers.Include(employer => employer.Substitutes);
-        Employer? emp = await employersQ.FirstOrDefaultAsync(employer => employer.Id == empId);
-
-        if (emp.Substitutes.All(substitute => substitute.Id != subId))
-        {
-            return true;
-        }
-        return false;
+        CheckMatchDto check = await CheckMatchQuery(dto);
+        dto.WasAMatch = check.WasAMatch;
+        dto.GigId = check.GigId;
+        return dto;
     }
+    
 
-    public async Task<bool> CheckIfMatchedSubGig(int subId, int gigId)
+
+    private async Task<CheckMatchDto> CheckMatchQuery(IdsForMatchDto dto)
     {
-        IQueryable<Substitute> substituteQ = _databaseContext.Substitutes.Include(substitute => substitute.Positions);
-        Substitute? sub = await substituteQ.FirstOrDefaultAsync(substitute => substitute.Id == subId);
+        //Check om employer-substitute har et element med hhv. subid og empid
+        //Der på samtidig er true for begge
 
-        if (sub.Positions.All(gig => gig.Id != gigId))
+        var query = from gigSubs in _databaseContext.Set<GigSubstitute>()
+            join empSubs in _databaseContext.Set<EmployerSubstitute>()
+                on new { id = gigSubs.Substitute, dto.SustituteId }
+                equals new { id = empSubs.Substitute, dto.SustituteId }
+            join gigs in _databaseContext.Set<Gig>()
+                on new { id = gigSubs.GigId }
+                equals new { id = gigs.Id }
+            select new { empSubs, gigSubs, gigs };
+
+        foreach (var var in query)
         {
-            return true;
+            Console.WriteLine("GIGS" + var.gigs.Id +" " + var.gigs.Employer.Id +" "
+            + " EMPSUBS" + var.empSubs.EmployerId +" " + var.empSubs.WantsToMatch +" "
+            + "GIGSUBS" + var.gigSubs.WantsToMatch);
         }
-        return false;
+        
+        var result = query.FirstOrDefaultAsync(joined =>
+            joined.gigSubs.WantsToMatch == joined.empSubs.WantsToMatch
+            //Gigs skal måske have en iclude?
+            && joined.empSubs.EmployerId == joined.gigs.Employer.Id).Result;
+
+        if (result != null)
+        {
+            Console.WriteLine("RESULT" + result.gigs.Id + " " + result.empSubs.EmployerId + " " + result.gigSubs.GigId);
+            Console.WriteLine("DTO: " + dto.GigId + " "+ dto.EmployerId + " " + dto.SustituteId);
+            return new CheckMatchDto
+            {
+                GigId = result.gigs.Id,
+                WasAMatch = true
+            };
+        }
+        else
+        {
+            Console.WriteLine("NO MATCH");
+            return new CheckMatchDto
+            {
+                GigId = -1,
+                WasAMatch = false
+            };
+        }
+        
     }
 }

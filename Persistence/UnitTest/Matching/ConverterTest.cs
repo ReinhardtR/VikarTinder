@@ -44,7 +44,7 @@ public class ConverterTest
     //Substitute converter tests
     //Testing for employer making matches
     //Creation of match validations
-    
+    /*
     [Test, Description("Testing for creating matchValidation with null gigs list")]
     public void GigsListIsNull()
     {
@@ -110,6 +110,7 @@ public class ConverterTest
             index++;
         }
     }
+    */
     
     
     

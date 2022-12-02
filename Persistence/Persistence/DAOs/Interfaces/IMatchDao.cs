@@ -1,11 +1,12 @@
-﻿using Persistence.Models;
+﻿using Persistence.Dto;
+using Persistence.Models;
 
 namespace Persistence.DAOs.Interfaces;
 
 public interface IMatchDao
 {
-    Task<Gig> MatchWithGig(int currentUserId, int matchId);
-    Task<Substitute> MatchWithSubstitute(int currentUserId, int matchId);
+    Task<IdsForMatchDto> MatchingGig(ToBeMatchedDto dto);
+    Task<IdsForMatchDto> MatchingSubstitute(ToBeMatchedDto dto);
 
 
     Task<List<Substitute>> GetSubstitutesForMatching(int id);
@@ -16,7 +17,6 @@ public interface IMatchDao
     Task<Substitute> GetSubstituteById(int id);
     Task<Gig> GetGigById(int id);
 
-    Task<bool> CheckIfMatchedEmpSub(int empId, int subId);
-    Task<bool> CheckIfMatchedSubGig(int subId, int gigId);
-
+    Task<IdsForMatchDto> CheckIfMatched(IdsForMatchDto dto);
+    
 }
