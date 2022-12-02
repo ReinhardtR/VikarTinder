@@ -19,6 +19,5 @@ public class JobConfirmation : DateTrackingEntity
     
     public bool IsTaken { get; set; } // if the job is taken by another substitute, bliver erstattet af stilling
 
-    public DateTime CreatedAt { get; set; }
     
 }

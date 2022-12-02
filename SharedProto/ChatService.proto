@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+
+import "google/protobuf/timestamp.proto";
 option csharp_namespace = "Persistence";
 option java_multiple_files = true;
 
@@ -57,7 +59,7 @@ message MessageObject {
   int32 author_id = 2;
   int32 chat_id = 3;
   string content = 4;
-  //TO DO - add timestamp
+  google.protobuf.Timestamp created_at = 5;
 }
 
 message ChatOverviewObject {

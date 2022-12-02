@@ -8,15 +8,28 @@ public class JobConfirmationFactory
     { 
         return new CreateJobConfirmationResponse
         {
-            JobConfirmation = new JobConfirmationObject
-            {   
-                Id = jobConfirmation.Id,
-                ChatId = jobConfirmation.Chat.Id,
-                SubstituteId = jobConfirmation.Substitute.Id,
-                EmployerId = jobConfirmation.Employer.Id,
-                IsAccepted = jobConfirmation.IsAccepted
-                
-            }
+            JobConfirmation = ToJobConfirmationObject(jobConfirmation)
+        };
+    }
+
+    public static JobConfirmationAnswerResponse ToJobConfirmationAnswerResponse(JobConfirmation jobConfirmation)
+    {
+        return new JobConfirmationAnswerResponse
+        {
+            JobConfirmation = ToJobConfirmationObject(jobConfirmation)
+        };
+    }
+    
+    private static JobConfirmationObject ToJobConfirmationObject(JobConfirmation jobConfirmation)
+    {
+        return new JobConfirmationObject
+        {
+            Id = jobConfirmation.Id,
+            ChatId = jobConfirmation.Chat.Id,
+            SubstituteId = jobConfirmation.Substitute.Id,
+            EmployerId = jobConfirmation.Employer.Id,
+            IsAccepted = jobConfirmation.IsAccepted,
+            CreatedAt = jobConfirmation.CreatedAt
         };
     }
 }

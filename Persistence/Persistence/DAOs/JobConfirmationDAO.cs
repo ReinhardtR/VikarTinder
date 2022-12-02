@@ -37,4 +37,16 @@ public class JobConfirmationDAO : IJobConfirmationDAO
 
         return createdJobConfirmation.Entity;
     }
+
+    public async Task<JobConfirmation?> AnswerJobConfirmationAsync(int requestId, int requestChatId, bool requestIsAccepted)
+    {
+       EntityEntry<JobConfirmation> Jobconfirmation = (EntityEntry<JobConfirmation>)_dataContext.Update(_dataContext.Chats.FirstOrDefault(c => c.Id == requestChatId).JobConfirmations
+           .FirstOrDefault(j => j.Id == requestId).IsAccepted = requestIsAccepted);
+        //Virker måské ik?
+        
+        await _dataContext.SaveChangesAsync();
+
+
+        return Jobconfirmation.Entity;
+    }
 }

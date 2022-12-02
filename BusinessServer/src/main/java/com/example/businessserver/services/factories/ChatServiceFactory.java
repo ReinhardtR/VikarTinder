@@ -5,6 +5,9 @@ import com.example.businessserver.dtos.chat.*;
 import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
 import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 public class ChatServiceFactory {
@@ -74,7 +77,9 @@ public class ChatServiceFactory {
 						message.getId(),
 						message.getChatId(),
 						message.getAuthorId(),
-						message.getContent()
+						message.getContent(),
+				LocalDateTime.ofInstant(
+						Instant.ofEpochSecond(message.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
 		);
 	}
 

@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Collections;
+using Google.Protobuf.WellKnownTypes;
 using Persistence.Models;
 
 namespace Persistence.Services;
@@ -16,6 +17,7 @@ public class ChatServiceFactory
                 AuthorId = message.AuthorId,
                 ChatId = message.ChatId,
                 Content = message.Content,
+                CreatedAt = message.CreatedAt.ToTimestamp()
             }
         };
     }
@@ -62,7 +64,9 @@ public class ChatServiceFactory
             Id = m.Id,
             Content = m.Content,
             AuthorId = m.AuthorId,
-            ChatId = m.ChatId
+            ChatId = m.ChatId,
+            CreatedAt = m.CreatedAt.ToTimestamp()
+            
         });
 
         GetChatHistoryResponse getChatHistoryResponse = new GetChatHistoryResponse()

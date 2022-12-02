@@ -22,5 +22,15 @@ public class JobConfirmationServiceServer : JobConfirmationService.JobConfirmati
         CreateJobConfirmationResponse reply = JobConfirmationFactory.ToCreateJobConfirmationResponse(jobConfirmation);
     
         return reply;
-    } 
+    }
+
+    public override async Task<JobConfirmationAnswerResponse> AnswerJobConfirmation(
+        JobConfirmationAnswerRequest request, ServerCallContext context)
+    {
+        JobConfirmation jobConfirmation = await _jobConfirmationDAO.AnswerJobConfirmationAsync(request.Id,request.ChatId,request.IsAccepted);
+        
+        JobConfirmationAnswerResponse reply = JobConfirmationFactory.ToJobConfirmationAnswerResponse(jobConfirmation);
+
+        return reply;
+    }
 }

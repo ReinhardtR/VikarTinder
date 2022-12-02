@@ -1,31 +1,48 @@
 package com.example.businessserver.dtos.chat;
 
+import java.time.LocalDateTime;
+
 public class MessageDTO {
 	private int id;
 	private int chatId;
 	private int authorId;
 	private String content;
 
-	public MessageDTO(int id, int chatId, int authorId, String content) {
+	private LocalDateTime createdAt;
+
+	public MessageDTO(int id, int chatId, int authorId, String content,
+			LocalDateTime createdAt)
+	{
 		this.id = id;
 		this.chatId = chatId;
 		this.authorId = authorId;
 		this.content = content;
+		this.createdAt = createdAt;
 	}
 
-	public int getId() {
+
+	public int getId()
+	{
 		return id;
 	}
 
-	public int getChatId() {
+	public int getChatId()
+	{
 		return chatId;
 	}
 
-	public int getAuthorId() {
+	public int getAuthorId()
+	{
 		return authorId;
 	}
 
-	public String getContent() {
+	public String getContent()
+	{
 		return content;
+	}
+
+	public LocalDateTime getCreatedAt()
+	{
+		return createdAt;
 	}
 }

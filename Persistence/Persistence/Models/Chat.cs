@@ -12,5 +12,6 @@ public class Chat
     
     public List<Message> Messages { get; set; }
     
+    public List<JobConfirmation> JobConfirmations { get; set; }
     
 }
