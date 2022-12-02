@@ -9,12 +9,13 @@ public class ChatServiceFactory
     public static SendMessageResponse ToSendMessageResponse(Message message)
     {
         return new SendMessageResponse
-        { Message = new MessageObject()
+        { 
+            Message = new MessageObject()
             {
-            Id = message.Id,
-            AuthorId = message.AuthorId,
-            ChatId = message.ChatId,
-            Content = message.Content,
+                Id = message.Id,
+                AuthorId = message.AuthorId,
+                ChatId = message.ChatId,
+                Content = message.Content,
             }
         };
     }
@@ -70,17 +71,5 @@ public class ChatServiceFactory
         };
 
         return getChatHistoryResponse;
-    }
-
-    public static CreateJobConfirmationResponse ToCreateJobConfirmationResponse(JobConfirmation jobConfirmation)
-    { 
-        return new CreateJobConfirmationResponse
-        {
-            Id = jobConfirmation.id,
-            ChatId = jobConfirmation.chat.Id,
-            SubstituteId = jobConfirmation.substitute.Id,
-            EmployerId = jobConfirmation.employer.Id,
-            IsAccepted = jobConfirmation.isAccepted
-        };
     }
 }

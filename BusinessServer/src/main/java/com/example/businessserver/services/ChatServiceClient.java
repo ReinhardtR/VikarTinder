@@ -11,8 +11,6 @@ public interface ChatServiceClient {
 
 	MessageDTO sendMessage(SendMessageDTO dto);
 
-	JobConfirmationDTO createJobConfirmation(CreateJobConfirmationDTO dto);
-
 	ChatOverviewDTO getChatOverview(GetChatOverviewDTO dto);
 
 

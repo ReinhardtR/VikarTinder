@@ -19,6 +19,8 @@ builder.Services.AddGrpc();
 builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddScoped<IChatDAO, ChatDAO>();
+builder.Services.AddScoped<IJobConfirmationDAO, JobConfirmationDAO>();
+
 
 var app = builder.Build();
 

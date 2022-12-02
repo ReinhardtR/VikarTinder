@@ -1,0 +1,42 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Persistence";
+option java_multiple_files = true;
+
+package JobConfirmationService;
+
+service JobConfirmationService {
+    rpc CreateJobConfirmation (CreateJobConfirmationRequest) returns (CreateJobConfirmationResponse);
+    rpc AnswerJobConfirmation (JobConfirmationAnswerRequest) returns (JobConfirmationAnswerResponse);
+  
+}
+
+message CreateJobConfirmationRequest{
+  int32 chat_id = 1;
+  int32 substitute_id = 2;
+  int32 employer_id = 3;
+}
+
+message CreateJobConfirmationResponse{
+  JobConfirmationObject job_confirmation = 1;
+}
+
+
+message JobConfirmationAnswerRequest{
+  int32 id = 1;
+  int32 chat_id = 2;
+  bool is_accepted = 3;
+}
+
+message JobConfirmationAnswerResponse{
+  JobConfirmationObject job_confirmation = 1;
+}
+
+message JobConfirmationObject{
+  int32 id = 1;
+  int32 chat_id = 2;
+  int32 substitute_id = 3;
+  int32 employer_id = 4;
+  bool is_accepted = 5;
+  //To do - add date
+}
