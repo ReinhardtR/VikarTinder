@@ -1,5 +1,6 @@
 package com.example.businessserver.logic;
 
+import JobConfirmationService.JobConfirmationStatus;
 import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
 import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
 import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
@@ -15,20 +16,14 @@ public class JobConfirmationLogicImpl implements JobConfirmationLogic {
 
 
 	@Override
-	public JobConfirmationDTO createJobConfirmation(CreateJobConfirmationDTO dto) {
-		//Hvis der er en jobrequest på denne chat, så skal der checkes om den er true.
-		//Hvis den ikke er "unanswered", så skal der laves en jobconfirmation
+	public JobConfirmationDTO createJobConfirmation(CreateJobConfirmationDTO dto)
+			throws Exception
+	{
 
-		//Hvis der ikke er en jobrequest på denne chat, så skal der laves en jobconfirmation
-
-
-		//Get Jobconfirmation by chatId
 		JobConfirmationDTO jobConfirmationToBeReplaced = jobConfirmationServiceClient.getJobConfirmation(dto.getChatId());
 
-
-
 		if (JobRequestIsPresent(jobConfirmationToBeReplaced) && JobRequestIsNotDeclined(jobConfirmationToBeReplaced)) {
-
+			throw new Exception("Job request already exists");
 		}
 
 		return jobConfirmationServiceClient.CreateJobConfirmation(dto);
@@ -37,7 +32,7 @@ public class JobConfirmationLogicImpl implements JobConfirmationLogic {
 
 	private boolean JobRequestIsNotDeclined(JobConfirmationDTO jobConfirmationToBeReplaced)
 	{
-		return jobConfirmationToBeReplaced.
+		return jobConfirmationToBeReplaced.getIsAccepted() == JobConfirmationStatus.ACCEPTED || jobConfirmationToBeReplaced.getIsAccepted() == JobConfirmationStatus.UNANSWERED;
 	}
 
 	private boolean JobRequestIsPresent(JobConfirmationDTO jobConfirmationToBeReplaced)

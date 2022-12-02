@@ -18,7 +18,9 @@ public class JobConfirmationController {
 	private JobConfirmationLogic jobConfirmationLogic;
 
 	@PostMapping("/job-confirmation")
-	public JobConfirmationDTO createJobConfirmation(@RequestBody CreateJobConfirmationDTO dto) {
+	public JobConfirmationDTO createJobConfirmation(@RequestBody CreateJobConfirmationDTO dto)
+			throws Exception
+	{
 		JobConfirmationDTO jobConfirmationDTO = jobConfirmationLogic.createJobConfirmation(dto);
 
 		socketHandler.sendJobConfirmation(jobConfirmationDTO);

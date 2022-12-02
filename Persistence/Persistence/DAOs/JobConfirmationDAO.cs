@@ -45,6 +45,7 @@ public class JobConfirmationDAO : IJobConfirmationDAO
         return createdJobConfirmation.Entity;
         
     }
+    
 
     public async Task<JobConfirmation?> AnswerJobConfirmationAsync(int id, JobConfirmationStatus isAccepted)
     {
