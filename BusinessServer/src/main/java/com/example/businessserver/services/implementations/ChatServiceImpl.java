@@ -1,6 +1,8 @@
 package com.example.businessserver.services.implementations;
 
 import ChatService.*;
+import JobConfirmationService.CreateJobConfirmationRequest;
+import JobConfirmationService.CreateJobConfirmationResponse;
 import com.example.businessserver.dtos.chat.*;
 import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
 import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
@@ -40,16 +42,6 @@ public class ChatServiceImpl implements ChatServiceClient
 		return ChatServiceFactory.toMessageDTO(response.getMessage());
 	}
 
-
-
-	@Override public JobConfirmationDTO createJobConfirmation(
-			CreateJobConfirmationDTO dto)
-	{
-		CreateJobConfirmationRequest request = ChatServiceFactory.toCreateJobConfirmationRequest(dto);
-		CreateJobConfirmationResponse response = chatServiceBlockingStub.createJobConfirmation(request);
-
-		return ChatServiceFactory.toJobConfirmationDTO(response);
-	}
 
 	@Override
 	public ChatOverviewDTO getChatOverview(GetChatOverviewDTO dto) {

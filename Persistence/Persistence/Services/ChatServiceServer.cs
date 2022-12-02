@@ -56,13 +56,4 @@ public class ChatServiceServer : ChatService.ChatServiceBase
         
         return reply;
     }
-    
-    public override async Task<CreateJobConfirmationResponse> CreateJobConfirmation(CreateJobConfirmationRequest request, ServerCallContext context)
-    {
-        JobConfirmation jobConfirmation = await _chatDao.CreateJobConfirmationAsync(request.ChatId,request.SubstituteId,request.EmployerId);
-    
-        CreateJobConfirmationResponse reply = ChatServiceFactory.ToCreateJobConfirmationResponse(jobConfirmation);
-
-        return reply;
-    } 
 }
