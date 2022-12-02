@@ -1,0 +1,60 @@
+
+@if (gigs == null && errorLabel == null)
+{
+    <p>Loading...</p>
+}
+else if (errorLabel != null)
+{
+    <p>Error: @errorLabel</p>
+}
+else if (gigs != null)
+{
+    <MudStack>
+        <MudText Typo="Typo.h6">Dine stillinger</MudText>
+        <MudGrid>
+            @foreach (int gig in gigs)
+            {
+                <MudItem xs="6">
+                    <MudButton FullWidth="true" OnClick="() => OnGigSelected(gig)">
+                        <MudPaper Width="100%" Class="py-12">
+                            <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
+                                <MudText Typo="Typo.h6">@gig</MudText>
+                            </MudStack>
+                        </MudPaper>
+                    </MudButton>
+                </MudItem>
+            }
+        </MudGrid>
+    </MudStack>
+}
+
+@code {
+    
+    [Parameter]
+    public Action<int> OnGigSelected { get; set; }
+    
+    // TODO replace with real gigs
+    private ICollection<int>? gigs;
+    private string? errorLabel; 
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchGigs();
+    }
+
+    private async Task FetchGigs()
+    {
+        try
+        {
+            errorLabel = null;
+
+            gigs = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        }
+        catch (Exception e)
+        {
+            gigs = null;
+            
+            errorLabel = e.Message;
+        }
+    }
+}
