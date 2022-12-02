@@ -83,13 +83,14 @@ public class ChatServiceFactory
             JobConfirmationObject jobConfirmation = new JobConfirmationObject()
             {
                 Id = chat.JobConfirmation.Id,
+
                 ChatId = chat.JobConfirmation.ChatId,
                 SubstituteId= chat.JobConfirmation.SubstituteId,
                 EmployerId = chat.JobConfirmation.EmployerId,
                 IsAccepted = chat.JobConfirmation.IsAccepted,
                 CreatedAt = chat.JobConfirmation.CreatedAt.ToTimestamp()
             };
-            
+ 
 
         return new GetChatHistoryResponse()
         {

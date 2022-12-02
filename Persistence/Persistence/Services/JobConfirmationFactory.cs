@@ -35,6 +35,7 @@ public class JobConfirmationFactory
     }
 
 
+
     public static JobConfirmationStatus ToJobConfirmationStatus(bool? value)
     {
         return value switch
@@ -47,12 +48,13 @@ public class JobConfirmationFactory
     }
 
 
+
+
     public static GetJobConfirmationResponse ToGetJobConfirmationResponse(JobConfirmation jobConfirmation)
     {
         return new GetJobConfirmationResponse
         {
             JobConfirmation = ToJobConfirmationObject(jobConfirmation)
-
         };
     }
 }
