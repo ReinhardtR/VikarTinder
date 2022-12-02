@@ -26,13 +26,12 @@
             <JobConfirmationRequest GigId="@GigId" ChatId="@ChatId" />
         }
 
-        <MudStack Class="overflow-y-scroll pa-4 flex-grow-1 flex-column-reverse">
+        <MudStack Reverse="@true" Class="overflow-y-scroll pa-4 flex-grow-1">
             <MudStack Spacing="4">
                 @foreach (MessageDTO message in chatHistory.Messages)
                 {
                     <ChatMessage UserId="@userId" AuthorId="@message.AuthorId" Content="@message.Content" />
                 }
-                <JobRequest ChatId="@ChatId" UserId="@userId" AuthorId="2" />
             </MudStack>
         </MudStack>
 
@@ -75,7 +74,7 @@
         }
       
         ListenToChatSocket();
-        ListenToJobRequestSocket();
+        // ListenToJobRequestSocket();
     }
 
     private class FormModel
