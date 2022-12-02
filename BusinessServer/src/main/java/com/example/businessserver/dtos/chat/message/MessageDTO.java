@@ -1,4 +1,4 @@
-package com.example.businessserver.dtos.chat;
+package com.example.businessserver.dtos.chat.message;
 
 import java.time.LocalDateTime;
 
@@ -7,7 +7,6 @@ public class MessageDTO {
 	private int chatId;
 	private int authorId;
 	private String content;
-
 	private LocalDateTime createdAt;
 
 	public MessageDTO(int id, int chatId, int authorId, String content,
@@ -19,7 +18,6 @@ public class MessageDTO {
 		this.content = content;
 		this.createdAt = createdAt;
 	}
-
 
 	public int getId()
 	{

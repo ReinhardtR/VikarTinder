@@ -1,7 +1,7 @@
 package com.example.businessserver.websockets;
 
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
-import com.example.businessserver.dtos.chat.MessageDTO;
+import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

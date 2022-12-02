@@ -1,11 +1,12 @@
-package com.example.businessserver.dtos.chat.JobConfirmation;
+package com.example.businessserver.dtos.JobConfirmation;
 
-public class JobConfirmationAnswer {
+public class AnswerJobConfirmationDTO
+{
 	private int id;
 	private int chatId;
 	private boolean isAccepted;
 
-	public JobConfirmationAnswer(int id, int chatId, boolean isAccepted) {
+	public AnswerJobConfirmationDTO(int id, int chatId, boolean isAccepted) {
 		this.id = id;
 		this.chatId = chatId;
 		this.isAccepted = isAccepted;

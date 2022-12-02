@@ -5,7 +5,7 @@
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\miloA\Documents\GitHub\VikarTinder\Persistence\Persistence\Data.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:C:\Users\gamer\Documents\GitHub\VikarTinder\Persistence\Persistence\Data.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
       <libraries>
         <library>

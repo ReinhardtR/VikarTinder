@@ -14,25 +14,22 @@ public class ChatDAO : IChatDAO
         _dataContext = dataContext;
     }
 
-    public Task<List<Message>> GetChatHistoryAsync(int chatId)
-    {
-        return _dataContext.Messages.Where(m => m.ChatId == chatId).OrderBy(m => m.CreatedAt).ToListAsync();
-    }
+   
 
-    public async Task<Chat> CreateChatAsync(List<int> userIds)
+    public async Task<Chat> CreateChatAsync(int employerId, int substituteId)
     {
-       List<User> users =  await _dataContext.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
-        
-        Chat chatToCreate = new()
+        var chat = new Chat
         {
-            Participants = users
+            EmployerId = employerId,
+            SubstituteId = substituteId
         };
-        
-        EntityEntry<Chat> createdChat =  _dataContext.Chats.Add(chatToCreate);
+
+        EntityEntry<Chat> result = await _dataContext.Chats.AddAsync(chat);
         await _dataContext.SaveChangesAsync();
 
-        return createdChat.Entity;
+        return result.Entity;
     }
+    
 
     public async Task<Message> SendMessageAsync(string content, int authorId, int chatId)
     {
@@ -51,8 +48,20 @@ public class ChatDAO : IChatDAO
 
     public Task<List<Chat>> GetAllChatsAsync(int userId)
     {
-        return _dataContext.Chats.Where((c) => c.Participants.Any(u => u.Id == userId)).Include((c) => c.Participants).ToListAsync();
+        return _dataContext.Chats.Where(c => c.EmployerId == userId || c.SubstituteId == userId).ToListAsync();
+        
     }
 
-   
+    public Task<Chat> GetChatHistoryAsync(int requestChatId)
+    {
+        return _dataContext.Chats
+            .Include(c => c.Messages)
+            .Include(c => c.EmployerId)
+            .Include(c => c.SubstituteId)
+            .Include(c => c.JobConfirmations)
+            .FirstOrDefaultAsync(c => c.Id == requestChatId);
+        
+    }
+
+    
 }

@@ -1,11 +1,11 @@
 package com.example.businessserver.services;
 
 import com.example.businessserver.dtos.chat.*;
-import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.chat.message.MessageDTO;
+import com.example.businessserver.dtos.chat.message.SendMessageDTO;
 
 public interface ChatServiceClient {
-	ChatDTO createChat(CreateChatDTO dto);
+	BasicChatDTO createChat(CreateChatDTO dto);
 
 	ChatHistoryDTO getChatHistory(GetChatHistoryDTO dto);
 

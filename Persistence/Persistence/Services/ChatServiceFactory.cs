@@ -6,6 +6,7 @@ namespace Persistence.Services;
 
 public class ChatServiceFactory
 {
+    
 
     public static SendMessageResponse ToSendMessageResponse(Message message)
     {
@@ -14,7 +15,7 @@ public class ChatServiceFactory
             Message = new MessageObject()
             {
                 Id = message.Id,
-                AuthorId = message.AuthorId,
+                Author = ToChatUserObject(message.Author),
                 ChatId = message.ChatId,
                 Content = message.Content,
                 CreatedAt = message.CreatedAt.ToTimestamp()
@@ -26,7 +27,9 @@ public class ChatServiceFactory
     {
             return new CreateChatResponse
         {
-            Id = chat.Id
+            Id = chat.Id,
+            Employer = ToChatUserObject(new User() {Id = chat.EmployerId}),
+            Substitute = ToChatUserObject(new User(){Id = chat.SubstituteId})
         };
     }
 
@@ -36,17 +39,11 @@ public class ChatServiceFactory
 
         foreach (Chat chat in chats)
         {
-            RepeatedField<int> userIds = new RepeatedField<int>();
-            
-            foreach (User participant in chat.Participants)
-            {
-                userIds.Add(participant.Id);
-            }
-
             chatOverviewObjects.Add(new ChatOverviewObject()
             {
                 Id = chat.Id,
-                UserIds = { userIds }
+                Employer = ToChatUserObject(new User() {Id = chat.EmployerId}),
+                Substitute = ToChatUserObject(new User(){Id = chat.SubstituteId}) //skal ændres når vi merger usecases
             });
         }
         
@@ -57,24 +54,51 @@ public class ChatServiceFactory
         return getChatOverviewResponse;
     }
 
-    public static GetChatHistoryResponse ToGetChatHistoryResponse(List<Message> messages)
+   
+    
+    private static ChatUserObject ToChatUserObject(User user)
     {
-        IEnumerable<MessageObject> messageObjects = messages.Select((m) =>
-            new MessageObject
-            {
-                Id = m.Id,
-                Content = m.Content,
-                AuthorId = m.AuthorId,
-                ChatId = m.ChatId,
-                CreatedAt = m.CreatedAt.ToTimestamp()
-            }
-        );
-
-        GetChatHistoryResponse getChatHistoryResponse = new GetChatHistoryResponse()
+        return new ChatUserObject()
         {
-            Messages = { messageObjects }
+            Id = user.Id
         };
+    }
 
-        return getChatHistoryResponse;
+    public static GetChatHistoryResponse ToGetChatHistoryResponse(Chat chat)
+    {
+        RepeatedField<MessageObject> messageObjects = new RepeatedField<MessageObject>();
+        foreach (Message message in chat.Messages)
+        {
+            messageObjects.Add(new MessageObject()
+            {
+                Id = message.Id,
+                Author = ToChatUserObject(message.Author),
+                ChatId = message.ChatId,
+                Content = message.Content,
+                CreatedAt = message.CreatedAt.ToTimestamp()
+            });
+        }
+
+        RepeatedField<JobConfirmationObject> jobConfirmationObjects = new RepeatedField<JobConfirmationObject>();
+        foreach (JobConfirmation jobConfirmation in chat.JobConfirmations)
+        {
+            jobConfirmationObjects.Add(new JobConfirmationObject()
+            {
+                Id = jobConfirmation.Id,
+                ChatId = jobConfirmation.Chat.Id,
+                SubstituteId= jobConfirmation.Substitute.Id,
+                EmployerId = jobConfirmation.Employer.Id,
+                IsAccepted = jobConfirmation.IsAccepted,
+                CreatedAt = jobConfirmation.CreatedAt.ToTimestamp()
+            });
+        }
+
+        return new GetChatHistoryResponse()
+        {
+            Messages = { messageObjects },
+            JobConfirmations = { jobConfirmationObjects },
+            Employer = ToChatUserObject(new User() { Id = chat.EmployerId }),
+            Substitute = ToChatUserObject(new User() { Id = chat.SubstituteId })
+        };
     }
 }

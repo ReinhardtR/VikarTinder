@@ -1,4 +1,4 @@
-package com.example.businessserver.dtos.chat;
+package com.example.businessserver.dtos.chat.message;
 
 public class SendMessageDTO {
 	private int chatId;

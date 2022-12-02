@@ -1,6 +1,8 @@
 package com.example.businessserver.restcontrollers;
 
 import com.example.businessserver.dtos.chat.*;
+import com.example.businessserver.dtos.chat.message.MessageDTO;
+import com.example.businessserver.dtos.chat.message.SendMessageDTO;
 import com.example.businessserver.logic.ChatLogic;
 import com.example.businessserver.websockets.SocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ public class ChatController {
 	}
 
 	@PostMapping("/")
-	public ChatDTO createChat(@RequestBody CreateChatDTO dto) {
+	public BasicChatDTO createChat(@RequestBody CreateChatDTO dto) {
 		System.out.println("CREATE CHAT");
 		return chatLogic.createChat(dto);
 	}

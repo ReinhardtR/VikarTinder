@@ -11,28 +11,13 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221128094130_FixCreatedAtDate")]
-    partial class FixCreatedAtDate
+    [Migration("20221202125805_updatedimployername")]
+    partial class updatedimployername
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
-
-            modelBuilder.Entity("ChatUser", b =>
-                {
-                    b.Property<int>("ChatsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ParticipantsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ChatsId", "ParticipantsId");
-
-                    b.HasIndex("ParticipantsId");
-
-                    b.ToTable("ChatUser");
-                });
 
             modelBuilder.Entity("Persistence.Models.Chat", b =>
                 {
@@ -40,9 +25,58 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubstituteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("Persistence.Models.JobConfirmation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsTaken")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubstituteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("EmployerId");
+
+                    b.HasIndex("SubstituteId");
+
+                    b.ToTable("JobConfirmations");
                 });
 
             modelBuilder.Entity("Persistence.Models.Message", b =>
@@ -61,8 +95,10 @@ namespace Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime?>("SentAt")
-                        .ValueGeneratedOnAdd()
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -85,19 +121,38 @@ namespace Persistence.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ChatUser", b =>
+            modelBuilder.Entity("Persistence.Models.Chat", b =>
                 {
-                    b.HasOne("Persistence.Models.Chat", null)
-                        .WithMany()
-                        .HasForeignKey("ChatsId")
+                    b.HasOne("Persistence.Models.User", null)
+                        .WithMany("Chats")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Persistence.Models.JobConfirmation", b =>
+                {
+                    b.HasOne("Persistence.Models.Chat", "Chat")
+                        .WithMany("JobConfirmations")
+                        .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Persistence.Models.User", null)
+                    b.HasOne("Persistence.Models.User", "Employer")
                         .WithMany()
-                        .HasForeignKey("ParticipantsId")
+                        .HasForeignKey("EmployerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Persistence.Models.User", "Substitute")
+                        .WithMany()
+                        .HasForeignKey("SubstituteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("Employer");
+
+                    b.Navigation("Substitute");
                 });
 
             modelBuilder.Entity("Persistence.Models.Message", b =>
@@ -121,7 +176,14 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Persistence.Models.Chat", b =>
                 {
+                    b.Navigation("JobConfirmations");
+
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Persistence.Models.User", b =>
+                {
+                    b.Navigation("Chats");
                 });
 #pragma warning restore 612, 618
         }

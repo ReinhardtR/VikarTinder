@@ -5,13 +5,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 public class CreateChatDTO {
-	private final List<Integer> ids;
+	private int substituteId;
+	private int employerId;
 
-	public CreateChatDTO(@JsonProperty("ids") List<Integer> ids) {
-		this.ids = ids;
+	public CreateChatDTO(int substituteId, int employerId)
+	{
+		this.substituteId = substituteId;
+		this.employerId = employerId;
 	}
 
-	public List<Integer> getIds() {
-		return ids;
+	public int getSubstituteId()
+	{
+		return substituteId;
+	}
+
+	public int getEmployerId()
+	{
+		return employerId;
 	}
 }

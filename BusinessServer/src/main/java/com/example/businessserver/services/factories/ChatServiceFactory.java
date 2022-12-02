@@ -1,9 +1,11 @@
 package com.example.businessserver.services.factories;
 
 import ChatService.*;
+import JobConfirmationService.JobConfirmationObject;
+import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
 import com.example.businessserver.dtos.chat.*;
-import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.chat.message.MessageDTO;
+import com.example.businessserver.dtos.chat.message.SendMessageDTO;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -13,52 +15,86 @@ import java.util.List;
 public class ChatServiceFactory {
 	// Create Chat
 	public static CreateChatRequest toCreateChatRequest(CreateChatDTO dto) {
+		if (ObjectIsNull(dto))
+			return null;
+
 		return CreateChatRequest
 						.newBuilder()
-						.addAllUserIds(dto.getIds())
+						.setEmployer(toChatUserObject(dto.getEmployerId()))
+						.setSubstitute(toChatUserObject(dto.getSubstituteId()))
 						.build();
 	}
 
-	public static ChatDTO toChatDto(CreateChatResponse response) {
-		return new ChatDTO(response.getId());
-	}
 
 	// Chat History
 	public static GetChatHistoryRequest toGetChatHistoryRequest(GetChatHistoryDTO dto) {
+		if (ObjectIsNull(dto))
+			return null;
+
 		return GetChatHistoryRequest
 						.newBuilder()
-						.setChatId(dto.getId())
+						.setChatId(dto.getChatId())
 						.build();
 	}
 
 	public static ChatHistoryDTO toChatHistoryDto(GetChatHistoryResponse response) {
+		if (ObjectIsNull(response))
+			return null;
+
 		List<MessageDTO> messages = response.getMessagesList()
 						.stream()
 						.map(ChatServiceFactory::toMessageDTO)
 						.toList();
 
-		return new ChatHistoryDTO(messages);
+		List<JobConfirmationDTO> jobConfirmations = response.getJobConfirmationsList()
+				.stream()
+				.map(ChatServiceFactory::toJobConfirmationDTO)
+				.toList();
+
+
+
+
+		return new ChatHistoryDTO(messages,jobConfirmations,response.getSubstitute().getId(),response.getEmployer().getId());
 	}
+
+
 
 	// Send Message
 	public static SendMessageRequest toSendMessageRequest(SendMessageDTO dto) {
+		if (ObjectIsNull(dto))
+			return null;
+
 		return SendMessageRequest
 						.newBuilder()
 						.setChatId(dto.getChatId())
-						.setAuthorId(dto.getAuthorId())
+						.setAuthor(toChatUserObject(dto.getAuthorId()))
 						.setContent(dto.getContent())
 						.build();
 	}
 
 	// Chat Overview
 	public static GetChatOverviewRequest toGetChatOverviewRequest(GetChatOverviewDTO dto) {
+		if (ObjectIsNull(dto))
+			return null;
+
 		return GetChatOverviewRequest
 						.newBuilder()
-						.setUserId(dto.getUserId())
+						.setUser(toChatUserObject(dto.getUserId()))
 						.build();
 	}
 
+	public static BasicChatDTO toBasicChatDTO(CreateChatResponse response)
+	{
+		if (ObjectIsNull(response))
+			return null;
+
+		return new BasicChatDTO(response.getId(), response.getSubstitute().getId(),response.getEmployer().getId());
+	}
+
 	public static ChatOverviewDTO toChatOverviewDTO(GetChatOverviewResponse response) {
+		if (ObjectIsNull(response))
+			return null;
+
 		List<BasicChatDTO> chats = response.getChatsList()
 						.stream()
 						.map(ChatServiceFactory::toBasicChatDTO)
@@ -69,14 +105,20 @@ public class ChatServiceFactory {
 
 	// Shared Methods
 	public static BasicChatDTO toBasicChatDTO(ChatOverviewObject chat) {
-		return new BasicChatDTO(chat.getId(), chat.getUserIdsList());
+		if (ObjectIsNull(chat))
+			return null;
+
+		return new BasicChatDTO(chat.getId(), chat.getSubstitute().getId(),chat.getEmployer().getId());
 	}
 
 	public static MessageDTO toMessageDTO(MessageObject message) {
+		if (ObjectIsNull(message))
+			return null;
+
 		return new MessageDTO(
 						message.getId(),
 						message.getChatId(),
-						message.getAuthorId(),
+						message.getAuthor().getId(),
 						message.getContent(),
 				LocalDateTime.ofInstant(
 						Instant.ofEpochSecond(message.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
@@ -84,15 +126,20 @@ public class ChatServiceFactory {
 	}
 
 	public static MessageObject toMessageObject(MessageDTO dto) {
+		if (ObjectIsNull(dto))
+			return null;
+
 		return MessageObject
 						.newBuilder()
 						.setId(dto.getId())
 						.setChatId(dto.getChatId())
-						.setAuthorId(dto.getAuthorId())
+						.setAuthor(toChatUserObject(dto.getAuthorId()))
 						.setContent(dto.getContent())
 						.build();
 
 	}
+
+
 
 
 	private ChatUserObject toChatUserObject(ChatUserDTO dto) {
@@ -100,5 +147,31 @@ public class ChatServiceFactory {
 						.newBuilder()
 						.setId(dto.getId())
 						.build();
+	}
+
+	private static ChatUserObject toChatUserObject(int authorId)
+	{
+		return ChatUserObject.newBuilder()
+				.setId(authorId)
+				.build();
+	}
+	private static boolean ObjectIsNull(Object o)
+	{
+		return o == null;
+	}
+
+	private static JobConfirmationDTO toJobConfirmationDTO(
+			JobConfirmationObject jobConfirmationObject)
+	{
+
+		return new JobConfirmationDTO(
+				jobConfirmationObject.getId(),
+				jobConfirmationObject.getChatId(),
+				jobConfirmationObject.getSubstituteId(),
+				jobConfirmationObject.getEmployerId(),
+				jobConfirmationObject.getIsAccepted(),
+				LocalDateTime.ofInstant(
+						Instant.ofEpochSecond(jobConfirmationObject.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
+		);
 	}
 }
