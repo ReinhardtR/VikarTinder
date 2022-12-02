@@ -1,7 +1,20 @@
+
 namespace Persistence.Models;
 
-public class DateTrackingEntity
+public abstract class DateTrackingEntity
 {
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
+    private DateTime _createdDate;
+    public DateTime CreatedAt
+    {
+        get => _createdDate.ToUniversalTime();
+        set => _createdDate = value.ToUniversalTime();
+    }
+    
+    private DateTime _updatedDate;
+
+    public DateTime? UpdatedAt
+    {
+        get => _updatedDate.ToUniversalTime();
+        set => _updatedDate = value?.ToUniversalTime() ?? DateTime.UtcNow;
+    }
 }

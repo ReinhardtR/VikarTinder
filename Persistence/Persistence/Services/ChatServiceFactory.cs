@@ -59,15 +59,16 @@ public class ChatServiceFactory
 
     public static GetChatHistoryResponse ToGetChatHistoryResponse(List<Message> messages)
     {
-        IEnumerable<MessageObject> messageObjects = messages.Select((m) => new MessageObject
-        {
-            Id = m.Id,
-            Content = m.Content,
-            AuthorId = m.AuthorId,
-            ChatId = m.ChatId,
-            CreatedAt = m.CreatedAt.ToTimestamp()
-            
-        });
+        IEnumerable<MessageObject> messageObjects = messages.Select((m) =>
+            new MessageObject
+            {
+                Id = m.Id,
+                Content = m.Content,
+                AuthorId = m.AuthorId,
+                ChatId = m.ChatId,
+                CreatedAt = m.CreatedAt.ToTimestamp()
+            }
+        );
 
         GetChatHistoryResponse getChatHistoryResponse = new GetChatHistoryResponse()
         {
