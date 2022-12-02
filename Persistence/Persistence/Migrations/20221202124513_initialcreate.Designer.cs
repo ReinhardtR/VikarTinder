@@ -11,28 +11,13 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221201093758_Added_JobConfirmations")]
-    partial class Added_JobConfirmations
+    [Migration("20221202124513_initialcreate")]
+    partial class initialcreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
-
-            modelBuilder.Entity("ChatUser", b =>
-                {
-                    b.Property<int>("ChatsId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ParticipantsId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("ChatsId", "ParticipantsId");
-
-                    b.HasIndex("ParticipantsId");
-
-                    b.ToTable("ChatUser");
-                });
 
             modelBuilder.Entity("Persistence.Models.Chat", b =>
                 {
@@ -40,42 +25,56 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubstituteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Persistence.Models.JobConfirmation", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ChatId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsTaken")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubstituteId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("chatId")
-                        .HasColumnType("INTEGER");
+                    b.HasKey("Id");
 
-                    b.Property<int>("employerId")
-                        .HasColumnType("INTEGER");
+                    b.HasIndex("ChatId");
 
-                    b.Property<bool>("isAccepted")
-                        .HasColumnType("INTEGER");
+                    b.HasIndex("EmployerId");
 
-                    b.Property<int>("substituteId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("chatId");
-
-                    b.HasIndex("employerId");
-
-                    b.HasIndex("substituteId");
+                    b.HasIndex("SubstituteId");
 
                     b.ToTable("JobConfirmations");
                 });
@@ -122,46 +121,38 @@ namespace Persistence.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ChatUser", b =>
+            modelBuilder.Entity("Persistence.Models.Chat", b =>
                 {
-                    b.HasOne("Persistence.Models.Chat", null)
-                        .WithMany()
-                        .HasForeignKey("ChatsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Persistence.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("ParticipantsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Chats")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Persistence.Models.JobConfirmation", b =>
                 {
-                    b.HasOne("Persistence.Models.Chat", "chat")
-                        .WithMany()
-                        .HasForeignKey("chatId")
+                    b.HasOne("Persistence.Models.Chat", "Chat")
+                        .WithMany("JobConfirmations")
+                        .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Persistence.Models.User", "employer")
+                    b.HasOne("Persistence.Models.User", "Employer")
                         .WithMany()
-                        .HasForeignKey("employerId")
+                        .HasForeignKey("EmployerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Persistence.Models.User", "substitute")
+                    b.HasOne("Persistence.Models.User", "Substitute")
                         .WithMany()
-                        .HasForeignKey("substituteId")
+                        .HasForeignKey("SubstituteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("chat");
+                    b.Navigation("Chat");
 
-                    b.Navigation("employer");
+                    b.Navigation("Employer");
 
-                    b.Navigation("substitute");
+                    b.Navigation("Substitute");
                 });
 
             modelBuilder.Entity("Persistence.Models.Message", b =>
@@ -185,7 +176,14 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Persistence.Models.Chat", b =>
                 {
+                    b.Navigation("JobConfirmations");
+
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Persistence.Models.User", b =>
+                {
+                    b.Navigation("Chats");
                 });
 #pragma warning restore 612, 618
         }

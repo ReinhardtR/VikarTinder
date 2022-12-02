@@ -8,7 +8,9 @@ public class Chat
     [Key]
     public int Id { get; set; }
 
-    public List<User> Participants { get; set; }
+    public int SubstituteId { get; set; }
+
+    public int EmployerId { get; set; } 
     
     public List<Message> Messages { get; set; }
     
