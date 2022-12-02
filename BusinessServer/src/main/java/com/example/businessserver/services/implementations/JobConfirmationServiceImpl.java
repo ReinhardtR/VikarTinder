@@ -2,9 +2,9 @@ package com.example.businessserver.services.implementations;
 
 
 import JobConfirmationService.*;
-import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationAnswer;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
 import com.example.businessserver.services.JobConfirmationServiceClient;
 import com.example.businessserver.services.factories.JobConfirmationServiceFactory;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -24,7 +24,7 @@ public class JobConfirmationServiceImpl implements JobConfirmationServiceClient 
 	}
 
 	@Override
-	public JobConfirmationDTO answerJobConfirmation(JobConfirmationAnswer dto) {
+	public JobConfirmationDTO answerJobConfirmation(AnswerJobConfirmationDTO dto) {
 		JobConfirmationAnswerRequest request = JobConfirmationServiceFactory.toJobConfirmationAnswerRequest(dto);
 		JobConfirmationAnswerResponse response = jobConfirmationServiceBlockingStub.answerJobConfirmation(request);
 

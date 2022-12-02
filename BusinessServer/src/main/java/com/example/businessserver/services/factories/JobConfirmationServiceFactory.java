@@ -5,9 +5,9 @@ import JobConfirmationService.CreateJobConfirmationRequest;
 import JobConfirmationService.CreateJobConfirmationResponse;
 import JobConfirmationService.JobConfirmationAnswerRequest;
 import JobConfirmationService.JobConfirmationAnswerResponse;
-import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationAnswer;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -65,7 +65,7 @@ public class JobConfirmationServiceFactory {
   }
 
   public static JobConfirmationAnswerRequest toJobConfirmationAnswerRequest(
-      JobConfirmationAnswer dto)
+      AnswerJobConfirmationDTO dto)
   {
     if (ObjectIsNull(dto))
       return null;

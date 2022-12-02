@@ -2,12 +2,12 @@ package com.example.businessserver.services.factories;
 
 import ChatService.*;
 import com.example.businessserver.dtos.chat.*;
-import org.junit.jupiter.api.BeforeEach;
+import com.example.businessserver.dtos.chat.message.MessageDTO;
+import com.example.businessserver.dtos.chat.message.SendMessageDTO;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,7 +32,7 @@ class ChatServiceFactoryTest
   {
    CreateChatResponse createChatResponse = CreateChatResponse.newBuilder().setId(1).build();
 
-    ChatDTO chatDTO = ChatServiceFactory.toChatDto(createChatResponse);
+    ChatIdDTO chatDTO = ChatServiceFactory.toChatDto(createChatResponse);
 
     //Check if all fields in class CreateChatResponse and ChatDTO are equal
     assertEquals(createChatResponse.getId(), chatDTO.getChatId());
@@ -45,7 +45,7 @@ class ChatServiceFactoryTest
     GetChatHistoryRequest getChatHistoryRequest = ChatServiceFactory.toGetChatHistoryRequest(getChatHistoryDTO);
 
     //Check if all fields in class GetChatHistoryDTO and GetChatHistoryRequest are equal
-    assertEquals(getChatHistoryDTO.getId(), getChatHistoryRequest.getChatId());
+    assertEquals(getChatHistoryDTO.getChatId(), getChatHistoryRequest.getChatId());
   }
 
   @Test void toChatHistoryDto()

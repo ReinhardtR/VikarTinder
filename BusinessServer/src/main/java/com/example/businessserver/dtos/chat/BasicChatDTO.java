@@ -4,28 +4,28 @@ import java.util.List;
 
 public class BasicChatDTO {
 	private int id;
-	private List<Integer> userIds;
+	private int substituteId;
+	private int employerId;
 
-	public BasicChatDTO(int id, List<Integer> userIds) {
+	public BasicChatDTO(int id, int substituteId, int employerId)
+	{
 		this.id = id;
-		this.userIds = userIds;
+		this.substituteId = substituteId;
+		this.employerId = employerId;
 	}
 
-	public int getId() {
+	public int getId()
+	{
 		return id;
 	}
 
-	public List<Integer> getUserIds() {
-		return userIds;
+	public int getSubstituteId()
+	{
+		return substituteId;
 	}
 
-	@Override public String toString()
+	public int getEmployerId()
 	{
-		StringBuilder userids = new StringBuilder();
-		for (int i = 0; i < userIds.size(); i++)
-		{
-			userids = new StringBuilder(userids.append("user_ids: " + userIds.get(i) + "\n"));
-		}
-		return "id: " + id + "\n" + userids;
+		return employerId;
 	}
 }

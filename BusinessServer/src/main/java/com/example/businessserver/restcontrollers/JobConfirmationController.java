@@ -1,8 +1,8 @@
 package com.example.businessserver.restcontrollers;
 
-import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationAnswer;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
 import com.example.businessserver.logic.JobConfirmationLogic;
 import com.example.businessserver.websockets.SocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class JobConfirmationController {
 	}
 
 	@PatchMapping("/job-confirmation")
-	public JobConfirmationDTO answerJobConfirmation(@RequestBody JobConfirmationAnswer dto) {
+	public JobConfirmationDTO answerJobConfirmation(@RequestBody AnswerJobConfirmationDTO dto) {
 		JobConfirmationDTO jobConfirmationDTO = jobConfirmationLogic.answerJobConfirmation(dto);
 
 		socketHandler.sendJobConfirmation(jobConfirmationDTO);

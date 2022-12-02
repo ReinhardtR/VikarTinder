@@ -1,11 +1,9 @@
 package com.example.businessserver.services.implementations;
 
 import ChatService.*;
-import JobConfirmationService.CreateJobConfirmationRequest;
-import JobConfirmationService.CreateJobConfirmationResponse;
 import com.example.businessserver.dtos.chat.*;
-import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.chat.message.MessageDTO;
+import com.example.businessserver.dtos.chat.message.SendMessageDTO;
 import com.example.businessserver.services.ChatServiceClient;
 import com.example.businessserver.services.factories.ChatServiceFactory;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -19,11 +17,11 @@ public class ChatServiceImpl implements ChatServiceClient
 	private ChatServiceGrpc.ChatServiceBlockingStub chatServiceBlockingStub;
 
 	@Override
-	public ChatDTO createChat(CreateChatDTO dto) {
+	public BasicChatDTO createChat(CreateChatDTO dto) {
 		CreateChatRequest request = ChatServiceFactory.toCreateChatRequest(dto);
 		CreateChatResponse response = chatServiceBlockingStub.createChat(request);
 
-		return ChatServiceFactory.toChatDto(response);
+		return ChatServiceFactory.toBasicChatDTO(response);
 	}
 
 	@Override

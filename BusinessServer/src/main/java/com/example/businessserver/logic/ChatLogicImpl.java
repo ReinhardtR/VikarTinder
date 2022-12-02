@@ -1,6 +1,8 @@
 package com.example.businessserver.logic;
 
 import com.example.businessserver.dtos.chat.*;
+import com.example.businessserver.dtos.chat.message.MessageDTO;
+import com.example.businessserver.dtos.chat.message.SendMessageDTO;
 import com.example.businessserver.services.ChatServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,7 @@ public class ChatLogicImpl implements ChatLogic {
 	private ChatServiceClient chatServiceClient;
 
 	@Override
-	public ChatDTO createChat(CreateChatDTO dto) {
+	public BasicChatDTO createChat(CreateChatDTO dto) {
 		return chatServiceClient.createChat(dto);
 	}
 

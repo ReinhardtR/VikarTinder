@@ -1,13 +1,13 @@
 package com.example.businessserver.logic;
 
-import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationAnswer;
-import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
 
 public interface JobConfirmationLogic
 {
 
   JobConfirmationDTO createJobConfirmation(CreateJobConfirmationDTO dto);
 
-  JobConfirmationDTO answerJobConfirmation(JobConfirmationAnswer dto);
+  JobConfirmationDTO answerJobConfirmation(AnswerJobConfirmationDTO dto);
 }

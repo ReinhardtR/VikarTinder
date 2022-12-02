@@ -1,4 +1,4 @@
-package com.example.businessserver.dtos.chat.JobConfirmation;
+package com.example.businessserver.dtos.JobConfirmation;
 
 public class CreateJobConfirmationDTO {
 	private int chatId;
