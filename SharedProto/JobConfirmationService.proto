@@ -10,7 +10,7 @@ package JobConfirmationService;
 service JobConfirmationService {
     rpc CreateJobConfirmation (CreateJobConfirmationRequest) returns (CreateJobConfirmationResponse);
     rpc AnswerJobConfirmation (JobConfirmationAnswerRequest) returns (JobConfirmationAnswerResponse);
-  
+    rpc GetJobConfirmation (GetJobConfirmationRequest) returns (GetJobConfirmationResponse);
 }
 
 message CreateJobConfirmationRequest{
@@ -47,4 +47,12 @@ message JobConfirmationObject{
   int32 employer_id = 4;
   JobConfirmationStatus is_accepted = 5;
   google.protobuf.Timestamp created_at = 6;
+}
+
+message GetJobConfirmationRequest{
+  int32 id = 1;
+}
+
+message GetJobConfirmationResponse{
+  JobConfirmationObject job_confirmation = 1;
 }

@@ -1,10 +1,7 @@
 package com.example.businessserver.services.factories;
 
 
-import JobConfirmationService.CreateJobConfirmationRequest;
-import JobConfirmationService.CreateJobConfirmationResponse;
-import JobConfirmationService.JobConfirmationAnswerRequest;
-import JobConfirmationService.JobConfirmationAnswerResponse;
+import JobConfirmationService.*;
 import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
 import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
 import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
@@ -38,14 +35,7 @@ public class JobConfirmationServiceFactory {
     if (ObjectIsNull(response))
       return null;
 
-    return new JobConfirmationDTO(
-        response.getJobConfirmation().getId(),
-        response.getJobConfirmation().getChatId(),
-        response.getJobConfirmation().getSubstituteId(),
-        response.getJobConfirmation().getEmployerId(),
-        response.getJobConfirmation().getIsAccepted(),
-      LocalDateTime.ofInstant(Instant.ofEpochSecond(response.getJobConfirmation().getCreatedAt().getSeconds()), ZoneId.of("UTC"))
-    );
+    return toJobConfirmationDTO(response.getJobConfirmation());
   }
 
   public static JobConfirmationDTO toJobConfirmationDTO(
@@ -54,14 +44,7 @@ public class JobConfirmationServiceFactory {
     if (ObjectIsNull(response))
       return null;
 
-    return new JobConfirmationDTO(
-        response.getJobConfirmation().getId(),
-        response.getJobConfirmation().getChatId(),
-        response.getJobConfirmation().getSubstituteId(),
-        response.getJobConfirmation().getEmployerId(),
-        response.getJobConfirmation().getIsAccepted(),
-        LocalDateTime.ofInstant(Instant.ofEpochSecond(response.getJobConfirmation().getCreatedAt().getSeconds()), ZoneId.of("UTC"))
-        );
+    return toJobConfirmationDTO(response.getJobConfirmation());
   }
 
   public static JobConfirmationAnswerRequest toJobConfirmationAnswerRequest(
@@ -81,5 +64,39 @@ public class JobConfirmationServiceFactory {
   private static boolean ObjectIsNull(Object o)
   {
     return o == null;
+  }
+
+  public static GetJobConfirmationRequest toGetJobConfirmationRequest(int chatId)
+  {
+    return GetJobConfirmationRequest
+        .newBuilder()
+        .setId(chatId)
+        .build();
+  }
+
+  public static JobConfirmationDTO toJobConfirmationDTO(
+      GetJobConfirmationResponse response)
+  {
+    if (ObjectIsNull(response))
+      return null;
+
+    return toJobConfirmationDTO(response.getJobConfirmation());
+
+  }
+
+  private static JobConfirmationDTO toJobConfirmationDTO(
+      JobConfirmationObject jobConfirmation)
+  {
+    if (ObjectIsNull(jobConfirmation))
+      return null;
+
+    return new JobConfirmationDTO(
+        jobConfirmation.getId(),
+        jobConfirmation.getChatId(),
+        jobConfirmation.getSubstituteId(),
+        jobConfirmation.getEmployerId(),
+        jobConfirmation.getIsAccepted(),
+        LocalDateTime.ofInstant(Instant.ofEpochSecond(jobConfirmation.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
+    );
   }
 }

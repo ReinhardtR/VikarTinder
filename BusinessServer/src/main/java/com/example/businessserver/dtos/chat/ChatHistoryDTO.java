@@ -8,17 +8,16 @@ import java.util.List;
 public class ChatHistoryDTO {
 	private List<MessageDTO> messages;
 
-	private List<JobConfirmationDTO> jobConfirmations;
+	private JobConfirmationDTO jobConfirmation;
 
 	private int substituteId;
 	private int employerId;
 
 	public ChatHistoryDTO(List<MessageDTO> messages,
-			List<JobConfirmationDTO> jobConfirmations, int substituteId,
-			int employerId)
+			JobConfirmationDTO jobConfirmation, int substituteId, int employerId)
 	{
 		this.messages = messages;
-		this.jobConfirmations = jobConfirmations;
+		this.jobConfirmation = jobConfirmation;
 		this.substituteId = substituteId;
 		this.employerId = employerId;
 	}
@@ -28,9 +27,9 @@ public class ChatHistoryDTO {
 		return messages;
 	}
 
-	public List<JobConfirmationDTO> getJobConfirmations()
+	public JobConfirmationDTO getJobConfirmation()
 	{
-		return jobConfirmations;
+		return jobConfirmation;
 	}
 
 	public int getSubstituteId()

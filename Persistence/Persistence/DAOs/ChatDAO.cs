@@ -56,7 +56,7 @@ public class ChatDAO : IChatDAO
     {
         return _dataContext.Chats
             .Include(c => c.Messages)
-            .Include(c => c.JobConfirmations)
+            .Include(c => c.JobConfirmation)
             .FirstOrDefaultAsync(c => c.Id == requestChatId);
     }
 

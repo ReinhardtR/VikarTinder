@@ -38,4 +38,18 @@ public class JobConfirmationServiceServer : JobConfirmationService.JobConfirmati
 
         return reply;
     }
+    
+    public override async Task<GetJobConfirmationResponse> GetJobConfirmation(GetJobConfirmationRequest request, ServerCallContext context)
+    {
+        JobConfirmation? jobConfirmation = await _jobConfirmationDao.GetJobConfirmationAsync(request.Id);
+        
+        if (jobConfirmation == null)
+        {
+            throw new RpcException(new Status(StatusCode.NotFound, "Job confirmation not found"));
+        }
+        
+        GetJobConfirmationResponse reply = JobConfirmationFactory.ToGetJobConfirmationResponse(jobConfirmation);
+
+        return reply;
+    }
 }

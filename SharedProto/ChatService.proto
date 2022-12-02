@@ -42,7 +42,7 @@ message GetChatHistoryRequest{
 
 message GetChatHistoryResponse{ 
   repeated MessageObject messages = 1;
-  repeated JobConfirmationService.JobConfirmationObject jobConfirmations = 2;
+  JobConfirmationService.JobConfirmationObject jobConfirmation = 2;
   ChatUserObject substitute = 3;
   ChatUserObject employer = 4;
 }

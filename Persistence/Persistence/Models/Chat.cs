@@ -13,6 +13,6 @@ public class Chat
     
     public List<Message> Messages { get; set; }
     
-    public List<JobConfirmation> JobConfirmations { get; set; }
+    public JobConfirmation JobConfirmation { get; set; }
     
 }

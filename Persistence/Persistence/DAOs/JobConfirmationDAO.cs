@@ -37,12 +37,13 @@ public class JobConfirmationDAO : IJobConfirmationDAO
             Employer = foundEmployer 
         };
 
-        EntityEntry<JobConfirmation> createdJobConfirmation =
-            _dataContext.JobConfirmations.Add(jobConfirmationToCreate);
+          EntityEntry<JobConfirmation> createdJobConfirmation =
+          _dataContext.JobConfirmations.Update(jobConfirmationToCreate);
         
         await _dataContext.SaveChangesAsync();
 
         return createdJobConfirmation.Entity;
+        
     }
 
     public async Task<JobConfirmation?> AnswerJobConfirmationAsync(int id, JobConfirmationStatus isAccepted)
@@ -55,5 +56,14 @@ public class JobConfirmationDAO : IJobConfirmationDAO
         await  _dataContext.SaveChangesAsync();
         
         return jobConfirmation;
+    }
+
+    public Task<JobConfirmation?> GetJobConfirmationAsync(int requestId)
+    {
+        return _dataContext.JobConfirmations
+            .Include(jc => jc.Chat)
+            .Include(jc => jc.Substitute)
+            .Include(jc => jc.Employer)
+            .SingleOrDefaultAsync((jc) => jc.Id == requestId);
     }
 }

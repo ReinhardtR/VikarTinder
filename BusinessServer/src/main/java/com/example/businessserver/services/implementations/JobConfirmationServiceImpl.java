@@ -31,4 +31,12 @@ public class JobConfirmationServiceImpl implements JobConfirmationServiceClient 
 		return JobConfirmationServiceFactory.toJobConfirmationDTO(response);
 
 	}
+
+	@Override public JobConfirmationDTO getJobConfirmation(int chatId)
+	{
+		GetJobConfirmationRequest request = JobConfirmationServiceFactory.toGetJobConfirmationRequest(chatId);
+		GetJobConfirmationResponse response = jobConfirmationServiceBlockingStub.getJobConfirmation(request);
+
+		return JobConfirmationServiceFactory.toJobConfirmationDTO(response);
+	}
 }

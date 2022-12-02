@@ -8,4 +8,5 @@ public interface JobConfirmationServiceClient
 {
   JobConfirmationDTO CreateJobConfirmation(CreateJobConfirmationDTO dto);
   JobConfirmationDTO answerJobConfirmation(AnswerJobConfirmationDTO dto);
+  JobConfirmationDTO getJobConfirmation(int chatId);
 }

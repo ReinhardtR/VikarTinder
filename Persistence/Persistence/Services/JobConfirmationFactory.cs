@@ -41,6 +41,7 @@ public class JobConfirmationFactory
             true => JobConfirmationStatus.Accepted,
             false => JobConfirmationStatus.Declined,
             _ => JobConfirmationStatus.Unanswered
+            
         };
     }
 }

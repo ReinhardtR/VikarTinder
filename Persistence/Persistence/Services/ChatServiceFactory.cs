@@ -79,24 +79,23 @@ public class ChatServiceFactory
             });
         }
 
-        RepeatedField<JobConfirmationObject> jobConfirmationObjects = new RepeatedField<JobConfirmationObject>();
-        foreach (JobConfirmation jobConfirmation in chat.JobConfirmations)
-        {
-            jobConfirmationObjects.Add(new JobConfirmationObject()
+        
+            JobConfirmationObject jobConfirmation = new JobConfirmationObject()
             {
-                Id = jobConfirmation.Id,
-                ChatId = jobConfirmation.ChatId,
-                SubstituteId= jobConfirmation.SubstituteId,
-                EmployerId = jobConfirmation.EmployerId,
-                IsAccepted = jobConfirmation.IsAccepted,
-                CreatedAt = jobConfirmation.CreatedAt.ToTimestamp()
-            });
-        }
+                Id = chat.JobConfirmation.Id,
+                ChatId = chat.JobConfirmation.ChatId,
+                SubstituteId= chat.JobConfirmation.SubstituteId,
+                EmployerId = chat.JobConfirmation.EmployerId,
+                IsAccepted = chat.JobConfirmation.IsAccepted,
+                CreatedAt = chat.JobConfirmation.CreatedAt.ToTimestamp()
+            };
+        
+
 
         return new GetChatHistoryResponse()
         {
             Messages = { messageObjects },
-            JobConfirmations = { jobConfirmationObjects },
+            JobConfirmation =  jobConfirmation ,
             Employer = ToChatUserObject(new User() { Id = chat.EmployerId }),
             Substitute = ToChatUserObject(new User() { Id = chat.SubstituteId })
         };
