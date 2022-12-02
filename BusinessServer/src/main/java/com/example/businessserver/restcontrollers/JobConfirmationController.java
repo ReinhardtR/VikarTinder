@@ -21,12 +21,19 @@ public class JobConfirmationController {
 
 	@PostMapping("/job-confirmation")
 	public JobConfirmationDTO createJobConfirmation(@RequestBody CreateJobConfirmationDTO dto) {
-		return jobConfirmationLogic.createJobConfirmation(dto);
+		JobConfirmationDTO jobConfirmationDTO = jobConfirmationLogic.createJobConfirmation(dto);
+
+		socketHandler.sendJobConfirmation(jobConfirmationDTO);
+
+		return jobConfirmationDTO;
 	}
 
 	@PatchMapping("/job-confirmation")
 	public JobConfirmationDTO answerJobConfirmation(@RequestBody JobConfirmationAnswer dto) {
-		return jobConfirmationLogic.answerJobConfirmation(dto);
-		// do socket stuff
+		JobConfirmationDTO jobConfirmationDTO = jobConfirmationLogic.answerJobConfirmation(dto);
+
+		socketHandler.sendJobConfirmation(jobConfirmationDTO);
+
+		return jobConfirmationDTO;
 	}
 }

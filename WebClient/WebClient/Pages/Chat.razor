@@ -2,6 +2,7 @@
 @using HttpClients.Services        
 @using HttpClients
 @using WebSockets
+@inject ChatSocket ChatSocket
 @inject ChatService ChatService    
 
 @if (chatHistory == null && errorLabel == null)
@@ -26,13 +27,12 @@
             <JobConfirmationRequest GigId="@GigId" ChatId="@ChatId" />
         }
 
-        <MudStack Class="overflow-y-scroll pa-4 flex-grow-1 flex-column-reverse">
+        <MudStack Reverse="@true" Class="overflow-y-scroll pa-4 flex-grow-1">
             <MudStack Spacing="4">
                 @foreach (MessageDTO message in chatHistory.Messages)
                 {
                     <ChatMessage UserId="@userId" AuthorId="@message.AuthorId" Content="@message.Content" />
                 }
-                <JobRequest ChatId="@ChatId" UserId="@userId" AuthorId="2" />
             </MudStack>
         </MudStack>
 
@@ -74,6 +74,9 @@
             return;
         }
       
+        Console.WriteLine("CONNECTING");
+        await ChatSocket.ConnectAsync(ChatId);
+        Console.WriteLine("CONNECTED");
         ListenToChatSocket();
         ListenToJobRequestSocket();
     }
@@ -91,13 +94,11 @@
 
     private FormModel formModel = new();
 
-    private ChatSocket chatSocket = new();
-    
     private async void ListenToChatSocket()
     {
         try
         {
-            IAsyncEnumerable<MessageDTO> messages = chatSocket.ListenToChatMessages(ChatId);
+            IAsyncEnumerable<MessageDTO> messages = ChatSocket.ListenToChatMessages();
 
             await foreach (MessageDTO message in messages)
             {
@@ -116,7 +117,7 @@
     {
         try
         {
-            IAsyncEnumerable<JobConfirmationDTO> jobConfirmations = chatSocket.ListenToJobConfirmation(ChatId);
+            IAsyncEnumerable<JobConfirmationDTO> jobConfirmations = ChatSocket.ListenToJobConfirmations();
                 
             await foreach (JobConfirmationDTO newJobConfirmation in jobConfirmations)
             {

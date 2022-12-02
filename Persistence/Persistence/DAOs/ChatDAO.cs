@@ -16,7 +16,7 @@ public class ChatDAO : IChatDAO
 
     public Task<List<Message>> GetChatHistoryAsync(int chatId)
     {
-        return _dataContext.Messages.Where(m => m.ChatId == chatId).OrderByDescending(m => m.CreatedAt).ToListAsync();
+        return _dataContext.Messages.Where(m => m.ChatId == chatId).OrderBy(m => m.CreatedAt).ToListAsync();
     }
 
     public async Task<Chat> CreateChatAsync(List<int> userIds)

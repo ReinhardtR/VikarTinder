@@ -13,23 +13,24 @@ else if (errorLabel != null)
 } 
 else if (chats != null)
 {
-    <MudStack AlignItems="AlignItems.Stretch">
+    <MudStack AlignItems="AlignItems.Stretch" Style="width: 100%" >
         <MudText Typo="Typo.h6">Chats</MudText>
-        @foreach (BasicChatDTO chat in chats)
-        {
-            <MudButton OnClick="() => NavigateToChat(chat.Id)">
-                <MudPaper class="ma-1" Width="100%">
-                    <MudStack Row="true" Class="pa-4">
-                        <MudAvatar Color="Color.Secondary">@chat.UserIds.Single(u => u != userId)</MudAvatar>
-                        <MudStack Justify="Justify.Center" Spacing="0">
-                            <MudText Typo="Typo.body1">@chat.UserIds.Single(u => u != userId)</MudText>
-                            <MudText Typo="Typo.body2">Sample Emailgmail.com</MudText>
+        <MudStack Spacing="2">
+            @foreach (BasicChatDTO chat in chats)
+            {
+                <MudButton OnClick="() => NavigateToChat(chat.Id)" FullWidth="@true">
+                    <MudPaper class="ma-1" Width="100%">
+                        <MudStack Row="true" Class="pa-4">
+                            <MudAvatar Color="Color.Secondary">@chat.UserIds.Single(u => u != userId)</MudAvatar>
+                            <MudStack Justify="Justify.Center" Spacing="0">
+                                <MudText Typo="Typo.body1">@chat.UserIds.Single(u => u != userId)</MudText>
+                                <MudText Typo="Typo.body2">Sample Emailgmail.com</MudText>
+                            </MudStack>
                         </MudStack>
-                    </MudStack>
-                </MudPaper>
-            </MudButton>
-
-        }
+                    </MudPaper>
+                </MudButton>
+            }
+        </MudStack>
     </MudStack>
 }
 
@@ -46,7 +47,6 @@ else if (chats != null)
     
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("ON INIT");
         await FetchChats();
     }
 
