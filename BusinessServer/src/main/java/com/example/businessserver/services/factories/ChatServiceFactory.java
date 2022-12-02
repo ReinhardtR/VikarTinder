@@ -48,6 +48,7 @@ public class ChatServiceFactory {
 						.toList();
 
 
+
 		JobConfirmationDTO jobConfirmation = toJobConfirmationDTO(response.getJobConfirmation());
 
 

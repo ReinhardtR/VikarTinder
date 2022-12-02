@@ -89,8 +89,7 @@ public class ChatServiceFactory
                 IsAccepted = chat.JobConfirmation.IsAccepted,
                 CreatedAt = chat.JobConfirmation.CreatedAt.ToTimestamp()
             };
-        
-
+            
 
         return new GetChatHistoryResponse()
         {
