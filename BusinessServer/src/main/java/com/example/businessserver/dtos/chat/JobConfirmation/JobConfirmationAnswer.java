@@ -1,41 +1,25 @@
 package com.example.businessserver.dtos.chat.JobConfirmation;
 
-import com.google.type.DateTime;
+public class JobConfirmationAnswer {
+	private int id;
+	private int chatId;
+	private boolean isAccepted;
 
-public class JobConfirmationAnswer
-{
-  private int id;
-  private int chatId;
-  private boolean isAccepted;
+	public JobConfirmationAnswer(int id, int chatId, boolean isAccepted) {
+		this.id = id;
+		this.chatId = chatId;
+		this.isAccepted = isAccepted;
+	}
 
-  private DateTime acceptedAt;
+	public int getId() {
+		return id;
+	}
 
-  public JobConfirmationAnswer(int id, int chatId, boolean isAccepted, DateTime acceptedAt)
-  {
-    this.id = id;
-    this.chatId = chatId;
-    this.isAccepted = isAccepted;
-    this.acceptedAt = acceptedAt;
-  }
+	public int getChatId() {
+		return chatId;
+	}
 
-
-  public int getId()
-  {
-    return id;
-  }
-
-  public int getChatId()
-  {
-    return chatId;
-  }
-
-  public boolean isAccepted()
-  {
-    return isAccepted;
-  }
-
-  public DateTime getAcceptedAt()
-  {
-    return acceptedAt;
-  }
+	public boolean getIsAccepted() {
+		return isAccepted;
+	}
 }

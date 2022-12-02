@@ -3,28 +3,43 @@
 @using HttpClients
 @using WebSockets
 @inject ChatSocket ChatSocket
-@inject ChatService ChatService    
+@inject ChatService ChatService
+@inject JobConfirmationService JobConfirmationService
+  
 
-@if (chatHistory == null && errorLabel == null)
+@if (chatHistory == null && loadingErrorLabel == null)
 {
     <p>Loading...</p>
-} else if (errorLabel != null)
+} else if (loadingErrorLabel != null)
 {
-    <p>Error: @errorLabel</p>
+    <p>Error: @loadingErrorLabel</p>
 } else if (chatHistory != null)
 {
     @* vh based on the size of the appbar taking up the top part of the screen *@
     <MudStack Justify="Justify.Center" Spacing="4" Style="height: 80vh">
-        <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
-            <MudAvatar Size="Size.Medium" Color="Color.Secondary">@chatName[0]</MudAvatar>
-            <MudText Typo="Typo.h6">@chatName</MudText>
+        <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+            <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
+                <MudAvatar Size="Size.Medium" Color="Color.Secondary">@chatName[0]</MudAvatar>
+                <MudText Typo="Typo.h6">@chatName</MudText> 
+            </MudStack>
+         
+            <MudText Typo="Typo.caption" Color="Color.Error">
+                @usageErrorLabel
+            </MudText>
+            
+            <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
+                <MudButton OnClick="SendJobConfirmationRequest" Variant="Variant.Outlined">
+                    Send Job Anmodning
+                </MudButton>
+            </MudStack>
         </MudStack>
         
-        <MudDivider Class="my-2" />
+        <MudDivider Class="my-1" />
         
         @if (jobConfirmation != null)
         {
-            <JobConfirmationRequest GigId="@GigId" ChatId="@ChatId" />
+            <JobConfirmationRequest JobConfirmation="@jobConfirmation" />
+            <MudDivider Class="my-1" />
         }
 
         <MudStack Reverse="@true" Class="overflow-y-scroll pa-4 flex-grow-1">
@@ -51,17 +66,24 @@
     public int ChatId { get; set; }
 
     // TODO replace with auth stuff
+    private bool isEmployer = true;
+    
+    // TODO replace with auth stuff
     private int userId = 2;
     
     // TODO replace with data from server
     private string chatName = "John Doe";
+    
+    // TODO replace with data from server
+    private int substituteId = 1;
 
     // TODO replace with data from server
-    private int GigId = 1;
+    private int gigId = 1;
     
     private JobConfirmationDTO? jobConfirmation;
     private ChatHistoryDTO? chatHistory;
-    private string? errorLabel;
+    private string? loadingErrorLabel;
+    private string? usageErrorLabel;
     
     protected override async Task OnInitializedAsync()
     {
@@ -70,7 +92,7 @@
         
         if (chatHistory == null)
         {
-            errorLabel = "You are not a member of this chat";
+            loadingErrorLabel = "You are not a member of this chat";
             return;
         }
       
@@ -108,7 +130,7 @@
         }
         catch (Exception e)
         {
-            errorLabel = e.Message;
+            loadingErrorLabel = e.Message;
             StateHasChanged();
         }
     }
@@ -122,14 +144,35 @@
             await foreach (JobConfirmationDTO newJobConfirmation in jobConfirmations)
             {
                 // TODO if job confirmation is answered set to null, else set it to the new job confirmation
-                jobConfirmation = newJobConfirmation;
+
+                jobConfirmation = newJobConfirmation.Accepted != null ? null : newJobConfirmation;
+
                 StateHasChanged();
             }
         }
         catch (Exception e)
         {
-            errorLabel = e.Message;
+            loadingErrorLabel = e.Message;
             StateHasChanged();
+        }
+    }
+
+    private async void SendJobConfirmationRequest()
+    {
+        try
+        {
+            CreateJobConfirmationDTO createJobConfirmationDto = new()
+            {
+                ChatId = ChatId,
+                EmployerId = userId,
+                SubstituteId = substituteId
+            };
+            
+            await JobConfirmationService.CreateJobConfirmationAsync(createJobConfirmationDto);
+        }
+        catch (Exception e)
+        {
+            usageErrorLabel = "Failed to send job confirmation request";
         }
     }
     
@@ -156,7 +199,7 @@
         }
         catch (Exception e)
         {
-            errorLabel = e.Message;
+            usageErrorLabel = "Failed to send message";
         }
         
         StateHasChanged();

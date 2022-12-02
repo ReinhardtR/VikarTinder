@@ -84,17 +84,13 @@ public class ChatSocket
         {
             string? newMessageText = await GetNewMessageAsync();
             if (newMessageText == null) continue;
-
-            Console.WriteLine("TEXT: " + newMessageText);
             
             MessageWrapper? wrapper = JsonConvert.DeserializeObject<MessageWrapper>(newMessageText);
-            Console.WriteLine("JSON : " + wrapper);
-
             if (wrapper == null) continue;
             
             switch (wrapper.MessageType)
             {
-                case MessageType.JOB_CONFIRMATION_UPDATED:
+                case MessageType.JOB_CONFIRMATION_UPDATE:
                 {
                     JobConfirmationDTO? jobConfirmationDto = JsonConvert.DeserializeObject<JobConfirmationDTO>(wrapper.Data.ToString());
                     if (jobConfirmationDto != null) _jobConfirmations.Enqueue(jobConfirmationDto);

@@ -26,9 +26,9 @@ public class JobConfirmationFactory
         return new JobConfirmationObject
         {
             Id = jobConfirmation.Id,
-            ChatId = jobConfirmation.Chat.Id,
-            SubstituteId = jobConfirmation.Substitute.Id,
-            EmployerId = jobConfirmation.Employer.Id,
+            ChatId = jobConfirmation.ChatId,
+            SubstituteId = jobConfirmation.SubstituteId,
+            EmployerId = jobConfirmation.EmployerId,
             IsAccepted = jobConfirmation.IsAccepted,
             CreatedAt = jobConfirmation.CreatedAt.ToTimestamp()
         };
