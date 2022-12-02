@@ -1,4 +1,5 @@
-﻿using Persistence.Models;
+﻿using Google.Protobuf.WellKnownTypes;
+using Persistence.Models;
 
 namespace Persistence.Services;
 
@@ -29,7 +30,7 @@ public class JobConfirmationFactory
             SubstituteId = jobConfirmation.Substitute.Id,
             EmployerId = jobConfirmation.Employer.Id,
             IsAccepted = jobConfirmation.IsAccepted,
-            CreatedAt = jobConfirmation.CreatedAt
+            CreatedAt = jobConfirmation.CreatedAt.ToTimestamp()
         };
     }
 }
