@@ -1,10 +1,15 @@
+@using HttpClients
+@using HttpClients.Services
+@inject JobConfirmationService JobConfirmationService
+
 <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
     <MudText>Vil du have jobbet?</MudText>
+    
     <MudStack Row="@true" Justify="Justify.Center" AlignItems="AlignItems.Center">
-        <MudButton OnClick="AcceptHandler" Variant="Variant.Filled" Color="Color.Success" Disabled="@isEmployer">
+        <MudButton OnClick="() => AnswerHandler(true)" Variant="Variant.Filled" Color="Color.Success" Disabled="@isEmployer">
             Ja
         </MudButton>
-        <MudButton OnClick="DeclineHandler" Variant="Variant.Outlined" Color="Color.Error" Disabled="@isEmployer">
+        <MudButton OnClick="() => AnswerHandler(false)" Variant="Variant.Outlined" Color="Color.Error" Disabled="@isEmployer">
             Nej
         </MudButton>
         @if (isEmployer)
@@ -14,64 +19,57 @@
             </MudButton>
         }
     </MudStack>
+    
+    @if (errorLabel != null)
+    {
+        <MudText Typo="Typo.caption" Color="Color.Error">@errorLabel</MudText>
+    }
 </MudStack>
 
 @code {
 
-    // replace with auth stuff
+    [Parameter]
+    public JobConfirmationDTO JobConfirmation { get; set; }
+    
+    // TODO replace with auth stuff
     private int userId = 2;
 
-    // replace with auth stuff
+    // TODO replace with auth stuff
     private bool isEmployer = false;
-    
-    [Parameter]
-    public int GigId { get; set; }
-    
-    [Parameter]
-    public int ChatId { get; set; }
 
-    [Parameter]
-    public Action? OnFinished { get; set; }
+    private string? errorLabel;
+  
     
-    private void AcceptHandler()
+    private async void AnswerHandler(bool isAccepted)
     {
         try
         {
-            // call server and accept job request
+            errorLabel = null;
+            
+            JobConfirmationAnswer jobConfirmationAnswer = new()
+            {
+                Id = JobConfirmation.Id,
+                ChatId = JobConfirmation.ChatId,
+                IsAccepted = isAccepted,
+            };
+            
+            await JobConfirmationService.AnswerJobConfirmationAsync(jobConfirmationAnswer);
         } 
         catch (Exception e)
         {
-            // error handling
+            errorLabel = "Failed to send answer";
         }
-        
-        OnFinished?.Invoke();
     }
-    
-    private void DeclineHandler()
-    {
-        try
-        {
-            // call server and decline job request
-        } 
-        catch (Exception e)
-        {
-            // error handling
-        }
-        
-        OnFinished?.Invoke();
-    }
-    
+
     private void CancelHandler()
     {
         try
         {
-            // call server and cancel job request
-        } 
+    // call server and cancel job request
+        }
         catch (Exception e)
         {
-            // error handling
+    // error handling
         }
-        
-        OnFinished?.Invoke();
     }
 }

@@ -1,7 +1,6 @@
 package com.example.businessserver.services.factories;
 
 
-
 import JobConfirmationService.CreateJobConfirmationRequest;
 import JobConfirmationService.CreateJobConfirmationResponse;
 import JobConfirmationService.JobConfirmationAnswerRequest;
@@ -9,16 +8,13 @@ import JobConfirmationService.JobConfirmationAnswerResponse;
 import com.example.businessserver.dtos.chat.JobConfirmation.CreateJobConfirmationDTO;
 import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationAnswer;
 import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
-import com.google.type.DateTime;
-import com.google.type.DateTimeOrBuilder;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
-public class JobConfirmationServiceFactory
-{
+public class JobConfirmationServiceFactory {
+
 
   public static CreateJobConfirmationRequest toCreateJobConfirmationRequest(
       CreateJobConfirmationDTO dto)
@@ -78,7 +74,7 @@ public class JobConfirmationServiceFactory
         .newBuilder()
         .setId(dto.getId())
         .setChatId(dto.getChatId())
-        .setIsAccepted(dto.isAccepted())
+        .setIsAccepted(dto.getIsAccepted())
         .build();
   }
 

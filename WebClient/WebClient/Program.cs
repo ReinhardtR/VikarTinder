@@ -13,6 +13,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped<HttpClient>();
 
 builder.Services.AddScoped<ChatService>();
+builder.Services.AddScoped<JobConfirmationService>();
+
 builder.Services.AddScoped<Client>();
 builder.Services.AddScoped<ChatSocket>();
 

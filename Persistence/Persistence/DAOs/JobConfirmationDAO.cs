@@ -1,13 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Persistence.Models;
 
 namespace Persistence.DAOs;
 
 public class JobConfirmationDAO : IJobConfirmationDAO
 {
-    
     private readonly DataContext _dataContext;
 
+    public JobConfirmationDAO(DataContext dataContext)
+    {
+        _dataContext = dataContext;
+    }
+    
     public async Task<JobConfirmation> CreateJobConfirmationAsync(int requestChatId, int requestSubstituteId, int requestEmployerId)
     {
         Chat? foundChat = _dataContext.Chats.FirstOrDefault(c => c.Id == requestChatId);
@@ -18,6 +24,7 @@ public class JobConfirmationDAO : IJobConfirmationDAO
         if (foundSubstitute == null)
             throw new Exception("Substitute not found");
         
+        Console.WriteLine("employer id: " + requestEmployerId);
         User? foundEmployer = _dataContext.Users.FirstOrDefault(u => u.Id == requestEmployerId);
         if (foundEmployer == null)
             throw new Exception("Employer not found");
@@ -40,13 +47,13 @@ public class JobConfirmationDAO : IJobConfirmationDAO
 
     public async Task<JobConfirmation?> AnswerJobConfirmationAsync(int requestId, int requestChatId, bool requestIsAccepted)
     {
-       EntityEntry<JobConfirmation> Jobconfirmation = (EntityEntry<JobConfirmation>)_dataContext.Update(_dataContext.Chats.FirstOrDefault(c => c.Id == requestChatId).JobConfirmations
-           .FirstOrDefault(j => j.Id == requestId).IsAccepted = requestIsAccepted);
-        //Virker måské ik?
+        JobConfirmation? jobConfirmation = _dataContext.JobConfirmations
+            .SingleOrDefault((jc) => jc.Id == requestId);
+        if (jobConfirmation == null) return jobConfirmation;
         
-        await _dataContext.SaveChangesAsync();
-
-
-        return Jobconfirmation.Entity;
+        jobConfirmation.IsAccepted = requestIsAccepted;
+        await  _dataContext.SaveChangesAsync();
+        
+        return jobConfirmation;
     }
 }
