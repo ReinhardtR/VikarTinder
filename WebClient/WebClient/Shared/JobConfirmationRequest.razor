@@ -12,12 +12,6 @@
         <MudButton OnClick="() => AnswerHandler(false)" Variant="Variant.Outlined" Color="Color.Error" Disabled="@isEmployer">
             Nej
         </MudButton>
-        @if (isEmployer)
-        {
-            <MudButton OnClick="CancelHandler" Variant="Variant.Text" Disabled="@(!isEmployer)">
-                Annuller
-            </MudButton>
-        }
     </MudStack>
     
     @if (errorLabel != null)
@@ -38,8 +32,7 @@
     private bool isEmployer = false;
 
     private string? errorLabel;
-  
-    
+
     private async void AnswerHandler(bool isAccepted)
     {
         try
@@ -58,18 +51,6 @@
         catch (Exception e)
         {
             errorLabel = "Failed to send answer";
-        }
-    }
-
-    private void CancelHandler()
-    {
-        try
-        {
-    // call server and cancel job request
-        }
-        catch (Exception e)
-        {
-    // error handling
         }
     }
 }

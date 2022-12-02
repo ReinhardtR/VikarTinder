@@ -82,6 +82,7 @@
     
     private JobConfirmationDTO? jobConfirmation;
     private ChatHistoryDTO? chatHistory;
+    
     private string? loadingErrorLabel;
     private string? usageErrorLabel;
     
@@ -95,10 +96,9 @@
             loadingErrorLabel = "You are not a member of this chat";
             return;
         }
-      
-        Console.WriteLine("CONNECTING");
+        
         await ChatSocket.ConnectAsync(ChatId);
-        Console.WriteLine("CONNECTED");
+        
         ListenToChatSocket();
         ListenToJobRequestSocket();
     }
@@ -143,8 +143,6 @@
                 
             await foreach (JobConfirmationDTO newJobConfirmation in jobConfirmations)
             {
-                // TODO if job confirmation is answered set to null, else set it to the new job confirmation
-
                 jobConfirmation = newJobConfirmation.Accepted != null ? null : newJobConfirmation;
 
                 StateHasChanged();
@@ -192,10 +190,9 @@
                 Content = formModel.Content
             };
             
-            MessageDTO messageDto = await ChatService.SendMessageAsync(sendMessageDto);
+            await ChatService.SendMessageAsync(sendMessageDto);
 
             formModel = new FormModel();
-            // error handling?
         }
         catch (Exception e)
         {
