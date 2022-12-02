@@ -11,7 +11,7 @@ public class MatchConverter : IMatchConverter
     
     public MatchingSubstitutes ConvertSubList(List<Substitute> substitutes)
     {
-        if (substitutes == null || substitutes.Count.Equals(0))
+        if (substitutes == null || substitutes.Count == 0)
             throw new ConverterNullReference("Substitute list");
         
         MatchingSubstitutes subs = new MatchingSubstitutes();
@@ -29,6 +29,9 @@ public class MatchConverter : IMatchConverter
     
     public MatchingGigs ConvertGigList(List<Gig> gigs)
     {
+        if (gigs == null || gigs.Count == 0)
+            throw new ConverterNullReference("Gigs list");
+        
         MatchingGigs gigsGrpc = new MatchingGigs();
 
         foreach (var gig in gigs)

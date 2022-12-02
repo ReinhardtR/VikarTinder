@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Persistence.DAOs.Interfaces;
 using Persistence.Dto;
 using Persistence.Models;
@@ -179,7 +182,9 @@ public class MatchDao : IMatchDao
         subsQuery = subsQuery.Where(substitute =>
             substitute.Employers.Any() == false ||
             substitute.Employers.All(employer => employer.Id != userId) == true);
-
+        
+        
+        
         return await subsQuery.ToListAsync();
     }
 
@@ -190,12 +195,13 @@ public class MatchDao : IMatchDao
         //Gigs må ikke have været swipet ja til før
 
         //Hope it works :3
+
         IQueryable<Gig> gigsQuery = _databaseContext.Gigs.AsQueryable();
 
         gigsQuery = gigsQuery.Where(gig =>
             gig.Substitutes.Any() == false ||
             gig.Substitutes.All(substitute => substitute.Id != id) == true);
-
+        
         return await gigsQuery.ToListAsync();
     }
 
@@ -232,7 +238,65 @@ public class MatchDao : IMatchDao
         dto.GigId = check.GigId;
         return dto;
     }
-    
+
+    public async Task RemoveWhereTimerIsOut(int id, DaoRequestType type)
+    {
+        DateTime currentDateTime = DateTime.Now;
+        TimeSpan span= new TimeSpan(1,0,0);
+
+        if (type.Equals(DaoRequestType.Employer))
+        {
+            RemoveWhereTimerIsOutEmpSub(id, currentDateTime, span);
+        }
+        else if(type.Equals(DaoRequestType.Substitute))
+        {
+            RemoveWhereTimerIsOutSubGig(id, currentDateTime, span);
+            
+        }
+        return;
+    }
+
+    private async void RemoveWhereTimerIsOutSubGig(int id, DateTime currentDateTime, TimeSpan span)
+    {
+
+        var query = from gigSubs in _databaseContext.Set<GigSubstitute>()
+            where gigSubs.WantsToMatch == false && currentDateTime - gigSubs.PublicationDate < span
+            select gigSubs;
+        var listToDelete = await query.ToListAsync();
+            
+        var sub = await GetSubstituteById(id);
+
+        foreach (var gigSub in listToDelete)
+        {
+            //possible null reference
+            sub.GigSubstitutes.Remove(gigSub);
+        }
+            
+        _databaseContext.ChangeTracker.Clear();
+        _databaseContext.Substitutes.Update(sub);
+        await _databaseContext.SaveChangesAsync();
+    }
+
+    private async void RemoveWhereTimerIsOutEmpSub(int id, DateTime currentDateTime, TimeSpan span)
+    {
+
+        var query = from empSubs in _databaseContext.Set<EmployerSubstitute>()
+            where empSubs.WantsToMatch == false && currentDateTime - empSubs.PublicationDate < span
+            select empSubs;
+        var listToDelete = await query.ToListAsync();
+            
+        var emp = await GetEmployerById(id);
+
+        foreach (var empSub in listToDelete)
+        {
+            //possible null reference
+            emp.EmployerSubstitutes.Remove(empSub);
+        }
+            
+        _databaseContext.ChangeTracker.Clear();
+        _databaseContext.Employers.Update(emp);
+        await _databaseContext.SaveChangesAsync();
+    }
 
 
     private async Task<CheckMatchDto> CheckMatchQuery(IdsForMatchDto dto)

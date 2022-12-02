@@ -78,6 +78,9 @@ insert into Substitutes values (1);
     public override async Task<MatchingSubstitutes> GetSubstitutes(SubstituteSearchParameters request,
         ServerCallContext context)
     {
+        //Resetter dem man har sagt nej til så de kan swipes igen
+        await _dao.RemoveWhereTimerIsOut(request.CurrentUserId, DaoRequestType.Employer);
+        
         //Databasekald for at få en liste af substitutes til matching
         List<Substitute> subsFromDatabase = await _dao.GetSubstitutesForMatching(request.CurrentUserId);
 
@@ -90,6 +93,9 @@ insert into Substitutes values (1);
 
     public override async Task<MatchingGigs> GetGigs(GigSearchParameters request, ServerCallContext context)
     {
+        //Resetter dem man har sagt nej til så de kan swipes igen
+        await _dao.RemoveWhereTimerIsOut(request.CurrentUserId,DaoRequestType.Substitute);
+            
         //Databasekald for at få en liste af substitutes til matching
         List<Gig> gigsFromDatabase = await _dao.GetGigsForMatching(request.CurrentUserId);
 

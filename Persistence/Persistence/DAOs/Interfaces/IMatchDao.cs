@@ -18,5 +18,6 @@ public interface IMatchDao
     Task<Gig> GetGigById(int id);
 
     Task<IdsForMatchDto> CheckIfMatched(IdsForMatchDto dto);
-    
+
+    Task RemoveWhereTimerIsOut(int id, DaoRequestType type);
 }
