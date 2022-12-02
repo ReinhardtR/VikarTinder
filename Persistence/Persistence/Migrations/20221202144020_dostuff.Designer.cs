@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,10 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221202144020_dostuff")]
+    partial class dostuff
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
@@ -29,7 +31,12 @@ namespace Persistence.Migrations
                     b.Property<int>("SubstituteId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Chats");
                 });
@@ -114,6 +121,13 @@ namespace Persistence.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Persistence.Models.Chat", b =>
+                {
+                    b.HasOne("Persistence.Models.User", null)
+                        .WithMany("Chats")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("Persistence.Models.JobConfirmation", b =>
                 {
                     b.HasOne("Persistence.Models.Chat", "Chat")
@@ -165,6 +179,11 @@ namespace Persistence.Migrations
                     b.Navigation("JobConfirmations");
 
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Persistence.Models.User", b =>
+                {
+                    b.Navigation("Chats");
                 });
 #pragma warning restore 612, 618
         }

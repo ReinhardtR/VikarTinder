@@ -9,7 +9,7 @@ public class ChatService
         _client = client;
     }
 
-    public async Task<ChatDTO> CreateChatAsync(CreateChatDTO dto)
+    public async Task<BasicChatDTO> CreateChatAsync(CreateChatDTO dto)
     {
         return await _client.CreateChatAsync(dto);
     }

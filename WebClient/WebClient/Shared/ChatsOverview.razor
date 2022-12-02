@@ -18,12 +18,14 @@ else if (chats != null)
         <MudStack Spacing="2">
             @foreach (BasicChatDTO chat in chats)
             {
+                
+                
                 <MudButton OnClick="() => NavigateToChat(chat.Id)" FullWidth="@true">
                     <MudPaper class="ma-1" Width="100%">
                         <MudStack Row="true" Class="pa-4">
-                            <MudAvatar Color="Color.Secondary">@chat.UserIds.Single(u => u != userId)</MudAvatar>
+                            <MudAvatar Color="Color.Secondary">@GetRecipientId(chat)</MudAvatar>
                             <MudStack Justify="Justify.Center" Spacing="0">
-                                <MudText Typo="Typo.body1">@chat.UserIds.Single(u => u != userId)</MudText>
+                                <MudText Typo="Typo.body1">@GetRecipientId(chat)</MudText>
                                 <MudText Typo="Typo.body2">Sample Emailgmail.com</MudText>
                             </MudStack>
                         </MudStack>
@@ -41,6 +43,9 @@ else if (chats != null)
     
     // TODO replace with auth stuff
     private int userId = 1;
+    
+    // TODO replace with auth stuff
+    private bool isEmployer = true;
     
     private ICollection<BasicChatDTO>? chats;
     private string? errorLabel;
@@ -86,6 +91,10 @@ else if (chats != null)
         }
     }
     
+    private int GetRecipientId(BasicChatDTO chat)
+    {
+        return isEmployer ? chat.SubstituteId : chat.EmployerId;
+    }
     
     private void NavigateToChat(int chatToGoTo)
     {

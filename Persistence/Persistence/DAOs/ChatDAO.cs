@@ -35,9 +35,9 @@ public class ChatDAO : IChatDAO
     {
         Message messageToSend = new()
         {
-            Content = content,
+            ChatId = chatId,
             AuthorId = authorId,
-            ChatId = chatId
+            Content = content,
         };
         
        EntityEntry<Message> sentMessage = _dataContext.Messages.Add(messageToSend);
@@ -58,7 +58,6 @@ public class ChatDAO : IChatDAO
             .Include(c => c.Messages)
             .Include(c => c.JobConfirmations)
             .FirstOrDefaultAsync(c => c.Id == requestChatId);
-        
     }
 
     

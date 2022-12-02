@@ -134,7 +134,7 @@ namespace HttpClients
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<JobConfirmationDTO> AnswerJobConfirmationAsync(JobConfirmationAnswer body)
+        public virtual System.Threading.Tasks.Task<JobConfirmationDTO> AnswerJobConfirmationAsync(AnswerJobConfirmationDTO body)
         {
             return AnswerJobConfirmationAsync(body, System.Threading.CancellationToken.None);
         }
@@ -142,7 +142,7 @@ namespace HttpClients
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<JobConfirmationDTO> AnswerJobConfirmationAsync(JobConfirmationAnswer body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<JobConfirmationDTO> AnswerJobConfirmationAsync(AnswerJobConfirmationDTO body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -296,7 +296,7 @@ namespace HttpClients
 
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ChatDTO> CreateChatAsync(CreateChatDTO body)
+        public virtual System.Threading.Tasks.Task<BasicChatDTO> CreateChatAsync(CreateChatDTO body)
         {
             return CreateChatAsync(body, System.Threading.CancellationToken.None);
         }
@@ -304,7 +304,7 @@ namespace HttpClients
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>OK</returns>
         /// <exception cref="ApiException">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ChatDTO> CreateChatAsync(CreateChatDTO body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<BasicChatDTO> CreateChatAsync(CreateChatDTO body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -348,7 +348,7 @@ namespace HttpClients
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ChatDTO>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<BasicChatDTO>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ApiException("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -831,11 +831,12 @@ namespace HttpClients
         [Newtonsoft.Json.JsonProperty("employerId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int EmployerId { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("isAccepted", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public JobConfirmationDTOIsAccepted IsAccepted { get; set; }
+
         [Newtonsoft.Json.JsonProperty("offeredAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTimeOffset OfferedAt { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("accepted", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool Accepted { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -903,8 +904,11 @@ namespace HttpClients
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class CreateChatDTO
     {
-        [Newtonsoft.Json.JsonProperty("ids", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<int> Ids { get; set; }
+        [Newtonsoft.Json.JsonProperty("substituteId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int SubstituteId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("employerId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int EmployerId { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -918,10 +922,16 @@ namespace HttpClients
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ChatDTO
+    public partial class BasicChatDTO
     {
-        [Newtonsoft.Json.JsonProperty("chatId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int ChatId { get; set; }
+        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Id { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("substituteId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int SubstituteId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("employerId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int EmployerId { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -952,7 +962,7 @@ namespace HttpClients
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class JobConfirmationAnswer
+    public partial class AnswerJobConfirmationDTO
     {
         [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int Id { get; set; }
@@ -961,27 +971,8 @@ namespace HttpClients
         public int ChatId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("isAccepted", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsAccepted { get; set; }
-
-        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
-
-        [Newtonsoft.Json.JsonExtensionData]
-        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
-        {
-            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
-            set { _additionalProperties = value; }
-        }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class BasicChatDTO
-    {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Id { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("userIds", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<int> UserIds { get; set; }
+        [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
+        public AnswerJobConfirmationDTOIsAccepted IsAccepted { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
@@ -1017,6 +1008,15 @@ namespace HttpClients
         [Newtonsoft.Json.JsonProperty("messages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<MessageDTO> Messages { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("jobConfirmations", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<JobConfirmationDTO> JobConfirmations { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("substituteId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int SubstituteId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("employerId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int EmployerId { get; set; }
+
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 
         [Newtonsoft.Json.JsonExtensionData]
@@ -1025,6 +1025,42 @@ namespace HttpClients
             get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
             set { _additionalProperties = value; }
         }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum JobConfirmationDTOIsAccepted
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ACCEPTED")]
+        ACCEPTED = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"DECLINED")]
+        DECLINED = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UNANSWERED")]
+        UNANSWERED = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UNRECOGNIZED")]
+        UNRECOGNIZED = 3,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum AnswerJobConfirmationDTOIsAccepted
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"ACCEPTED")]
+        ACCEPTED = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"DECLINED")]
+        DECLINED = 1,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UNANSWERED")]
+        UNANSWERED = 2,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"UNRECOGNIZED")]
+        UNRECOGNIZED = 3,
 
     }
 

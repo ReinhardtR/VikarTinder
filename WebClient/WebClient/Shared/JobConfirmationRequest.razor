@@ -6,10 +6,10 @@
     <MudText>Vil du have jobbet?</MudText>
     
     <MudStack Row="@true" Justify="Justify.Center" AlignItems="AlignItems.Center">
-        <MudButton OnClick="() => AnswerHandler(true)" Variant="Variant.Filled" Color="Color.Success" Disabled="@isEmployer">
+        <MudButton OnClick="() => AnswerHandler(AnswerJobConfirmationDTOIsAccepted.ACCEPTED)" Variant="Variant.Filled" Color="Color.Success" Disabled="@isEmployer">
             Ja
         </MudButton>
-        <MudButton OnClick="() => AnswerHandler(false)" Variant="Variant.Outlined" Color="Color.Error" Disabled="@isEmployer">
+        <MudButton OnClick="() => AnswerHandler(AnswerJobConfirmationDTOIsAccepted.DECLINED)" Variant="Variant.Outlined" Color="Color.Error" Disabled="@isEmployer">
             Nej
         </MudButton>
     </MudStack>
@@ -33,20 +33,20 @@
 
     private string? errorLabel;
 
-    private async void AnswerHandler(bool isAccepted)
+    private async void AnswerHandler(AnswerJobConfirmationDTOIsAccepted isAccepted)
     {
         try
         {
             errorLabel = null;
             
-            JobConfirmationAnswer jobConfirmationAnswer = new()
+            AnswerJobConfirmationDTO answerJobConfirmation = new()
             {
                 Id = JobConfirmation.Id,
                 ChatId = JobConfirmation.ChatId,
                 IsAccepted = isAccepted,
             };
             
-            await JobConfirmationService.AnswerJobConfirmationAsync(jobConfirmationAnswer);
+            await JobConfirmationService.AnswerJobConfirmationAsync(answerJobConfirmation);
         } 
         catch (Exception e)
         {

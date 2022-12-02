@@ -49,7 +49,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JobConfirmationAnswer"
+                "$ref": "#/components/schemas/AnswerJobConfirmationDTO"
               }
             }
           },
@@ -121,7 +121,7 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/ChatDTO"
+                  "$ref": "#/components/schemas/BasicChatDTO"
                 }
               }
             }
@@ -291,12 +291,18 @@
             "type": "integer",
             "format": "int32"
           },
+          "isAccepted": {
+            "type": "string",
+            "enum": [
+              "ACCEPTED",
+              "DECLINED",
+              "UNANSWERED",
+              "UNRECOGNIZED"
+            ]
+          },
           "offeredAt": {
             "type": "string",
             "format": "date-time"
-          },
-          "accepted": {
-            "type": "boolean"
           }
         }
       },
@@ -343,19 +349,28 @@
       "CreateChatDTO": {
         "type": "object",
         "properties": {
-          "ids": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
+          "substituteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "employerId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
-      "ChatDTO": {
+      "BasicChatDTO": {
         "type": "object",
         "properties": {
-          "chatId": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "substituteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "employerId": {
             "type": "integer",
             "format": "int32"
           }
@@ -369,7 +384,7 @@
           }
         }
       },
-      "JobConfirmationAnswer": {
+      "AnswerJobConfirmationDTO": {
         "type": "object",
         "properties": {
           "id": {
@@ -381,23 +396,13 @@
             "format": "int32"
           },
           "isAccepted": {
-            "type": "boolean"
-          }
-        }
-      },
-      "BasicChatDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "userIds": {
-            "type": "array",
-            "items": {
-              "type": "integer",
-              "format": "int32"
-            }
+            "type": "string",
+            "enum": [
+              "ACCEPTED",
+              "DECLINED",
+              "UNANSWERED",
+              "UNRECOGNIZED"
+            ]
           }
         }
       },
@@ -420,6 +425,20 @@
             "items": {
               "$ref": "#/components/schemas/MessageDTO"
             }
+          },
+          "jobConfirmations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JobConfirmationDTO"
+            }
+          },
+          "substituteId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "employerId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       }

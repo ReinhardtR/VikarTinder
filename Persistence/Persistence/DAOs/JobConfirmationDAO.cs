@@ -14,18 +14,18 @@ public class JobConfirmationDAO : IJobConfirmationDAO
         _dataContext = dataContext;
     }
     
-    public async Task<JobConfirmation> CreateJobConfirmationAsync(int requestChatId, int requestSubstituteId, int requestEmployerId)
+    public async Task<JobConfirmation> CreateJobConfirmationAsync(int chatId, int substituteId, int employerId)
     {
-        Chat? foundChat = _dataContext.Chats.FirstOrDefault(c => c.Id == requestChatId);
+        Chat? foundChat = _dataContext.Chats.FirstOrDefault(c => c.Id == chatId);
         if (foundChat == null)
             throw new Exception("Chat not found");
         
-        User? foundSubstitute = _dataContext.Users.FirstOrDefault(u => u.Id == requestSubstituteId);
+        User? foundSubstitute = _dataContext.Users.FirstOrDefault(u => u.Id == substituteId);
         if (foundSubstitute == null)
             throw new Exception("Substitute not found");
         
-        Console.WriteLine("employer id: " + requestEmployerId);
-        User? foundEmployer = _dataContext.Users.FirstOrDefault(u => u.Id == requestEmployerId);
+        Console.WriteLine("employer id: " + employerId);
+        User? foundEmployer = _dataContext.Users.FirstOrDefault(u => u.Id == employerId);
         if (foundEmployer == null)
             throw new Exception("Employer not found");
         
@@ -45,13 +45,13 @@ public class JobConfirmationDAO : IJobConfirmationDAO
         return createdJobConfirmation.Entity;
     }
 
-    public async Task<JobConfirmation?> AnswerJobConfirmationAsync(int requestId, int requestChatId, bool requestIsAccepted)
+    public async Task<JobConfirmation?> AnswerJobConfirmationAsync(int id, JobConfirmationStatus isAccepted)
     {
         JobConfirmation? jobConfirmation = _dataContext.JobConfirmations
-            .SingleOrDefault((jc) => jc.Id == requestId);
+            .SingleOrDefault((jc) => jc.Id == id);
         if (jobConfirmation == null) return jobConfirmation;
         
-        jobConfirmation.IsAccepted = requestIsAccepted;
+        jobConfirmation.IsAccepted = isAccepted;
         await  _dataContext.SaveChangesAsync();
         
         return jobConfirmation;

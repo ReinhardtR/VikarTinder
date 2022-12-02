@@ -5560,19 +5560,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Gamer\\.nuget\\packages\\": {}
+    "/Users/reinhardt/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Gamer\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
+      "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
       "projectName": "UnitTest",
-      "projectPath": "C:\\Users\\Gamer\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
-      "packagesPath": "C:\\Users\\Gamer\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Gamer\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\obj\\",
+      "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
+      "packagesPath": "/Users/reinhardt/.nuget/packages/",
+      "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Gamer\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
@@ -5584,8 +5584,8 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\Gamer\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
-              "projectPath": "C:\\Users\\Gamer\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj"
+            "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj": {
+              "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj"
             }
           }
         }
@@ -5636,26 +5636,12 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[6.0.11, 6.0.11]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[6.0.11, 6.0.11]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[6.0.11, 6.0.11]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.100\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
       }
     }
   }

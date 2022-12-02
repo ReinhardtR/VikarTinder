@@ -2,6 +2,7 @@ package com.example.businessserver.services.factories;
 
 import ChatService.*;
 import JobConfirmationService.JobConfirmationObject;
+import JobConfirmationService.JobConfirmationStatus;
 import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
 import com.example.businessserver.dtos.chat.*;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
@@ -47,16 +48,13 @@ public class ChatServiceFactory {
 						.toList();
 
 		List<JobConfirmationDTO> jobConfirmations = response.getJobConfirmationsList()
-				.stream()
-				.map(ChatServiceFactory::toJobConfirmationDTO)
-				.toList();
+						.stream()
+						.map(ChatServiceFactory::toJobConfirmationDTO)
+						.toList();
 
 
-
-
-		return new ChatHistoryDTO(messages,jobConfirmations,response.getSubstitute().getId(),response.getEmployer().getId());
+		return new ChatHistoryDTO(messages, jobConfirmations, response.getSubstitute().getId(), response.getEmployer().getId());
 	}
-
 
 
 	// Send Message
@@ -83,12 +81,11 @@ public class ChatServiceFactory {
 						.build();
 	}
 
-	public static BasicChatDTO toBasicChatDTO(CreateChatResponse response)
-	{
+	public static BasicChatDTO toBasicChatDTO(CreateChatResponse response) {
 		if (ObjectIsNull(response))
 			return null;
 
-		return new BasicChatDTO(response.getId(), response.getSubstitute().getId(),response.getEmployer().getId());
+		return new BasicChatDTO(response.getId(), response.getSubstitute().getId(), response.getEmployer().getId());
 	}
 
 	public static ChatOverviewDTO toChatOverviewDTO(GetChatOverviewResponse response) {
@@ -108,7 +105,7 @@ public class ChatServiceFactory {
 		if (ObjectIsNull(chat))
 			return null;
 
-		return new BasicChatDTO(chat.getId(), chat.getSubstitute().getId(),chat.getEmployer().getId());
+		return new BasicChatDTO(chat.getId(), chat.getSubstitute().getId(), chat.getEmployer().getId());
 	}
 
 	public static MessageDTO toMessageDTO(MessageObject message) {
@@ -120,8 +117,8 @@ public class ChatServiceFactory {
 						message.getChatId(),
 						message.getAuthor().getId(),
 						message.getContent(),
-				LocalDateTime.ofInstant(
-						Instant.ofEpochSecond(message.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
+						LocalDateTime.ofInstant(
+										Instant.ofEpochSecond(message.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
 		);
 	}
 
@@ -139,8 +136,29 @@ public class ChatServiceFactory {
 
 	}
 
+	private static ChatUserObject toChatUserObject(int authorId) {
+		return ChatUserObject.newBuilder()
+						.setId(authorId)
+						.build();
+	}
 
+	private static boolean ObjectIsNull(Object o) {
+		return o == null;
+	}
 
+	private static JobConfirmationDTO toJobConfirmationDTO(
+					JobConfirmationObject jobConfirmationObject) {
+
+		return new JobConfirmationDTO(
+						jobConfirmationObject.getId(),
+						jobConfirmationObject.getChatId(),
+						jobConfirmationObject.getSubstituteId(),
+						jobConfirmationObject.getEmployerId(),
+						jobConfirmationObject.getIsAccepted(),
+						LocalDateTime.ofInstant(
+										Instant.ofEpochSecond(jobConfirmationObject.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
+		);
+	}
 
 	private ChatUserObject toChatUserObject(ChatUserDTO dto) {
 		return ChatUserObject
@@ -149,29 +167,11 @@ public class ChatServiceFactory {
 						.build();
 	}
 
-	private static ChatUserObject toChatUserObject(int authorId)
-	{
-		return ChatUserObject.newBuilder()
-				.setId(authorId)
-				.build();
-	}
-	private static boolean ObjectIsNull(Object o)
-	{
-		return o == null;
-	}
-
-	private static JobConfirmationDTO toJobConfirmationDTO(
-			JobConfirmationObject jobConfirmationObject)
-	{
-
-		return new JobConfirmationDTO(
-				jobConfirmationObject.getId(),
-				jobConfirmationObject.getChatId(),
-				jobConfirmationObject.getSubstituteId(),
-				jobConfirmationObject.getEmployerId(),
-				jobConfirmationObject.getIsAccepted(),
-				LocalDateTime.ofInstant(
-						Instant.ofEpochSecond(jobConfirmationObject.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
-		);
+	private Boolean fromJobConfirmationStatus(JobConfirmationStatus status) {
+		return switch (status) {
+			case ACCEPTED -> true;
+			case DECLINED -> false;
+			default -> null;
+		};
 	}
 }

@@ -33,4 +33,14 @@ public class JobConfirmationFactory
             CreatedAt = jobConfirmation.CreatedAt.ToTimestamp()
         };
     }
+    
+    public static JobConfirmationStatus ToJobConfirmationStatus(bool? value)
+    {
+        return value switch
+        {
+            true => JobConfirmationStatus.Accepted,
+            false => JobConfirmationStatus.Declined,
+            _ => JobConfirmationStatus.Unanswered
+        };
+    }
 }

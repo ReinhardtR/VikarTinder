@@ -27,7 +27,7 @@ public class JobConfirmationServiceServer : JobConfirmationService.JobConfirmati
     public override async Task<JobConfirmationAnswerResponse> AnswerJobConfirmation(
         JobConfirmationAnswerRequest request, ServerCallContext context)
     {
-        JobConfirmation? jobConfirmation = await _jobConfirmationDao.AnswerJobConfirmationAsync(request.Id, request.ChatId, request.IsAccepted);
+        JobConfirmation? jobConfirmation = await _jobConfirmationDao.AnswerJobConfirmationAsync(request.Id, request.IsAccepted);
         
         if (jobConfirmation == null)
         {

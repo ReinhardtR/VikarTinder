@@ -1,6 +1,6 @@
 ﻿syntax = "proto3";
 
-import"google/protobuf/timestamp.proto";
+import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "Persistence";
 option java_multiple_files = true;
@@ -27,11 +27,17 @@ message CreateJobConfirmationResponse{
 message JobConfirmationAnswerRequest{
   int32 id = 1;
   int32 chat_id = 2;
-  bool is_accepted = 3;
+  JobConfirmationStatus is_accepted = 3;
 }
 
 message JobConfirmationAnswerResponse{
   JobConfirmationObject job_confirmation = 1;
+}
+
+enum JobConfirmationStatus {
+  UNANSWERED = 0;
+  ACCEPTED = 1;
+  DECLINED = 2;
 }
 
 message JobConfirmationObject{
@@ -39,6 +45,6 @@ message JobConfirmationObject{
   int32 chat_id = 2;
   int32 substitute_id = 3;
   int32 employer_id = 4;
-  optional bool is_accepted = 5 ;
+  JobConfirmationStatus is_accepted = 5;
   google.protobuf.Timestamp created_at = 6;
 }

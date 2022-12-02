@@ -15,7 +15,7 @@ public class ChatServiceFactory
             Message = new MessageObject()
             {
                 Id = message.Id,
-                Author = ToChatUserObject(message.Author),
+                Author = ToChatUserObject(new User() { Id = message.AuthorId}),
                 ChatId = message.ChatId,
                 Content = message.Content,
                 CreatedAt = message.CreatedAt.ToTimestamp()
@@ -72,7 +72,7 @@ public class ChatServiceFactory
             messageObjects.Add(new MessageObject()
             {
                 Id = message.Id,
-                Author = ToChatUserObject(message.Author),
+                Author = ToChatUserObject(new User() {Id = message.AuthorId}),
                 ChatId = message.ChatId,
                 Content = message.Content,
                 CreatedAt = message.CreatedAt.ToTimestamp()
@@ -85,9 +85,9 @@ public class ChatServiceFactory
             jobConfirmationObjects.Add(new JobConfirmationObject()
             {
                 Id = jobConfirmation.Id,
-                ChatId = jobConfirmation.Chat.Id,
-                SubstituteId= jobConfirmation.Substitute.Id,
-                EmployerId = jobConfirmation.Employer.Id,
+                ChatId = jobConfirmation.ChatId,
+                SubstituteId= jobConfirmation.SubstituteId,
+                EmployerId = jobConfirmation.EmployerId,
                 IsAccepted = jobConfirmation.IsAccepted,
                 CreatedAt = jobConfirmation.CreatedAt.ToTimestamp()
             });

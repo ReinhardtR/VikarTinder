@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Persistence.Models;
 
@@ -17,8 +18,8 @@ public class JobConfirmation : DateTrackingEntity
     
     public int EmployerId { get; set; }
     public User Employer { get; set; }
-
-    public bool IsAccepted { get; set; }
+    
+    public JobConfirmationStatus IsAccepted { get; set; }
     
     public bool IsTaken { get; set; } // if the job is taken by another substitute, bliver erstattet af stilling
 

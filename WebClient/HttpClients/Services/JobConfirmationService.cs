@@ -14,7 +14,7 @@ public class JobConfirmationService
         return _client.CreateJobConfirmationAsync(dto);
     }
 
-    public Task<JobConfirmationDTO> AnswerJobConfirmationAsync(JobConfirmationAnswer dto)
+    public Task<JobConfirmationDTO> AnswerJobConfirmationAsync(AnswerJobConfirmationDTO dto)
     {
         return _client.AnswerJobConfirmationAsync(dto);
     }

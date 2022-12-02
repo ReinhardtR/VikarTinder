@@ -1,12 +1,13 @@
 package com.example.businessserver.dtos.JobConfirmation;
 
-public class AnswerJobConfirmationDTO
-{
+import JobConfirmationService.JobConfirmationStatus;
+
+public class AnswerJobConfirmationDTO {
 	private int id;
 	private int chatId;
-	private boolean isAccepted;
+	private JobConfirmationStatus isAccepted;
 
-	public AnswerJobConfirmationDTO(int id, int chatId, boolean isAccepted) {
+	public AnswerJobConfirmationDTO(int id, int chatId, JobConfirmationStatus isAccepted) {
 		this.id = id;
 		this.chatId = chatId;
 		this.isAccepted = isAccepted;
@@ -20,7 +21,7 @@ public class AnswerJobConfirmationDTO
 		return chatId;
 	}
 
-	public boolean getIsAccepted() {
+	public JobConfirmationStatus getIsAccepted() {
 		return isAccepted;
 	}
 }

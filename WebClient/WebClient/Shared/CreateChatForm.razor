@@ -40,12 +40,13 @@
         {
             CreateChatDTO createChatDto = new()
             {
-                Ids = new List<int> { formModel.User1Id, formModel.User2Id }
+                EmployerId = formModel.User1Id,
+                SubstituteId = formModel.User2Id
             };
 
-            ChatDTO createdChat = await ChatService.CreateChatAsync(createChatDto);
+            BasicChatDTO createdChat = await ChatService.CreateChatAsync(createChatDto);
             
-            responseLabel = $"Created a chat with id {createdChat.ChatId}";
+            responseLabel = $"Created a chat with id {createdChat.Id}";
         }
         catch (Exception e)
         {

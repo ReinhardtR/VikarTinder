@@ -4,6 +4,6 @@ namespace Persistence.DAOs;
 
 public interface IJobConfirmationDAO
 {
-    Task<JobConfirmation> CreateJobConfirmationAsync(int requestChatId, int requestSubstituteId, int requestEmployerId);
-    Task<JobConfirmation?> AnswerJobConfirmationAsync(int requestId, int requestChatId, bool requestIsAccepted);
+    Task<JobConfirmation> CreateJobConfirmationAsync(int chatId, int substituteId, int employerId);
+    Task<JobConfirmation?> AnswerJobConfirmationAsync(int id, JobConfirmationStatus isAccepted);
 }
