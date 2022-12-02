@@ -1,5 +1,6 @@
 package com.example.businessserver.websockets;
 
+import com.example.businessserver.dtos.chat.JobConfirmation.JobConfirmationDTO;
 import com.example.businessserver.dtos.chat.MessageDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,25 @@ public class SocketHandler extends TextWebSocketHandler {
 	}
 
 	// Called by the RestController when a message is sent
-	public void sendMessage(MessageDTO message) {
+	public void sendJobConfirmation(JobConfirmationDTO jobConfirmation) {
+		if (chatMap.get(jobConfirmation.getChatId()) == null) {
+			return;
+		}
+
+		chatMap.get(jobConfirmation.getChatId()).forEach((sessionId) -> {
+			WebSocketSession sessionToSend = sessionMap.get(sessionId);
+
+			try {
+				MessageWrapper wrapper = new MessageWrapper(MessageType.JOB_CONFIRMATION_UPDATE, jobConfirmation);
+				String messageJson = objectMapper.writeValueAsString(wrapper);
+				sessionToSend.sendMessage(new TextMessage(messageJson));
+			} catch (Exception e) {
+				System.out.println("Error sending message to session " + sessionId);
+			}
+		});
+	}
+
+	public void sendChatMessage(MessageDTO message) {
 		if (chatMap.get(message.getChatId()) == null) {
 			return;
 		}
@@ -57,7 +76,8 @@ public class SocketHandler extends TextWebSocketHandler {
 			WebSocketSession sessionToSend = sessionMap.get(sessionId);
 
 			try {
-				String messageJson = objectMapper.writeValueAsString(message);
+				MessageWrapper wrapper = new MessageWrapper(MessageType.CHAT_MESSAGE, message);
+				String messageJson = objectMapper.writeValueAsString(wrapper);
 				sessionToSend.sendMessage(new TextMessage(messageJson));
 			} catch (IOException e) {
 				System.out.println("Error sending message to session " + sessionId);
