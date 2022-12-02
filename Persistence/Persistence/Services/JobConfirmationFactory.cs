@@ -10,11 +10,12 @@ public class JobConfirmationFactory
         {
             JobConfirmation = new JobConfirmationObject
             {   
-                Id = jobConfirmation.id,
-                ChatId = jobConfirmation.chat.Id,
-                SubstituteId = jobConfirmation.substitute.Id,
-                EmployerId = jobConfirmation.employer.Id,
-                IsAccepted = jobConfirmation.isAccepted
+                Id = jobConfirmation.Id,
+                ChatId = jobConfirmation.Chat.Id,
+                SubstituteId = jobConfirmation.Substitute.Id,
+                EmployerId = jobConfirmation.Employer.Id,
+                IsAccepted = jobConfirmation.IsAccepted
+                
             }
         };
     }

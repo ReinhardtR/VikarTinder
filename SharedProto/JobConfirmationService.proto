@@ -1,5 +1,7 @@
 ﻿syntax = "proto3";
 
+import"google/protobuf/timestamp.proto";
+
 option csharp_namespace = "Persistence";
 option java_multiple_files = true;
 
@@ -38,5 +40,5 @@ message JobConfirmationObject{
   int32 substitute_id = 3;
   int32 employer_id = 4;
   bool is_accepted = 5;
-  //To do - add date
+  google.protobuf.Timestamp created_at = 6;
 }

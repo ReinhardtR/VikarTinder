@@ -2,6 +2,9 @@ package com.example.businessserver.dtos.chat.JobConfirmation;
 
 import com.google.type.DateTime;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class JobConfirmationDTO
 {
   private int id;
@@ -10,10 +13,10 @@ public class JobConfirmationDTO
   private int employerId;
   private boolean isAccepted;
 
-  private DateTime offeredAt;
+  private LocalDateTime offeredAt;
 
   public JobConfirmationDTO(int id, int chatId, int substituteId,
-      int employerId, boolean isAccepted, DateTime offeredAt)
+      int employerId, boolean isAccepted, LocalDateTime offeredAt)
   {
     this.id = id;
     this.chatId = chatId;
@@ -48,7 +51,7 @@ public class JobConfirmationDTO
     return isAccepted;
   }
 
-  public DateTime getOfferedAt()
+  public LocalDateTime getOfferedAt()
   {
     return offeredAt;
   }

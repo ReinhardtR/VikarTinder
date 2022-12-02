@@ -23,13 +23,15 @@ public class JobConfirmationServiceImpl implements JobConfirmationServiceClient
     CreateJobConfirmationResponse response = jobConfirmationServiceBlockingStub.createJobConfirmation(request);
 
     return JobConfirmationServiceFactory.toJobConfirmationDTO(response);
+
   }
 
   @Override public JobConfirmationDTO answerJobConfirmation(JobConfirmationAnswer dto)
   {
     JobConfirmationAnswerRequest request = JobConfirmationServiceFactory.toJobConfirmationAnswerRequest(dto);
-    JobConfirmationAnswerResponse response = JobConfirmationServiceGrpc.answerJobConfirmation(request);
+    JobConfirmationAnswerResponse response = jobConfirmationServiceBlockingStub.answerJobConfirmation(request);
 
     return JobConfirmationServiceFactory.toJobConfirmationDTO(response);
+
   }
 }

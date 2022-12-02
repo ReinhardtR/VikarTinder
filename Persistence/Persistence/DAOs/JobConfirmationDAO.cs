@@ -25,9 +25,9 @@ public class JobConfirmationDAO : IJobConfirmationDAO
         
         JobConfirmation jobConfirmationToCreate = new()
         {
-            chat = foundChat,
-            substitute = foundSubstitute,
-            employer = foundEmployer 
+            Chat = foundChat,
+            Substitute = foundSubstitute,
+            Employer = foundEmployer 
         };
 
         EntityEntry<JobConfirmation> createdJobConfirmation =
