@@ -2,8 +2,8 @@
 
 public class CheckMatchDto
 {
-    public int GigId { get; set; }
-    public bool WasAMatch { get; set; }
+    public int GigId { get; init; }
+    public bool WasAMatch { get; init; }
 
     public CheckMatchDto()
     {

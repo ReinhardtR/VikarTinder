@@ -26,9 +26,8 @@ insert into Substitutes values (1);
     public override async Task<MatchValidation> SendMatchFromSubstitute(MatchRequest request, ServerCallContext context)
     {
         Console.WriteLine("IDs: [Sub]:" + request.CurrentUser + " [Gig]:" + request.ToBeMatchedId);
-        
+        Console.WriteLine(request.WantToMatch);
         //DatabaseKald for at matche
-        
         IdsForMatchDto matchedGig = await _dao.MatchingGig(
             _converter.CreateToBeMatchedDto(
                 request.CurrentUser,
@@ -36,7 +35,7 @@ insert into Substitutes values (1);
                 request.WantToMatch));
         
         Console.WriteLine("Gig Id = " + matchedGig.GigId);
-
+        
         //Finding if matched
         if (request.WantToMatch)
         {

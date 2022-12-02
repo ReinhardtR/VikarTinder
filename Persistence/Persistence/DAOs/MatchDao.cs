@@ -38,7 +38,6 @@ public class MatchDao : IMatchDao
         {
             SustituteId = substitute.Id,
             GigId = gig.Id,
-            //Giver måske en fejl include fix if so
             EmployerId = gig.Employer.Id
         };
 
@@ -52,9 +51,10 @@ public class MatchDao : IMatchDao
             WantsToMatch = false
         });
         //Opdateringen og gemning
-        _databaseContext.ChangeTracker.Clear();
         _databaseContext.Substitutes.Update(substitute);
         await _databaseContext.SaveChangesAsync();
+        _databaseContext.ChangeTracker.Clear();
+
 
         return toBeReturned;
     }
@@ -74,7 +74,6 @@ public class MatchDao : IMatchDao
         {
             SustituteId = substitute.Id,
             GigId = gig.Id,
-            //Giver måske en fejl include fix if so
             EmployerId = gig.Employer.Id
         };
 
@@ -82,15 +81,14 @@ public class MatchDao : IMatchDao
         substitute.GigSubstitutes.Add(new GigSubstitute
         {
             Gig = gig,
-            GigId = gig.Id,
             Substitute = substitute,
-            SubstituteId = substitute.Id,
             WantsToMatch = true
         });
         //Opdateringen og gemning
-        _databaseContext.ChangeTracker.Clear();
         _databaseContext.Substitutes.Update(substitute);
         await _databaseContext.SaveChangesAsync();
+        _databaseContext.ChangeTracker.Clear();
+
 
 
         return toBeReturned;
@@ -132,11 +130,11 @@ public class MatchDao : IMatchDao
             EmployerId = employer.Id
         };
 
-
-        _databaseContext.ChangeTracker.Clear();
         _databaseContext.Employers.Update(employer);
 
         await _databaseContext.SaveChangesAsync();
+        _databaseContext.ChangeTracker.Clear();
+
 
         return toBeReturned;
     }
@@ -164,10 +162,10 @@ public class MatchDao : IMatchDao
         };
 
 
-        _databaseContext.ChangeTracker.Clear();
         _databaseContext.Employers.Update(employer);
-
         await _databaseContext.SaveChangesAsync();
+        _databaseContext.ChangeTracker.Clear();
+
 
         return toBeReturned;
     }
@@ -226,7 +224,8 @@ public class MatchDao : IMatchDao
     public async Task<Gig> GetGigById(int id)
     {
 
-        Gig? gigToReturn = await _databaseContext.Gigs.FirstOrDefaultAsync(gig => gig.Id == id);
+        Gig? gigToReturn = await _databaseContext.Gigs.Include(gig => gig.Employer)
+            .FirstOrDefaultAsync(gig => gig.Id == id);
 
         return gigToReturn;
     }
@@ -241,7 +240,7 @@ public class MatchDao : IMatchDao
 
     public async Task RemoveWhereTimerIsOut(int id, DaoRequestType type)
     {
-        DateTime currentDateTime = DateTime.Now;
+        DateTime currentDateTime = DateTime.UtcNow;
         TimeSpan span= new TimeSpan(1,0,0);
 
         if (type.Equals(DaoRequestType.Employer))
@@ -259,43 +258,43 @@ public class MatchDao : IMatchDao
     private async void RemoveWhereTimerIsOutSubGig(int id, DateTime currentDateTime, TimeSpan span)
     {
 
-        var query = from gigSubs in _databaseContext.Set<GigSubstitute>()
-            where gigSubs.WantsToMatch == false && currentDateTime - gigSubs.PublicationDate < span
-            select gigSubs;
-        var listToDelete = await query.ToListAsync();
-            
-        var sub = await GetSubstituteById(id);
+        var substitute = await _databaseContext.Substitutes.Include(sub =>
+            sub.EmployerSubstitutes).FirstOrDefaultAsync(sub => sub.Id == id);
 
-        foreach (var gigSub in listToDelete)
+        foreach (var gigSub in substitute.GigSubstitutes)
         {
-            //possible null reference
-            sub.GigSubstitutes.Remove(gigSub);
+            Console.WriteLine("REAL TIME:"+ currentDateTime + "GIG SUB" +gigSub.PublicationDate +" " + gigSub.WantsToMatch);
         }
-            
-        _databaseContext.ChangeTracker.Clear();
-        _databaseContext.Substitutes.Update(sub);
+
+        var amountRemoved = substitute.GigSubstitutes.RemoveAll(gigsub =>
+            gigsub.WantsToMatch == false && currentDateTime - gigsub.PublicationDate > span);
+        Console.WriteLine(amountRemoved);
+        Console.WriteLine(substitute.GigSubstitutes.Count);
+
+        _databaseContext.Substitutes.Update(substitute);
         await _databaseContext.SaveChangesAsync();
+        _databaseContext.ChangeTracker.Clear();
     }
 
     private async void RemoveWhereTimerIsOutEmpSub(int id, DateTime currentDateTime, TimeSpan span)
     {
+        var employer = await _databaseContext.Employers.Include(emp =>
+            emp.EmployerSubstitutes).FirstOrDefaultAsync(emp => emp.Id == id);
+        
 
-        var query = from empSubs in _databaseContext.Set<EmployerSubstitute>()
-            where empSubs.WantsToMatch == false && currentDateTime - empSubs.PublicationDate < span
-            select empSubs;
-        var listToDelete = await query.ToListAsync();
-            
-        var emp = await GetEmployerById(id);
-
-        foreach (var empSub in listToDelete)
+        foreach (var empSub in employer.EmployerSubstitutes)
         {
-            //possible null reference
-            emp.EmployerSubstitutes.Remove(empSub);
+            Console.WriteLine("REAL TIME:"+ currentDateTime + "EMP SUB" +empSub.PublicationDate +" " + empSub.WantsToMatch);
         }
-            
-        _databaseContext.ChangeTracker.Clear();
-        _databaseContext.Employers.Update(emp);
+
+        var amountRemoved = employer.EmployerSubstitutes.RemoveAll(empSub =>
+            empSub.WantsToMatch == false && currentDateTime - empSub.PublicationDate > span);
+        Console.WriteLine(amountRemoved);
+        Console.WriteLine(employer.EmployerSubstitutes.Count);
+
+        _databaseContext.Employers.Update(employer);
         await _databaseContext.SaveChangesAsync();
+        _databaseContext.ChangeTracker.Clear();
     }
 
 
@@ -308,7 +307,7 @@ public class MatchDao : IMatchDao
             join empSubs in _databaseContext.Set<EmployerSubstitute>()
                 on new { id = gigSubs.Substitute, dto.SustituteId }
                 equals new { id = empSubs.Substitute, dto.SustituteId }
-            join gigs in _databaseContext.Set<Gig>()
+            join gigs in _databaseContext.Set<Gig>().Include(gig => gig.Employer)
                 on new { id = gigSubs.GigId }
                 equals new { id = gigs.Id }
             select new { empSubs, gigSubs, gigs };
@@ -317,13 +316,14 @@ public class MatchDao : IMatchDao
         {
             Console.WriteLine("GIGS" + var.gigs.Id +" " + var.gigs.Employer.Id +" "
             + " EMPSUBS" + var.empSubs.EmployerId +" " + var.empSubs.WantsToMatch +" "
-            + "GIGSUBS" + var.gigSubs.WantsToMatch);
+            + "GIGSUBS" + var.gigSubs.SubstituteId + " "+ var.gigSubs.WantsToMatch);
         }
         
         var result = query.FirstOrDefaultAsync(joined =>
             joined.gigSubs.WantsToMatch == joined.empSubs.WantsToMatch
-            //Gigs skal måske have en iclude?
-            && joined.empSubs.EmployerId == joined.gigs.Employer.Id).Result;
+            && joined.empSubs.EmployerId == joined.gigs.Employer.Id
+            && joined.empSubs.EmployerId == dto.EmployerId
+            && joined.gigSubs.SubstituteId == dto.SustituteId).Result;
 
         if (result != null)
         {

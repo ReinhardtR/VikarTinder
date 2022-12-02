@@ -1,4 +1,5 @@
-﻿using Persistence.Converter.Interfaces;
+﻿using System.Collections.Immutable;
+using Persistence.Converter.Interfaces;
 using Persistence.Dto;
 using Persistence.Exceptions.ConverterExceptions;
 using Persistence.Models;
@@ -11,17 +12,21 @@ public class MatchConverter : IMatchConverter
     
     public MatchingSubstitutes ConvertSubList(List<Substitute> substitutes)
     {
-        if (substitutes == null || substitutes.Count == 0)
+        if (substitutes == null)
             throw new ConverterNullReference("Substitute list");
         
         MatchingSubstitutes subs = new MatchingSubstitutes();
 
-        foreach (var sub in substitutes)
+        if (substitutes.Count != 0)
         {
-            subs.Substitutes.Add(new SubstituteToBeMatched
+            foreach (var sub in substitutes)
             {
-                Id = sub.Id
-            });
+                subs.Substitutes.Add(new SubstituteToBeMatched
+                {
+                    Id = sub.Id
+                });
+            }
+
         }
 
         return subs;
@@ -29,17 +34,20 @@ public class MatchConverter : IMatchConverter
     
     public MatchingGigs ConvertGigList(List<Gig> gigs)
     {
-        if (gigs == null || gigs.Count == 0)
+        if (gigs == null)
             throw new ConverterNullReference("Gigs list");
         
         MatchingGigs gigsGrpc = new MatchingGigs();
 
-        foreach (var gig in gigs)
+        if (gigs.Count != 0)
         {
-            gigsGrpc.Gigs.Add(new GigToBeMatched
+            foreach (var gig in gigs)
             {
-                Id = gig.Id
-            });
+                gigsGrpc.Gigs.Add(new GigToBeMatched
+                {
+                    Id = gig.Id
+                });
+            }
         }
 
         return gigsGrpc;
@@ -47,13 +55,15 @@ public class MatchConverter : IMatchConverter
 
     public MatchValidation ConvertToValidation(IdsForMatchDto dto)
     {
+        if (dto == null)
+            throw new ConverterNullReference("IdsForMatch argument ");
         MatchValidation val = new MatchValidation
-        {
-            EmployerId = dto.EmployerId,
-            GigId = dto.GigId,
-            IsMatched = dto.WasAMatch,
-            SubstituteId = dto.SustituteId
-        };
+            {
+                EmployerId = dto.EmployerId,
+                GigId = dto.GigId,
+                IsMatched = dto.WasAMatch,
+                SubstituteId = dto.SustituteId
+            };
 
         return val;
     }
