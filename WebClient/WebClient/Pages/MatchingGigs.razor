@@ -43,9 +43,10 @@
     private bool _isWaiting = true;
     private string _somethingIsWrongText;
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         GetGigsAsync();
+        return Task.CompletedTask;
     }
 
     private async void SendGigMatchRequest(bool wantToMatch)
@@ -63,7 +64,7 @@
     private void NextMatch()
     {
         if (_gigs.Count == 0)
-            GetGigsAsync();
+            CantDisplayMatches("No more matches");
         if (_areStillGigsToMatch)
             _currentDateId = _gigs.Pop().Id;
     }
@@ -77,26 +78,25 @@
             {
                 CurrentSubstituteId = _userId
             });
+            
             foreach (var gigMatchingDTO in gigsAsync.PossibleMatches)
-            {
                 _gigs.Push(gigMatchingDTO);
-            }
-            if (_gigs.Count == 0)
-            {
-                _areStillGigsToMatch = false;
-                _somethingIsWrongText = "No more matches";
-            }else
-                _currentDateId = _gigs.Pop().Id;
+            NextMatch();
         }
         catch (Exception e)
         {
-            _areStillGigsToMatch = false;
-            _somethingIsWrongText = "Connection issues";
+            CantDisplayMatches("Connection issues");
         }
         _isWaiting = false;
         StateHasChanged();
     }
-    
+
+    private void CantDisplayMatches(string reason)
+    {
+        _areStillGigsToMatch = false;
+        _somethingIsWrongText = reason;
+    }
+
 }
 
 <style>
