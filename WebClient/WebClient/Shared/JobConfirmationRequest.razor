@@ -1,6 +1,7 @@
 @using HttpClients
 @using HttpClients.Services
 @inject JobConfirmationService JobConfirmationService
+@inject ISnackbar Snackbar
 
 <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
     <MudText>Vil du have jobbet?</MudText>
@@ -13,11 +14,6 @@
             Nej
         </MudButton>
     </MudStack>
-    
-    @if (errorLabel != null)
-    {
-        <MudText Typo="Typo.caption" Color="Color.Error">@errorLabel</MudText>
-    }
 </MudStack>
 
 @code {
@@ -31,14 +27,10 @@
     // TODO replace with auth stuff
     private bool isEmployer = false;
 
-    private string? errorLabel;
-
     private async void AnswerHandler(AnswerJobConfirmationDTOIsAccepted isAccepted)
     {
         try
         {
-            errorLabel = null;
-            
             AnswerJobConfirmationDTO answerJobConfirmation = new()
             {
                 Id = JobConfirmation.Id,
@@ -50,7 +42,7 @@
         } 
         catch (Exception e)
         {
-            errorLabel = "Failed to send answer";
+            Snackbar.Add("Failed to send answer", Severity.Error);
         }
     }
 }

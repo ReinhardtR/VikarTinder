@@ -5,7 +5,7 @@
 @inject ChatSocket ChatSocket
 @inject ChatService ChatService
 @inject JobConfirmationService JobConfirmationService
-  
+@inject ISnackbar Snackbar
 
 @if (chatHistory == null && loadingErrorLabel == null)
 {
@@ -22,11 +22,7 @@
                 <MudAvatar Size="Size.Medium" Color="Color.Secondary">@chatName[0]</MudAvatar>
                 <MudText Typo="Typo.h6">@chatName</MudText> 
             </MudStack>
-         
-            <MudText Typo="Typo.caption" Color="Color.Error">
-                @usageErrorLabel
-            </MudText>
-            
+
             <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
                 <MudButton OnClick="SendJobConfirmationRequest" Variant="Variant.Outlined">
                     Send Job Anmodning
@@ -84,8 +80,7 @@
     private ChatHistoryDTO? chatHistory;
     
     private string? loadingErrorLabel;
-    private string? usageErrorLabel;
-    
+
     protected override async Task OnInitializedAsync()
     {
         ChatHistoryDTO newChatHistory = await ChatService.GetChatHistoryAsync(ChatId);
@@ -181,8 +176,9 @@
         }
         catch (Exception e)
         {
-            usageErrorLabel = "Failed to send job confirmation request";
+            Snackbar.Add("Failed to send job confirmation request", Severity.Error);
         }
+        
         StateHasChanged();
     }
     
@@ -208,7 +204,7 @@
         }
         catch (Exception e)
         {
-            usageErrorLabel = "Failed to send message";
+            Snackbar.Add("Failed to send message", Severity.Error);
         }
         
         StateHasChanged();
