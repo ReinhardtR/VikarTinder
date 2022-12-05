@@ -85,10 +85,11 @@
     {
         ChatHistoryDTO newChatHistory = await ChatService.GetChatHistoryAsync(ChatId);
         chatHistory = newChatHistory;
+        jobConfirmation = newChatHistory.JobConfirmation;
         
         if (chatHistory == null)
         {
-            loadingErrorLabel = "You are not a member of this chat";
+            loadingErrorLabel = "Couldn't load the chat history.";
             return;
         }
         
@@ -126,8 +127,9 @@
         catch (Exception e)
         {
             loadingErrorLabel = e.Message;
-            StateHasChanged();
         }
+        
+        StateHasChanged();
     }
     
     private async void ListenToJobRequestSocket()
@@ -138,27 +140,32 @@
                 
             await foreach (JobConfirmationDTO newJobConfirmation in jobConfirmations)
             {
-                Console.WriteLine("Received job confirmation");
-                Console.WriteLine("state: " + newJobConfirmation.IsAccepted);
-                
-                // if new job confirmation is unanswered overwrite the old one
-                if (newJobConfirmation.IsAccepted == JobConfirmationDTOIsAccepted.UNANSWERED)
-                {
-                    jobConfirmation = newJobConfirmation;
-                }
-                else
-                {
-                    jobConfirmation = null;
-                }
+                jobConfirmation = newJobConfirmation.IsAccepted == JobConfirmationDTOIsAccepted.UNANSWERED ? newJobConfirmation : null;
 
-                StateHasChanged();
+                switch (newJobConfirmation.IsAccepted)
+                {
+                    case JobConfirmationDTOIsAccepted.ACCEPTED:
+                        Snackbar.Add("Job anmodningen er accepteret", Severity.Success);
+                        break;
+                    case JobConfirmationDTOIsAccepted.DECLINED:
+                        Snackbar.Add("Job anmodningen er afvist", Severity.Info);
+                        break;
+                    case JobConfirmationDTOIsAccepted.UNANSWERED:
+                        Snackbar.Add("Job anmodningen er sendt", Severity.Info);
+                        break;
+                    case JobConfirmationDTOIsAccepted.UNRECOGNIZED:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
         }
         catch (Exception e)
         {
             loadingErrorLabel = e.Message;
-            StateHasChanged();
         }
+        
+        StateHasChanged();
     }
 
     private async void SendJobConfirmationRequest()

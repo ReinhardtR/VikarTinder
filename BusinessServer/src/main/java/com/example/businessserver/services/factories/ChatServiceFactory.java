@@ -47,11 +47,9 @@ public class ChatServiceFactory {
 						.map(ChatServiceFactory::toMessageDTO)
 						.toList();
 
-
 		JobConfirmationDTO jobConfirmation = toJobConfirmationDTO(response.getJobConfirmation());
 
-
-		return new ChatHistoryDTO(messages,jobConfirmation,response.getSubstitute().getId(),response.getEmployer().getId());
+		return new ChatHistoryDTO(messages, jobConfirmation, response.getSubstitute().getId(), response.getEmployer().getId());
 
 	}
 
