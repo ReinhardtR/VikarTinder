@@ -49,10 +49,10 @@ namespace Persistence.Migrations
                     b.Property<int>("EmployerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsAccepted")
+                    b.Property<bool>("IsTaken")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsTaken")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("SubstituteId")
@@ -163,8 +163,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Persistence.Models.Chat", b =>
                 {
-                    b.Navigation("JobConfirmation")
-                        .IsRequired();
+                    b.Navigation("JobConfirmation");
 
                     b.Navigation("Messages");
                 });

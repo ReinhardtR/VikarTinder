@@ -151,7 +151,7 @@ public class ChatServiceFactory {
 						jobConfirmationObject.getChatId(),
 						jobConfirmationObject.getSubstituteId(),
 						jobConfirmationObject.getEmployerId(),
-						jobConfirmationObject.getIsAccepted(),
+						jobConfirmationObject.getStatus(),
 						LocalDateTime.ofInstant(
 										Instant.ofEpochSecond(jobConfirmationObject.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
 		);

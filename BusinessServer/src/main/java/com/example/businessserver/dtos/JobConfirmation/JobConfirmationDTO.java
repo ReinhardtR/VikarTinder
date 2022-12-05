@@ -9,17 +9,17 @@ public class JobConfirmationDTO {
 	private int chatId;
 	private int substituteId;
 	private int employerId;
-	private JobConfirmationStatus isAccepted;
+	private JobConfirmationStatus status;
 
 	private LocalDateTime offeredAt;
 
 	public JobConfirmationDTO(int id, int chatId, int substituteId,
-														int employerId, JobConfirmationStatus isAccepted, LocalDateTime offeredAt) {
+														int employerId, JobConfirmationStatus status, LocalDateTime offeredAt) {
 		this.id = id;
 		this.chatId = chatId;
 		this.substituteId = substituteId;
 		this.employerId = employerId;
-		this.isAccepted = isAccepted;
+		this.status = status;
 		this.offeredAt = offeredAt;
 	}
 
@@ -39,8 +39,8 @@ public class JobConfirmationDTO {
 		return employerId;
 	}
 
-	public JobConfirmationStatus getIsAccepted() {
-		return isAccepted;
+	public JobConfirmationStatus getStatus() {
+		return status;
 	}
 
 	public LocalDateTime getOfferedAt() {

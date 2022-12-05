@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221202155913_changeJobConfirmationDatatypeonChat")]
-    partial class changeJobConfirmationDatatypeonChat
+    [Migration("20221205093344_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,12 +31,7 @@ namespace Persistence.Migrations
                     b.Property<int>("SubstituteId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Chats");
                 });
@@ -56,10 +51,10 @@ namespace Persistence.Migrations
                     b.Property<int>("EmployerId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsAccepted")
+                    b.Property<bool>("IsTaken")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("IsTaken")
+                    b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("SubstituteId")
@@ -122,13 +117,6 @@ namespace Persistence.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Persistence.Models.Chat", b =>
-                {
-                    b.HasOne("Persistence.Models.User", null)
-                        .WithMany("Chats")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("Persistence.Models.JobConfirmation", b =>
                 {
                     b.HasOne("Persistence.Models.Chat", "Chat")
@@ -177,15 +165,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Persistence.Models.Chat", b =>
                 {
-                    b.Navigation("JobConfirmation")
-                        .IsRequired();
+                    b.Navigation("JobConfirmation");
 
                     b.Navigation("Messages");
-                });
-
-            modelBuilder.Entity("Persistence.Models.User", b =>
-                {
-                    b.Navigation("Chats");
                 });
 #pragma warning restore 612, 618
         }

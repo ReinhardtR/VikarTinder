@@ -2,8 +2,8 @@ package com.example.businessserver.services.implementations;
 
 
 import JobConfirmationService.*;
-import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
 import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
 import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
 import com.example.businessserver.services.JobConfirmationServiceClient;
 import com.example.businessserver.services.factories.JobConfirmationServiceFactory;
@@ -17,7 +17,7 @@ public class JobConfirmationServiceImpl implements JobConfirmationServiceClient 
 
 
 	@Override
-	public JobConfirmationDTO CreateJobConfirmation(CreateJobConfirmationDTO dto) {
+	public JobConfirmationDTO createJobConfirmation(CreateJobConfirmationDTO dto) {
 		CreateJobConfirmationRequest request = JobConfirmationServiceFactory.toCreateJobConfirmationRequest(dto);
 		CreateJobConfirmationResponse response = jobConfirmationServiceBlockingStub.createJobConfirmation(request);
 		return JobConfirmationServiceFactory.toJobConfirmationDTO(response);
@@ -32,8 +32,8 @@ public class JobConfirmationServiceImpl implements JobConfirmationServiceClient 
 
 	}
 
-	@Override public JobConfirmationDTO getJobConfirmation(int chatId)
-	{
+	@Override
+	public JobConfirmationDTO getJobConfirmation(int chatId) {
 		GetJobConfirmationRequest request = JobConfirmationServiceFactory.toGetJobConfirmationRequest(chatId);
 		GetJobConfirmationResponse response = jobConfirmationServiceBlockingStub.getJobConfirmation(request);
 

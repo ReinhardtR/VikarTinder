@@ -22,11 +22,11 @@ public class JobConfirmationLogicImpl implements JobConfirmationLogic {
 			throw new Exception("Job request already exists");
 		}
 
-		return jobConfirmationServiceClient.CreateJobConfirmation(dto);
+		return jobConfirmationServiceClient.createJobConfirmation(dto);
 	}
 
 	private boolean JobRequestIsNotDeclined(JobConfirmationDTO jobConfirmationToBeReplaced) {
-		return jobConfirmationToBeReplaced.getIsAccepted() == JobConfirmationStatus.ACCEPTED || jobConfirmationToBeReplaced.getIsAccepted() == JobConfirmationStatus.UNANSWERED;
+		return jobConfirmationToBeReplaced.getStatus() == JobConfirmationStatus.ACCEPTED || jobConfirmationToBeReplaced.getStatus() == JobConfirmationStatus.UNANSWERED;
 	}
 
 	private boolean JobRequestIsPresent(JobConfirmationDTO jobConfirmationToBeReplaced) {

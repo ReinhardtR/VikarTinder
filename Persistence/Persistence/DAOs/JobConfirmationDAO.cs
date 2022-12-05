@@ -16,7 +16,7 @@ public class JobConfirmationDAO : IJobConfirmationDAO
     
     public async Task<JobConfirmation> CreateJobConfirmationAsync(int chatId, int substituteId, int employerId)
     {
-        Chat? foundChat = _dataContext.Chats.FirstOrDefault(c => c.Id == chatId);
+        Chat? foundChat = _dataContext.Chats.Include((c) => c.JobConfirmation).FirstOrDefault(c => c.Id == chatId);
         if (foundChat == null)
             throw new Exception("Chat not found");
         
@@ -27,11 +27,10 @@ public class JobConfirmationDAO : IJobConfirmationDAO
         User? foundEmployer = _dataContext.Users.FirstOrDefault(u => u.Id == employerId);
         if (foundEmployer == null)
             throw new Exception("Employer not found");
-
-
-        if (foundChat.JobConfirmation != null || foundChat.JobConfirmation.IsAccepted == JobConfirmationStatus.Declined)
+        
+        if (foundChat.JobConfirmation != null)
         {
-            _dataContext.Remove(_dataContext.Chats.FirstOrDefault(c => c.Id == chatId)!.JobConfirmation);
+            _dataContext.Remove(foundChat.JobConfirmation);
         }
         
         JobConfirmation jobConfirmationToCreate = new()
@@ -41,8 +40,7 @@ public class JobConfirmationDAO : IJobConfirmationDAO
             Employer = foundEmployer 
         };
         
-          EntityEntry<JobConfirmation> createdJobConfirmation =
-          _dataContext.JobConfirmations.Add(jobConfirmationToCreate);
+        EntityEntry<JobConfirmation> createdJobConfirmation = _dataContext.JobConfirmations.Add(jobConfirmationToCreate);
           
         await _dataContext.SaveChangesAsync();
 

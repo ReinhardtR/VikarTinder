@@ -45,7 +45,7 @@ message JobConfirmationObject{
   int32 chat_id = 2;
   int32 substitute_id = 3;
   int32 employer_id = 4;
-  JobConfirmationStatus is_accepted = 5;
+  JobConfirmationStatus status = 5;
   google.protobuf.Timestamp created_at = 6;
 }
 

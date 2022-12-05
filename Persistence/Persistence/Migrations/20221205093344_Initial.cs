@@ -5,10 +5,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
 {
-    public partial class initialcreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Chats",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SubstituteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    EmployerId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chats", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -22,26 +36,6 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Chats",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SubstituteId = table.Column<int>(type: "INTEGER", nullable: false),
-                    EmployeeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserId = table.Column<int>(type: "INTEGER", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chats", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Chats_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "JobConfirmations",
                 columns: table => new
                 {
@@ -50,7 +44,7 @@ namespace Persistence.Migrations
                     ChatId = table.Column<int>(type: "INTEGER", nullable: false),
                     SubstituteId = table.Column<int>(type: "INTEGER", nullable: false),
                     EmployerId = table.Column<int>(type: "INTEGER", nullable: false),
-                    IsAccepted = table.Column<bool>(type: "INTEGER", nullable: false),
+                    Status = table.Column<int>(type: "INTEGER", nullable: false),
                     IsTaken = table.Column<bool>(type: "INTEGER", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
@@ -84,8 +78,8 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
                     ChatId = table.Column<int>(type: "INTEGER", nullable: false),
+                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: true)
@@ -108,14 +102,10 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Chats_UserId",
-                table: "Chats",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_JobConfirmations_ChatId",
                 table: "JobConfirmations",
-                column: "ChatId");
+                column: "ChatId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobConfirmations_EmployerId",

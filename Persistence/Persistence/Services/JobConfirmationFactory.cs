@@ -29,7 +29,7 @@ public class JobConfirmationFactory
             ChatId = jobConfirmation.ChatId,
             SubstituteId = jobConfirmation.SubstituteId,
             EmployerId = jobConfirmation.EmployerId,
-            IsAccepted = jobConfirmation.Status,
+            Status = jobConfirmation.Status,
             CreatedAt = jobConfirmation.CreatedAt.ToTimestamp()
         };
     }
