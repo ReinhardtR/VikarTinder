@@ -1,7 +1,6 @@
 @page "/Chat/{ChatId:int}"
 @using HttpClients.Services        
 @using HttpClients
-@using Newtonsoft.Json
 @using WebSockets
 @inject ChatSocket ChatSocket
 @inject ChatService ChatService
@@ -25,15 +24,28 @@
             </MudStack>
 
             <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
-                <MudButton OnClick="SendJobConfirmationRequest" Variant="Variant.Outlined">
-                    Send Job Anmodning
-                </MudButton>
+                @if (jobConfirmation?.Status == JobConfirmationDTOStatus.ACCEPTED)
+                {
+                    <MudText Typo="Typo.h6" Color="Color.Success">JOB ER ACCEPTERET</MudText>
+                } 
+                else if (isEmployer && jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
+                {
+                    <MudText Typo="Typo.h6" Color="Color.Info">
+                        JOB ANMODNING ER SENDT
+                    </MudText>
+                }
+                else if (isEmployer)
+                {
+                    <MudButton OnClick="SendJobConfirmationRequest" Variant="Variant.Outlined">
+                        Send Job Anmodning
+                    </MudButton>
+                }
             </MudStack>
         </MudStack>
         
         <MudDivider Class="my-1" />
         
-        @if (jobConfirmation != null)
+        @if (!isEmployer && jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
         {
             <JobConfirmationRequest JobConfirmation="@jobConfirmation" />
             <MudDivider Class="my-1" />
@@ -84,17 +96,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        ChatHistoryDTO newChatHistory = await ChatService.GetChatHistoryAsync(ChatId);
-        chatHistory = newChatHistory;
-        
-        Console.WriteLine("jOB CONFRIMATION: " + JsonConvert.SerializeObject(newChatHistory.JobConfirmation));
-        jobConfirmation = newChatHistory.JobConfirmation;
-        
-        if (chatHistory == null)
+        ChatHistoryDTO? newChatHistory = await ChatService.GetChatHistoryAsync(ChatId);
+ 
+        if (newChatHistory == null)
         {
             loadingErrorLabel = "Couldn't load the chat history.";
             return;
         }
+        
+        chatHistory = newChatHistory;
+        jobConfirmation = newChatHistory.JobConfirmation;
         
         await ChatSocket.ConnectAsync(ChatId);
         
@@ -143,9 +154,9 @@
                 
             await foreach (JobConfirmationDTO newJobConfirmation in jobConfirmations)
             {
-                jobConfirmation = newJobConfirmation.Status == JobConfirmationDTOStatus.UNANSWERED ? newJobConfirmation : null;
+                jobConfirmation = newJobConfirmation;
 
-                switch (newJobConfirmation.Status)
+                switch (jobConfirmation.Status)
                 {
                     case JobConfirmationDTOStatus.ACCEPTED:
                         Snackbar.Add("Job anmodningen er accepteret", Severity.Success);
@@ -161,6 +172,8 @@
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+                
+                StateHasChanged();
             }
         }
         catch (Exception e)

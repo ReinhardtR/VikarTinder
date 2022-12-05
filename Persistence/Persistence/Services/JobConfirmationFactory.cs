@@ -44,11 +44,16 @@ public class JobConfirmationFactory
         };
     }
     
-    public static GetJobConfirmationResponse ToGetJobConfirmationResponse(JobConfirmation jobConfirmation)
+    public static GetJobConfirmationResponse ToGetJobConfirmationResponse(JobConfirmation? jobConfirmation)
     {
-        return new GetJobConfirmationResponse
-        {
-            JobConfirmation = ToJobConfirmationObject(jobConfirmation)
-        };
+        return jobConfirmation == null
+            ? new GetJobConfirmationResponse()
+            {
+                JobConfirmation = null
+            }
+            : new GetJobConfirmationResponse()
+            {
+                JobConfirmation = ToJobConfirmationObject(jobConfirmation)
+            };
     }
 }

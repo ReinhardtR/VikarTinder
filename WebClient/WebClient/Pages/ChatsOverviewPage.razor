@@ -4,7 +4,7 @@
 
 <CreateChatForm></CreateChatForm>
 
-@if (isSubstitute)
+@if (isEmployer)
 {
     <ChatsOverview />
 }
@@ -23,7 +23,7 @@ else
 @code {
 
     // TODO replace with auth stuff
-    private bool isSubstitute = false;
+    private bool isEmployer = true;
     
     private int? selectedGigId;
 

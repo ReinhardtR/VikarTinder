@@ -7,10 +7,11 @@ import java.util.List;
 
 public class ChatHistoryDTO {
 	private List<MessageDTO> messages;
-	
+
 	private JobConfirmationDTO jobConfirmation;
 
 	private int substituteId;
+	
 	private int employerId;
 
 	public ChatHistoryDTO(List<MessageDTO> messages, JobConfirmationDTO jobConfirmation, int substituteId, int employerId) {

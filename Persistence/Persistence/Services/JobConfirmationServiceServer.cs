@@ -43,11 +43,6 @@ public class JobConfirmationServiceServer : JobConfirmationService.JobConfirmati
     {
         JobConfirmation? jobConfirmation = await _jobConfirmationDao.GetJobConfirmationAsync(request.Id);
         
-        if (jobConfirmation == null)
-        {
-            throw new RpcException(new Status(StatusCode.NotFound, "Job confirmation not found"));
-        }
-        
         GetJobConfirmationResponse reply = JobConfirmationFactory.ToGetJobConfirmationResponse(jobConfirmation);
 
         return reply;

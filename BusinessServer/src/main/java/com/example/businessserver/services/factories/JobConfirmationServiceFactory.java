@@ -67,17 +67,14 @@ public class JobConfirmationServiceFactory {
 						.build();
 	}
 
-	public static JobConfirmationDTO toJobConfirmationDTO(
-					GetJobConfirmationResponse response) {
-		if (ObjectIsNull(response))
+	public static JobConfirmationDTO toJobConfirmationDTO(GetJobConfirmationResponse response) {
+		if (ObjectIsNull(response) || !response.hasJobConfirmation())
 			return null;
 
 		return toJobConfirmationDTO(response.getJobConfirmation());
-
 	}
 
-	private static JobConfirmationDTO toJobConfirmationDTO(
-					JobConfirmationObject jobConfirmation) {
+	private static JobConfirmationDTO toJobConfirmationDTO(JobConfirmationObject jobConfirmation) {
 		if (ObjectIsNull(jobConfirmation))
 			return null;
 

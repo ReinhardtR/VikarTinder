@@ -28,6 +28,7 @@ public class JobConfirmationDAO : IJobConfirmationDAO
         if (foundEmployer == null)
             throw new Exception("Employer not found");
         
+        Console.WriteLine("Job confirmation: " + foundChat.JobConfirmation);
         if (foundChat.JobConfirmation != null)
         {
             _dataContext.Remove(foundChat.JobConfirmation);
@@ -45,7 +46,6 @@ public class JobConfirmationDAO : IJobConfirmationDAO
         await _dataContext.SaveChangesAsync();
 
         return createdJobConfirmation.Entity;
-        
     }
     
     public async Task<JobConfirmation?> AnswerJobConfirmationAsync(int id, JobConfirmationStatus status)
