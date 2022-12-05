@@ -54,5 +54,5 @@ message GetJobConfirmationRequest{
 }
 
 message GetJobConfirmationResponse{
-  JobConfirmationObject job_confirmation = 1;
+  optional JobConfirmationObject job_confirmation = 1;
 }

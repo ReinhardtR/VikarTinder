@@ -18,15 +18,15 @@ public class JobConfirmationLogicImpl implements JobConfirmationLogic {
 	public JobConfirmationDTO createJobConfirmation(CreateJobConfirmationDTO dto) throws Exception {
 		JobConfirmationDTO jobConfirmationToBeReplaced = jobConfirmationServiceClient.getJobConfirmation(dto.getChatId());
 
-		if (JobRequestIsPresent(jobConfirmationToBeReplaced) && JobRequestIsNotDeclined(jobConfirmationToBeReplaced)) {
+		if (JobRequestIsPresent(jobConfirmationToBeReplaced) && !JobRequestIsDeclined(jobConfirmationToBeReplaced)) {
 			throw new Exception("Job request already exists");
 		}
 
 		return jobConfirmationServiceClient.createJobConfirmation(dto);
 	}
 
-	private boolean JobRequestIsNotDeclined(JobConfirmationDTO jobConfirmationToBeReplaced) {
-		return jobConfirmationToBeReplaced.getStatus() == JobConfirmationStatus.ACCEPTED || jobConfirmationToBeReplaced.getStatus() == JobConfirmationStatus.UNANSWERED;
+	private boolean JobRequestIsDeclined(JobConfirmationDTO jobConfirmationToBeReplaced) {
+		return jobConfirmationToBeReplaced.getStatus().equals(JobConfirmationStatus.DECLINED);
 	}
 
 	private boolean JobRequestIsPresent(JobConfirmationDTO jobConfirmationToBeReplaced) {
