@@ -294,9 +294,9 @@
           "isAccepted": {
             "type": "string",
             "enum": [
+              "UNANSWERED",
               "ACCEPTED",
               "DECLINED",
-              "UNANSWERED",
               "UNRECOGNIZED"
             ]
           },
@@ -398,9 +398,9 @@
           "isAccepted": {
             "type": "string",
             "enum": [
+              "UNANSWERED",
               "ACCEPTED",
               "DECLINED",
-              "UNANSWERED",
               "UNRECOGNIZED"
             ]
           }
@@ -426,11 +426,8 @@
               "$ref": "#/components/schemas/MessageDTO"
             }
           },
-          "jobConfirmations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/JobConfirmationDTO"
-            }
+          "jobConfirmation": {
+            "$ref": "#/components/schemas/JobConfirmationDTO"
           },
           "substituteId": {
             "type": "integer",

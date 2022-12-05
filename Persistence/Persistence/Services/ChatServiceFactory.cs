@@ -87,7 +87,7 @@ public class ChatServiceFactory
                 ChatId = chat.JobConfirmation.ChatId,
                 SubstituteId= chat.JobConfirmation.SubstituteId,
                 EmployerId = chat.JobConfirmation.EmployerId,
-                IsAccepted = chat.JobConfirmation.IsAccepted,
+                IsAccepted = chat.JobConfirmation.Status,
                 CreatedAt = chat.JobConfirmation.CreatedAt.ToTimestamp()
             };
  

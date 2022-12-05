@@ -1,8 +1,8 @@
 package com.example.businessserver.logic;
 
 import JobConfirmationService.JobConfirmationStatus;
-import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
 import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
+import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
 import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
 import com.example.businessserver.services.JobConfirmationServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,8 @@ public class JobConfirmationLogicImpl implements JobConfirmationLogic {
 	@Autowired
 	private JobConfirmationServiceClient jobConfirmationServiceClient;
 
-
 	@Override
-	public JobConfirmationDTO createJobConfirmation(CreateJobConfirmationDTO dto)
-			throws Exception
-	{
-
+	public JobConfirmationDTO createJobConfirmation(CreateJobConfirmationDTO dto) throws Exception {
 		JobConfirmationDTO jobConfirmationToBeReplaced = jobConfirmationServiceClient.getJobConfirmation(dto.getChatId());
 
 		if (JobRequestIsPresent(jobConfirmationToBeReplaced) && JobRequestIsNotDeclined(jobConfirmationToBeReplaced)) {
@@ -27,16 +23,13 @@ public class JobConfirmationLogicImpl implements JobConfirmationLogic {
 		}
 
 		return jobConfirmationServiceClient.CreateJobConfirmation(dto);
-
 	}
 
-	private boolean JobRequestIsNotDeclined(JobConfirmationDTO jobConfirmationToBeReplaced)
-	{
+	private boolean JobRequestIsNotDeclined(JobConfirmationDTO jobConfirmationToBeReplaced) {
 		return jobConfirmationToBeReplaced.getIsAccepted() == JobConfirmationStatus.ACCEPTED || jobConfirmationToBeReplaced.getIsAccepted() == JobConfirmationStatus.UNANSWERED;
 	}
 
-	private boolean JobRequestIsPresent(JobConfirmationDTO jobConfirmationToBeReplaced)
-	{
+	private boolean JobRequestIsPresent(JobConfirmationDTO jobConfirmationToBeReplaced) {
 		return jobConfirmationToBeReplaced != null;
 	}
 
@@ -44,7 +37,4 @@ public class JobConfirmationLogicImpl implements JobConfirmationLogic {
 	public JobConfirmationDTO answerJobConfirmation(AnswerJobConfirmationDTO dto) {
 		return jobConfirmationServiceClient.answerJobConfirmation(dto);
 	}
-
-
-
 }

@@ -1008,8 +1008,8 @@ namespace HttpClients
         [Newtonsoft.Json.JsonProperty("messages", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<MessageDTO> Messages { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("jobConfirmations", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<JobConfirmationDTO> JobConfirmations { get; set; }
+        [Newtonsoft.Json.JsonProperty("jobConfirmation", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public JobConfirmationDTO JobConfirmation { get; set; }
 
         [Newtonsoft.Json.JsonProperty("substituteId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int SubstituteId { get; set; }
@@ -1032,14 +1032,14 @@ namespace HttpClients
     public enum JobConfirmationDTOIsAccepted
     {
 
+        [System.Runtime.Serialization.EnumMember(Value = @"UNANSWERED")]
+        UNANSWERED = 0,
+
         [System.Runtime.Serialization.EnumMember(Value = @"ACCEPTED")]
-        ACCEPTED = 0,
+        ACCEPTED = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"DECLINED")]
-        DECLINED = 1,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"UNANSWERED")]
-        UNANSWERED = 2,
+        DECLINED = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"UNRECOGNIZED")]
         UNRECOGNIZED = 3,
@@ -1050,14 +1050,14 @@ namespace HttpClients
     public enum AnswerJobConfirmationDTOIsAccepted
     {
 
+        [System.Runtime.Serialization.EnumMember(Value = @"UNANSWERED")]
+        UNANSWERED = 0,
+
         [System.Runtime.Serialization.EnumMember(Value = @"ACCEPTED")]
-        ACCEPTED = 0,
+        ACCEPTED = 1,
 
         [System.Runtime.Serialization.EnumMember(Value = @"DECLINED")]
-        DECLINED = 1,
-
-        [System.Runtime.Serialization.EnumMember(Value = @"UNANSWERED")]
-        UNANSWERED = 2,
+        DECLINED = 2,
 
         [System.Runtime.Serialization.EnumMember(Value = @"UNRECOGNIZED")]
         UNRECOGNIZED = 3,
