@@ -1,6 +1,7 @@
 @page "/Chat/{ChatId:int}"
 @using HttpClients.Services        
 @using HttpClients
+@using Newtonsoft.Json
 @using WebSockets
 @inject ChatSocket ChatSocket
 @inject ChatService ChatService
@@ -85,6 +86,8 @@
     {
         ChatHistoryDTO newChatHistory = await ChatService.GetChatHistoryAsync(ChatId);
         chatHistory = newChatHistory;
+        
+        Console.WriteLine("jOB CONFRIMATION: " + JsonConvert.SerializeObject(newChatHistory.JobConfirmation));
         jobConfirmation = newChatHistory.JobConfirmation;
         
         if (chatHistory == null)
@@ -140,20 +143,20 @@
                 
             await foreach (JobConfirmationDTO newJobConfirmation in jobConfirmations)
             {
-                jobConfirmation = newJobConfirmation.IsAccepted == JobConfirmationDTOIsAccepted.UNANSWERED ? newJobConfirmation : null;
+                jobConfirmation = newJobConfirmation.Status == JobConfirmationDTOStatus.UNANSWERED ? newJobConfirmation : null;
 
-                switch (newJobConfirmation.IsAccepted)
+                switch (newJobConfirmation.Status)
                 {
-                    case JobConfirmationDTOIsAccepted.ACCEPTED:
+                    case JobConfirmationDTOStatus.ACCEPTED:
                         Snackbar.Add("Job anmodningen er accepteret", Severity.Success);
                         break;
-                    case JobConfirmationDTOIsAccepted.DECLINED:
+                    case JobConfirmationDTOStatus.DECLINED:
                         Snackbar.Add("Job anmodningen er afvist", Severity.Info);
                         break;
-                    case JobConfirmationDTOIsAccepted.UNANSWERED:
+                    case JobConfirmationDTOStatus.UNANSWERED:
                         Snackbar.Add("Job anmodningen er sendt", Severity.Info);
                         break;
-                    case JobConfirmationDTOIsAccepted.UNRECOGNIZED:
+                    case JobConfirmationDTOStatus.UNRECOGNIZED:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

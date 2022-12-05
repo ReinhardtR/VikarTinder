@@ -831,9 +831,9 @@ namespace HttpClients
         [Newtonsoft.Json.JsonProperty("employerId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int EmployerId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("isAccepted", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        [Newtonsoft.Json.JsonProperty("status", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         [Newtonsoft.Json.JsonConverter(typeof(Newtonsoft.Json.Converters.StringEnumConverter))]
-        public JobConfirmationDTOIsAccepted IsAccepted { get; set; }
+        public JobConfirmationDTOStatus Status { get; set; }
 
         [Newtonsoft.Json.JsonProperty("offeredAt", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.DateTimeOffset OfferedAt { get; set; }
@@ -1029,7 +1029,7 @@ namespace HttpClients
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "13.17.0.0 (NJsonSchema v10.8.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public enum JobConfirmationDTOIsAccepted
+    public enum JobConfirmationDTOStatus
     {
 
         [System.Runtime.Serialization.EnumMember(Value = @"UNANSWERED")]
