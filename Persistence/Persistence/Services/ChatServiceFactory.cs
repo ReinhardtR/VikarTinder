@@ -51,11 +51,10 @@ public class ChatServiceFactory
         {
             Chats = { chatOverviewObjects }
         };
+        
         return getChatOverviewResponse;
     }
 
-   
-    
     private static ChatUserObject ToChatUserObject(User user)
     {
         return new ChatUserObject()
@@ -66,7 +65,8 @@ public class ChatServiceFactory
 
     public static GetChatHistoryResponse ToGetChatHistoryResponse(Chat chat)
     {
-        RepeatedField<MessageObject> messageObjects = new RepeatedField<MessageObject>();
+        RepeatedField<MessageObject> messageObjects = new();
+        
         foreach (Message message in chat.Messages)
         {
             messageObjects.Add(new MessageObject()
@@ -79,18 +79,20 @@ public class ChatServiceFactory
             });
         }
 
-        
-            JobConfirmationObject jobConfirmation = new JobConfirmationObject()
+
+
+        JobConfirmationObject? jobConfirmation = chat.JobConfirmation != null
+            ? new JobConfirmationObject()
             {
                 Id = chat.JobConfirmation.Id,
                 ChatId = chat.JobConfirmation.ChatId,
-                SubstituteId= chat.JobConfirmation.SubstituteId,
+                SubstituteId = chat.JobConfirmation.SubstituteId,
                 EmployerId = chat.JobConfirmation.EmployerId,
                 Status = chat.JobConfirmation.Status,
                 CreatedAt = chat.JobConfirmation.CreatedAt.ToTimestamp()
-            };
- 
-
+            }
+            : null;
+        
         return new GetChatHistoryResponse()
         {
             Messages = { messageObjects },

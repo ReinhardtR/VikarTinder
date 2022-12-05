@@ -59,6 +59,4 @@ public class ChatDAO : IChatDAO
             .Include(c => c.JobConfirmation)
             .FirstOrDefaultAsync(c => c.Id == requestChatId)!;
     }
-
-    
 }

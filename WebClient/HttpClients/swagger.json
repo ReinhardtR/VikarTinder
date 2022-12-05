@@ -291,7 +291,7 @@
             "type": "integer",
             "format": "int32"
           },
-          "isAccepted": {
+          "status": {
             "type": "string",
             "enum": [
               "UNANSWERED",
