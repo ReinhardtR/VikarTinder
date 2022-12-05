@@ -29,13 +29,11 @@ public class JobConfirmationFactory
             ChatId = jobConfirmation.ChatId,
             SubstituteId = jobConfirmation.SubstituteId,
             EmployerId = jobConfirmation.EmployerId,
-            IsAccepted = jobConfirmation.IsAccepted,
+            IsAccepted = jobConfirmation.Status,
             CreatedAt = jobConfirmation.CreatedAt.ToTimestamp()
         };
     }
-
-
-
+    
     public static JobConfirmationStatus ToJobConfirmationStatus(bool? value)
     {
         return value switch
@@ -43,13 +41,9 @@ public class JobConfirmationFactory
             true => JobConfirmationStatus.Accepted,
             false => JobConfirmationStatus.Declined,
             _ => JobConfirmationStatus.Unanswered
-
         };
     }
-
-
-
-
+    
     public static GetJobConfirmationResponse ToGetJobConfirmationResponse(JobConfirmation jobConfirmation)
     {
         return new GetJobConfirmationResponse
