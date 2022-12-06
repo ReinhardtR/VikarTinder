@@ -8,12 +8,15 @@ package MatchingProto;
 message GigToBeMatched {
   int32 id = 1;
 }
+
 message SubstituteToBeMatched {
   int32 id = 1;
 }
+
 message GigSearchParameters {
   int32 currentUserId = 1;
 }
+
 message SubstituteSearchParameters {
   int32 currentUserId = 1;
 }
@@ -23,6 +26,7 @@ message SubstituteSearchParameters {
 message MatchingGigs {
   repeated GigToBeMatched gigs = 1;
 }
+
 message MatchingSubstitutes {
   repeated SubstituteToBeMatched substitutes = 1;
 }
@@ -33,7 +37,6 @@ message MatchingSubstitutes {
 message MatchRequest {
   int32 currentUser = 1;
   int32 toBeMatchedId =2 ;
-  
   bool wantToMatch = 3;
 }
 
@@ -42,7 +45,6 @@ message MatchRequest {
 //Tilføj 
 message MatchValidation {
   bool isMatched = 1;
-  
   int32 employerId = 2;
   int32 substituteId = 3;
   int32 gigId = 4;

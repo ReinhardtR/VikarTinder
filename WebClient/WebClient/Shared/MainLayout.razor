@@ -1,10 +1,10 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
+<div class="page">
     <main>
         <div class="top-row px-4">
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
@@ -15,7 +15,3 @@
         </article>
     </main>
 </div>
-
-<MudThemeProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>

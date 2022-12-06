@@ -1,127 +1,88 @@
 ﻿@page "/Matching/Substitutes"
 @using HttpClients.Services
 @using HttpClients
-@inject MatchingService MatchingService;
+@inject MatchingService MatchingService
 
 <h3>Substitutes</h3>
 <div>
     <MudGrid Justify="Justify.Center" Spacing="2">
         <MudItem xs="12" Class="d-flex align-content-center justify-content-center">
             <MudPaper Class="represent">
-                <MudPaper class="infoBox">
-                    @if (_isWaiting)
+                <MudPaper Class="infoBox">
+                    @if (errorLabel != null && !isLoading)
+                    {
+                        <MudText Color="Color.Error">@errorLabel</MudText>   
+                    }
+                    else if (isLoading)
                     {
                         <MudText Class="infoText">
                             <MudProgressCircular Color="Color.Secondary" Size="Size.Large" Indeterminate="true"/>
                         </MudText>
-                    }else
+                    }
+                    else if (substitutes.Count > 0)
                     {
-                        @if (_areStillSubstitutesToMatch)
-                        {
-                            <MudText Class="infoText">@_currentDateId</MudText>
-                        }
-                        else
-                        {
-                            <MudText Class="infoText">@_somethingIsWrongText</MudText>
-                        }
+                        <MudText Class="infoText">@substitutes.Peek().Id</MudText>
+                    }
+                    else
+                    {
+                        <MudText Class="infoText">Ikke flere muligheder</MudText>
                     }
                 </MudPaper>
                 <MudItem Class="d-flex align-content-center justify-content-center matchBtns">
-                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" @onclick="@(e => SendSubstituteMatchRequest(true))">JA</MudButton>
-                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Error" @onclick="@(e => SendSubstituteMatchRequest(false))">NEJ</MudButton>
+                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" OnClick="() => SendSubstituteMatchRequestAsync(true)">JA</MudButton>
+                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Error" OnClick="() => SendSubstituteMatchRequestAsync(false)">NEJ</MudButton>
                 </MudItem>
             </MudPaper>
         </MudItem>
     </MudGrid>
-
 </div>
+
 @code {
-    private readonly int _userId = 1; 
-    private int _currentDateId;
-    private Stack<SubstituteMatchingDTO> _substitutes = new();
-    private bool _areStillSubstitutesToMatch = true;
-    private bool _isWaiting = true;
-    private string _somethingIsWrongText;
+    // TODO: replace with auth stuff
+    private int userId = 1; 
+    
+    private Stack<SubstituteMatchingDTO> substitutes = new();
+    private bool isLoading = true;
+    private string? errorLabel;
 
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        GetSubstitutesAsync();
-        return Task.CompletedTask;
-    }
- 
-    private async void SendSubstituteMatchRequest(bool wantToMatch)
-    {
-        await MatchingService.SendSubstituteMatchRequestAsync(new MatchRequestDTO()
-        {
-            CurrentUser = _userId,
-            MatchId = _currentDateId,
-            WantToMatch = wantToMatch
-        });
-        
-        NextMatch();
-        
-        StateHasChanged();
+       await GetSubstitutesAsync();
     }
 
-    private void NextMatch()
+    private async Task GetSubstitutesAsync()
     {
-        if (_substitutes.Count == 0)
-            CantDisplayMatches("No more matches");
-        if (_areStillSubstitutesToMatch)
-            _currentDateId = _substitutes.Pop().Id;
-    }
-    
-    
-    private async void GetSubstitutesAsync()
-    {
-        _isWaiting = true;
+        isLoading = true;
+        
         try
         {
-            SubstituteMatchingDTOs substitutesAsync = await MatchingService.GetSubstitutesAsync(new SubstituteSearchParametersDTO()
+            SubstituteMatchingDTOs substitutesResult = await MatchingService.GetSubstitutesAsync(new SubstituteSearchParametersDTO()
             {
-                CurrentEmployerId = _userId
+                CurrentEmployerId = userId
             });
-            foreach (var substituteMatchingDTO in substitutesAsync.PossibleMatches)
-                _substitutes.Push(substituteMatchingDTO);
-            NextMatch();
+            
+            substitutesResult.PossibleMatches.ToList().ForEach((s) => substitutes.Push(s));
         }
-        catch (Exception e)
+        catch
         {
-            Console.WriteLine(e.Message);
-            CantDisplayMatches("Connection issues");
+            errorLabel = "Der skete en fejl";
         }
-        _isWaiting = false;
+        
+        isLoading = false;
         StateHasChanged();
     }
     
-    private void CantDisplayMatches(string reason)
+    private async Task SendSubstituteMatchRequestAsync(bool wantToMatch)
     {
-        _areStillSubstitutesToMatch = false;
-        _somethingIsWrongText = reason;
+        SubstituteMatchingDTO substitute = substitutes.Pop();
+        
+        await MatchingService.SendSubstituteMatchRequestAsync(new MatchRequestDTO()
+        {
+            CurrentUser = userId,
+            MatchId = substitute.Id,
+            WantToMatch = wantToMatch
+        });
+
+        StateHasChanged();
     }
 }
-
-<style>
-    .represent{
-    width: 95%;
-    }
-    
-    .infoBox {
-    width: 90%;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 5%;
-    
-    }
-    
-    .infoText {
-    font-size: 500%;
-    padding: 5%;
-    text-align: center;
-    }
-    
-    .matchBtns {
-    margin: 1em;
-    }
-</style>

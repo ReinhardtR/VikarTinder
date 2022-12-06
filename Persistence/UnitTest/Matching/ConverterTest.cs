@@ -43,7 +43,7 @@ public class ConverterTest
         
     }
     
-    //ConvertSublist & ConvertGigList
+    // ConvertSublist & ConvertGigList
     
     [Test, Description("Conversion of null SubList or null GigList should catch")]
     public void GigAndSubListNull()
@@ -67,7 +67,7 @@ public class ConverterTest
     }
     
     
-    //ConvertToValidation
+    // ConvertToValidation
     
     [Test, Description("Null argument")]
     public void NullTestValidationConversion()
@@ -84,9 +84,9 @@ public class ConverterTest
     }
     
     
-    //CreateToBeMatchedDto
+    // CreateToBeMatchedDto
     
-    [TestCaseSource(typeof(DataClass), nameof(DataClass.IdToTobematchedDtoConversion)),Description(
+    [TestCaseSource(typeof(DataClass), nameof(DataClass.IdToToBeMatchedDtoConversion)),Description(
          "Testing boundaries for conversion of ids to dto")]
     public List<dynamic> IdToDtoConversion(int currentUser, int matchUser, bool wantsToMatch)
     {
@@ -94,9 +94,6 @@ public class ConverterTest
 
         return new List<dynamic>() { dto.UserId, dto.MatchId ,dto.WantsToMatch};
     }
-    
-    
-
 }
 
 public class DataClass
@@ -105,29 +102,24 @@ public class DataClass
     {
         get
         {
-            DataClass dataClass = new DataClass();
-            
             yield return new TestCaseData(new List<Gig>()).
                 Returns(0);
-            yield return new TestCaseData(dataClass.CreateGigList(1))
+            yield return new TestCaseData(CreateGigList(1))
                 .Returns(1);
-            yield return new TestCaseData(dataClass.CreateGigList(100))
+            yield return new TestCaseData(CreateGigList(100))
                 .Returns(100);
         }
-        
     }
 
     public static IEnumerable SubListConversion
     {
         get
         {
-            DataClass dataClass = new DataClass();
-            
             yield return new TestCaseData(new List<Substitute>()).
                 Returns(0);
-            yield return new TestCaseData(dataClass.CreateSubList(1))
+            yield return new TestCaseData(CreateSubList(1))
                 .Returns(1);
-            yield return new TestCaseData(dataClass.CreateSubList(100))
+            yield return new TestCaseData(CreateSubList(100))
                 .Returns(100);
         }
     }
@@ -153,46 +145,46 @@ public class DataClass
             });
             yield return new TestCaseData(new IdsForMatchDto
             {
-                EmployerId = Int32.MinValue,
-                GigId = Int32.MinValue,
-                SustituteId = Int32.MinValue,
+                EmployerId = int.MinValue,
+                GigId = int.MinValue,
+                SustituteId = int.MinValue,
             }).Returns(new MatchValidation
             {
-                EmployerId = Int32.MinValue,
-                GigId = Int32.MinValue,
-                SubstituteId = Int32.MinValue
+                EmployerId = int.MinValue,
+                GigId = int.MinValue,
+                SubstituteId = int.MinValue
             });
             yield return new TestCaseData(new IdsForMatchDto
             {
-                EmployerId = Int32.MaxValue,
-                GigId = Int32.MaxValue,
-                SustituteId = Int32.MaxValue,
+                EmployerId = int.MaxValue,
+                GigId = int.MaxValue,
+                SustituteId = int.MaxValue,
                 WasAMatch = true
             }).Returns(new MatchValidation
             {
-                EmployerId = Int32.MaxValue,
-                GigId = Int32.MaxValue,
-                SubstituteId = Int32.MaxValue,
+                EmployerId = int.MaxValue,
+                GigId = int.MaxValue,
+                SubstituteId = int.MaxValue,
                 IsMatched = true
             });
         }
         
     }
 
-    public static IEnumerable IdToTobematchedDtoConversion
+    public static IEnumerable IdToToBeMatchedDtoConversion
     {
         get
         {
             yield return new TestCaseData(1, 1, true)
                 .Returns(new List<dynamic>{1,1,true});
-            yield return new TestCaseData(Int32.MinValue, Int32.MinValue, false)
-                .Returns(new List<dynamic> { Int32.MinValue, Int32.MinValue, false });
-            yield return new TestCaseData(Int32.MaxValue, Int32.MaxValue, true)
-                .Returns(new List<dynamic> { Int32.MaxValue, Int32.MaxValue, true });
+            yield return new TestCaseData(int.MinValue, int.MinValue, false)
+                .Returns(new List<dynamic> { int.MinValue, int.MinValue, false });
+            yield return new TestCaseData(int.MaxValue, int.MaxValue, true)
+                .Returns(new List<dynamic> { int.MaxValue, int.MaxValue, true });
         }
     }
 
-    public List<Gig> CreateGigList(int amount)
+    private static List<Gig> CreateGigList(int amount)
     {
         List<Gig> gigs = new List<Gig>();
         for (int i = 0; i < amount; i++)
@@ -205,7 +197,8 @@ public class DataClass
 
         return gigs;
     }
-    public List<Substitute> CreateSubList(int amount)
+    
+    private static List<Substitute> CreateSubList(int amount)
     {
         List<Substitute> substitutes = new List<Substitute>();
         for (int i = 0; i < amount; i++)
@@ -218,6 +211,4 @@ public class DataClass
 
         return substitutes;
     }
-    
-
 }

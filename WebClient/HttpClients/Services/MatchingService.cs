@@ -9,9 +9,9 @@ public class  MatchingService
         _client = client;
     }
 
-    public async Task<SubstituteMatchingDTOs> GetSubstitutesAsync(SubstituteSearchParametersDTO parameters)
+    public Task<SubstituteMatchingDTOs> GetSubstitutesAsync(SubstituteSearchParametersDTO parameters)
     {
-        return await _client.GetSubstitutesAsync(parameters);
+        return _client.GetSubstitutesAsync(parameters);
     }
 
     public Task SendSubstituteMatchRequestAsync(MatchRequestDTO request)
@@ -19,9 +19,9 @@ public class  MatchingService
         return _client.SubstitutesMatchRequestAsync(request);
     }
 
-    public async Task<GigMatchingDTOs> GetGigsAsync(GigSearchParametersDTO parameters)
+    public Task<GigMatchingDTOs> GetGigsAsync(GigSearchParametersDTO parameters)
     {
-        return await _client.GetGigsAsync(parameters);
+        return _client.GetGigsAsync(parameters);
     }
 
     public Task SendGigsMatchRequestAsync(MatchRequestDTO request)

@@ -17,5 +17,4 @@ builder.Services.AddScoped<Client>();
 
 builder.Services.AddMudServices();
 
-
 await builder.Build().RunAsync();

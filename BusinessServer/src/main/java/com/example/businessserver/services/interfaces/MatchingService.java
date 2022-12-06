@@ -4,10 +4,11 @@ import com.example.businessserver.dtos.matching.*;
 
 
 public interface MatchingService {
-    SubstituteMatchingDTOs getSubstitutes(SubstituteSearchParametersDTO searchParameters);
-    GigMatchingDTOs getGigs(GigSearchParametersDTO searchParameters);
+	SubstituteMatchingDTOs getSubstitutes(SubstituteSearchParametersDTO searchParameters);
 
-    MatchValidationDTO gigsMatchRequest(MatchRequestDTO matchRequest);
+	GigMatchingDTOs getGigs(GigSearchParametersDTO searchParameters);
 
-    MatchValidationDTO substitutesMatchRequest(MatchRequestDTO matchRequest);
+	MatchValidationDTO gigsMatchRequest(MatchRequestDTO matchRequest);
+
+	MatchValidationDTO substitutesMatchRequest(MatchRequestDTO matchRequest);
 }
