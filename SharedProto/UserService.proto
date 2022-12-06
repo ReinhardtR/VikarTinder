@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+//TODO: DELETE
 option csharp_namespace = "Persistence";
 option java_multiple_files = true;
 

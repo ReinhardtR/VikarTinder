@@ -21,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class ChatServiceFactoryTest
 {
 
+  //TODO: JobConfirmation-factory test
+  //TODO: Test for ZOMBIES (mangler boundary og exceptions et par steder)
+
   @ParameterizedTest
   @MethodSource()
   void toCreateChatRequest(int substituteId, int employerId)

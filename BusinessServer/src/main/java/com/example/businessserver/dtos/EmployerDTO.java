@@ -1,5 +1,6 @@
 package com.example.businessserver.dtos;
 
+//TODO: empty constructor needed?
 public class EmployerDTO
 {
 

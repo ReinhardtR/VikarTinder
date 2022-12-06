@@ -6,6 +6,10 @@ using Persistence.Services;
 
 namespace UnitTest.Chat;
 
+
+//TODO: I har one og many – kan snildt lave exceptions, null og boundaries
+//TODO:	Mangler jobconfirmation factory
+
 [TestFixture]
 public class ChatServiceFactoryTest
 {

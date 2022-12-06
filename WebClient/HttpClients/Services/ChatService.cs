@@ -1,5 +1,6 @@
 namespace HttpClients.Services;
 
+//TODO: Interface definition
 public class ChatService
 {
     private readonly Client _client;

@@ -1,5 +1,6 @@
 namespace HttpClients.Services;
 
+//TODO: interface definition
 public class JobConfirmationService
 {
     private readonly Client _client;

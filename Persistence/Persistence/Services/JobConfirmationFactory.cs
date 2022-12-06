@@ -3,6 +3,8 @@ using Persistence.Models;
 
 namespace Persistence.Services;
 
+//TODO: interface definition
+//TODO: Error handling (null)
 public class JobConfirmationFactory
 {
     public static CreateJobConfirmationResponse ToCreateJobConfirmationResponse(JobConfirmation jobConfirmation)
