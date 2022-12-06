@@ -16,9 +16,6 @@ import java.util.List;
 public class ChatServiceFactory {
 	// Create Chat
 	public static CreateChatRequest toCreateChatRequest(CreateChatDTO dto) {
-		if (ObjectIsNull(dto))
-			return null;
-
 		return CreateChatRequest
 						.newBuilder()
 						.setEmployer(toChatUserObject(dto.getEmployerId()))
@@ -29,9 +26,6 @@ public class ChatServiceFactory {
 
 	// Chat History
 	public static GetChatHistoryRequest toGetChatHistoryRequest(GetChatHistoryDTO dto) {
-		if (ObjectIsNull(dto))
-			return null;
-
 		return GetChatHistoryRequest
 						.newBuilder()
 						.setChatId(dto.getChatId())
@@ -39,9 +33,6 @@ public class ChatServiceFactory {
 	}
 
 	public static ChatHistoryDTO toChatHistoryDto(GetChatHistoryResponse response) {
-		if (ObjectIsNull(response))
-			return null;
-
 		List<MessageDTO> messages = response.getMessagesList()
 						.stream()
 						.map(ChatServiceFactory::toMessageDTO)
@@ -56,9 +47,6 @@ public class ChatServiceFactory {
 
 	// Send Message
 	public static SendMessageRequest toSendMessageRequest(SendMessageDTO dto) {
-		if (ObjectIsNull(dto))
-			return null;
-
 		return SendMessageRequest
 						.newBuilder()
 						.setChatId(dto.getChatId())
@@ -69,9 +57,6 @@ public class ChatServiceFactory {
 
 	// Chat Overview
 	public static GetChatOverviewRequest toGetChatOverviewRequest(GetChatOverviewDTO dto) {
-		if (ObjectIsNull(dto))
-			return null;
-
 		return GetChatOverviewRequest
 						.newBuilder()
 						.setUser(toChatUserObject(dto.getUserId()))
@@ -79,16 +64,10 @@ public class ChatServiceFactory {
 	}
 
 	public static BasicChatDTO toBasicChatDTO(CreateChatResponse response) {
-		if (ObjectIsNull(response))
-			return null;
-
 		return new BasicChatDTO(response.getId(), response.getSubstitute().getId(), response.getEmployer().getId());
 	}
 
 	public static ChatOverviewDTO toChatOverviewDTO(GetChatOverviewResponse response) {
-		if (ObjectIsNull(response))
-			return null;
-
 		List<BasicChatDTO> chats = response.getChatsList()
 						.stream()
 						.map(ChatServiceFactory::toBasicChatDTO)
@@ -99,16 +78,10 @@ public class ChatServiceFactory {
 
 	// Shared Methods
 	public static BasicChatDTO toBasicChatDTO(ChatOverviewObject chat) {
-		if (ObjectIsNull(chat))
-			return null;
-
 		return new BasicChatDTO(chat.getId(), chat.getSubstitute().getId(), chat.getEmployer().getId());
 	}
 
 	public static MessageDTO toMessageDTO(MessageObject message) {
-		if (ObjectIsNull(message))
-			return null;
-
 		return new MessageDTO(
 						message.getId(),
 						message.getChatId(),
@@ -120,9 +93,6 @@ public class ChatServiceFactory {
 	}
 
 	public static MessageObject toMessageObject(MessageDTO dto) {
-		if (ObjectIsNull(dto))
-			return null;
-
 		return MessageObject
 						.newBuilder()
 						.setId(dto.getId())
@@ -139,10 +109,6 @@ public class ChatServiceFactory {
 						.build();
 	}
 
-	private static boolean ObjectIsNull(Object o) {
-		return o == null;
-	}
-
 	private static JobConfirmationDTO toJobConfirmationDTO(
 					JobConfirmationObject jobConfirmationObject) {
 
@@ -157,6 +123,7 @@ public class ChatServiceFactory {
 		);
 	}
 
+	//TO DO Hvaa skal disse ikke bruges i future? Venter lige med at slette dem.
 	private ChatUserObject toChatUserObject(ChatUserDTO dto) {
 		return ChatUserObject
 						.newBuilder()

@@ -20,9 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ChatServiceFactoryTest
 {
 
-  //TODO: JobConfirmation-factory test
-  //TODO: Test for ZOMBIES (mangler boundary og exceptions et par steder)
-  //TODO: Testing af validering
+
   @ParameterizedTest
   @MethodSource()
   void toCreateChatRequest(int substituteId, int employerId)
@@ -41,8 +39,8 @@ class ChatServiceFactoryTest
   {
     return Stream.of(
       new Object[]{1, 2},
-      new Object[]{3, 4},
-      new Object[]{5, 6}
+      new Object[]{-3, 2},
+      new Object[]{Integer.MIN_VALUE, Integer.MAX_VALUE}
     );
   }
 
@@ -51,20 +49,20 @@ class ChatServiceFactoryTest
   @MethodSource()
   void toChatDto(int chatId)
   {
-   CreateChatResponse createChatResponse = CreateChatResponse.newBuilder().setId(1).build();
+   CreateChatResponse createChatResponse = CreateChatResponse.newBuilder().setId(chatId).build();
 
     BasicChatDTO chatDTO = ChatServiceFactory.toBasicChatDTO(createChatResponse);
 
     //Check if all fields in class CreateChatResponse and ChatDTO are equal
-    assertEquals(createChatResponse.getId(), chatDTO.getId());
+    assertEquals(createChatResponse.getId(), chatDTO.getId(), "ChatId is not equal");
   }
 
   private static Stream<Object> toChatDto()
   {
     return Stream.of(
       new Object[]{1},
-      new Object[]{2},
-      new Object[]{3}
+      new Object[]{-2},
+      new Object[]{0}
     );
   }
 
@@ -85,9 +83,9 @@ class ChatServiceFactoryTest
   private static Stream<Object> toGetChatHistoryRequest()
   {
     return Stream.of(
-      new Object[]{1},
+      new Object[]{-1},
       new Object[]{2},
-      new Object[]{3}
+      new Object[]{0}
     );
   }
 
@@ -138,10 +136,10 @@ class ChatServiceFactoryTest
   private static Stream<Object> toSendMessageRequest()
   {
     return Stream.of(
-      new Object[]{1,1,"request"},
-      new Object[]{1,2,"response"},
+      new Object[]{1,-1," "},
+      new Object[]{-1,2,"response"},
       new Object[]{1,1,"request2"},
-      new Object[]{1,2,"response2"}
+      new Object[]{Integer.MIN_VALUE,Integer.MAX_VALUE,"response2"}
     );
   }
 
@@ -160,9 +158,9 @@ class ChatServiceFactoryTest
   private static Stream<Object> toGetChatOverviewRequest()
   {
     return Stream.of(
-      new Object[]{1},
+      new Object[]{-1},
       new Object[]{2},
-      new Object[]{3}
+      new Object[]{0}
     );
   }
 
@@ -176,14 +174,14 @@ class ChatServiceFactoryTest
                 .setEmployer(ChatUserObject.newBuilder().setId(2).build())
                 .build(),
             ChatOverviewObject.newBuilder()
-                .setId(2)
+                .setId(-2)
                 .setSubstitute(ChatUserObject.newBuilder().setId(3).build())
                 .setEmployer(ChatUserObject.newBuilder().setId(4).build())
                 .build(),
             ChatOverviewObject.newBuilder()
-                .setId(3)
-                .setSubstitute(ChatUserObject.newBuilder().setId(5).build())
-                .setEmployer(ChatUserObject.newBuilder().setId(6).build())
+                .setId(0)
+                .setSubstitute(ChatUserObject.newBuilder().setId(-5).build())
+                .setEmployer(ChatUserObject.newBuilder().setId(Integer.MAX_VALUE).build())
                 .build()
         ))).build();
 
@@ -229,8 +227,8 @@ class ChatServiceFactoryTest
   {
     return Stream.of(
       new Object[]{1,1,2},
-      new Object[]{2,4,3},
-      new Object[]{3,2,4}
+      new Object[]{-2,-4,3},
+      new Object[]{3,Integer.MAX_VALUE,4}
     );
   }
 
@@ -259,9 +257,9 @@ class ChatServiceFactoryTest
   {
     return Stream.of(
       new Object[]{1,1,1,"request"},
-      new Object[]{2,3,2,"response"},
-      new Object[]{3,4,1,"request2"},
-      new Object[]{4,4,2,"response2"}
+      new Object[]{-2,-3,2," "},
+      new Object[]{3,Integer.MAX_VALUE,1,"request2"},
+      new Object[]{4,4,Integer.MIN_VALUE,"response2"}
     );
   }
 
@@ -283,9 +281,9 @@ class ChatServiceFactoryTest
   {
     return Stream.of(
       new Object[]{1,1,1,"request"},
-      new Object[]{2,3,2,"response"},
-      new Object[]{3,4,1,"request2"},
-      new Object[]{4,4,2,"response2"}
+      new Object[]{-2,0,2,"response"},
+      new Object[]{3,4,-1,"request2"},
+      new Object[]{Integer.MIN_VALUE,0,0,"response2"}
     );
   }
 }

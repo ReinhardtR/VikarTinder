@@ -15,9 +15,6 @@ public class JobConfirmationServiceFactory {
 
 	public static CreateJobConfirmationRequest toCreateJobConfirmationRequest(
 					CreateJobConfirmationDTO dto) {
-		if (ObjectIsNull(dto))
-			return null;
-
 		return CreateJobConfirmationRequest
 						.newBuilder()
 						.setChatId(dto.getChatId())
@@ -29,35 +26,22 @@ public class JobConfirmationServiceFactory {
 
 	public static JobConfirmationDTO toJobConfirmationDTO(
 					CreateJobConfirmationResponse response) {
-		if (ObjectIsNull(response))
-			return null;
-
 		return toJobConfirmationDTO(response.getJobConfirmation());
 	}
 
 	public static JobConfirmationDTO toJobConfirmationDTO(
 					JobConfirmationAnswerResponse response) {
-		if (ObjectIsNull(response))
-			return null;
-
 		return toJobConfirmationDTO(response.getJobConfirmation());
 	}
 
 	public static JobConfirmationAnswerRequest toJobConfirmationAnswerRequest(
 					AnswerJobConfirmationDTO dto) {
-		if (ObjectIsNull(dto))
-			return null;
-
 		return JobConfirmationAnswerRequest
 						.newBuilder()
 						.setId(dto.getId())
 						.setChatId(dto.getChatId())
 						.setIsAccepted(dto.getStatus())
 						.build();
-	}
-
-	private static boolean ObjectIsNull(Object o) {
-		return o == null;
 	}
 
 	public static GetJobConfirmationRequest toGetJobConfirmationRequest(int chatId) {
@@ -68,16 +52,10 @@ public class JobConfirmationServiceFactory {
 	}
 
 	public static JobConfirmationDTO toJobConfirmationDTO(GetJobConfirmationResponse response) {
-		if (ObjectIsNull(response) || !response.hasJobConfirmation())
-			return null;
-
 		return toJobConfirmationDTO(response.getJobConfirmation());
 	}
 
 	private static JobConfirmationDTO toJobConfirmationDTO(JobConfirmationObject jobConfirmation) {
-		if (ObjectIsNull(jobConfirmation))
-			return null;
-
 		return new JobConfirmationDTO(
 						jobConfirmation.getId(),
 						jobConfirmation.getChatId(),

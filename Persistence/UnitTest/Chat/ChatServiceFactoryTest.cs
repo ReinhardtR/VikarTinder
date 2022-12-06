@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Microsoft.VisualBasic.CompilerServices;
 using NUnit.Framework.Internal;
 using Persistence;
 using Persistence.Models;
@@ -7,38 +8,39 @@ using Persistence.Services;
 namespace UnitTest.Chat;
 
 
-//TODO: I har one og many – kan snildt lave exceptions, null og boundaries
 //TODO:	Mangler jobconfirmation factory
 
+
+//Factory cass without validation, only creates objects.
 [TestFixture]
 public class ChatServiceFactoryTest
 {
     private static object[] ToSendMessageResponseTestData =
     {
-        new object[] { 1, 1, 1, "1" },
-        new object[] { 2, 2, 2, "2" },
-        new object[] { 3, 3, 3, "3" }
+        new object[] { 1, -1, 1, "yes" },
+        new object[] { -2, 2, int.MaxValue, "2" },
+        new object[] { 3, 4, int.MinValue, " " }
     };
 
     private static object[] ToCreateChatResponseTestData =
     {
         new object[] { 1 },
-        new object[] { 2 },
-        new object[] { 3 }
+        new object[] { -2 },
+        new object[] { int.MinValue }
     };
 
     private static object[] ToGetChatOverviewResponseTestData =
     {
-        new object[] { 1, 2 },
-        new object[] { 2, 3 },
-        new object[] { 3, 4 }
+        new object[] { 1, -2 },
+        new object[] { -2, 3 },
+        new object[] { int.MinValue, int.MaxValue }
     };
 
     private static object[] ToGetChatHistoryResponseTestData =
     {
-        new object[] { 1, 1, 2 },
-        new object[] { 2, 1, 3 },
-        new object[] { 3, 2, 3 },
+        new object[] { 1, -1, 2 },
+        new object[] { 2, -1, 3 },
+        new object[] { 3, -2, 3 },
         new object[] { 4, 2, 4 },
     };
     

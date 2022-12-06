@@ -3,9 +3,6 @@ using Persistence.Models;
 
 namespace Persistence.Services;
 
-//TODO: interface definition
-//TODO: egen mappe til factorys imo
-//TODO: Error handling (null)
 public class JobConfirmationFactory
 {
     public static CreateJobConfirmationResponse ToCreateJobConfirmationResponse(JobConfirmation jobConfirmation)
@@ -37,6 +34,7 @@ public class JobConfirmationFactory
         };
     }
     
+    //TODO hvaa hvad sker der her? Den er ikke brugt?
     public static JobConfirmationStatus ToJobConfirmationStatus(bool? value)
     {
         return value switch
