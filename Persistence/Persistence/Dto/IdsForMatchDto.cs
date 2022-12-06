@@ -2,6 +2,7 @@
 
 public class IdsForMatchDto
 {
+    // TODO: incorrect spelling smh 😥
     public int SustituteId { get; set; }
     public int EmployerId { get; set; }
     public int GigId { get; set; }

@@ -14,19 +14,22 @@ insert into Employers values (1);
 insert into Substitutes values (1);  
      */
 
+    // TODO: make this shi' static
     private readonly IMatchConverter _converter;
+    
     private readonly IMatchDao _dao;
+    
     public MatchingService(IMatchConverter converter, IMatchDao dao)
     {
         _converter = converter;
         _dao = dao;
     }
 
-
     public override async Task<MatchValidation> SendMatchFromSubstitute(MatchRequest request, ServerCallContext context)
     {
         Console.WriteLine("IDs: [Sub]:" + request.CurrentUser + " [Gig]:" + request.ToBeMatchedId);
         Console.WriteLine(request.WantToMatch);
+        
         //DatabaseKald for at matche
         IdsForMatchDto matchedGig = await _dao.MatchingGig(
             _converter.CreateToBeMatchedDto(
@@ -43,17 +46,15 @@ insert into Substitutes values (1);
         }
 
         //Convert tilbage til reqly
-        MatchValidation val = _converter.ConvertToValidation(matchedGig);
+        MatchValidation validation = _converter.ConvertToValidation(matchedGig);
         Console.WriteLine("Conversion success");
 
-        return val;
+        return validation;
     }
     
     public override async Task<MatchValidation> SendMatchFromEmployer(MatchRequest request, ServerCallContext context)
     {
         Console.WriteLine("IDs: [Employer]:" + request.CurrentUser + " [Substitute]:" + request.ToBeMatchedId);
-        
-        
         
         //DatabaseKald for at matche
         IdsForMatchDto matchedSubstitute = await _dao.MatchingSubstitute(_converter.CreateToBeMatchedDto(
@@ -68,23 +69,22 @@ insert into Substitutes values (1);
         }
 
         //Conversion
-        MatchValidation val = _converter.ConvertToValidation(matchedSubstitute);
+        MatchValidation validation = _converter.ConvertToValidation(matchedSubstitute);
         
-        Console.WriteLine("Conversion success: [SUB ID]"+ val.SubstituteId + "[ISMATCHED]"+val.IsMatched);
-        return val;
+        Console.WriteLine("Conversion success: [SUB ID]"+ validation.SubstituteId + "[ISMATCHED]" + validation.IsMatched);
+        return validation;
     }
 
     public override async Task<MatchingSubstitutes> GetSubstitutes(SubstituteSearchParameters request,
         ServerCallContext context)
     {
-        //Resetter dem man har sagt nej til så de kan swipes igen
+        // Resetter dem man har sagt nej til så de kan swipes igen
         await _dao.RemoveWhereTimerIsOut(request.CurrentUserId, DaoRequestType.Employer);
         
-        //Databasekald for at få en liste af substitutes til matching
+        // Databasekald for at få en liste af substitutes til matching
         List<Substitute> subsFromDatabase = await _dao.GetSubstitutesForMatching(request.CurrentUserId);
 
-
-        //Convert til en reply
+        // Convert til en reply
         MatchingSubstitutes subs =_converter.ConvertSubList(subsFromDatabase);
 
         return subs;
@@ -99,7 +99,7 @@ insert into Substitutes values (1);
         List<Gig> gigsFromDatabase = await _dao.GetGigsForMatching(request.CurrentUserId);
 
         //Convert til en reply
-        MatchingGigs  gigs = _converter.ConvertGigList(gigsFromDatabase);
+        MatchingGigs gigs = _converter.ConvertGigList(gigsFromDatabase);
 
         return gigs;
     }

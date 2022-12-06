@@ -6,8 +6,10 @@ public class Gig
     public Employer Employer { get; set; }
     public List<GigSubstitute> GigSubstitutes { get; set; }
 
+    // TODO: why use icollection here and list above?
     public ICollection<Substitute> Substitutes { get; set; }
 
+    // TODO: why giving employer as parameter?
     public Gig(Employer employer)
     {
         Substitutes = new List<Substitute>();
@@ -15,6 +17,7 @@ public class Gig
         Employer = employer;
     }
 
+    // TODO: not used
     private Gig()
     {
         Substitutes = new List<Substitute>();

@@ -8,6 +8,7 @@ public class Substitute
     public List<Employer> Employers { get; set; }
     public List<EmployerSubstitute> EmployerSubstitutes { get; set; }
 
+    // TODO: why initialize lists here?
     public Substitute()
     {
         Positions = new List<Gig>();

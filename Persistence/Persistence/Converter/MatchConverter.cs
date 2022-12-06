@@ -8,14 +8,12 @@ namespace Persistence.Converter;
 
 public class MatchConverter : IMatchConverter
 {
-    
-    
     public MatchingSubstitutes ConvertSubList(List<Substitute> substitutes)
     {
         if (substitutes == null)
             throw new ConverterNullReference("Substitute list");
         
-        MatchingSubstitutes subs = new MatchingSubstitutes();
+        MatchingSubstitutes subs = new();
 
         if (substitutes.Count != 0)
         {
@@ -37,7 +35,7 @@ public class MatchConverter : IMatchConverter
         if (gigs == null)
             throw new ConverterNullReference("Gigs list");
         
-        MatchingGigs gigsGrpc = new MatchingGigs();
+        MatchingGigs gigsGrpc = new();
 
         if (gigs.Count != 0)
         {
@@ -57,7 +55,8 @@ public class MatchConverter : IMatchConverter
     {
         if (dto == null)
             throw new ConverterNullReference("IdsForMatch argument ");
-        MatchValidation val = new MatchValidation
+        
+        MatchValidation val = new()
             {
                 EmployerId = dto.EmployerId,
                 GigId = dto.GigId,
@@ -70,12 +69,13 @@ public class MatchConverter : IMatchConverter
 
     public ToBeMatchedDto CreateToBeMatchedDto(int requestCurrentUser, int requestToBeMatchedId, bool requestWantToMatch)
     {
-        ToBeMatchedDto dto = new ToBeMatchedDto()
+        ToBeMatchedDto dto = new()
         {
             UserId = requestCurrentUser,
             MatchId = requestToBeMatchedId,
             WantsToMatch = requestWantToMatch
         };
+        
         return dto;
     }
 }

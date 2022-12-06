@@ -5,7 +5,6 @@ namespace Persistence.Converter.Interfaces;
 
 public interface IMatchConverter
 {
-
     MatchingSubstitutes ConvertSubList(List<Substitute> substitutes);
     MatchingGigs ConvertGigList(List<Gig> gigs);
     MatchValidation ConvertToValidation(IdsForMatchDto dto);
