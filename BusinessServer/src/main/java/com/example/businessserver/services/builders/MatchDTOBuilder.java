@@ -2,14 +2,12 @@ package com.example.businessserver.services.builders;
 
 import MatchingProto.*;
 import com.example.businessserver.dtos.matching.*;
-import com.example.businessserver.services.builders.interfaces.dto.MatchingDTOBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DTOBuilder implements MatchingDTOBuilder {
-    @Override
-    public SubstituteMatchingDTOs substituteMatchingDTOs(MatchingSubstitutes possibleMatches)
+public class MatchDTOBuilder {
+    public static SubstituteMatchingDTOs substituteMatchingDTOs(MatchingSubstitutes possibleMatches)
     {
         List<SubstituteMatchingDTO> substituteDatingDTOs = new ArrayList<>();
         for (SubstituteToBeMatched id:possibleMatches.getSubstitutesList()) {
@@ -18,8 +16,7 @@ public class DTOBuilder implements MatchingDTOBuilder {
         return new SubstituteMatchingDTOs(substituteDatingDTOs);
     }
 
-    @Override
-    public GigMatchingDTOs gigMatchingDTOs(MatchingGigs possibleMatches) {
+    public static GigMatchingDTOs gigMatchingDTOs(MatchingGigs possibleMatches) {
         List<GigMatchingDTO> gigMatchingDTOs = new ArrayList<>();
         for (GigToBeMatched id:possibleMatches.getGigsList()) {
             gigMatchingDTOs.add(new GigMatchingDTO(id.getId()));
@@ -27,8 +24,7 @@ public class DTOBuilder implements MatchingDTOBuilder {
         return new GigMatchingDTOs(gigMatchingDTOs);
     }
 
-    @Override
-    public MatchValidationDTO matchValidationDTO(MatchValidation validation) {
+    public static MatchValidationDTO matchValidationDTO(MatchValidation validation) {
         return new MatchValidationDTO(
                 validation.getIsMatched(),
                 validation.getEmployerId(),

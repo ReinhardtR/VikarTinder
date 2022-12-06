@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MatchingLogicImplTest {
     MatchingLogicImpl logic = new MatchingLogicImpl();
     @Test
-    void testCheckId()
+    void test_checkId_SunnyScenario()
     {
         try {
             logic.checkId(1);
@@ -23,13 +23,13 @@ class MatchingLogicImplTest {
     }
 
     @Test
-    void testCheckIdOutOfBoundsException()
+    void test_checkId_DTOOutOfBoundsException()
     {
         assertThrows(DTOOutOfBoundsException.class, () -> logic.checkId(0));
     }
 
     @Test
-    void testObjectNullCheck()
+    void test_objectNullCheck_SunnyScenario()
     {
         try {
             logic.objectNullCheck(new Object(), "test");
@@ -39,13 +39,13 @@ class MatchingLogicImplTest {
     }
 
     @Test
-    void testObjectNullCheckNullPointerException()
+    void test_objectNullCheck_DTONullPointerException()
     {
         assertThrows(DTONullPointerException.class, () -> logic.objectNullCheck(null, "test"));
     }
 
     @Test
-    void testCheckMatch()
+    void test_checkMatch_SunnyScenario()
     {
         try {
             logic.checkMatch(new MatchRequestDTO(1,1, true));
@@ -55,13 +55,13 @@ class MatchingLogicImplTest {
     }
 
     @Test
-    void testCheckMatchNullPointerException()
+    void test_checkMatch_DTONullPointerException()
     {
         assertThrows(DTONullPointerException.class, ()-> logic.checkMatch(null));
     }
 
     @Test
-    void testCheckMatchOutOfBoundsException()
+    void test_checkMatch_DTOOutOfBoundsException()
     {
         assertAll(
                 ()-> assertThrows(DTOOutOfBoundsException.class, () -> logic.checkMatch(

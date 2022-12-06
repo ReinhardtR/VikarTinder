@@ -16,8 +16,7 @@ public class MatchValidationDTO {
 		this.gigId = gigId;
 	}
 
-	// TODO: rename to getIsMatched, so that the nswag-generated property is "isMatched" instead of "matched"
-	public boolean isMatched() {
+	public boolean getIsMatched() {
 		return isMatched;
 	}
 
