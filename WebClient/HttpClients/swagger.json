@@ -16,36 +16,6 @@
         "tags": [
           "matching-controller"
         ],
-        "operationId": "getSubstitutes",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SubstituteSearchParametersDTO"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubstituteMatchingDTOs"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/matching/substitutes/request": {
-      "post": {
-        "tags": [
-          "matching-controller"
-        ],
         "operationId": "substitutesMatchRequest",
         "requestBody": {
           "content": {
@@ -69,36 +39,6 @@
         "tags": [
           "matching-controller"
         ],
-        "operationId": "getGigs",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GigSearchParametersDTO"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/GigMatchingDTOs"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/matching/gigs/request": {
-      "post": {
-        "tags": [
-          "matching-controller"
-        ],
         "operationId": "gigsMatchRequest",
         "requestBody": {
           "content": {
@@ -116,16 +56,85 @@
           }
         }
       }
+    },
+    "/matching/substitutes/{currentUserId}": {
+      "get": {
+        "tags": [
+          "matching-controller"
+        ],
+        "operationId": "getSubstitutes",
+        "parameters": [
+          {
+            "name": "currentUserId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubstituteMatchingDTOs"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/matching/gigs/{currentUserId}": {
+      "get": {
+        "tags": [
+          "matching-controller"
+        ],
+        "operationId": "getGigs",
+        "parameters": [
+          {
+            "name": "currentUserId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GigMatchingDTOs"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "SubstituteSearchParametersDTO": {
+      "MatchRequestDTO": {
         "type": "object",
         "properties": {
-          "currentEmployerId": {
+          "currentUser": {
             "type": "integer",
             "format": "int32"
+          },
+          "matchId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wantsToMatch": {
+            "type": "boolean"
           }
         }
       },
@@ -146,31 +155,6 @@
             "items": {
               "$ref": "#/components/schemas/SubstituteMatchingDTO"
             }
-          }
-        }
-      },
-      "MatchRequestDTO": {
-        "type": "object",
-        "properties": {
-          "currentUser": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "matchId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "wantToMatch": {
-            "type": "boolean"
-          }
-        }
-      },
-      "GigSearchParametersDTO": {
-        "type": "object",
-        "properties": {
-          "currentSubstituteId": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },
