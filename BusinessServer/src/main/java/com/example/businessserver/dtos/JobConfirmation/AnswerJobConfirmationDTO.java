@@ -5,12 +5,12 @@ import JobConfirmationService.JobConfirmationStatus;
 public class AnswerJobConfirmationDTO {
 	private int id;
 	private int chatId;
-	private JobConfirmationStatus isAccepted;
+	private JobConfirmationStatus status;
 
-	public AnswerJobConfirmationDTO(int id, int chatId, JobConfirmationStatus isAccepted) {
+	public AnswerJobConfirmationDTO(int id, int chatId, JobConfirmationStatus status) {
 		this.id = id;
 		this.chatId = chatId;
-		this.isAccepted = isAccepted;
+		this.status = status;
 	}
 
 	public int getId() {
@@ -21,7 +21,7 @@ public class AnswerJobConfirmationDTO {
 		return chatId;
 	}
 
-	public JobConfirmationStatus getIsAccepted() {
-		return isAccepted;
+	public JobConfirmationStatus getStatus() {
+		return status;
 	}
 }

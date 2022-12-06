@@ -52,7 +52,7 @@ public class JobConfirmationServiceFactory {
 						.newBuilder()
 						.setId(dto.getId())
 						.setChatId(dto.getChatId())
-						.setIsAccepted(dto.getIsAccepted())
+						.setIsAccepted(dto.getStatus())
 						.build();
 	}
 
