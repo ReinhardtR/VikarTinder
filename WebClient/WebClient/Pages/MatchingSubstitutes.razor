@@ -56,10 +56,7 @@
         
         try
         {
-            SubstituteMatchingDTOs substitutesResult = await MatchingService.GetSubstitutesAsync(new SubstituteSearchParametersDTO()
-            {
-                CurrentEmployerId = userId
-            });
+            SubstituteMatchingDTOs substitutesResult = await MatchingService.GetSubstitutesAsync(userId);
             
             substitutesResult.PossibleMatches.ToList().ForEach((s) => substitutes.Push(s));
         }
@@ -72,7 +69,7 @@
         StateHasChanged();
     }
     
-    private async Task SendSubstituteMatchRequestAsync(bool wantToMatch)
+    private async Task SendSubstituteMatchRequestAsync(bool wantsToMatch)
     {
         SubstituteMatchingDTO substitute = substitutes.Pop();
         
@@ -80,7 +77,7 @@
         {
             CurrentUser = userId,
             MatchId = substitute.Id,
-            WantToMatch = wantToMatch
+            WantsToMatch = wantsToMatch
         });
 
         StateHasChanged();

@@ -1,44 +1,42 @@
-package com.example.businessserver.services.builders.interfaces.grpc;
+package com.example.businessserver.services.builders;
 
 import MatchingProto.MatchRequest;
 import com.example.businessserver.dtos.matching.GigSearchParametersDTO;
 import com.example.businessserver.dtos.matching.MatchRequestDTO;
 import com.example.businessserver.dtos.matching.SubstituteSearchParametersDTO;
-import com.example.businessserver.services.builders.GRPCBuilder;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MatchingGRPCBuilderTest {
-    MatchingGRPCBuilder matchingBuilder = new GRPCBuilder();
+class MatchGRPCBuilderTest {
 
     @Test
-    void testBuildSubstituteSearchParameters()
+    void test_substituteSearchParameters()
     {
         assertEquals(
                 1,
-                matchingBuilder.buildSubstituteSearchParameters(
+                MatchGRPCBuilder.substituteSearchParameters(
                                 new SubstituteSearchParametersDTO(1))
                         .getCurrentUserId()
         );
     }
 
     @Test
-    void testBuildGigsSearchParameters()
+    void test_gigsSearchParameters()
     {
         assertEquals(
                 1,
-                matchingBuilder.buildGigsSearchParameters(
+                MatchGRPCBuilder.gigsSearchParameters(
                                 new GigSearchParametersDTO(1))
                         .getCurrentUserId()
         );
     }
 
     @Test
-    void testBuildMatchRequest()
+    void test_matchRequest()
     {
-        MatchRequest matchRequest = matchingBuilder.buildMatchRequest(
-          new MatchRequestDTO(1,5, true)
+        MatchRequest matchRequest = MatchGRPCBuilder.matchRequest(
+                new MatchRequestDTO(1,5, true)
         );
         assertAll(
                 ()-> assertEquals(1, matchRequest.getCurrentUser()),

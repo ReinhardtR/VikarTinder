@@ -14,17 +14,16 @@ public class MatchingController {
 	@Autowired
 	private MatchingLogic logic;
 
-	@PostMapping("/substitutes")
-	public SubstituteMatchingDTOs getSubstitutes(@RequestBody SubstituteSearchParametersDTO searchParameters) {
+	@GetMapping("/substitutes/{currentUserId}")
+	public SubstituteMatchingDTOs getSubstitutes(@PathVariable int currentUserId) {
 		try {
-			return logic.getSubstitutes(searchParameters);
+			return logic.getSubstitutes(new SubstituteSearchParametersDTO(currentUserId));
 		} catch (DTOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	// TODO: rename request to match
-	@PostMapping("/substitutes/request")
+	@PostMapping("/substitutes")
 	public void substitutesMatchRequest(@RequestBody MatchRequestDTO matchRequest) {
 		try {
 			logic.substitutesMatchRequest(matchRequest);
@@ -33,17 +32,16 @@ public class MatchingController {
 		}
 	}
 
-	@PostMapping("/gigs")
-	public GigMatchingDTOs getGigs(@RequestBody GigSearchParametersDTO searchParameters) {
+	@GetMapping("/gigs/{currentUserId}")
+	public GigMatchingDTOs getGigs(@PathVariable int currentUserId) {
 		try {
-			return logic.getGigs(searchParameters);
+			return logic.getGigs(new GigSearchParametersDTO(currentUserId));
 		} catch (DTOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	// TODO: rename request to match
-	@PostMapping("/gigs/request")
+	@PostMapping("/gigs")
 	public void gigsMatchRequest(@RequestBody MatchRequestDTO matchRequest) {
 		try {
 			logic.gigsMatchRequest(matchRequest);

@@ -3,15 +3,15 @@ package com.example.businessserver.dtos.matching;
 public class MatchRequestDTO {
 	private int currentUser;
 	private int matchId;
-	private boolean wantToMatch;
+	private boolean wantsToMatch;
 
 	public MatchRequestDTO() {
 	}
 
-	public MatchRequestDTO(int currentUser, int matchId, boolean wantToMatch) {
+	public MatchRequestDTO(int currentUser, int matchId, boolean wantsToMatch) {
 		this.currentUser = currentUser;
 		this.matchId = matchId;
-		this.wantToMatch = wantToMatch;
+		this.wantsToMatch = wantsToMatch;
 	}
 
 	public int getCurrentUser() {
@@ -22,8 +22,7 @@ public class MatchRequestDTO {
 		return matchId;
 	}
 
-	// TODO: rename to getWantToMatch, makes more sense
-	public boolean isWantToMatch() {
-		return wantToMatch;
+	public boolean getWantsToMatch() {
+		return wantsToMatch;
 	}
 }
