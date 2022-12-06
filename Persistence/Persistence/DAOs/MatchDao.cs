@@ -16,19 +16,9 @@ public class MatchDao : IMatchDao
     {
         _databaseContext = databaseContext;
     }
-
-    public async Task<IdsForMatchDto> MatchingGig(ToBeMatchedDto dto)
-    {
-        if (dto.WantsToMatch)
-        {
-            return await MatchWithGig(dto);
-        }
-  
-        return await DontWantGig(dto);
-    }
-
+    
     // TODO: merge "match gig" and "dont want to match gig" into one method
-    private async Task<IdsForMatchDto> DontWantGig(ToBeMatchedDto dto)
+    public async Task<IdsForMatchDto> MatchingGig(ToBeMatchedDto dto)
     {
         Substitute substitute = await GetSubstituteById(dto.UserId);
         Gig gig = await GetGigById(dto.MatchId);
@@ -46,19 +36,18 @@ public class MatchDao : IMatchDao
             SustituteId = substitute.Id,
             GigId = gig.Id,
             EmployerId = gig.Employer.Id,
-            WasAMatch = CheckIfMatched();
         };
-        
+
+        //TODO: Er det nødvendigt at simplificere den? :)
+        idsForMatch.WasAMatch = dto.WantsToMatch ? CheckIfMatched(idsForMatch).Result.WasAMatch : false;
+
         //Opdateringen og gemning
         _databaseContext.Substitutes.Update(substitute);
         await _databaseContext.SaveChangesAsync();
-        
-        // TODO: what dis do?
-        _databaseContext.ChangeTracker.Clear();
-
         return idsForMatch;
     }
 
+    /*
     private async Task<IdsForMatchDto> MatchWithGig(ToBeMatchedDto dto)
     {
         Substitute substitute = await GetSubstituteById(dto.UserId);
@@ -86,24 +75,13 @@ public class MatchDao : IMatchDao
         _databaseContext.Substitutes.Update(substitute);
         await _databaseContext.SaveChangesAsync();
         
-        // TODO: what dis do?
         _databaseContext.ChangeTracker.Clear();
 
         return idsForMatch;
     }
+    */
     
-    // TODO: merge "match" and "dont match" into one method
     public async Task<IdsForMatchDto> MatchingSubstitute(ToBeMatchedDto dto)
-    {
-        if (dto.WantsToMatch)
-        {
-            return await MatchWithSubstitute(dto);
-        }
-     
-        return await DontWantSubstitute(dto);
-    }
-
-    private async Task<IdsForMatchDto> DontWantSubstitute(ToBeMatchedDto dto)
     {
         Employer employer = await GetEmployerById(dto.UserId);
         Console.WriteLine(employer.Id + " EMPLOYER");
@@ -114,16 +92,16 @@ public class MatchDao : IMatchDao
         {
             Employer = employer,
             Substitute = substitute,
-            WantsToMatch = false
+            WantsToMatch = dto.WantsToMatch
         });
-        
-        employer.Substitutes.Add(substitute);
 
         IdsForMatchDto idsForMatch = new()
         {
             SustituteId = substitute.Id,
             EmployerId = employer.Id
         };
+        
+        idsForMatch.WasAMatch = dto.WantsToMatch ? CheckIfMatched(idsForMatch).Result.WasAMatch : false;
 
         _databaseContext.Employers.Update(employer);
         await _databaseContext.SaveChangesAsync();
@@ -134,6 +112,7 @@ public class MatchDao : IMatchDao
         return idsForMatch;
     }
 
+    /*
     private async Task<IdsForMatchDto> MatchWithSubstitute(ToBeMatchedDto dto)
     {
         Employer employer = await GetEmployerById(dto.UserId);
@@ -162,32 +141,22 @@ public class MatchDao : IMatchDao
 
         return idsForMatch;
     }
+    */
 
     public async Task<List<Substitute>> GetSubstitutesForMatching(int userId)
     {
-        //Få en list af substitutes
-
-        //Listen af substitutes skal være en liste der ikke allerede er swipet ja til før
-        IQueryable<Substitute> subsQuery = _databaseContext.Substitutes.AsQueryable();
+        var subsQuery = _databaseContext.Substitutes.AsQueryable();
 
         subsQuery = subsQuery.Where(substitute =>
             substitute.Employers.Any() == false ||
             substitute.Employers.All(employer => employer.Id != userId) == true);
-        
-        
         
         return await subsQuery.ToListAsync();
     }
 
     public async Task<List<Gig>> GetGigsForMatching(int id)
     {
-        //Få en list af gigs
-
-        //Gigs må ikke have været swipet ja til før
-
-        //Hope it works :3
-
-        IQueryable<Gig> gigsQuery = _databaseContext.Gigs.AsQueryable();
+        var gigsQuery = _databaseContext.Gigs.AsQueryable();
 
         gigsQuery = gigsQuery.Where(gig =>
             gig.Substitutes.Any() == false ||
@@ -195,45 +164,18 @@ public class MatchDao : IMatchDao
         
         return await gigsQuery.ToListAsync();
     }
-
-
-    public async Task<Employer> GetEmployerById(int id)
-    {
-
-        Employer? employer = await _databaseContext.Employers.FirstOrDefaultAsync(emp =>
-            emp.Id == id);
-
-        return employer;
-    }
-
-    public async Task<Substitute> GetSubstituteById(int id)
-    {
-        Substitute? substitute = await _databaseContext.Substitutes.FirstOrDefaultAsync(sub => sub.Id == id);
-
-        return substitute;
-    }
-
-    // TODO: private much? null return type?
-    public async Task<Gig> GetGigById(int id)
-    {
-        Gig? gigToReturn = await _databaseContext.Gigs.Include(gig => gig.Employer)
-            .FirstOrDefaultAsync(gig => gig.Id == id);
-
-        return gigToReturn;
-    }
+    
 
     public async Task<IdsForMatchDto> CheckIfMatched(IdsForMatchDto dto)
     {
         CheckMatchDto check = await CheckMatchQuery(dto);
         
         dto.WasAMatch = check.WasAMatch;
-        dto.GigId = check.GigId;
+        dto.GigId = check.WasAMatch ? check.GigId : 0;
         
         return dto;
     }
-
-    // TODO: investigate filtering by date in the query,
-    // TODO: instead of removing old answers before using the query.
+    
     public async Task RemoveWhereTimerIsOut(int id, DaoRequestType type)
     {
         DateTime currentDateTime = DateTime.UtcNow;
@@ -255,7 +197,7 @@ public class MatchDao : IMatchDao
     private async void RemoveWhereTimerIsOutSubGig(int id, DateTime currentDateTime, TimeSpan span)
     {
 
-        var substitute = await _databaseContext.Substitutes.Include(sub =>
+        Substitute? substitute = await _databaseContext.Substitutes.Include(sub =>
             sub.EmployerSubstitutes).FirstOrDefaultAsync(sub => sub.Id == id);
 
         foreach (var gigSub in substitute.GigSubstitutes)
@@ -263,6 +205,7 @@ public class MatchDao : IMatchDao
             Console.WriteLine("REAL TIME:"+ currentDateTime + "GIG SUB" +gigSub.PublicationDate +" " + gigSub.WantsToMatch);
         }
 
+        //test
         var amountRemoved = substitute.GigSubstitutes.RemoveAll(gigsub =>
             gigsub.WantsToMatch == false && currentDateTime - gigsub.PublicationDate > span);
         Console.WriteLine(amountRemoved);
@@ -277,7 +220,7 @@ public class MatchDao : IMatchDao
 
     private async void RemoveWhereTimerIsOutEmpSub(int id, DateTime currentDateTime, TimeSpan span)
     {
-        var employer = await _databaseContext.Employers.Include(emp =>
+        Employer? employer = await _databaseContext.Employers.Include(emp =>
             emp.EmployerSubstitutes).FirstOrDefaultAsync(emp => emp.Id == id);
         
 
@@ -286,6 +229,7 @@ public class MatchDao : IMatchDao
             Console.WriteLine("REAL TIME:"+ currentDateTime + "EMP SUB" +empSub.PublicationDate +" " + empSub.WantsToMatch);
         }
 
+        //Test
         var amountRemoved = employer.EmployerSubstitutes.RemoveAll(empSub =>
             empSub.WantsToMatch == false && currentDateTime - empSub.PublicationDate > span);
         Console.WriteLine(amountRemoved);
@@ -318,30 +262,59 @@ public class MatchDao : IMatchDao
             + "GIGSUBS" + var.gigSubs.SubstituteId + " "+ var.gigSubs.WantsToMatch);
         }
         
-        // TODO: first condition is sus? change to &&
         var result = query.FirstOrDefaultAsync(joined =>
-            joined.gigSubs.WantsToMatch == joined.empSubs.WantsToMatch // <- this
+            joined.gigSubs.WantsToMatch == true
+            && joined.empSubs.WantsToMatch == true
             && joined.empSubs.EmployerId == joined.gigs.Employer.Id
             && joined.empSubs.EmployerId == dto.EmployerId
             && joined.gigSubs.SubstituteId == dto.SustituteId
         ).Result;
 
+        CheckMatchDto checkDto = result != null
+            ? new CheckMatchDto
+            {
+                GigId = result.gigs.Id,
+                WasAMatch = true
+            }
+            : new CheckMatchDto
+            {
+                WasAMatch = false
+            };
+
         if (result != null)
         {
             Console.WriteLine("RESULT" + result.gigs.Id + " " + result.empSubs.EmployerId + " " + result.gigSubs.GigId);
             Console.WriteLine("DTO: " + dto.GigId + " "+ dto.EmployerId + " " + dto.SustituteId);
-            return new CheckMatchDto
-            {
-                GigId = result.gigs.Id,
-                WasAMatch = true
-            };
         }
-      
-        Console.WriteLine("NO MATCH");
-        return new CheckMatchDto
+        else
         {
-            GigId = -1,
-            WasAMatch = false
-        };
+            Console.WriteLine("NO MATCH");
+        }
+
+        return checkDto;
+    }
+    
+    private async Task<Employer?> GetEmployerById(int id)
+    {
+
+        Employer? employer = await _databaseContext.Employers.FirstOrDefaultAsync(emp =>
+            emp.Id == id);
+
+        return employer;
+    }
+
+    private async Task<Substitute?> GetSubstituteById(int id)
+    {
+        Substitute? substitute = await _databaseContext.Substitutes.FirstOrDefaultAsync(sub => sub.Id == id);
+
+        return substitute;
+    }
+    
+    private async Task<Gig?> GetGigById(int id)
+    {
+        Gig? gigToReturn = await _databaseContext.Gigs.Include(gig => gig.Employer)
+            .FirstOrDefaultAsync(gig => gig.Id == id);
+
+        return gigToReturn;
     }
 }

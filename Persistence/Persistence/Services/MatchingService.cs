@@ -28,12 +28,6 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
                 request.WantToMatch));
         
         Console.WriteLine("Gig Id = " + matchedGig.GigId);
-        
-        //Finding if matched
-        if (request.WantToMatch)
-        {
-            matchedGig = await _dao.CheckIfMatched(matchedGig);
-        }
 
         //Convert tilbage til reqly
         MatchValidation validation = MatchConverter.ConvertToValidation(matchedGig);
@@ -51,13 +45,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
             request.CurrentUser,
             request.ToBeMatchedId,
             request.WantToMatch));
-        
-        //Setting match
-        if (request.WantToMatch)
-        {
-            matchedSubstitute = await _dao.CheckIfMatched(matchedSubstitute);
-        }
-
+   
         //Conversion
         MatchValidation validation = MatchConverter.ConvertToValidation(matchedSubstitute);
         

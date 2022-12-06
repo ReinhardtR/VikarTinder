@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.WellKnownTypes;
 using Persistence;
 using Persistence.Converter;
 using Persistence.Dto;

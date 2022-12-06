@@ -7,16 +7,8 @@ public interface IMatchDao
 {
     Task<IdsForMatchDto> MatchingGig(ToBeMatchedDto dto);
     Task<IdsForMatchDto> MatchingSubstitute(ToBeMatchedDto dto);
-
-
     Task<List<Substitute>> GetSubstitutesForMatching(int id);
     Task<List<Gig>> GetGigsForMatching(int id);
-    
-    
-    Task<Employer> GetEmployerById(int id);
-    Task<Substitute> GetSubstituteById(int id);
-    Task<Gig> GetGigById(int id);
-
     Task<IdsForMatchDto> CheckIfMatched(IdsForMatchDto dto);
 
     Task RemoveWhereTimerIsOut(int id, DaoRequestType type);
