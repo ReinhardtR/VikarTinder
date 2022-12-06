@@ -15,4 +15,10 @@ public class Gig
         GigSubstitutes = new List<GigSubstitute>();
         Employer = employer;
     }
+
+    public Gig()
+    {
+        Substitutes = new List<Substitute>();
+        GigSubstitutes = new List<GigSubstitute>();
+    }
 }
