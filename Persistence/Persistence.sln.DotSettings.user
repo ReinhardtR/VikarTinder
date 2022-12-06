@@ -1,4 +1,9 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7dbfddbf_002D3a8d_002D43e1_002Da3ed_002D264d9c005deb/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::CD8F2D4F-6CE0-4228-8AC9-314ED9F7DA21::net6.0::UnitTest.ConverterTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f1cf2f2b_002Dfeee_002D41c5_002Dbd17_002D0faa8f80b831/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ConvertWithNullList" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;NUnit3x::CD8F2D4F-6CE0-4228-8AC9-314ED9F7DA21::net6.0::UnitTest.ConverterTest.ConvertWithNullList&lt;/TestId&gt;

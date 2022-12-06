@@ -32,21 +32,22 @@ public class MatchDao : IMatchDao
     {
         Substitute substitute = await GetSubstituteById(dto.UserId);
         Gig gig = await GetGigById(dto.MatchId);
-        
-        IdsForMatchDto idsForMatch = new()
-        {
-            SustituteId = substitute.Id,
-            GigId = gig.Id,
-            EmployerId = gig.Employer.Id
-        };
 
         //Adder den valgte gig under sig
         substitute.GigSubstitutes.Add(new GigSubstitute
         {
             Gig = gig,
             Substitute = substitute,
-            WantsToMatch = false
+            WantsToMatch = dto.WantsToMatch
         });
+        
+        IdsForMatchDto idsForMatch = new()
+        {
+            SustituteId = substitute.Id,
+            GigId = gig.Id,
+            EmployerId = gig.Employer.Id,
+            WasAMatch = CheckIfMatched();
+        };
         
         //Opdateringen og gemning
         _databaseContext.Substitutes.Update(substitute);

@@ -1,14 +1,13 @@
 ﻿using System.Collections.Immutable;
-using Persistence.Converter.Interfaces;
 using Persistence.Dto;
 using Persistence.Exceptions.ConverterExceptions;
 using Persistence.Models;
 
 namespace Persistence.Converter;
 
-public class MatchConverter : IMatchConverter
+public class MatchConverter
 {
-    public MatchingSubstitutes ConvertSubList(List<Substitute> substitutes)
+    public static MatchingSubstitutes ConvertSubList(List<Substitute> substitutes)
     {
         if (substitutes == null)
             throw new ConverterNullReference("Substitute list");
@@ -30,7 +29,7 @@ public class MatchConverter : IMatchConverter
         return subs;
     }
     
-    public MatchingGigs ConvertGigList(List<Gig> gigs)
+    public static MatchingGigs ConvertGigList(List<Gig> gigs)
     {
         if (gigs == null)
             throw new ConverterNullReference("Gigs list");
@@ -51,7 +50,7 @@ public class MatchConverter : IMatchConverter
         return gigsGrpc;
     }
 
-    public MatchValidation ConvertToValidation(IdsForMatchDto dto)
+    public static MatchValidation ConvertToValidation(IdsForMatchDto dto)
     {
         if (dto == null)
             throw new ConverterNullReference("IdsForMatch argument ");
@@ -67,7 +66,7 @@ public class MatchConverter : IMatchConverter
         return val;
     }
 
-    public ToBeMatchedDto CreateToBeMatchedDto(int requestCurrentUser, int requestToBeMatchedId, bool requestWantToMatch)
+    public static ToBeMatchedDto CreateToBeMatchedDto(int requestCurrentUser, int requestToBeMatchedId, bool requestWantToMatch)
     {
         ToBeMatchedDto dto = new()
         {

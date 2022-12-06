@@ -1,8 +1,7 @@
 ﻿using System.Collections;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using System.Collections.Generic;
 using Persistence;
 using Persistence.Converter;
-using Persistence.Converter.Interfaces;
 using Persistence.Dto;
 using Persistence.Exceptions.ConverterExceptions;
 using Persistence.Models;
@@ -12,58 +11,27 @@ namespace UnitTest;
 [TestFixture]
 public class ConverterTest
 {
-    private IMatchConverter _converter;
-    private List<Gig> _gigsForTest;
-    private List<Substitute> _substitutesForTest;
-
-    readonly int idOnSubMatch = 1;
-    bool matchMatchedYou = false;
-    readonly int userId = 2;
-    public int listSize = 5;
-    
-    [SetUp]
-    public void SetUp()
-    {
-        _converter = new MatchConverter();
-        _gigsForTest = new List<Gig>();
-        _substitutesForTest = new List<Substitute>();
-        
-        for (int i = 0; i < listSize; i++)
-        {
-            _gigsForTest.Add(new Gig(new Employer
-            {
-                Id = i
-            }));
-            
-            _substitutesForTest.Add(new Substitute
-            {
-                Id = i
-            });
-        }
-        
-    }
-    
     // ConvertSublist & ConvertGigList
     
     [Test, Description("Conversion of null SubList or null GigList should catch")]
     public void GigAndSubListNull()
     {
-        Assert.Catch<ConverterNullReference>(() => _converter.ConvertGigList(null));
-        Assert.Catch<ConverterNullReference>(() => _converter.ConvertSubList(null));
+        Assert.Catch<ConverterNullReference>(() => MatchConverter.ConvertGigList(null));
+        Assert.Catch<ConverterNullReference>(() => MatchConverter.ConvertSubList(null));
     }
 
     [TestCaseSource(typeof(DataClass), nameof(DataClass.GigListConversion)), Description(
          "Testing boundaries for gigList conversion")]
     public int BoundaryBehaviors(List<Gig> gigs)
     {
-        return _converter.ConvertGigList(gigs).Gigs.Count;
+        return MatchConverter.ConvertGigList(gigs).Gigs.Count;
     }
     
     [TestCaseSource(typeof(DataClass), nameof(DataClass.SubListConversion)), Description(
          "Testing boundaries for gigList conversion")]
     public int BoundaryBehaviors(List<Substitute> substitutes)
     {
-        return _converter.ConvertSubList(substitutes).Substitutes.Count;
+        return MatchConverter.ConvertSubList(substitutes).Substitutes.Count;
     }
     
     
@@ -72,7 +40,7 @@ public class ConverterTest
     [Test, Description("Null argument")]
     public void NullTestValidationConversion()
     {
-        Assert.Catch<ConverterNullReference>(() =>_converter.ConvertToValidation(null));
+        Assert.Catch<ConverterNullReference>(() =>MatchConverter.ConvertToValidation(null));
     }
     
     [TestCaseSource(typeof(DataClass), nameof(DataClass.ConversionToValidation)), Description(
@@ -80,7 +48,7 @@ public class ConverterTest
     public MatchValidation ValidationConversion(IdsForMatchDto dto)
     {
 
-        return _converter.ConvertToValidation(dto);
+        return MatchConverter.ConvertToValidation(dto);
     }
     
     
@@ -90,7 +58,7 @@ public class ConverterTest
          "Testing boundaries for conversion of ids to dto")]
     public List<dynamic> IdToDtoConversion(int currentUser, int matchUser, bool wantsToMatch)
     {
-        ToBeMatchedDto dto = _converter.CreateToBeMatchedDto(currentUser, matchUser, wantsToMatch);
+        ToBeMatchedDto dto = MatchConverter.CreateToBeMatchedDto(currentUser, matchUser, wantsToMatch);
 
         return new List<dynamic>() { dto.UserId, dto.MatchId ,dto.WantsToMatch};
     }

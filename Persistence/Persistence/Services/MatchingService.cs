@@ -1,4 +1,4 @@
-﻿using Persistence.Converter.Interfaces;
+﻿using Persistence.Converter;
 using Persistence.DAOs.Interfaces;
 using Persistence.Dto;
 using Persistence.Models;
@@ -8,20 +8,10 @@ using Grpc.Core;
 
 public class MatchingService : Persistence.MatchingService.MatchingServiceBase
 {
-    /*
-     insert into Gigs values (1, 1), (2,1), (3,1), (4, 1), (5,1);
-insert into Employers values (1);
-insert into Substitutes values (1);  
-     */
-
-    // TODO: make this shi' static
-    private readonly IMatchConverter _converter;
-    
     private readonly IMatchDao _dao;
     
-    public MatchingService(IMatchConverter converter, IMatchDao dao)
+    public MatchingService(IMatchDao dao)
     {
-        _converter = converter;
         _dao = dao;
     }
 
@@ -32,7 +22,7 @@ insert into Substitutes values (1);
         
         //DatabaseKald for at matche
         IdsForMatchDto matchedGig = await _dao.MatchingGig(
-            _converter.CreateToBeMatchedDto(
+            MatchConverter.CreateToBeMatchedDto(
                 request.CurrentUser,
                 request.ToBeMatchedId,
                 request.WantToMatch));
@@ -46,7 +36,7 @@ insert into Substitutes values (1);
         }
 
         //Convert tilbage til reqly
-        MatchValidation validation = _converter.ConvertToValidation(matchedGig);
+        MatchValidation validation = MatchConverter.ConvertToValidation(matchedGig);
         Console.WriteLine("Conversion success");
 
         return validation;
@@ -57,7 +47,7 @@ insert into Substitutes values (1);
         Console.WriteLine("IDs: [Employer]:" + request.CurrentUser + " [Substitute]:" + request.ToBeMatchedId);
         
         //DatabaseKald for at matche
-        IdsForMatchDto matchedSubstitute = await _dao.MatchingSubstitute(_converter.CreateToBeMatchedDto(
+        IdsForMatchDto matchedSubstitute = await _dao.MatchingSubstitute(MatchConverter.CreateToBeMatchedDto(
             request.CurrentUser,
             request.ToBeMatchedId,
             request.WantToMatch));
@@ -69,7 +59,7 @@ insert into Substitutes values (1);
         }
 
         //Conversion
-        MatchValidation validation = _converter.ConvertToValidation(matchedSubstitute);
+        MatchValidation validation = MatchConverter.ConvertToValidation(matchedSubstitute);
         
         Console.WriteLine("Conversion success: [SUB ID]"+ validation.SubstituteId + "[ISMATCHED]" + validation.IsMatched);
         return validation;
@@ -85,7 +75,7 @@ insert into Substitutes values (1);
         List<Substitute> subsFromDatabase = await _dao.GetSubstitutesForMatching(request.CurrentUserId);
 
         // Convert til en reply
-        MatchingSubstitutes subs =_converter.ConvertSubList(subsFromDatabase);
+        MatchingSubstitutes subs =MatchConverter.ConvertSubList(subsFromDatabase);
 
         return subs;
     }
@@ -99,7 +89,7 @@ insert into Substitutes values (1);
         List<Gig> gigsFromDatabase = await _dao.GetGigsForMatching(request.CurrentUserId);
 
         //Convert til en reply
-        MatchingGigs gigs = _converter.ConvertGigList(gigsFromDatabase);
+        MatchingGigs gigs = MatchConverter.ConvertGigList(gigsFromDatabase);
 
         return gigs;
     }

@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Persistence;
 using Persistence.Converter;
-using Persistence.Converter.Interfaces;
 using Persistence.DAOs;
 using Persistence.DAOs.Interfaces;
 using MatchingService = Persistence.Services.MatchingService;
@@ -20,7 +19,7 @@ builder.WebHost.ConfigureKestrel(options =>
 // Add services to the container.
 builder.Services.AddGrpc();
 builder.Services.AddScoped<IMatchDao, MatchDao>();
-builder.Services.AddScoped<IMatchConverter, MatchConverter>();
+builder.Services.AddScoped<MatchConverter>();
 builder.Services.AddScoped<MatchingService>();
 builder.Services.AddScoped<DatabaseContext>();
 
