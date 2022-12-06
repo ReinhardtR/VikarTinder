@@ -8,6 +8,7 @@ import com.example.businessserver.services.JobConfirmationServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+//TODO: Validering - Se meistertask
 @Service
 public class JobConfirmationLogicImpl implements JobConfirmationLogic {
 

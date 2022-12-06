@@ -23,7 +23,7 @@ class ChatServiceFactoryTest
 
   //TODO: JobConfirmation-factory test
   //TODO: Test for ZOMBIES (mangler boundary og exceptions et par steder)
-
+  //TODO: Testing af validering
   @ParameterizedTest
   @MethodSource()
   void toCreateChatRequest(int substituteId, int employerId)

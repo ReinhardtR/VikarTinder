@@ -7,6 +7,7 @@ import com.example.businessserver.services.ChatServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+//TODO: Validering - se meistertask
 @Service
 public class ChatLogicImpl implements ChatLogic {
 

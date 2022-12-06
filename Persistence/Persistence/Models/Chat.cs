@@ -9,7 +9,7 @@ public class Chat
 
     public int SubstituteId { get; set; }
 
-    public int EmployerId { get; set; } 
+    public int EmployerId { get; set; }
     
     public List<Message> Messages { get; set; }
     
