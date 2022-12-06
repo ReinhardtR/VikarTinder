@@ -5,6 +5,7 @@ using Persistence.Models;
 namespace Persistence.Services;
 
 //TODO: interface definition
+//TODO: egen mappe til factorys imo
 //TODO: Error handling (null)
 public class ChatServiceFactory
 {
