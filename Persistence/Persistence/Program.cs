@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Persistence;
+using Persistence.DAOs;
 using Persistence.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,11 +16,17 @@ builder.WebHost.ConfigureKestrel(options =>
 
 // Add services to the container.
 builder.Services.AddGrpc();
+builder.Services.AddDbContext<DataContext>();
+
+builder.Services.AddScoped<IChatDAO, ChatDAO>();
+builder.Services.AddScoped<IJobConfirmationDAO, JobConfirmationDAO>();
+
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-app.MapGrpcService<GreeterService>();
+app.MapGrpcService<ChatServiceServer>();
+app.MapGrpcService<JobConfirmationServiceServer>();
 app.MapGet("/",
     () =>
         "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");

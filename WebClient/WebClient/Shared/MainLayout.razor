@@ -1,17 +1,47 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu/>
-    </div>
+<MudThemeProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
+<MudLayout>
+    <MudAppBar>
+        <MudButton OnClick="@NavigateToHome" Variant="Variant.Text" Style="color: white">
+            <MudStack Row="@true" Spacing="2" AlignItems="AlignItems.Center">
+                <MudIcon Icon="@Icons.Filled.ContactPage" />
+                <MudText Typo="Typo.h6">Vikar Tinder</MudText>
+            </MudStack>
+        </MudButton>
+        
+        <MudSpacer />
+        
+        <MudButton OnClick="@NavigateToChatOverview" Variant="Variant.Text" Style="color: white">Chat</MudButton>
+        
+        <MudSpacer />
+        
+        <MudText>
+            <MudButton Variant="Variant.Text" Style="color: white">Reinhardt Rijna</MudButton>
+        </MudText>
+    </MudAppBar>
+    
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Medium" Class="py-8">
             @Body
-        </article>
-    </main>
-</div>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+
+    private void NavigateToHome()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+    private void NavigateToChatOverview()
+    {
+        NavigationManager.NavigateTo("/chat");
+    }
+
+}

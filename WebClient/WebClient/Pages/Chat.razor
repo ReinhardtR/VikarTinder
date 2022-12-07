@@ -1,0 +1,235 @@
+@page "/Chat/{ChatId:int}"
+@using HttpClients.Services        
+@using HttpClients
+@using WebSockets
+@inject ChatSocket ChatSocket
+@inject ChatService ChatService
+@inject JobConfirmationService JobConfirmationService
+@inject ISnackbar Snackbar
+
+@if (chatHistory == null && loadingErrorLabel == null)
+{
+    <p>Loading...</p>
+} else if (loadingErrorLabel != null)
+{
+    <p>Error: @loadingErrorLabel</p>
+} else if (chatHistory != null)
+{
+    @* vh based on the size of the appbar taking up the top part of the screen *@
+    <MudStack Justify="Justify.Center" Spacing="4" Style="height: 80vh">
+        <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
+            <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
+                <MudAvatar Size="Size.Medium" Color="Color.Secondary">@chatName[0]</MudAvatar>
+                <MudText Typo="Typo.h6">@chatName</MudText> 
+            </MudStack>
+
+            <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
+                @if (jobConfirmation?.Status == JobConfirmationDTOStatus.ACCEPTED)
+                {
+                    <MudText Typo="Typo.h6" Color="Color.Success">JOB ER ACCEPTERET</MudText>
+                } 
+                else if (isEmployer && jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
+                {
+                    <MudText Typo="Typo.h6" Color="Color.Info">
+                        JOB ANMODNING ER SENDT
+                    </MudText>
+                }
+                else if (isEmployer)
+                {
+                    <MudButton OnClick="SendJobConfirmationRequest" Variant="Variant.Outlined">
+                        Send Job Anmodning
+                    </MudButton>
+                }
+            </MudStack>
+        </MudStack>
+        
+        <MudDivider Class="my-1" />
+        
+        @if (!isEmployer && jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
+        {
+            <JobConfirmationRequest JobConfirmation="@jobConfirmation" />
+            <MudDivider Class="my-1" />
+        }
+
+        <MudStack Reverse="@true" Class="overflow-y-scroll pa-4 flex-grow-1">
+            <MudStack Spacing="4">
+                @foreach (MessageDTO message in chatHistory.Messages)
+                {
+                    <ChatMessage UserId="@userId" AuthorId="@message.AuthorId" Content="@message.Content" />
+                }
+            </MudStack>
+        </MudStack>
+
+        <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
+            <MudStack Row="@true" Spacing="2" Class="px-4" AlignItems="AlignItems.Start" Justify="Justify.Center">
+                <MudTextField Label="Message" AutoFocus="@true" Variant="Variant.Outlined" @bind-Value="@formModel.Content" For="() => formModel.Content" />
+                <MudIconButton Icon="@Icons.Filled.Send" Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit" Class="py-4 px-5 my-1" />
+            </MudStack>
+        </EditForm>
+    </MudStack>
+}
+
+@code {
+    
+    [Parameter]
+    public int ChatId { get; set; }
+
+    // TODO replace with auth stuff
+    private bool isEmployer = true;
+    
+    // TODO replace with auth stuff
+    private int userId = 2;
+    
+    // TODO replace with data from server
+    private string chatName = "John Doe";
+    
+    // TODO replace with data from server
+    private int substituteId = 1;
+
+    // TODO replace with data from server
+    private int gigId = 1;
+    
+    private JobConfirmationDTO? jobConfirmation;
+    private ChatHistoryDTO? chatHistory;
+    
+    private string? loadingErrorLabel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ChatHistoryDTO? newChatHistory = await ChatService.GetChatHistoryAsync(ChatId);
+ 
+        if (newChatHistory == null)
+        {
+            loadingErrorLabel = "Couldn't load the chat history.";
+            return;
+        }
+        
+        chatHistory = newChatHistory;
+        jobConfirmation = newChatHistory.JobConfirmation;
+        
+        await ChatSocket.ConnectAsync(ChatId);
+        
+        ListenToChatSocket();
+        ListenToJobRequestSocket();
+    }
+
+    private class FormModel
+    {
+        private string _content = "";
+        
+        public string Content
+        {
+            get => _content.Trim();
+            set => _content = value;
+        }
+    }
+
+    private FormModel formModel = new();
+
+    private async void ListenToChatSocket()
+    {
+        try
+        {
+            IAsyncEnumerable<MessageDTO> messages = ChatSocket.ListenToChatMessages();
+
+            await foreach (MessageDTO message in messages)
+            {
+                chatHistory?.Messages.Add(message);
+                StateHasChanged();
+            }
+        }
+        catch (Exception e)
+        {
+            loadingErrorLabel = e.Message;
+        }
+        
+        StateHasChanged();
+    }
+    
+    private async void ListenToJobRequestSocket()
+    {
+        try
+        {
+            IAsyncEnumerable<JobConfirmationDTO> jobConfirmations = ChatSocket.ListenToJobConfirmations();
+                
+            await foreach (JobConfirmationDTO newJobConfirmation in jobConfirmations)
+            {
+                jobConfirmation = newJobConfirmation;
+
+                switch (jobConfirmation.Status)
+                {
+                    case JobConfirmationDTOStatus.ACCEPTED:
+                        Snackbar.Add("Job anmodningen er accepteret", Severity.Success);
+                        break;
+                    case JobConfirmationDTOStatus.DECLINED:
+                        Snackbar.Add("Job anmodningen er afvist", Severity.Info);
+                        break;
+                    case JobConfirmationDTOStatus.UNANSWERED:
+                        Snackbar.Add("Job anmodningen er sendt", Severity.Info);
+                        break;
+                    case JobConfirmationDTOStatus.UNRECOGNIZED:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+                
+                StateHasChanged();
+            }
+        }
+        catch (Exception e)
+        {
+            loadingErrorLabel = e.Message;
+        }
+        
+        StateHasChanged();
+    }
+
+    private async void SendJobConfirmationRequest()
+    {
+        try
+        {
+            CreateJobConfirmationDTO createJobConfirmationDto = new()
+            {
+                ChatId = ChatId,
+                EmployerId = userId,
+                SubstituteId = substituteId
+            };
+            
+            await JobConfirmationService.CreateJobConfirmationAsync(createJobConfirmationDto);
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Failed to send job confirmation request", Severity.Error);
+        }
+        
+        StateHasChanged();
+    }
+    
+    private async void HandleValidSubmit()
+    {
+        try
+        {
+            if (formModel.Content == "")
+            {
+                return;
+            }
+            
+            SendMessageDTO sendMessageDto = new()
+            {
+                ChatId = ChatId,
+                AuthorId = userId,
+                Content = formModel.Content
+            };
+            
+            await ChatService.SendMessageAsync(sendMessageDto);
+
+            formModel = new FormModel();
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Failed to send message", Severity.Error);
+        }
+        
+        StateHasChanged();
+    }
+}

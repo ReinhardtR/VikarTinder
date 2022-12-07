@@ -1,0 +1,103 @@
+@using HttpClients
+@using HttpClients.Services
+@inject ChatService ChatService
+@inject NavigationManager NavigationManager
+
+@if (chats == null && errorLabel == null)
+{
+    <p>Loading...</p>
+} 
+else if (errorLabel != null)
+{
+    <p>Error: @errorLabel</p>
+} 
+else if (chats != null)
+{
+    <MudStack AlignItems="AlignItems.Stretch" Style="width: 100%" >
+        <MudText Typo="Typo.h6">Chats</MudText>
+        <MudStack Spacing="2">
+            @foreach (BasicChatDTO chat in chats)
+            {
+                
+                
+                <MudButton OnClick="() => NavigateToChat(chat.Id)" FullWidth="@true">
+                    <MudPaper class="ma-1" Width="100%">
+                        <MudStack Row="true" Class="pa-4">
+                            <MudAvatar Color="Color.Secondary">@GetRecipientId(chat)</MudAvatar>
+                            <MudStack Justify="Justify.Center" Spacing="0">
+                                <MudText Typo="Typo.body1">@GetRecipientId(chat)</MudText>
+                                <MudText Typo="Typo.body2">Sample Emailgmail.com</MudText>
+                            </MudStack>
+                        </MudStack>
+                    </MudPaper>
+                </MudButton>
+            }
+        </MudStack>
+    </MudStack>
+}
+
+@code {
+    
+    [Parameter]
+    public int? GigId { get; set; }
+    
+    // TODO replace with auth stuff
+    private int userId = 1;
+    
+    // TODO replace with auth stuff
+    private bool isEmployer = true;
+    
+    private ICollection<BasicChatDTO>? chats;
+    private string? errorLabel;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await FetchChats();
+    }
+
+    private async Task FetchChats()
+    {
+        try
+        {
+            errorLabel = null;
+
+            ChatOverviewDTO? chatOverview;
+            
+            if (GigId != null)
+            {
+                chatOverview = await ChatService.GetChatOverviewAsync(userId);
+            }
+            else
+            {
+                // TODO fetch chats for gig
+                chatOverview = new ChatOverviewDTO()
+                {
+                    Chats = new List<BasicChatDTO>()
+                };
+            }
+
+            if (chatOverview == null)
+            {
+                throw new Exception("Something went wrong.");
+            }
+
+            chats = chatOverview.Chats;
+        }
+        catch (Exception e)
+        {
+            chats = null;
+            
+            errorLabel = e.Message;
+        }
+    }
+    
+    private int GetRecipientId(BasicChatDTO chat)
+    {
+        return isEmployer ? chat.SubstituteId : chat.EmployerId;
+    }
+    
+    private void NavigateToChat(int chatToGoTo)
+    {
+        NavigationManager.NavigateTo($"/chat/{chatToGoTo}");
+    }
+}

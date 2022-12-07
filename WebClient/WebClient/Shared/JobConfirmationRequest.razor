@@ -1,0 +1,48 @@
+@using HttpClients
+@using HttpClients.Services
+@inject JobConfirmationService JobConfirmationService
+@inject ISnackbar Snackbar
+
+<MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
+    <MudText>Vil du have jobbet?</MudText>
+    
+    <MudStack Row="@true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+        <MudButton OnClick="() => AnswerHandler(AnswerJobConfirmationDTOIsAccepted.ACCEPTED)" Variant="Variant.Filled" Color="Color.Success" Disabled="@isEmployer">
+            Ja
+        </MudButton>
+        <MudButton OnClick="() => AnswerHandler(AnswerJobConfirmationDTOIsAccepted.DECLINED)" Variant="Variant.Outlined" Color="Color.Error" Disabled="@isEmployer">
+            Nej
+        </MudButton>
+    </MudStack>
+</MudStack>
+
+@code {
+
+    [Parameter]
+    public JobConfirmationDTO JobConfirmation { get; set; }
+    
+    // TODO replace with auth stuff
+    private int userId = 2;
+
+    // TODO replace with auth stuff
+    private bool isEmployer = false;
+
+    private async void AnswerHandler(AnswerJobConfirmationDTOIsAccepted isAccepted)
+    {
+        try
+        {
+            AnswerJobConfirmationDTO answerJobConfirmation = new()
+            {
+                Id = JobConfirmation.Id,
+                ChatId = JobConfirmation.ChatId,
+                IsAccepted = isAccepted,
+            };
+            
+            await JobConfirmationService.AnswerJobConfirmationAsync(answerJobConfirmation);
+        } 
+        catch (Exception e)
+        {
+            Snackbar.Add("Failed to send answer", Severity.Error);
+        }
+    }
+}

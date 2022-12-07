@@ -1,0 +1,29 @@
+<MudPaper Class="@GetMessageClasses()" Style="@GetMessageStyles()">
+  <MudText>@Content</MudText>
+</MudPaper>
+  
+@code {
+    // replace with auth stuff?
+    [Parameter]
+    public int UserId { get; set; }
+      
+    [Parameter]
+    public int AuthorId { get; set; }
+      
+    [Parameter]
+    public string Content { get; set; }
+
+    private String GetMessageClasses()
+    {
+        string baseClasses = "pa-3";
+        string uniqueClasses = AuthorId == UserId ? "ml-auto" : "mr-auto";
+        return $"{baseClasses} {uniqueClasses}";
+    }
+
+    private string GetMessageStyles()
+    {
+        string baseStyles = "max-width: 80%; word-break: break-all;";
+        string uniqueStyles = AuthorId == UserId ? "background-color: #ebebeb;" : "background-color: #ff4081; color: white;";
+        return $"{baseStyles} {uniqueStyles}";
+    }
+}
