@@ -1,0 +1,85 @@
+﻿@page "/Matching/Substitutes"
+@using HttpClients.Services
+@using HttpClients
+@inject MatchingService MatchingService
+
+<h3>Substitutes</h3>
+<div>
+    <MudGrid Justify="Justify.Center" Spacing="2">
+        <MudItem xs="12" Class="d-flex align-content-center justify-content-center">
+            <MudPaper Class="represent">
+                <MudPaper Class="infoBox">
+                    @if (errorLabel != null && !isLoading)
+                    {
+                        <MudText Color="Color.Error">@errorLabel</MudText>   
+                    }
+                    else if (isLoading)
+                    {
+                        <MudText Class="infoText">
+                            <MudProgressCircular Color="Color.Secondary" Size="Size.Large" Indeterminate="true"/>
+                        </MudText>
+                    }
+                    else if (substitutes.Count > 0)
+                    {
+                        <MudText Class="infoText">@substitutes.Peek().Id</MudText>
+                    }
+                    else
+                    {
+                        <MudText Class="infoText">Ikke flere muligheder</MudText>
+                    }
+                </MudPaper>
+                <MudItem Class="d-flex align-content-center justify-content-center matchBtns">
+                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" OnClick="() => SendSubstituteMatchRequestAsync(true)">JA</MudButton>
+                    <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Error" OnClick="() => SendSubstituteMatchRequestAsync(false)">NEJ</MudButton>
+                </MudItem>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</div>
+
+@code {
+    // TODO: replace with auth stuff
+    private int userId = 1; 
+    
+    private Stack<SubstituteMatchingDTO> substitutes = new();
+    private bool isLoading = true;
+    private string? errorLabel;
+
+    protected override async Task OnInitializedAsync()
+    {
+       await GetSubstitutesAsync();
+    }
+
+    private async Task GetSubstitutesAsync()
+    {
+        isLoading = true;
+        
+        try
+        {
+            SubstituteMatchingDTOs substitutesResult = await MatchingService.GetSubstitutesAsync(userId);
+            
+            substitutesResult.PossibleMatches.ToList().ForEach((s) => substitutes.Push(s));
+        }
+        catch
+        {
+            errorLabel = "Der skete en fejl";
+        }
+        
+        isLoading = false;
+        StateHasChanged();
+    }
+    
+    private async Task SendSubstituteMatchRequestAsync(bool wantsToMatch)
+    {
+        SubstituteMatchingDTO substitute = substitutes.Pop();
+        
+        await MatchingService.SendSubstituteMatchRequestAsync(new MatchRequestDTO()
+        {
+            CurrentUser = userId,
+            MatchId = substitute.Id,
+            WantsToMatch = wantsToMatch
+        });
+
+        StateHasChanged();
+    }
+}

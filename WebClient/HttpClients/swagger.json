@@ -11,17 +11,17 @@
     }
   ],
   "paths": {
-    "/job-confirmation": {
+    "/matching/substitutes": {
       "post": {
         "tags": [
-          "job-confirmation-controller"
+          "matching-controller"
         ],
-        "operationId": "createJobConfirmation",
+        "operationId": "substitutesMatchRequest",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateJobConfirmationDTO"
+                "$ref": "#/components/schemas/MatchRequestDTO"
               }
             }
           },
@@ -217,24 +217,48 @@
                 }
               }
             }
+            "description": "OK"
           }
         }
       }
     },
-    "/api/tinder/{id}": {
+    "/matching/gigs": {
+      "post": {
+        "tags": [
+          "matching-controller"
+        ],
+        "operationId": "gigsMatchRequest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MatchRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/matching/substitutes/{currentUserId}": {
       "get": {
         "tags": [
-          "user-controller"
+          "matching-controller"
         ],
-        "operationId": "findById",
+        "operationId": "getSubstitutes",
         "parameters": [
           {
-            "name": "id",
+            "name": "currentUserId",
             "in": "path",
             "required": true,
             "schema": {
               "type": "integer",
-              "format": "int64"
+              "format": "int32"
             }
           }
         ],
@@ -245,6 +269,38 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/SubstituteDTO"
+                  "$ref": "#/components/schemas/SubstituteMatchingDTOs"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/matching/gigs/{currentUserId}": {
+      "get": {
+        "tags": [
+          "matching-controller"
+        ],
+        "operationId": "getGigs",
+        "parameters": [
+          {
+            "name": "currentUserId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GigMatchingDTOs"
                 }
               }
             }
@@ -377,10 +433,59 @@
         }
       },
       "SubstituteDTO": {
+      "MatchRequestDTO": {
+        "type": "object",
+        "properties": {
+          "currentUser": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "matchId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wantsToMatch": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SubstituteMatchingDTO": {
         "type": "object",
         "properties": {
           "id": {
-            "type": "string"
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "SubstituteMatchingDTOs": {
+        "type": "object",
+        "properties": {
+          "possibleMatches": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubstituteMatchingDTO"
+            }
+          }
+        }
+      },
+      "GigMatchingDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GigMatchingDTOs": {
+        "type": "object",
+        "properties": {
+          "possibleMatches": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GigMatchingDTO"
+            }
           }
         }
       },
