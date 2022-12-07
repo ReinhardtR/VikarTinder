@@ -10,25 +10,23 @@ public class ChatService
         _client = client;
     }
 
-    public async Task<BasicChatDTO> CreateChatAsync(CreateChatDTO dto)
+    public Task<BasicChatDTO> CreateChatAsync(CreateChatDTO dto)
     {
-        return await _client.CreateChatAsync(dto);
+        return _client.CreateChatAsync(dto);
     }
 
-    public async Task<MessageDTO> SendMessageAsync(SendMessageDTO dto)
+    public Task<MessageDTO> SendMessageAsync(SendMessageDTO dto)
     {
-        return await _client.SendMessageAsync(dto);
+        return _client.SendMessageAsync(dto);
     }
     
-    public async Task<ChatHistoryDTO?> GetChatHistoryAsync(int id)
+    public Task<ChatHistoryDTO?> GetChatHistoryAsync(int id)
     {
-        ChatHistoryDTO chatHistory = await _client.GetChatHistoryAsync(id);
-
-        return chatHistory;
+        return _client.GetChatHistoryAsync(id);;
     }
     
-    public async Task<ChatOverviewDTO> GetChatOverviewAsync(int id)
+    public Task<ChatOverviewDTO> GetChatOverviewAsync(int id)
     {
-        return await _client.GetChatOverviewAsync(id);
+        return _client.GetChatOverviewAsync(id);
     }
 }

@@ -7,8 +7,6 @@ namespace Persistence.Services;
 
 public class ChatServiceFactory
 {
-    
-
     public static SendMessageResponse ToSendMessageResponse(Message message)
     {
         return new SendMessageResponse
@@ -79,9 +77,7 @@ public class ChatServiceFactory
                 CreatedAt = message.CreatedAt.ToTimestamp()
             });
         }
-
-
-
+        
         JobConfirmationObject? jobConfirmation = chat.JobConfirmation != null
             ? new JobConfirmationObject()
             {
@@ -89,7 +85,7 @@ public class ChatServiceFactory
                 ChatId = chat.JobConfirmation.ChatId,
                 SubstituteId = chat.JobConfirmation.SubstituteId,
                 EmployerId = chat.JobConfirmation.EmployerId,
-                Status = chat.JobConfirmation.Status,
+                Status = JobConfirmationFactory.ToJobConfirmationStatusGrpc(chat.JobConfirmation.Status),
                 CreatedAt = chat.JobConfirmation.CreatedAt.ToTimestamp()
             }
             : null;

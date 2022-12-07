@@ -23,18 +23,17 @@ message CreateJobConfirmationResponse{
   JobConfirmationObject job_confirmation = 1;
 }
 
-
 message JobConfirmationAnswerRequest{
   int32 id = 1;
   int32 chat_id = 2;
-  JobConfirmationStatus is_accepted = 3;
+  JobConfirmationStatusGrpc status = 3;
 }
 
 message JobConfirmationAnswerResponse{
   JobConfirmationObject job_confirmation = 1;
 }
 
-enum JobConfirmationStatus {
+enum JobConfirmationStatusGrpc {
   UNANSWERED = 0;
   ACCEPTED = 1;
   DECLINED = 2;
@@ -45,7 +44,7 @@ message JobConfirmationObject{
   int32 chat_id = 2;
   int32 substitute_id = 3;
   int32 employer_id = 4;
-  JobConfirmationStatus status = 5;
+  JobConfirmationStatusGrpc status = 5;
   google.protobuf.Timestamp created_at = 6;
 }
 

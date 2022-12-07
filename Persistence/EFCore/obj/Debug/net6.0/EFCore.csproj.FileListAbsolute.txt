@@ -1,0 +1,12 @@
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/bin/Debug/net6.0/EFCore.deps.json
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/bin/Debug/net6.0/EFCore.dll
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/bin/Debug/net6.0/EFCore.pdb
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/Debug/net6.0/EFCore.csproj.AssemblyReference.cache
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/Debug/net6.0/EFCore.GeneratedMSBuildEditorConfig.editorconfig
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/Debug/net6.0/EFCore.AssemblyInfoInputs.cache
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/Debug/net6.0/EFCore.AssemblyInfo.cs
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/Debug/net6.0/EFCore.csproj.CoreCompileInputs.cache
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/Debug/net6.0/EFCore.dll
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/Debug/net6.0/refint/EFCore.dll
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/Debug/net6.0/EFCore.pdb
+/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/Debug/net6.0/ref/EFCore.dll

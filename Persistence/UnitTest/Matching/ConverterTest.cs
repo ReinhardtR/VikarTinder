@@ -17,22 +17,22 @@ public class ConverterTest
     [Test, Description("Conversion of null SubList or null GigList should catch")]
     public void GigAndSubListNull()
     {
-        Assert.Catch<ConverterNullReference>(() => MatchConverter.ConvertGigList(null));
-        Assert.Catch<ConverterNullReference>(() => MatchConverter.ConvertSubList(null));
+        Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertGigList(null));
+        Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertSubList(null));
     }
 
     [TestCaseSource(typeof(DataClass), nameof(DataClass.GigListConversion)), Description(
          "Testing boundaries for gigList conversion")]
     public int BoundaryBehaviors(List<Gig> gigs)
     {
-        return MatchConverter.ConvertGigList(gigs).Gigs.Count;
+        return MatchFactory.ConvertGigList(gigs).Gigs.Count;
     }
     
     [TestCaseSource(typeof(DataClass), nameof(DataClass.SubListConversion)), Description(
          "Testing boundaries for gigList conversion")]
     public int BoundaryBehaviors(List<Substitute> substitutes)
     {
-        return MatchConverter.ConvertSubList(substitutes).Substitutes.Count;
+        return MatchFactory.ConvertSubList(substitutes).Substitutes.Count;
     }
     
     
@@ -41,15 +41,14 @@ public class ConverterTest
     [Test, Description("Null argument")]
     public void NullTestValidationConversion()
     {
-        Assert.Catch<ConverterNullReference>(() =>MatchConverter.ConvertToValidation(null));
+        Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertToValidation(null));
     }
     
     [TestCaseSource(typeof(DataClass), nameof(DataClass.ConversionToValidation)), Description(
          "Testing for null and boundray")]
     public MatchValidation ValidationConversion(IdsForMatchDto dto)
     {
-
-        return MatchConverter.ConvertToValidation(dto);
+        return MatchFactory.ConvertToValidation(dto);
     }
     
     
@@ -59,7 +58,7 @@ public class ConverterTest
          "Testing boundaries for conversion of ids to dto")]
     public List<dynamic> IdToDtoConversion(int currentUser, int matchUser, bool wantsToMatch)
     {
-        ToBeMatchedDto dto = MatchConverter.CreateToBeMatchedDto(currentUser, matchUser, wantsToMatch);
+        ToBeMatchedDto dto = MatchFactory.CreateToBeMatchedDto(currentUser, matchUser, wantsToMatch);
 
         return new List<dynamic>() { dto.UserId, dto.MatchId ,dto.WantsToMatch};
     }
@@ -103,7 +102,7 @@ public class DataClass
             {
                 EmployerId = 1,
                 GigId = 1,
-                SustituteId = 1,
+                SubstituteId = 1,
                 WasAMatch = true
             }).Returns(new MatchValidation
             {
@@ -116,7 +115,7 @@ public class DataClass
             {
                 EmployerId = int.MinValue,
                 GigId = int.MinValue,
-                SustituteId = int.MinValue,
+                SubstituteId = int.MinValue,
             }).Returns(new MatchValidation
             {
                 EmployerId = int.MinValue,
@@ -127,7 +126,7 @@ public class DataClass
             {
                 EmployerId = int.MaxValue,
                 GigId = int.MaxValue,
-                SustituteId = int.MaxValue,
+                SubstituteId = int.MaxValue,
                 WasAMatch = true
             }).Returns(new MatchValidation
             {
@@ -158,7 +157,7 @@ public class DataClass
         List<Gig> gigs = new List<Gig>();
         for (int i = 0; i < amount; i++)
         {
-            gigs.Add(new Gig(null)
+            gigs.Add(new Gig()
             {
                 Id = i
             });

@@ -1,6 +1,6 @@
 package com.example.businessserver.dtos.chat;
 
-import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public class ChatHistoryDTO {
 	private JobConfirmationDTO jobConfirmation;
 
 	private int substituteId;
-	
+
 	private int employerId;
 
 	public ChatHistoryDTO(List<MessageDTO> messages, JobConfirmationDTO jobConfirmation, int substituteId, int employerId) {

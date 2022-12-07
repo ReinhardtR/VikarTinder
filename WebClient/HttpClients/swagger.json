@@ -29,6 +29,52 @@
         },
         "responses": {
           "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/matching/gigs": {
+      "post": {
+        "tags": [
+          "matching-controller"
+        ],
+        "operationId": "gigsMatchRequest",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MatchRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/job-confirmation": {
+      "post": {
+        "tags": [
+          "job-confirmation-controller"
+        ],
+        "operationId": "createJobConfirmation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateJobConfirmationDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
             "description": "OK",
             "content": {
               "*/*": {
@@ -129,29 +175,61 @@
         }
       }
     },
-    "/api/tinder": {
-      "post": {
+    "/matching/substitutes/{currentUserId}": {
+      "get": {
         "tags": [
-          "user-controller"
+          "matching-controller"
         ],
-        "operationId": "createUser",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/SubstituteDTO"
-              }
+        "operationId": "getSubstitutes",
+        "parameters": [
+          {
+            "name": "currentUserId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
-          },
-          "required": true
-        },
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/SubstituteDTO"
+                  "$ref": "#/components/schemas/SubstituteMatchingDTOs"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/matching/gigs/{currentUserId}": {
+      "get": {
+        "tags": [
+          "matching-controller"
+        ],
+        "operationId": "getGigs",
+        "parameters": [
+          {
+            "name": "currentUserId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/GigMatchingDTOs"
                 }
               }
             }
@@ -217,93 +295,6 @@
                 }
               }
             }
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/matching/gigs": {
-      "post": {
-        "tags": [
-          "matching-controller"
-        ],
-        "operationId": "gigsMatchRequest",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MatchRequestDTO"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/matching/substitutes/{currentUserId}": {
-      "get": {
-        "tags": [
-          "matching-controller"
-        ],
-        "operationId": "getSubstitutes",
-        "parameters": [
-          {
-            "name": "currentUserId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/SubstituteDTO"
-                  "$ref": "#/components/schemas/SubstituteMatchingDTOs"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/matching/gigs/{currentUserId}": {
-      "get": {
-        "tags": [
-          "matching-controller"
-        ],
-        "operationId": "getGigs",
-        "parameters": [
-          {
-            "name": "currentUserId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "$ref": "#/components/schemas/GigMatchingDTOs"
-                }
-              }
-            }
           }
         }
       }
@@ -311,6 +302,22 @@
   },
   "components": {
     "schemas": {
+      "MatchRequestDTO": {
+        "type": "object",
+        "properties": {
+          "currentUser": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "matchId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wantsToMatch": {
+            "type": "boolean"
+          }
+        }
+      },
       "CreateJobConfirmationDTO": {
         "type": "object",
         "properties": {
@@ -352,8 +359,7 @@
             "enum": [
               "UNANSWERED",
               "ACCEPTED",
-              "DECLINED",
-              "UNRECOGNIZED"
+              "DECLINED"
             ]
           },
           "offeredAt": {
@@ -432,20 +438,24 @@
           }
         }
       },
-      "SubstituteDTO": {
-      "MatchRequestDTO": {
+      "AnswerJobConfirmationDTO": {
         "type": "object",
         "properties": {
-          "currentUser": {
+          "id": {
             "type": "integer",
             "format": "int32"
           },
-          "matchId": {
+          "chatId": {
             "type": "integer",
             "format": "int32"
           },
-          "wantsToMatch": {
-            "type": "boolean"
+          "status": {
+            "type": "string",
+            "enum": [
+              "UNANSWERED",
+              "ACCEPTED",
+              "DECLINED"
+            ]
           }
         }
       },
@@ -486,28 +496,6 @@
             "items": {
               "$ref": "#/components/schemas/GigMatchingDTO"
             }
-          }
-        }
-      },
-      "AnswerJobConfirmationDTO": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "chatId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "isAccepted": {
-            "type": "string",
-            "enum": [
-              "UNANSWERED",
-              "ACCEPTED",
-              "DECLINED",
-              "UNRECOGNIZED"
-            ]
           }
         }
       },

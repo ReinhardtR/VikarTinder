@@ -2,11 +2,10 @@ package com.example.businessserver.services.factories;
 
 import ChatService.*;
 import JobConfirmationService.JobConfirmationObject;
-import JobConfirmationService.JobConfirmationStatus;
-import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
 import com.example.businessserver.dtos.chat.*;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
+import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -117,7 +116,7 @@ public class ChatServiceFactory {
 						jobConfirmationObject.getChatId(),
 						jobConfirmationObject.getSubstituteId(),
 						jobConfirmationObject.getEmployerId(),
-						jobConfirmationObject.getStatus(),
+						JobConfirmationServiceFactory.toJobConfirmationStatus(jobConfirmationObject.getStatus()),
 						LocalDateTime.ofInstant(
 										Instant.ofEpochSecond(jobConfirmationObject.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
 		);
@@ -129,13 +128,5 @@ public class ChatServiceFactory {
 						.newBuilder()
 						.setId(dto.getId())
 						.build();
-	}
-
-	private Boolean fromJobConfirmationStatus(JobConfirmationStatus status) {
-		return switch (status) {
-			case ACCEPTED -> true;
-			case DECLINED -> false;
-			default -> null;
-		};
 	}
 }

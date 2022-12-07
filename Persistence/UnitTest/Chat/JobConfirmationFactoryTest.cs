@@ -8,7 +8,7 @@ namespace UnitTest.Chat;
 [TestFixture]
 public class JobConfirmationFactoryTest
 {
-    private static JobConfirmation[] JobConfirmationData=
+    private static JobConfirmation[] JobConfirmationData =
     {
         
         new JobConfirmation
@@ -46,13 +46,13 @@ public class JobConfirmationFactoryTest
     [Test, TestCaseSource(nameof(JobConfirmationData))]
     public void ToCreateJobConfirmationResponseTest(JobConfirmation jobConfirmation)
     {
-        var result = JobConfirmationFactory.ToCreateJobConfirmationResponse(jobConfirmation);
+        CreateJobConfirmationResponse result = JobConfirmationFactory.ToCreateJobConfirmationResponse(jobConfirmation);
         
         Assert.AreEqual(jobConfirmation.Id, result.JobConfirmation.Id);
         Assert.AreEqual(jobConfirmation.ChatId, result.JobConfirmation.ChatId);
         Assert.AreEqual(jobConfirmation.SubstituteId, result.JobConfirmation.SubstituteId);
         Assert.AreEqual(jobConfirmation.EmployerId, result.JobConfirmation.EmployerId);
-        Assert.AreEqual(jobConfirmation.Status, result.JobConfirmation.Status);
+        Assert.AreEqual(JobConfirmationFactory.ToJobConfirmationStatusGrpc(jobConfirmation.Status), result.JobConfirmation.Status);
         Assert.That(result.JobConfirmation.CreatedAt, Is.EqualTo(jobConfirmation.CreatedAt.ToTimestamp()));
     }
     
@@ -65,7 +65,7 @@ public class JobConfirmationFactoryTest
         Assert.AreEqual(jobConfirmation.ChatId, result.JobConfirmation.ChatId);
         Assert.AreEqual(jobConfirmation.SubstituteId, result.JobConfirmation.SubstituteId);
         Assert.AreEqual(jobConfirmation.EmployerId, result.JobConfirmation.EmployerId);
-        Assert.AreEqual(jobConfirmation.Status, result.JobConfirmation.Status);
+        Assert.AreEqual(JobConfirmationFactory.ToJobConfirmationStatusGrpc(jobConfirmation.Status), result.JobConfirmation.Status);
         Assert.That(result.JobConfirmation.CreatedAt, Is.EqualTo(jobConfirmation.CreatedAt.ToTimestamp()));
     }
     
@@ -78,7 +78,7 @@ public class JobConfirmationFactoryTest
         Assert.AreEqual(jobConfirmation.ChatId, result.JobConfirmation.ChatId);
         Assert.AreEqual(jobConfirmation.SubstituteId, result.JobConfirmation.SubstituteId);
         Assert.AreEqual(jobConfirmation.EmployerId, result.JobConfirmation.EmployerId);
-        Assert.AreEqual(jobConfirmation.Status, result.JobConfirmation.Status);
+        Assert.AreEqual(JobConfirmationFactory.ToJobConfirmationStatusGrpc(jobConfirmation.Status), result.JobConfirmation.Status);
         Assert.That(result.JobConfirmation.CreatedAt, Is.EqualTo(jobConfirmation.CreatedAt.ToTimestamp()));
     }
     

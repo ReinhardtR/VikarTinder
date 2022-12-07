@@ -1,10 +1,11 @@
 package com.example.businessserver.logic;
 
-import JobConfirmationService.JobConfirmationStatus;
-import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
-import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
-import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
-import com.example.businessserver.services.JobConfirmationServiceClient;
+import com.example.businessserver.dtos.jobconfirmation.AnswerJobConfirmationDTO;
+import com.example.businessserver.dtos.jobconfirmation.CreateJobConfirmationDTO;
+import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.jobconfirmation.JobConfirmationStatus;
+import com.example.businessserver.logic.interfaces.JobConfirmationLogic;
+import com.example.businessserver.services.interfaces.JobConfirmationServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

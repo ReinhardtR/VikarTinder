@@ -20,17 +20,17 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         Console.WriteLine("IDs: [Sub]:" + request.CurrentUser + " [Gig]:" + request.ToBeMatchedId);
         Console.WriteLine(request.WantToMatch);
         
-        //DatabaseKald for at matche
         IdsForMatchDto matchedGig = await _dao.MatchingGig(
-            MatchConverter.CreateToBeMatchedDto(
+            MatchFactory.CreateToBeMatchedDto(
                 request.CurrentUser,
                 request.ToBeMatchedId,
-                request.WantToMatch));
+                request.WantToMatch
+            )
+        );
         
         Console.WriteLine("Gig Id = " + matchedGig.GigId);
-
-        //Convert tilbage til reqly
-        MatchValidation validation = MatchConverter.ConvertToValidation(matchedGig);
+        
+        MatchValidation validation = MatchFactory.ConvertToValidation(matchedGig);
         Console.WriteLine("Conversion success");
 
         return validation;
@@ -41,13 +41,13 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         Console.WriteLine("IDs: [Employer]:" + request.CurrentUser + " [Substitute]:" + request.ToBeMatchedId);
         
         //DatabaseKald for at matche
-        IdsForMatchDto matchedSubstitute = await _dao.MatchingSubstitute(MatchConverter.CreateToBeMatchedDto(
+        IdsForMatchDto matchedSubstitute = await _dao.MatchingSubstitute(MatchFactory.CreateToBeMatchedDto(
             request.CurrentUser,
             request.ToBeMatchedId,
             request.WantToMatch));
    
         //Conversion
-        MatchValidation validation = MatchConverter.ConvertToValidation(matchedSubstitute);
+        MatchValidation validation = MatchFactory.ConvertToValidation(matchedSubstitute);
         
         Console.WriteLine("Conversion success: [SUB ID]"+ validation.SubstituteId + "[ISMATCHED]" + validation.IsMatched);
         return validation;
@@ -63,7 +63,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         List<Substitute> subsFromDatabase = await _dao.GetSubstitutesForMatching(request.CurrentUserId);
 
         // Convert til en reply
-        MatchingSubstitutes subs =MatchConverter.ConvertSubList(subsFromDatabase);
+        MatchingSubstitutes subs =MatchFactory.ConvertSubList(subsFromDatabase);
 
         return subs;
     }
@@ -77,7 +77,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         List<Gig> gigsFromDatabase = await _dao.GetGigsForMatching(request.CurrentUserId);
 
         //Convert til en reply
-        MatchingGigs gigs = MatchConverter.ConvertGigList(gigsFromDatabase);
+        MatchingGigs gigs = MatchFactory.ConvertGigList(gigsFromDatabase);
 
         return gigs;
     }

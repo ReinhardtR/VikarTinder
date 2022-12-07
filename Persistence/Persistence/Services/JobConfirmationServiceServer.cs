@@ -7,9 +7,9 @@ namespace Persistence.Services;
 public class JobConfirmationServiceServer : JobConfirmationService.JobConfirmationServiceBase
 {
     private readonly ILogger<JobConfirmationServiceServer> _logger;
-    private readonly IJobConfirmationDAO _jobConfirmationDao;
+    private readonly IJobConfirmationDao _jobConfirmationDao;
     
-    public JobConfirmationServiceServer(ILogger<JobConfirmationServiceServer> logger, IJobConfirmationDAO jobConfirmationDao)
+    public JobConfirmationServiceServer(ILogger<JobConfirmationServiceServer> logger, IJobConfirmationDao jobConfirmationDao)
     {
         _logger = logger;
         _jobConfirmationDao = jobConfirmationDao;
@@ -27,7 +27,8 @@ public class JobConfirmationServiceServer : JobConfirmationService.JobConfirmati
     public override async Task<JobConfirmationAnswerResponse> AnswerJobConfirmation(
         JobConfirmationAnswerRequest request, ServerCallContext context)
     {
-        JobConfirmation? jobConfirmation = await _jobConfirmationDao.AnswerJobConfirmationAsync(request.Id,request.IsAccepted);
+        JobConfirmationStatus status = JobConfirmationFactory.ToJobConfirmationStatus(request.Status);
+        JobConfirmation? jobConfirmation = await _jobConfirmationDao.AnswerJobConfirmationAsync(request.Id, status);
         
         if (jobConfirmation == null)
         {

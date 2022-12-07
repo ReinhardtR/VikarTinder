@@ -2,10 +2,10 @@ package com.example.businessserver.services.implementations;
 
 
 import JobConfirmationService.*;
-import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
-import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
-import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
-import com.example.businessserver.services.JobConfirmationServiceClient;
+import com.example.businessserver.dtos.jobconfirmation.AnswerJobConfirmationDTO;
+import com.example.businessserver.dtos.jobconfirmation.CreateJobConfirmationDTO;
+import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
+import com.example.businessserver.services.interfaces.JobConfirmationServiceClient;
 import com.example.businessserver.services.factories.JobConfirmationServiceFactory;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;

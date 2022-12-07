@@ -34,6 +34,79 @@ namespace Persistence.Migrations
                     b.ToTable("Chats");
                 });
 
+            modelBuilder.Entity("Persistence.Models.Employer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Employers");
+                });
+
+            modelBuilder.Entity("Persistence.Models.EmployerSubstitute", b =>
+                {
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("SubstituteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("PublicationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<bool>("WantsToMatch")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("EmployerId", "SubstituteId");
+
+                    b.HasIndex("SubstituteId");
+
+                    b.ToTable("EmployerSubstitute");
+                });
+
+            modelBuilder.Entity("Persistence.Models.Gig", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EmployerId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployerId");
+
+                    b.ToTable("Gigs");
+                });
+
+            modelBuilder.Entity("Persistence.Models.GigSubstitute", b =>
+                {
+                    b.Property<int>("SubstituteId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("GigId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("PublicationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<bool>("WantsToMatch")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("SubstituteId", "GigId");
+
+                    b.HasIndex("GigId");
+
+                    b.ToTable("GigSubstitute");
+                });
+
             modelBuilder.Entity("Persistence.Models.JobConfirmation", b =>
                 {
                     b.Property<int>("Id")
@@ -104,6 +177,17 @@ namespace Persistence.Migrations
                     b.ToTable("Messages");
                 });
 
+            modelBuilder.Entity("Persistence.Models.Substitute", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Substitutes");
+                });
+
             modelBuilder.Entity("Persistence.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -113,6 +197,55 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Persistence.Models.EmployerSubstitute", b =>
+                {
+                    b.HasOne("Persistence.Models.Employer", "Employer")
+                        .WithMany("EmployerSubstitutes")
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Persistence.Models.Substitute", "Substitute")
+                        .WithMany("EmployerSubstitutes")
+                        .HasForeignKey("SubstituteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employer");
+
+                    b.Navigation("Substitute");
+                });
+
+            modelBuilder.Entity("Persistence.Models.Gig", b =>
+                {
+                    b.HasOne("Persistence.Models.Employer", "Employer")
+                        .WithMany("Gigs")
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employer");
+                });
+
+            modelBuilder.Entity("Persistence.Models.GigSubstitute", b =>
+                {
+                    b.HasOne("Persistence.Models.Gig", "Gig")
+                        .WithMany("GigSubstitutes")
+                        .HasForeignKey("GigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Persistence.Models.Substitute", "Substitute")
+                        .WithMany("GigSubstitutes")
+                        .HasForeignKey("SubstituteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Gig");
+
+                    b.Navigation("Substitute");
                 });
 
             modelBuilder.Entity("Persistence.Models.JobConfirmation", b =>
@@ -166,6 +299,25 @@ namespace Persistence.Migrations
                     b.Navigation("JobConfirmation");
 
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Persistence.Models.Employer", b =>
+                {
+                    b.Navigation("EmployerSubstitutes");
+
+                    b.Navigation("Gigs");
+                });
+
+            modelBuilder.Entity("Persistence.Models.Gig", b =>
+                {
+                    b.Navigation("GigSubstitutes");
+                });
+
+            modelBuilder.Entity("Persistence.Models.Substitute", b =>
+                {
+                    b.Navigation("EmployerSubstitutes");
+
+                    b.Navigation("GigSubstitutes");
                 });
 #pragma warning restore 612, 618
         }

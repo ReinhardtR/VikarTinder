@@ -8,10 +8,10 @@ namespace Persistence.Services;
 public class ChatServiceServer : ChatService.ChatServiceBase
 {
     private readonly ILogger<ChatServiceServer> _logger;
-    private readonly IChatDAO _chatDao;
+    private readonly IChatDao _chatDao;
     
     
-    public ChatServiceServer(ILogger<ChatServiceServer> logger, IChatDAO chatDao)
+    public ChatServiceServer(ILogger<ChatServiceServer> logger, IChatDao chatDao)
     {
         _logger = logger;
         _chatDao = chatDao;

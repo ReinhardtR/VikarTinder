@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj": {}
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj": {}
   },
   "projects": {
-    "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
-        "projectName": "Persistence",
-        "projectPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
-        "packagesPath": "C:\\Users\\miloA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\obj\\",
+        "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj",
+        "projectName": "EFCore",
+        "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj",
+        "packagesPath": "/Users/reinhardt/.nuget/packages/",
+        "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\miloA\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -38,38 +38,86 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
+              "target": "Package",
+              "version": "[6.0.11, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj",
+        "projectName": "Persistence",
+        "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj",
+        "packagesPath": "/Users/reinhardt/.nuget/packages/",
+        "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {
+              "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj": {
+                "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
             "Grpc.AspNetCore": {
               "target": "Package",
               "version": "[2.40.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-<<<<<<< HEAD
               "version": "[6.0.11, )"
-            },
-            "Microsoft.EntityFrameworkCore.Analyzers": {
-              "target": "Package",
-=======
->>>>>>> Matchingv1
-              "version": "[7.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-<<<<<<< HEAD
               "version": "[6.0.11, )"
-            },
-            "Microsoft.EntityFrameworkCore.Sqlite": {
-              "target": "Package",
-              "version": "[6.0.11, )"
-=======
-              "version": "[7.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore.Sqlite": {
-              "target": "Package",
-              "version": "[7.0.0, )"
->>>>>>> Matchingv1
             }
           },
           "imports": [
@@ -91,35 +139,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
         }
       }
     },
-<<<<<<< HEAD
-    "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj": {
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
+        "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
         "projectName": "UnitTest",
-        "projectPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
-        "packagesPath": "C:\\Users\\miloA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\obj\\",
+        "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
+        "packagesPath": "/Users/reinhardt/.nuget/packages/",
+        "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\miloA\\AppData\\Roaming\\NuGet\\NuGet.Config"
-=======
-    "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
-        "projectName": "UnitTest",
-        "projectPath": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
-        "packagesPath": "C:\\Users\\Simon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\obj\\",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "C:\\Users\\Simon\\AppData\\Roaming\\NuGet\\NuGet.Config"
->>>>>>> Matchingv1
+          "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -131,13 +165,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-<<<<<<< HEAD
-              "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
-                "projectPath": "C:\\Users\\miloA\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj"
-=======
-              "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
-                "projectPath": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj"
->>>>>>> Matchingv1
+              "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj": {
+                "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj"
               }
             }
           }
@@ -152,29 +181,9 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-<<<<<<< HEAD
             "Microsoft.EntityFrameworkCore.InMemory": {
               "target": "Package",
               "version": "[6.0.11, )"
-=======
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[7.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore.Abstractions": {
-              "target": "Package",
-              "version": "[7.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[7.0.0, )"
-            },
-            "Microsoft.EntityFrameworkCore.Sqlite": {
-              "target": "Package",
-              "version": "[7.0.0, )"
->>>>>>> Matchingv1
             },
             "Microsoft.NET.Test.Sdk": {
               "target": "Package",
@@ -213,7 +222,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
         }
       }
     }

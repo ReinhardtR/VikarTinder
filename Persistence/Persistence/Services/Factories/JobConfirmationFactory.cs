@@ -29,22 +29,21 @@ public class JobConfirmationFactory
             ChatId = jobConfirmation.ChatId,
             SubstituteId = jobConfirmation.SubstituteId,
             EmployerId = jobConfirmation.EmployerId,
-            Status = jobConfirmation.Status,
+            Status = ToJobConfirmationStatusGrpc(jobConfirmation.Status),
             CreatedAt = jobConfirmation.CreatedAt.ToTimestamp()
         };
     }
-    
-    //TODO hvaa hvad sker der her? Den er ikke brugt?
-    public static JobConfirmationStatus ToJobConfirmationStatus(bool? value)
+
+    public static JobConfirmationStatusGrpc ToJobConfirmationStatusGrpc(JobConfirmationStatus value)
     {
-        return value switch
-        {
-            true => JobConfirmationStatus.Accepted,
-            false => JobConfirmationStatus.Declined,
-            _ => JobConfirmationStatus.Unanswered
-        };
+        return (JobConfirmationStatusGrpc) value;
     }
     
+    public static JobConfirmationStatus ToJobConfirmationStatus(JobConfirmationStatusGrpc value)
+    {
+        return (JobConfirmationStatus) value;
+    }
+
     public static GetJobConfirmationResponse ToGetJobConfirmationResponse(JobConfirmation? jobConfirmation)
     {
         return jobConfirmation == null

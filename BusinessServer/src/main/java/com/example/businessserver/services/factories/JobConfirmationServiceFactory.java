@@ -2,9 +2,10 @@ package com.example.businessserver.services.factories;
 
 
 import JobConfirmationService.*;
-import com.example.businessserver.dtos.JobConfirmation.AnswerJobConfirmationDTO;
-import com.example.businessserver.dtos.JobConfirmation.CreateJobConfirmationDTO;
-import com.example.businessserver.dtos.JobConfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.jobconfirmation.AnswerJobConfirmationDTO;
+import com.example.businessserver.dtos.jobconfirmation.CreateJobConfirmationDTO;
+import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
+import com.example.businessserver.dtos.jobconfirmation.JobConfirmationStatus;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -40,7 +41,7 @@ public class JobConfirmationServiceFactory {
 						.newBuilder()
 						.setId(dto.getId())
 						.setChatId(dto.getChatId())
-						.setIsAccepted(dto.getStatus())
+						.setStatus(toJobConfirmationStatusGrpc(dto.getStatus()))
 						.build();
 	}
 
@@ -61,8 +62,25 @@ public class JobConfirmationServiceFactory {
 						jobConfirmation.getChatId(),
 						jobConfirmation.getSubstituteId(),
 						jobConfirmation.getEmployerId(),
-						jobConfirmation.getStatus(),
+						toJobConfirmationStatus(jobConfirmation.getStatus()),
 						LocalDateTime.ofInstant(Instant.ofEpochSecond(jobConfirmation.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
 		);
+	}
+
+	public static JobConfirmationStatus toJobConfirmationStatus(JobConfirmationStatusGrpc value) {
+		return switch (value) {
+			case ACCEPTED -> JobConfirmationStatus.ACCEPTED;
+			case DECLINED -> JobConfirmationStatus.DECLINED;
+			case UNANSWERED -> JobConfirmationStatus.UNANSWERED;
+			default -> throw new IllegalArgumentException("Unknown value: " + value);
+		};
+	}
+
+	public static JobConfirmationStatusGrpc toJobConfirmationStatusGrpc(JobConfirmationStatus value) {
+		return switch (value) {
+			case ACCEPTED -> JobConfirmationStatusGrpc.ACCEPTED;
+			case DECLINED -> JobConfirmationStatusGrpc.DECLINED;
+			case UNANSWERED -> JobConfirmationStatusGrpc.UNANSWERED;
+		};
 	}
 }
