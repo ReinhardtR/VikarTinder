@@ -53,10 +53,14 @@ public class JobConfirmationServiceFactory {
 	}
 
 	public static JobConfirmationDTO toJobConfirmationDTO(GetJobConfirmationResponse response) {
+		if (!response.hasJobConfirmation()) {
+			return null;
+		}
+
 		return toJobConfirmationDTO(response.getJobConfirmation());
 	}
 
-	private static JobConfirmationDTO toJobConfirmationDTO(JobConfirmationObject jobConfirmation) {
+	public static JobConfirmationDTO toJobConfirmationDTO(JobConfirmationObject jobConfirmation) {
 		return new JobConfirmationDTO(
 						jobConfirmation.getId(),
 						jobConfirmation.getChatId(),

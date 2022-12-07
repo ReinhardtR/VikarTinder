@@ -1,7 +1,6 @@
 package com.example.businessserver.services.factories;
 
 import ChatService.*;
-import JobConfirmationService.JobConfirmationObject;
 import com.example.businessserver.dtos.chat.*;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
@@ -37,7 +36,7 @@ public class ChatServiceFactory {
 						.map(ChatServiceFactory::toMessageDTO)
 						.toList();
 
-		JobConfirmationDTO jobConfirmation = toJobConfirmationDTO(response.getJobConfirmation());
+		JobConfirmationDTO jobConfirmation = JobConfirmationServiceFactory.toJobConfirmationDTO(response.getJobConfirmation());
 
 		return new ChatHistoryDTO(messages, jobConfirmation, response.getSubstitute().getId(), response.getEmployer().getId());
 
@@ -106,20 +105,6 @@ public class ChatServiceFactory {
 		return ChatUserObject.newBuilder()
 						.setId(authorId)
 						.build();
-	}
-
-	private static JobConfirmationDTO toJobConfirmationDTO(
-					JobConfirmationObject jobConfirmationObject) {
-
-		return new JobConfirmationDTO(
-						jobConfirmationObject.getId(),
-						jobConfirmationObject.getChatId(),
-						jobConfirmationObject.getSubstituteId(),
-						jobConfirmationObject.getEmployerId(),
-						JobConfirmationServiceFactory.toJobConfirmationStatus(jobConfirmationObject.getStatus()),
-						LocalDateTime.ofInstant(
-										Instant.ofEpochSecond(jobConfirmationObject.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
-		);
 	}
 
 	//TO DO Hvaa skal disse ikke bruges i future? Venter lige med at slette dem.

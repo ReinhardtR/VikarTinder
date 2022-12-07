@@ -24,8 +24,7 @@
             </MudStack>
 
             <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
-                @if (jobConfirmation?.Status == JobConfirmationDTOStatus.ACCEPTED)
-                {
+                @if (jobConfirmation?.Status == JobConfirmationDTOStatus.ACCEPTED) {
                     <MudText Typo="Typo.h6" Color="Color.Success">JOB ER ACCEPTERET</MudText>
                 } 
                 else if (isEmployer && jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
@@ -106,6 +105,7 @@
         
         chatHistory = newChatHistory;
         jobConfirmation = newChatHistory.JobConfirmation;
+        Console.WriteLine("status: " + jobConfirmation?.Id);
         
         await ChatSocket.ConnectAsync(ChatId);
         
