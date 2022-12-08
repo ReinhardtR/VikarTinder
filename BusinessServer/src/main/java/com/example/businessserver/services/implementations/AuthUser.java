@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-
+// Extender User for at snyde Spring Framework
 public class AuthUser extends User {
     private int id;
     private String role;
