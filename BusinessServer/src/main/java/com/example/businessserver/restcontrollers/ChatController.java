@@ -5,12 +5,14 @@ import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
 import com.example.businessserver.logic.interfaces.ChatLogic;
 import com.example.businessserver.websockets.SocketHandler;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/chat")
+@SecurityRequirement(name = "bearerAuth")
 public class ChatController {
 
 	@Autowired

@@ -2,9 +2,9 @@
 
 public class  MatchingService
 {
-    private readonly Client _client;
+    private readonly IClient _client;
 
-    public MatchingService(Client client)
+    public MatchingService(IClient client)
     {
         _client = client;
     }
