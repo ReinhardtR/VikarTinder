@@ -17,8 +17,6 @@
             </MudStack>
         </MudButton>
         
-        <MudSpacer />
-        
         <MudButton OnClick="@NavigateToChatOverview" Variant="Variant.Text" Style="color: white">Chat</MudButton>
         
         <MudSpacer />
@@ -31,8 +29,8 @@
                <MudMenu AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
                    <ActivatorContent>
                        <MudStack Row="true" Spacing="2" Justify="Justify.Center" AlignItems="AlignItems.Center">
-                           <MudAvatar Color="Color.Secondary">@context?.User?.Identity?.Name?[0]</MudAvatar>
-                           <MudText Typo="Typo.button">@context?.User?.Identity?.Name</MudText>
+                           <MudAvatar Color="Color.Secondary">@context.User.Claims.First((c) => c.Type.Equals("name")).Value[0]</MudAvatar>
+                           <MudText Typo="Typo.button">@context.User.Claims.First((c) => c.Type.Equals("name")).Value</MudText>
                        </MudStack>
                    </ActivatorContent>
                    <ChildContent>
@@ -64,10 +62,7 @@
         
         AuthenticationState state = await AuthState;
         ClaimsPrincipal principal = state.User;
-        
-        Console.WriteLine("IsAuthorized: " + principal.Identity?.IsAuthenticated);
-        Console.WriteLine("Identity Name: " + principal.Identity?.Name);
-        
+ 
         foreach (Claim principalClaim in principal.Claims)
         {
             Console.WriteLine($"Name: {principalClaim.Type}, Value: {principalClaim.Value}");
