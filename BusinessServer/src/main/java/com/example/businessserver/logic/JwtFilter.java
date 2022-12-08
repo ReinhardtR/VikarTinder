@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
 // TODO : Refactor navngivning til gruppens standard
 // TODO : Lav et logic interface/burde den være i logic?
 // TODO : Skal der testes på det her
@@ -34,19 +35,16 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = null;
         String userName = null;
 
-        if(null != authorization && authorization.startsWith("Bearer ")) {
+        if (null != authorization && authorization.startsWith("Bearer ")) {
             token = authorization.substring(7);
             userName = jwtUtility.getUsernameFromToken(token);
         }
 
-        if(null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails
-                    = userService.loadUserByUsername(userName);
+        if (null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = userService.loadUserByUsername(userName);
 
-            if(jwtUtility.validateToken(token,userDetails)) {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
-                        = new UsernamePasswordAuthenticationToken(userDetails,
-                        null, userDetails.getAuthorities());
+            if (jwtUtility.validateToken(token, userDetails)) {
+                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null);
 
                 usernamePasswordAuthenticationToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(httpServletRequest)
@@ -54,8 +52,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
-
         }
+
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

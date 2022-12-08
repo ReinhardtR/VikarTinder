@@ -2,18 +2,22 @@
 @using HttpClients.Services        
 @using HttpClients
 @using WebSockets
+@using System.Security.Claims
 @inject ChatSocket ChatSocket
 @inject ChatService ChatService
 @inject JobConfirmationService JobConfirmationService
 @inject ISnackbar Snackbar
+@attribute [Authorize]
 
 @if (chatHistory == null && loadingErrorLabel == null)
 {
     <p>Loading...</p>
-} else if (loadingErrorLabel != null)
+} 
+else if (loadingErrorLabel != null)
 {
     <p>Error: @loadingErrorLabel</p>
-} else if (chatHistory != null)
+}
+else if (chatHistory != null)
 {
     @* vh based on the size of the appbar taking up the top part of the screen *@
     <MudStack Justify="Justify.Center" Spacing="4" Style="height: 80vh">
@@ -27,37 +31,47 @@
                 @if (jobConfirmation?.Status == JobConfirmationDTOStatus.ACCEPTED) {
                     <MudText Typo="Typo.h6" Color="Color.Success">JOB ER ACCEPTERET</MudText>
                 } 
-                else if (isEmployer && jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
+                else
                 {
-                    <MudText Typo="Typo.h6" Color="Color.Info">
-                        JOB ANMODNING ER SENDT
-                    </MudText>
-                }
-                else if (isEmployer)
-                {
-                    <MudButton OnClick="SendJobConfirmationRequest" Variant="Variant.Outlined">
-                        Send Job Anmodning
-                    </MudButton>
+                    <AuthorizeView Roles="@AuthRoles.Employer">
+                        @if (jobConfirmation?.Status == JobConfirmationDTOStatus.DECLINED)
+                        {
+                            <MudButton OnClick="@SendJobConfirmationRequest" Variant="@Variant.Outlined">
+                                Send Job Anmodning
+                            </MudButton>
+                        }
+                        else if (jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
+                        {
+                            <MudText Typo="@Typo.h6" Color="@Color.Info">
+                                JOB ANMODNING ER SENDT
+                            </MudText>
+                        }
+                    </AuthorizeView>
                 }
             </MudStack>
         </MudStack>
         
         <MudDivider Class="my-1" />
         
-        @if (!isEmployer && jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
-        {
-            <JobConfirmationRequest JobConfirmation="@jobConfirmation" />
-            <MudDivider Class="my-1" />
-        }
+        <AuthorizeView Roles="@AuthRoles.Substitute">
+            @if (jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
+            {
+                <JobConfirmationRequest JobConfirmation="@jobConfirmation" />
+                <MudDivider Class="my-1" />
+            }
+        </AuthorizeView>
 
-        <MudStack Reverse="@true" Class="overflow-y-scroll pa-4 flex-grow-1">
-            <MudStack Spacing="4">
-                @foreach (MessageDTO message in chatHistory.Messages)
-                {
-                    <ChatMessage UserId="@userId" AuthorId="@message.AuthorId" Content="@message.Content" />
-                }
+        <AuthorizeView>
+            <MudStack Reverse="@true" Class="overflow-y-scroll pa-4 flex-grow-1">
+                <MudStack Spacing="4">
+                    @foreach (MessageDTO message in chatHistory.Messages)
+                    {
+                        int userId = int.Parse(context.User.Claims.First((c) => c.Type == ClaimTypes.NameIdentifier).Value);
+                        <ChatMessage UserId="@userId" AuthorId="@message.AuthorId" Content="@message.Content" />
+                    }
+                </MudStack>
             </MudStack>
-        </MudStack>
+        </AuthorizeView>
 
         <EditForm Model="@formModel" OnValidSubmit="@HandleValidSubmit">
             <MudStack Row="@true" Spacing="2" Class="px-4" AlignItems="AlignItems.Start" Justify="Justify.Center">
@@ -73,11 +87,8 @@
     [Parameter]
     public int ChatId { get; set; }
 
-    // TODO replace with auth stuff
-    private bool isEmployer = true;
-    
-    // TODO replace with auth stuff
-    private int userId = 2;
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
     
     // TODO replace with data from server
     private string chatName = "John Doe";
@@ -105,8 +116,7 @@
         
         chatHistory = newChatHistory;
         jobConfirmation = newChatHistory.JobConfirmation;
-        Console.WriteLine("status: " + jobConfirmation?.Id);
-        
+
         await ChatSocket.ConnectAsync(ChatId);
         
         ListenToChatSocket();
@@ -186,6 +196,11 @@
     {
         try
         {
+            AuthenticationState authState = await AuthState;
+            Claim? claim = authState.User.Claims.FirstOrDefault((c) => c.Type == ClaimTypes.NameIdentifier);
+            if (claim == null) throw new Exception("Couldn't find the user id.");
+            int userId = int.Parse(claim.Value);
+            
             CreateJobConfirmationDTO createJobConfirmationDto = new()
             {
                 ChatId = ChatId,
@@ -211,6 +226,11 @@
             {
                 return;
             }
+
+            AuthenticationState authState = await AuthState;
+            Claim? claim = authState.User.Claims.FirstOrDefault((c) => c.Type == ClaimTypes.NameIdentifier);
+            if (claim == null) throw new Exception("Couldn't find the user id.");
+            int userId = int.Parse(claim.Value);
             
             SendMessageDTO sendMessageDto = new()
             {
