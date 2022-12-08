@@ -1,5 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using HttpClients.Services.Interfaces
+@using System.Security.Claims
+@inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
+@inject IAuthService AuthService
 
 <MudThemeProvider/>
 <MudDialogProvider/>
@@ -20,9 +23,26 @@
         
         <MudSpacer />
         
-        <MudText>
-            <MudButton Variant="Variant.Text" Style="color: white">Reinhardt Rijna</MudButton>
-        </MudText>
+       <AuthorizeView>
+           <NotAuthorized>
+               <MudButton OnClick="LoginHandler" EndIcon="@Icons.Filled.Login" Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true">Login</MudButton>
+           </NotAuthorized>
+           <Authorized>
+               <MudMenu AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+                   <ActivatorContent>
+                       <MudStack Row="true" Spacing="2" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                           <MudAvatar Color="Color.Secondary">@context?.User?.Identity?.Name?[0]</MudAvatar>
+                           <MudText Typo="Typo.button">@context?.User?.Identity?.Name</MudText>
+                       </MudStack>
+                   </ActivatorContent>
+                   <ChildContent>
+                       <MudMenuItem Icon="@Icons.Filled.Logout" OnClick="LogoutHandler">
+                           Logout
+                       </MudMenuItem>
+                   </ChildContent>
+               </MudMenu>
+           </Authorized>
+       </AuthorizeView>
     </MudAppBar>
     
     <MudMainContent>
@@ -34,6 +54,31 @@
 
 @code {
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+    
+    // temporary
+    private async Task LoginHandler()
+    {
+        await AuthService.LoginAsync();
+        
+        AuthenticationState state = await AuthState;
+        ClaimsPrincipal principal = state.User;
+        
+        Console.WriteLine("IsAuthorized: " + principal.Identity?.IsAuthenticated);
+        Console.WriteLine("Identity Name: " + principal.Identity?.Name);
+        
+        foreach (Claim principalClaim in principal.Claims)
+        {
+            Console.WriteLine($"Name: {principalClaim.Type}, Value: {principalClaim.Value}");
+        }
+    }
+    
+    private async Task LogoutHandler()
+    {
+        await AuthService.LogoutAsync();
+    }
+    
     private void NavigateToHome()
     {
         NavigationManager.NavigateTo("/");
