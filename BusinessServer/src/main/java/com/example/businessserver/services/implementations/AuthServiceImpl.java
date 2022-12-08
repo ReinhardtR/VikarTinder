@@ -3,7 +3,6 @@ package com.example.businessserver.services.implementations;
 import com.example.businessserver.services.interfaces.AuthService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +12,7 @@ import java.util.ArrayList;
 public class AuthServiceImpl implements AuthService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-
-        //Logic to get the user form the Database
-
-        return new User("admin","password",new ArrayList<>());
+        new User("admin", "password", new ArrayList<>());
+        return new AuthUser("admin", "password", 5, "VIKAR", "vikar@viakr.vikar", new ArrayList<>());
     }
 }
