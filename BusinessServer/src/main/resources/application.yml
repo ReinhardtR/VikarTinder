@@ -1,4 +1,0 @@
-#TODO : Kunne ikke få ref til at virke
-# jwt secret key
-jwt:
-secret: secretary123

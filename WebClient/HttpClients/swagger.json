@@ -7,26 +7,6 @@
     }
   ],
   "paths": {
-    "/token": {
-      "post": {
-        "tags": [
-          "auth-controller"
-        ],
-        "operationId": "token",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "*/*": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/matching/substitutes": {
       "post": {
         "tags": [
@@ -158,12 +138,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/chat/": {
@@ -193,12 +168,37 @@
               }
             }
           }
+        }
+      }
+    },
+    "/authenticate": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "authenticate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JwtRequest"
+              }
+            }
+          },
+          "required": true
         },
-        "security": [
-          {
-            "bearerAuth": []
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwtResponse"
+                }
+              }
+            }
           }
-        ]
+        }
       }
     },
     "/matching/substitutes/{currentUserId}": {
@@ -291,12 +291,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     },
     "/chat/history/{id}": {
@@ -327,12 +322,7 @@
               }
             }
           }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
+        }
       }
     }
   },
@@ -474,6 +464,25 @@
           }
         }
       },
+      "JwtRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "JwtResponse": {
+        "type": "object",
+        "properties": {
+          "jwtToken": {
+            "type": "string"
+          }
+        }
+      },
       "AnswerJobConfirmationDTO": {
         "type": "object",
         "properties": {
@@ -572,7 +581,6 @@
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "in": "header",
         "scheme": "bearer",
         "bearerFormat": "JWT"
       }

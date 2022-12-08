@@ -1,17 +1,30 @@
 ﻿@page "/"
 @using System.Security.Claims
+@using HttpClients.Services.Interfaces
+@inject IAuthService AuthService
 
 <PageTitle>Index</PageTitle>
 
 <h1>Hello, world!</h1>
 
+<AuthorizeView>
+    <Authorized>
+        <MudText Color="Color.Success" Typo="Typo.h5">Logged in!</MudText>
+    </Authorized>
+    <NotAuthorized>
+        <MudButton OnClick="OnLogin" Color="Color.Primary" Variant="Variant.Filled">Login</MudButton>
+    </NotAuthorized>
+</AuthorizeView>
+
 @code {
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
-    
-    protected override async Task OnInitializedAsync()
+
+    private async void OnLogin()
     {
+        await AuthService.LoginAsync();
+        
         AuthenticationState state = await AuthState;
         ClaimsPrincipal principal = state.User;
         
@@ -22,6 +35,5 @@
         {
             Console.WriteLine($"Name: {principalClaim.Type}, Value: {principalClaim.Value}");
         }
-
     }
 }

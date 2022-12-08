@@ -18,16 +18,19 @@ public class JwtAuthService : IAuthService
 
     public Action<ClaimsPrincipal> OnAuthStateChanged { get; set; } = null!;
     
-    public Task LoginAsync()
+    public async Task LoginAsync()
     {
-        // call api to get token
-        // Jwt = token;
+        JwtResponse jwtResponse = await _client.AuthenticateAsync(new JwtRequest()
+        {
+            Username = "admin",
+            Password = "password"
+        });
         
-        // ClaimsPrincipal principal = CreateClaimsPrincipal();
-        //
-        // OnAuthStateChanged.Invoke(principal);
-        //
-        throw new NotImplementedException();
+        Jwt = jwtResponse.JwtToken;
+        
+        ClaimsPrincipal principal = CreateClaimsPrincipal();
+        
+        OnAuthStateChanged.Invoke(principal);
     }
 
     public Task LogoutAsync()
