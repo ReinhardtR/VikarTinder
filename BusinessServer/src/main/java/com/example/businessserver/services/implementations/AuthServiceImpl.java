@@ -13,6 +13,6 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         new User("admin", "password", new ArrayList<>());
-        return new AuthUser("admin", "password", 5, "VIKAR", "vikar@viakr.vikar", new ArrayList<>());
+        return new AuthUser("admin", "password", 5, "SUBSTITUTE", "vikar@viakr.vikar", new ArrayList<>());
     }
 }
