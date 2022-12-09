@@ -1,29 +1,28 @@
 @page "/chat"
+@using HttpClients.Services
+@attribute [Authorize]
 
 <PageTitle>Chat</PageTitle>
 
-<CreateChatForm></CreateChatForm>
-
-@if (!isEmployer)
-{
+<AuthorizeView Roles="@AuthRoles.Substitute">
     <ChatsOverview />
-}
-else if (selectedGigId == null)
-{
-    <GigsOverview OnGigSelected="OnGigSelected"/>
-}
-else
-{
-    <MudStack AlignItems="AlignItems.Start">
-        <MudButton OnClick="ResetGigId" StartIcon="@Icons.Filled.ArrowBack">Back</MudButton>
-        <ChatsOverview GigId="@selectedGigId" />
-    </MudStack>
-}
+</AuthorizeView>
+
+<AuthorizeView Roles="@AuthRoles.Employer">
+    @if (selectedGigId == null)
+    {
+        <GigsOverview OnGigSelected="OnGigSelected"/>
+    }
+    else
+    {
+        <MudStack AlignItems="AlignItems.Start">
+            <MudButton OnClick="ResetGigId" StartIcon="@Icons.Filled.ArrowBack">Back</MudButton>
+            <ChatsOverview GigId="@selectedGigId" />
+        </MudStack>
+    }
+</AuthorizeView>
 
 @code {
-
-    // TODO replace with auth stuff
-    private bool isEmployer = true;
     
     private int? selectedGigId;
 
