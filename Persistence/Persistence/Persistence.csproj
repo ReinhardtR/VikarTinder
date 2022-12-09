@@ -8,6 +8,9 @@
 
     <ItemGroup>
         <Protobuf Include="..\..\SharedProto\*.proto" GrpcServices="Server" />
+        <Protobuf Update="..\..\SharedProto\AdministrationService.proto">
+          <Link>SharedProto\AdministrationService.proto</Link>
+        </Protobuf>
     </ItemGroup>
 
     <ItemGroup>

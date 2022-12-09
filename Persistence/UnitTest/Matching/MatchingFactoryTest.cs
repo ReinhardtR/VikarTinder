@@ -98,6 +98,7 @@ public class DataClass
         {
             yield return new TestCaseData(new IdsForMatchDto())
                 .Returns(new MatchValidation());
+            
             yield return new TestCaseData(new IdsForMatchDto
             {
                 EmployerId = 1,
@@ -144,7 +145,7 @@ public class DataClass
         get
         {
             yield return new TestCaseData(1, 1, true)
-                .Returns(new List<dynamic>{1,1,true});
+                .Returns(new List<dynamic>{1, 1, true});
             yield return new TestCaseData(int.MinValue, int.MinValue, false)
                 .Returns(new List<dynamic> { int.MinValue, int.MinValue, false });
             yield return new TestCaseData(int.MaxValue, int.MaxValue, true)

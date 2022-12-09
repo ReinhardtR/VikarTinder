@@ -1,0 +1,84 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Persistence";
+option java_multiple_files = true;
+
+package AdministrationService;
+
+//PROTO OBJECTS
+
+message UserObject{
+  int32 id = 1;
+  UserData user_data = 2;
+}
+
+message UserData{
+  string name = 1;
+  string password_hash = 2;
+  string email = 3;
+  oneof role {SubstituteObject sub = 4; EmployerObject emp = 5;}
+}
+
+message EmployerObject {
+  string title = 1;
+  string workplace = 2;
+}
+
+message SubstituteObject{
+  int32 age = 1;
+  string bio = 2;
+  string address = 3;
+}
+
+message UserToDeleteParams{
+  int32 id = 1;
+  enum Role {EMPLOYER = 0 ; SUBSTITUTE = 1;}
+  Role role = 2;
+}
+
+
+//MESSAGES
+
+//CREATE
+message CreateUserRequest{
+  UserData user = 1;
+}
+message CreateUserResponse {
+  UserObject user = 1;
+}
+
+//LOGIN
+message CreateLoginRequest {
+  string email = 1;
+  string password_hash = 2;
+}
+message LoginUserResponse {
+  UserObject user = 1;
+}
+
+//UPDATE
+message UpdateUserRequest{
+  UserObject user = 1;
+}
+message UpdateUserResponse {
+  UserObject user = 1;
+}
+
+//DELETE
+message DeleteUserRequest {
+  UserToDeleteParams user = 1;
+}
+
+message DeleteUserResponse {
+  UserToDeleteParams user = 1;
+  bool validation = 2;
+}
+
+//
+
+service AdministrationService {
+    rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
+    rpc Login(CreateLoginRequest) returns (LoginUserResponse);
+    rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
+    rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+}
