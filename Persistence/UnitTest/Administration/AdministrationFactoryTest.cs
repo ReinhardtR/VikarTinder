@@ -18,7 +18,15 @@ public class ConverterTestAdministration
         Assert.Catch<FactoryNullReference>(() => AdministrationFactory.LoginSubstituteUserResponse(null));
         Assert.Catch<FactoryNullReference>(() => AdministrationFactory.LoginEmployerUserResponse(null));
     }
-
+    [Test]
+    public void CreateUserResponseWithEmptyArgumentsInParameter()
+    {
+        Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateSubstiuteUserResponse(
+            new Substitute()));
+        Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateEmployerUserResponse(
+            new Employer()));
+    }
+    
     [Test]
     public void CreateUserResponseWithNullArgumentsInParameter()
     {
@@ -28,14 +36,17 @@ public class ConverterTestAdministration
                 Id = 3,
                 PasswordHash = "1 2 3 4",
                 Email = "MailTest@mail.com",
+                Bio = "I am test!"
             }));
-        Assert.Catch<FactoryNullReference>();
-    }
-    
-    [Test]
-    public void smth()
-    {
-        AdministrationFactory.CreateSubstiuteUserResponse(new Substitute());
+        Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateEmployerUserResponse(
+            new Employer
+            {
+                Id = 3,
+                PasswordHash = "1 2 3 4",
+                Email = "MailTest@mail.com",
+                Title = "Testman",
+                WorkPlace = "TestPlace"
+            }));
     }
 
     [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertToResponseAsSubstitute))]
@@ -92,7 +103,7 @@ public class ConverterTestAdministration
                 }).Returns(
                     new List<dynamic>{2,"1 2 3 4","MailTest@mail.com"});
                 
-                //TODO: hvordan tester man max values for string?
+                
 
 
 
