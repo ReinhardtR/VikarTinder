@@ -1,16 +1,15 @@
 package com.example.businessserver.services.utils;
 
-import com.example.businessserver.services.implementations.AuthUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 @Component
@@ -55,15 +54,19 @@ public class JWTUtility implements Serializable {
     //generate token for user
     public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
-
-		if (userDetails instanceof AuthUser)
-		{
-			AuthUser temp = (AuthUser) userDetails;
-			claims.put("name", temp.getUsername());
-			claims.put("id", temp.getId());
-			claims.put("email", temp.getEmail());
-			claims.put("role", temp.getRole());
-		}
+        System.out.println(userDetails.getAuthorities().size());
+        System.out.println(userDetails.getAuthorities().toArray().length);
+        Object[] list = userDetails.getAuthorities().toArray();
+        for (Object test:list) {
+            System.out.println(test.getClass());
+            SimpleGrantedAuthority simp = (SimpleGrantedAuthority) test;
+            System.out.println(simp.getAuthority());
+        }
+        for (Object temp: list) {
+            SimpleGrantedAuthority simp = (SimpleGrantedAuthority) temp;
+            String[] claim = simp.getAuthority().split("_",2);
+            claims.put(claim[0], claim[1]);
+        }
 
         return doGenerateToken(claims, userDetails.getUsername());
     }
