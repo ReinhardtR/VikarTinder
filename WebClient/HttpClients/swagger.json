@@ -1,9 +1,5 @@
 {
   "openapi": "3.0.1",
-  "info": {
-    "title": "OpenAPI definition",
-    "version": "v0"
-  },
   "servers": [
     {
       "url": "http://localhost:8080",
@@ -168,6 +164,36 @@
               "*/*": {
                 "schema": {
                   "$ref": "#/components/schemas/BasicChatDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/authenticate": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "authenticate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JwtRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/JwtResponse"
                 }
               }
             }
@@ -438,6 +464,25 @@
           }
         }
       },
+      "JwtRequest": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "JwtResponse": {
+        "type": "object",
+        "properties": {
+          "jwtToken": {
+            "type": "string"
+          }
+        }
+      },
       "AnswerJobConfirmationDTO": {
         "type": "object",
         "properties": {
@@ -531,6 +576,13 @@
             "format": "int32"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }

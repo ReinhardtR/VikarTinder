@@ -7,10 +7,10 @@
     <MudText>Vil du have jobbet?</MudText>
     
     <MudStack Row="@true" Justify="Justify.Center" AlignItems="AlignItems.Center">
-        <MudButton OnClick="() => AnswerHandler(AnswerJobConfirmationDTOStatus.ACCEPTED)" Variant="Variant.Filled" Color="Color.Success" Disabled="@isEmployer">
+        <MudButton OnClick="() => AnswerHandler(AnswerJobConfirmationDTOStatus.ACCEPTED)" Variant="Variant.Filled" Color="Color.Success">
             Ja
         </MudButton>
-        <MudButton OnClick="() => AnswerHandler(AnswerJobConfirmationDTOStatus.DECLINED)" Variant="Variant.Outlined" Color="Color.Error" Disabled="@isEmployer">
+        <MudButton OnClick="() => AnswerHandler(AnswerJobConfirmationDTOStatus.DECLINED)" Variant="Variant.Outlined" Color="Color.Error">
             Nej
         </MudButton>
     </MudStack>
@@ -21,12 +21,6 @@
     [Parameter]
     public JobConfirmationDTO JobConfirmation { get; set; }
     
-    // TODO replace with auth stuff
-    private int userId = 2;
-
-    // TODO replace with auth stuff
-    private bool isEmployer = false;
-
     private async void AnswerHandler(AnswerJobConfirmationDTOStatus status)
     {
         try
