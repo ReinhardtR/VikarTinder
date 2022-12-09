@@ -2,7 +2,7 @@
 
 public class DeleteUserDto
 {
-    public int id { get; set; }
-    public DaoRequestType role { get; set; }
-    public bool validation { get; set; }
+    public int Id { get; set; }
+    public DaoRequestType Role { get; set; }
+    public bool Validation { get; set; }
 }

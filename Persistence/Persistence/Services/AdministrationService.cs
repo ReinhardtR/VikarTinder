@@ -23,14 +23,16 @@ public class AdministrationService : Persistence.AdministrationService.Administr
         //TODO: eller bare et if statement lul
         dynamic user = createUserRequest.User.RoleCase == UserData.RoleOneofCase.Sub
             ? await _dao.CreateSubstituteAsync(
-                createUserRequest.User.Name,
+                createUserRequest.User.FirstName,
+                createUserRequest.User.LastName,
                 createUserRequest.User.PasswordHash,
                 createUserRequest.User.Email,
                 createUserRequest.User.Sub.Age,
                 createUserRequest.User.Sub.Bio,
                 createUserRequest.User.Sub.Address)
             : await _dao.CreateEmployerAsync(
-                createUserRequest.User.Name,
+                createUserRequest.User.FirstName,
+                createUserRequest.User.LastName,
                 createUserRequest.User.PasswordHash,
                 createUserRequest.User.Email,
                 createUserRequest.User.Emp.Title,
@@ -46,11 +48,9 @@ public class AdministrationService : Persistence.AdministrationService.Administr
     public override async Task<LoginUserResponse> Login(CreateLoginRequest createLoginRequest,
         ServerCallContext serverCallContext)
     {
-        LoginUserDto user = await _dao.LoginAsync(createLoginRequest.Email, createLoginRequest.PasswordHash);
+        UserDto user = await _dao.LoginAsync(createLoginRequest.Email, createLoginRequest.PasswordHash);
 
-        LoginUserResponse userResponse = user.UserRole == DaoRequestType.Substitute
-            ? AdministrationFactory.LoginSubstituteUserResponse(user.Substitute)
-            : AdministrationFactory.LoginEmployerUserResponse(user.Employer);
+        LoginUserResponse userResponse = AdministrationFactory.CreateLoginUserResponse(user);
 
         return userResponse;
     }
@@ -73,14 +73,27 @@ public class AdministrationService : Persistence.AdministrationService.Administr
     public override async Task<DeleteUserResponse> DeleteUser(DeleteUserRequest deleteUserRequest,
         ServerCallContext serverCallContext)
     {
-        DaoRequestType userRole = deleteUserRequest.User.Role == UserToDeleteParams.Types.Role.Substitute
+        DaoRequestType userRole = deleteUserRequest.User.Role == GetUserParams.Types.Role.Substitute
             ? DaoRequestType.Substitute
             : DaoRequestType.Employer;
         
-        DeleteUserDto deletedUser = _dao.DeleteAccount(deleteUserRequest.User.Id, userRole);
+        DeleteUserDto deletedUser = await _dao.DeleteAccount(deleteUserRequest.User.Id, userRole);
 
         DeleteUserResponse deletedUserResponse = AdministrationFactory.CreateDeleteUserResponse(deletedUser);
 
         return deletedUserResponse;
+    }
+
+    public override async Task<GetUserResponse> GetUser(GetUserRequest getUserRequest,
+        ServerCallContext serverCallContext)
+    {
+        DaoRequestType role = getUserRequest.User.Role == GetUserParams.Types.Role.Substitute
+            ? DaoRequestType.Substitute
+            : DaoRequestType.Employer;
+        UserDto userDto = await _dao.GetUser(getUserRequest.User.Id, role);
+
+        GetUserResponse userResponse = AdministrationFactory.CreateGetUserResponse(userDto);
+
+        return userResponse;
     }
 }

@@ -7,12 +7,14 @@ namespace Persistence.DAOs;
 
 public class AdministrationDao : IAdministrationDao
 {
-    public Task<Substitute> CreateSubstituteAsync(string name, string passwordHash, string email, int age, string bio, string address)
+    public Task<Substitute> CreateSubstituteAsync(string firstName, string lastName, string passwordHash, string email, int age, string bio,
+        string address)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Employer> CreateEmployerAsync(string name, string passwordHash, string email, string title, string workPlace)
+    public Task<Employer> CreateEmployerAsync(string firstName, string lastName, string passwordHash, string email, string title,
+        string workPlace)
     {
         throw new NotImplementedException();
     }
@@ -27,13 +29,19 @@ public class AdministrationDao : IAdministrationDao
         throw new NotImplementedException();
     }
 
-    public Task<LoginUserDto> LoginAsync(string email, string password)
+    public Task<UserDto> LoginAsync(string email, string password)
     {
         throw new NotImplementedException();
     }
 
-    public DeleteUserDto DeleteAccount(int id, DaoRequestType role)
+    Task<DeleteUserDto> IAdministrationDao.DeleteAccount(int id, DaoRequestType role)
     {
         throw new NotImplementedException();
     }
+
+    public Task<UserDto> GetUser(int id, DaoRequestType role)
+    {
+        throw new NotImplementedException();
+    }
+    
 }

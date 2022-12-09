@@ -2,7 +2,7 @@
 
 namespace Persistence.Dto.Administration;
 
-public class LoginUserDto
+public class UserDto
 {
     public Employer? Employer { get; set; }
     public Substitute? Substitute { get; set; }

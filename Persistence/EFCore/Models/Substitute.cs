@@ -6,9 +6,13 @@ public class Substitute
     public int Age { get; set; }
     public string Bio { get; set; }
     public string Address { get; set; }
-    public string Name { get; set; }
-    public string Email { get; set; }
+    
+    public string FirstName { get; set; }
+    
+    public string LastName { get; set; }
     public string PasswordHash { get; set; }
+    
+    public string Email { get; set; }
     
     public ICollection<Gig> Positions { get; set; }
     public List<GigSubstitute> GigSubstitutes { get; set; }
