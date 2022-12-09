@@ -8,6 +8,7 @@ using MudBlazor;
 using MudBlazor.Services;
 using WebClient;
 using WebClient.Providers;
+using WebClient.Utils;
 using WebSockets;
 
 WebAssemblyHostBuilder builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -25,7 +26,21 @@ builder.Services.AddScoped<MatchingService>();
 builder.Services.AddScoped<ChatSocket>();
 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthProvider>();
-builder.Services.AddAuthorizationCore();
+
+builder.Services.AddAuthorizationCore((options) =>
+{
+    options.AddPolicy(AuthPolicies.EmployerOnly, policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim(AuthClaims.Role, AuthRoles.Employer);
+    });
+    
+    options.AddPolicy(AuthPolicies.SubstituteOnly, policy =>
+    {
+        policy.RequireAuthenticatedUser();
+        policy.RequireClaim(AuthClaims.Role, AuthRoles.Substitute);
+    });
+});
 
 builder.Services.AddMudServices((config) =>
 {

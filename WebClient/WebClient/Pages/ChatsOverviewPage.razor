@@ -1,14 +1,14 @@
 @page "/chat"
-@using HttpClients.Services
+@using WebClient.Utils
 @attribute [Authorize]
 
 <PageTitle>Chat</PageTitle>
 
-<AuthorizeView Roles="@AuthRoles.Substitute">
+<AuthorizeView Policy="@AuthPolicies.SubstituteOnly">
     <ChatsOverview />
 </AuthorizeView>
 
-<AuthorizeView Roles="@AuthRoles.Employer">
+<AuthorizeView Policy="@AuthPolicies.EmployerOnly">
     @if (selectedGigId == null)
     {
         <GigsOverview OnGigSelected="OnGigSelected"/>

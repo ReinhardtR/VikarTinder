@@ -1,5 +1,6 @@
 ﻿@using HttpClients.Services.Interfaces
 @using System.Security.Claims
+@using WebClient.Utils
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
 @inject IAuthService AuthService
@@ -17,20 +18,29 @@
             </MudStack>
         </MudButton>
         
-        <MudButton OnClick="@NavigateToChatOverview" Variant="Variant.Text" Style="color: white">Chat</MudButton>
-        
+        <AuthorizeView>
+            <MudButton OnClick="@NavigateToChatOverview" Variant="Variant.Text" Style="color: white">Chat</MudButton>
+        </AuthorizeView>
+    
         <MudSpacer />
         
        <AuthorizeView>
            <NotAuthorized>
-               <MudButton OnClick="LoginHandler" EndIcon="@Icons.Filled.Login" Variant="Variant.Filled" Color="Color.Secondary" DisableElevation="true">Login</MudButton>
+               <MudStack Row="true" Spacing="2">
+                  <MudButton OnClick="NavigateToSignup" Variant="Variant.Text" Style="color: white">Opret dig</MudButton>
+                  <MudButton OnClick="NavigateToLogin" EndIcon="@Icons.Filled.Login" Variant="Variant.Filled" Color="Color.Secondary" >Log ind</MudButton>
+               </MudStack>
            </NotAuthorized>
            <Authorized>
                <MudMenu AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
                    <ActivatorContent>
                        <MudStack Row="true" Spacing="2" Justify="Justify.Center" AlignItems="AlignItems.Center">
-                           <MudAvatar Color="Color.Secondary">@context.User.Claims.First((c) => c.Type.Equals("name")).Value[0]</MudAvatar>
-                           <MudText Typo="Typo.button">@context.User.Claims.First((c) => c.Type.Equals("name")).Value</MudText>
+                           @{
+                                Claim nameClaim = AuthClaims.GetClaim(context, AuthClaims.Name);
+                                string name = nameClaim?.Value ?? "Unknown";
+                           }
+                           <MudAvatar Color="Color.Secondary">@name[0]</MudAvatar>
+                           <MudText Typo="Typo.button">@name</MudText>
                        </MudStack>
                    </ActivatorContent>
                    <ChildContent>
@@ -54,26 +64,12 @@
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
-    
-    // temporary
-    private async Task LoginHandler()
-    {
-        await AuthService.LoginAsync();
-        
-        AuthenticationState state = await AuthState;
-        ClaimsPrincipal principal = state.User;
- 
-        foreach (Claim principalClaim in principal.Claims)
-        {
-            Console.WriteLine($"Name: {principalClaim.Type}, Value: {principalClaim.Value}");
-        }
-    }
-    
+
     private async Task LogoutHandler()
     {
         await AuthService.LogoutAsync();
     }
-    
+
     private void NavigateToHome()
     {
         NavigationManager.NavigateTo("/");
@@ -82,6 +78,16 @@
     private void NavigateToChatOverview()
     {
         NavigationManager.NavigateTo("/chat");
+    }
+    
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("/log-ind");
+    }
+    
+    private void NavigateToSignup()
+    {
+        NavigationManager.NavigateTo("/opret");
     }
 
 }
