@@ -18,7 +18,7 @@ public class JwtAuthService : IAuthService
 
     public Action<ClaimsPrincipal> OnAuthStateChanged { get; set; } = null!;
     
-    public async Task LoginAsync()
+    public async Task LoginAsync(string email, string password)
     {
         JwtResponse jwtResponse = await _client.AuthenticateAsync(new JwtRequest()
         {

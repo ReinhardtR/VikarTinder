@@ -1,8 +1,9 @@
 @page "/Matching/Gigs"
 @using HttpClients.Services
 @using HttpClients
+@using WebClient.Utils
 @inject MatchingService MatchingService
-@attribute [Authorize]
+@attribute [Authorize(Policy = AuthPolicies.SubstituteOnly)]
 
 <h3>Gigs</h3>
 <div>
