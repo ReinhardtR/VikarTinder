@@ -7,18 +7,61 @@ using Persistence.Dto;
 using Persistence.Exceptions.ConverterExceptions;
 using Persistence.Models;
 
-namespace UnitTest;
+namespace UnitTest.Matching;
 
 [TestFixture]
-public class ConverterTest
+public class MatchingFactoryTest
 {
     // ConvertSublist & ConvertGigList
     
-    [Test, Description("Conversion of null SubList or null GigList should catch")]
-    public void GigAndSubListNull()
+    [Test, Description("Giving null as arguemnt should throw")]
+    public void NullArguments()
     {
         Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertGigList(null));
         Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertSubList(null));
+        Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertToValidation(null));
+    }
+
+    [Test, Description("Arguments will null parameters should throw")]
+    public void NullParametersInArguments()
+    {
+        Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertGigList(
+            new List<Gig>
+            {
+                new Gig
+                {
+                    Id = 1
+                },
+                new Gig
+                {
+                },
+                new Gig
+                {
+                    Id = 3
+                }
+            }));
+        Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertSubList(
+            new List<Substitute>
+            {
+                new Substitute
+                {
+                    Id = 1
+                },
+                new Substitute
+                {
+
+                },
+                new Substitute
+                {
+                    Id = 3
+                }
+            }));
+        Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertToValidation(
+            new IdsForMatchDto
+            {
+                EmployerId = 1,
+                GigId = 2,
+            }));
     }
 
     [TestCaseSource(typeof(DataClass), nameof(DataClass.GigListConversion)), Description(
@@ -35,18 +78,10 @@ public class ConverterTest
         return MatchFactory.ConvertSubList(substitutes).Substitutes.Count;
     }
     
-    
     // ConvertToValidation
-    
-    [Test, Description("Null argument")]
-    public void NullTestValidationConversion()
-    {
-        Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertToValidation(null));
-    }
-    
     [TestCaseSource(typeof(DataClass), nameof(DataClass.ConversionToValidation)), Description(
          "Testing for null and boundray")]
-    public MatchValidation ValidationConversion(IdsForMatchDto dto)
+    public MatchValidationResponse ValidationConversion(IdsForMatchDto dto)
     {
         return MatchFactory.ConvertToValidation(dto);
     }
@@ -97,7 +132,7 @@ public class DataClass
         get
         {
             yield return new TestCaseData(new IdsForMatchDto())
-                .Returns(new MatchValidation());
+                .Returns(new MatchValidationResponse());
             
             yield return new TestCaseData(new IdsForMatchDto
             {
@@ -105,7 +140,7 @@ public class DataClass
                 GigId = 1,
                 SubstituteId = 1,
                 WasAMatch = true
-            }).Returns(new MatchValidation
+            }).Returns(new MatchValidationResponse
             {
                 EmployerId = 1,
                 GigId = 1,
@@ -117,7 +152,7 @@ public class DataClass
                 EmployerId = int.MinValue,
                 GigId = int.MinValue,
                 SubstituteId = int.MinValue,
-            }).Returns(new MatchValidation
+            }).Returns(new MatchValidationResponse
             {
                 EmployerId = int.MinValue,
                 GigId = int.MinValue,
@@ -129,7 +164,7 @@ public class DataClass
                 GigId = int.MaxValue,
                 SubstituteId = int.MaxValue,
                 WasAMatch = true
-            }).Returns(new MatchValidation
+            }).Returns(new MatchValidationResponse
             {
                 EmployerId = int.MaxValue,
                 GigId = int.MaxValue,

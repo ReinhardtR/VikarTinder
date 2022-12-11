@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using NuGet.Frameworks;
 using Persistence;
 using Persistence.Dto;
 using Persistence.Dto.Administration;
@@ -40,9 +39,13 @@ public class ConverterTestAdministration
         Assert.Catch<FactoryNullReference>(() => AdministrationFactory.UpdateEmployerUserResponse(
             new Employer()));
         Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateLoginUserResponse(
-            new UserDto()));
+            new Substitute()));
+        Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateLoginUserResponse(
+            new Employer()));
         Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateGetUserResponse(
-            new UserDto()));
+            new Substitute()));
+        Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateGetUserResponse(
+            new Employer()));
         Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateDeleteUserResponse(
             new DeleteUserDto()));
         Assert.Catch<FactoryNullReference>(() => AdministrationFactory.MakeSubstituteDomainObject(
@@ -89,60 +92,40 @@ public class ConverterTestAdministration
                 WorkPlace = "TestPlace"
             }));
         Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateLoginUserResponse(
-            new UserDto
+            new Substitute
             {
-                UserRole = DaoRequestType.Substitute,
-                Substitute = new Substitute
-                {
-                    Id = 3,
-                    PasswordHash = "1 2 3 4",
-                    Email = "MailTest@mail.com",
-                    Bio = "I am test!"
-                }
+                Id = 3,
+                PasswordHash = "1 2 3 4",
+                Email = "MailTest@mail.com",
+                Bio = "I am test!"
             }));
-        Assert.Catch<FactoryException>((() => AdministrationFactory.CreateLoginUserResponse(
-            new UserDto
-            {
-                UserRole = DaoRequestType.Employer,
-                Substitute = new Substitute
+        Assert.Catch<FactoryException>(() => AdministrationFactory.CreateLoginUserResponse(
+            new Employer
                 {
                     Id = 3,
                     FirstName = "Test",
                     LastName = "Tester",
                     PasswordHash = "1 2 3 4",
                     Email = "MailTest@mail.com",
-                    Age = 18,
-                    Address = "Testroad 1",
-                    Bio = "I am test!"
-                }
-            })));
+                    WorkPlace = "TestPlace"
+                }));
         Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateGetUserResponse(
-            new UserDto
+            new Substitute
             {
-                UserRole = DaoRequestType.Substitute,
-                Substitute = new Substitute
-                {
-                    Id = 3,
-                    PasswordHash = "1 2 3 4",
-                    Email = "MailTest@mail.com",
-                    Bio = "I am test!"
-                }
+                Id = 3,
+                PasswordHash = "1 2 3 4",
+                Email = "MailTest@mail.com",
+                Bio = "I am test!"
             }));
         Assert.Catch<FactoryNullReference>((() => AdministrationFactory.CreateGetUserResponse(
-            new UserDto
+            new Employer
             {
-                UserRole = DaoRequestType.Employer,
-                Substitute = new Substitute
-                {
-                    Id = 3,
-                    FirstName = "Test",
-                    LastName = "Tester",
-                    PasswordHash = "1 2 3 4",
-                    Email = "MailTest@mail.com",
-                    Age = 18,
-                    Address = "Testroad 1",
-                    Bio = "I am test!"
-                }
+                Id = 3,
+                FirstName = "Test",
+                LastName = "Tester",
+                PasswordHash = "1 2 3 4",
+                Email = "MailTest@mail.com",
+                WorkPlace = "TestPlace"
             })));
         
         Assert.Catch<FactoryNullReference>(() => AdministrationFactory.CreateDeleteUserResponse(
@@ -268,11 +251,11 @@ public class ConverterTestAdministration
         };
     }
 
-    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromUserDto)),
+    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromUser)),
     Description("Testing for CreateLoginUserResponse method")]
-    public List<dynamic> CreateLoginUserResponseFromUserDto(UserDto dto)
+    public List<dynamic> CreateLoginUserResponseFromUserDto(User user)
     {
-        LoginUserResponse response = AdministrationFactory.CreateLoginUserResponse(dto);
+        LoginUserResponse response = AdministrationFactory.CreateLoginUserResponse(user);
 
         var testDataResponse = response.User.UserData.RoleCase == UserData.RoleOneofCase.Sub
             ? new List<dynamic>
@@ -300,9 +283,9 @@ public class ConverterTestAdministration
         return testDataResponse;
     }
     
-    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromUserDto)),
+    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromUser)),
      Description("Testing for CreateGetUserResponse method")]
-    public List<dynamic> CreateGetUserResponseFromUserDto(UserDto dto)
+    public List<dynamic> CreateGetUserResponseFromUserDto(User dto)
     {
         GetUserResponse response = AdministrationFactory.CreateGetUserResponse(dto);
 
@@ -448,72 +431,57 @@ public class ConverterTestAdministration
             }
         }
 
-        public static IEnumerable ConvertFromUserDto
+        public static IEnumerable ConvertFromUser
         {
             get
             {
-                yield return new TestCaseData(new UserDto
+                yield return new TestCaseData(new Substitute
                 {
-                    UserRole = DaoRequestType.Substitute,
-                    Substitute = new Substitute
-                    {
-                        Id = 1,
-                        FirstName = "Test",
-                        LastName = "Tester",
-                        PasswordHash = "123",
-                        Email = "Testmail@test.com",
-                        Address = "Testroad 1",
-                        Age = 19,
-                        Bio = "I am test man, pick me!"
-                    }
+                    Id = 1,
+                    FirstName = "Test",
+                    LastName = "Tester",
+                    PasswordHash = "123",
+                    Email = "Testmail@test.com",
+                    Address = "Testroad 1",
+                    Age = 19,
+                    Bio = "I am test man, pick me!"
                 }).Returns(
                     new List<dynamic> { 1, "Test", "Tester", "123", "Testmail@test.com", "Testroad 1", 19, "I am test man, pick me!" });
                 
-                yield return new TestCaseData(new UserDto
+                yield return new TestCaseData(new Employer
                 {
-                    UserRole = DaoRequestType.Employer,
-                    Employer = new Employer
-                    {
-                        Id = 1,
-                        FirstName = "Test",
-                        LastName = "Tester",
-                        PasswordHash = "123",
-                        Email = "Testmail@test.com",
-                        Title = "Test CEO",
-                        WorkPlace = "Testland"
-                    }
+                    
+                    Id = 1,
+                    FirstName = "Test",
+                    LastName = "Tester",
+                    PasswordHash = "123",
+                    Email = "Testmail@test.com",
+                    Title = "Test CEO",
+                    WorkPlace = "Testland"
                 }).Returns(new List<dynamic>{1,"Test","Tester","123","Testmail@test.com","Test CEO","Testland"});
                 
-                yield return new TestCaseData(new UserDto()
+                yield return new TestCaseData(new Substitute
                 {
-                    UserRole = DaoRequestType.Substitute,
-                    Substitute = new Substitute
-                    {
-                        Id = Int32.MinValue,
-                        FirstName = Empty,
-                        LastName = Empty,
-                        PasswordHash = Empty,
-                        Email = Empty,
-                        Address = Empty,
-                        Age = Int32.MinValue,
-                        Bio = Empty
-                    }
+                    Id = Int32.MinValue,
+                    FirstName = Empty,
+                    LastName = Empty,
+                    PasswordHash = Empty,
+                    Email = Empty,
+                    Address = Empty,
+                    Age = Int32.MinValue,
+                    Bio = Empty
                 }).Returns(
                     new List<dynamic>{Int32.MinValue,Empty,Empty,Empty,Empty,Empty, Int32.MinValue, Empty});
                 
-                yield return new TestCaseData(new UserDto
+                yield return new TestCaseData(new Employer
                 {
-                    UserRole = DaoRequestType.Employer,
-                    Employer = new Employer
-                    {
-                        Id = Int32.MinValue,
-                        FirstName = Empty,
-                        LastName = Empty,
-                        PasswordHash = Empty,
-                        Email = Empty,
-                        Title = Empty,
-                        WorkPlace = Empty
-                    }
+                    Id = Int32.MinValue,
+                    FirstName = Empty,
+                    LastName = Empty,
+                    PasswordHash = Empty,
+                    Email = Empty,
+                    Title = Empty,
+                    WorkPlace = Empty
                 }).Returns(
                     new List<dynamic>{Int32.MinValue,Empty,Empty,Empty,Empty,Empty, Empty});
             }

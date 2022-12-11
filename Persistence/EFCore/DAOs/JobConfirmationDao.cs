@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Persistence.Exceptions.DaoExceptions;
 using Persistence.Models;
 
 namespace Persistence.DAOs;
@@ -15,17 +16,17 @@ public class JobConfirmationDao : IJobConfirmationDao
     
     public async Task<JobConfirmation> CreateJobConfirmationAsync(int chatId, int substituteId, int employerId)
     {
-        Chat? foundChat = _dataContext.Chats.Include((c) => c.JobConfirmation).FirstOrDefault(c => c.Id == chatId);
+        Chat? foundChat = await _dataContext.Chats.Include((c) => c.JobConfirmation).FirstOrDefaultAsync(c => c.Id == chatId);
         if (foundChat == null)
-            throw new Exception("Chat not found");
+            throw new DaoNullReference("Chat not found");
         
-        User? foundSubstitute = _dataContext.Users.FirstOrDefault(u => u.Id == substituteId);
+        User? foundSubstitute = await _dataContext.Substitutes.FirstOrDefaultAsync(substitute => substitute.Id == substituteId);
         if (foundSubstitute == null)
-            throw new Exception("Substitute not found");
+            throw new DaoNullReference("Substitute not found");
         
-        User? foundEmployer = _dataContext.Users.FirstOrDefault(u => u.Id == employerId);
+        User? foundEmployer = await _dataContext.Employers.FirstOrDefaultAsync(employer => employer.Id == employerId);
         if (foundEmployer == null)
-            throw new Exception("Employer not found");
+            throw new DaoNullReference("Employer not found");
         
         Console.WriteLine("Job confirmation: " + foundChat.JobConfirmation);
         if (foundChat.JobConfirmation != null)

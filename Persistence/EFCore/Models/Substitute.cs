@@ -1,18 +1,12 @@
-﻿namespace Persistence.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class Substitute
+namespace Persistence.Models;
+
+public class Substitute : User
 {
-    public int Id { get; set; }
     public int Age { get; set; }
     public string Bio { get; set; }
     public string Address { get; set; }
-    
-    public string FirstName { get; set; }
-    
-    public string LastName { get; set; }
-    public string PasswordHash { get; set; }
-    
-    public string Email { get; set; }
     
     public ICollection<Gig> Positions { get; set; }
     public List<GigSubstitute> GigSubstitutes { get; set; }

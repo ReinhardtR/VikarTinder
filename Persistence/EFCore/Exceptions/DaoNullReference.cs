@@ -2,7 +2,7 @@
 
 public class DaoNullReference : DaoException
 {
-    public DaoNullReference(string? message) : base(message + " cannot be null")
+    public DaoNullReference(string? message) : base(message)
     {
     }
 }

@@ -21,7 +21,7 @@ public class AdministrationFactory
             };
             return response;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw new FactoryNullReference("A substitute attribute");
         }
@@ -41,7 +41,7 @@ public class AdministrationFactory
             };
             return response;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw new FactoryNullReference("An employer attribute");
         }
@@ -62,7 +62,7 @@ public class AdministrationFactory
             return response;
 
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw new FactoryNullReference("A substitute attribute");
         }
@@ -85,52 +85,64 @@ public class AdministrationFactory
 
             return response;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw new FactoryNullReference("An employer attribute");
         }
     }
 
-    public static LoginUserResponse CreateLoginUserResponse(UserDto dto)
+    public static LoginUserResponse CreateLoginUserResponse(User user)
     {
-        if (dto == null)
-            throw new FactoryNullReference("dto");
+        if (user == null)
+            throw new FactoryNullReference("User");
 
         try
         {
-            LoginUserResponse response = new LoginUserResponse
+            LoginUserResponse response = new();
+            if (user is Substitute)
             {
-                User = dto.UserRole == DaoRequestType.Substitute
-                    ? CreateSubstituteUserObject(dto.Substitute)
-                    : CreateEmployerUserObject(dto.Employer)
-            };
-            return response;
+                Substitute substitute = (Substitute)user;
+                response.User = CreateSubstituteUserObject(substitute);
+                return response;
+            }
+            else
+            {
+                Employer employer = (Employer)user;
+                response.User = CreateEmployerUserObject(employer);
+                return response;
+            }
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw new FactoryNullReference("Something in the domain object of the dto");
+            throw new FactoryNullReference("Values in User");
         }
     }
     
 
-    public static GetUserResponse CreateGetUserResponse(UserDto dto)
+    public static GetUserResponse CreateGetUserResponse(User user)
     {
-        if (dto == null)
-            throw new FactoryNullReference("dto");
+        if (user == null)
+            throw new FactoryNullReference("User");
 
         try
         {
-            GetUserResponse response = new GetUserResponse
+            GetUserResponse response = new();
+            if (user is Substitute)
             {
-                User = dto.UserRole == DaoRequestType.Substitute
-                    ? CreateSubstituteUserObject(dto.Substitute)
-                    : CreateEmployerUserObject(dto.Employer)
-            };
-            return response;
+                Substitute substitute = (Substitute)user;
+                response.User = CreateSubstituteUserObject(substitute);
+                return response;
+            }
+            else
+            {
+                Employer employer = (Employer)user;
+                response.User = CreateEmployerUserObject(employer);
+                return response;
+            }
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw new FactoryNullReference("Domain object of the dto");
+            throw new FactoryNullReference("Values in User");
         }
     }
     
@@ -219,7 +231,7 @@ public class AdministrationFactory
                 Address = updateUserRequest.User.UserData.Sub.Address
             };
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw new FactoryNullReference("An UpdateUserRequest attribute");
         }
@@ -244,7 +256,7 @@ public class AdministrationFactory
                 WorkPlace = updateUserRequest.User.UserData.Emp.Workplace
             };
         }
-        catch (Exception e)
+        catch (Exception)
         {
             throw new FactoryNullReference("An UpdateUserRequest attribute");
         }
