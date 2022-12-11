@@ -119,11 +119,11 @@ public class AdministrationDao : IAdministrationDao
         return null;
     }
 
-    public async Task<User> LoginAsync(string email, string password)
+    public async Task<User> LoginAsync(string email)
     {
         //Nok nemmere at teste fra client hehe leles
         User? user = await _dataContext.Users.FirstOrDefaultAsync(u =>
-            u.Email.Equals(email) && u.PasswordHash.Equals(password));
+            u.Email.Equals(email));
         
         if (user == null)
             throw new DaoNullReference("User not found cant login");

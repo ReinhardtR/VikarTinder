@@ -57,7 +57,7 @@ public class AdministrationService : Persistence.AdministrationService.Administr
     {
         try
         {
-            User user = await _dao.LoginAsync(createLoginRequest.Email, createLoginRequest.PasswordHash);
+            User user = await _dao.LoginAsync(createLoginRequest.Email);
             LoginUserResponse userResponse = AdministrationFactory.CreateLoginUserResponse(user);
 
             return userResponse;
