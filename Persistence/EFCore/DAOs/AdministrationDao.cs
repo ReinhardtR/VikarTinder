@@ -33,6 +33,7 @@ public class AdministrationDao : IAdministrationDao
             });
             await _dataContext.SaveChangesAsync();
 
+            //Tjek om den substitute der kommer tilbage har fået et id nu :)
             Console.WriteLine(substitute.Entity.Id);
         
             return substitute.Entity;
@@ -60,7 +61,7 @@ public class AdministrationDao : IAdministrationDao
 
             await _dataContext.SaveChangesAsync();
 
-
+            //Tjek om den employer der kommer tilbage har fået et id nu :)
             Console.WriteLine(employer.Entity.Id);
 
             return employer.Entity;
@@ -73,6 +74,8 @@ public class AdministrationDao : IAdministrationDao
 
     public async Task<User> UpdateUserAsync(User user)
     {
+        //Tjek db her for at se om den har opdateret det hele korrekt
+        
         User? userToUpdate = await _dataContext.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
         if (userToUpdate == null)
             throw new DaoNullReference("User not found");
@@ -118,6 +121,7 @@ public class AdministrationDao : IAdministrationDao
 
     public async Task<User> LoginAsync(string email, string password)
     {
+        //Nok nemmere at teste fra client hehe leles
         User? user = await _dataContext.Users.FirstOrDefaultAsync(u =>
             u.Email.Equals(email) && u.PasswordHash.Equals(password));
         
@@ -129,6 +133,7 @@ public class AdministrationDao : IAdministrationDao
 
     public async Task<DeleteUserDto> DeleteAccount(int id, DaoRequestType role)
     {
+        //Tjek om brugeren er korrekt fjernet fra databasen
         DeleteUserDto deleteUserDto = new();
         
         if (role == DaoRequestType.Substitute)

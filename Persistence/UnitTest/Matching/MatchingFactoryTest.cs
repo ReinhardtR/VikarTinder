@@ -14,7 +14,7 @@ public class MatchingFactoryTest
 {
     // ConvertSublist & ConvertGigList
     
-    [Test, Description("Giving null as arguemnt should throw")]
+    [Test, Description("Giving null as argument should throw")]
     public void NullArguments()
     {
         Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertGigList(null));
@@ -22,7 +22,13 @@ public class MatchingFactoryTest
         Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertToValidation(null));
     }
 
-    [Test, Description("Arguments will null parameters should throw")]
+    [Test, Description("Giving empty object as argument should throw")]
+    public void EmptyObject()
+    {
+        Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertToValidation(new IdsForMatchDto()));
+    }
+
+    [Test, Description("Arguments will some null parameters should throw")]
     public void NullParametersInArguments()
     {
         Assert.Catch<FactoryNullReference>(() => MatchFactory.ConvertGigList(
@@ -66,16 +72,32 @@ public class MatchingFactoryTest
 
     [TestCaseSource(typeof(DataClass), nameof(DataClass.GigListConversion)), Description(
          "Testing boundaries for gigList conversion")]
-    public int BoundaryBehaviors(List<Gig> gigs)
+    public List<int> BoundaryBehaviors(List<Gig> gigs)
     {
-        return MatchFactory.ConvertGigList(gigs).Gigs.Count;
+        GigsForMatchingResponse responseTest = MatchFactory.ConvertGigList(gigs);
+
+        List<int> idsToReturn = new List<int>();
+        for (int i = 0; i < responseTest.Gigs.Count; i++)
+        {
+            idsToReturn.Add(responseTest.Gigs[i].Id);
+        }
+
+        return idsToReturn;
     }
     
     [TestCaseSource(typeof(DataClass), nameof(DataClass.SubListConversion)), Description(
          "Testing boundaries for gigList conversion")]
-    public int BoundaryBehaviors(List<Substitute> substitutes)
+    public List<int> BoundaryBehaviors(List<Substitute> substitutes)
     {
-        return MatchFactory.ConvertSubList(substitutes).Substitutes.Count;
+        SubstitutesForMatchingResponse responseTest = MatchFactory.ConvertSubList(substitutes);
+
+        List<int> idsToReturn = new List<int>();
+        for (int i = 0; i < responseTest.Substitutes.Count; i++)
+        {
+            idsToReturn.Add(responseTest.Substitutes[i].Id);
+        }
+
+        return idsToReturn;
     }
     
     // ConvertToValidation
@@ -106,11 +128,11 @@ public class DataClass
         get
         {
             yield return new TestCaseData(new List<Gig>()).
-                Returns(0);
+                Returns(IdsOnList(0));
             yield return new TestCaseData(CreateGigList(1))
-                .Returns(1);
+                .Returns(IdsOnList(1));
             yield return new TestCaseData(CreateGigList(100))
-                .Returns(100);
+                .Returns(IdsOnList(100));
         }
     }
 
@@ -119,11 +141,11 @@ public class DataClass
         get
         {
             yield return new TestCaseData(new List<Substitute>()).
-                Returns(0);
+                Returns(IdsOnList(0));
             yield return new TestCaseData(CreateSubList(1))
-                .Returns(1);
+                .Returns(IdsOnList(1));
             yield return new TestCaseData(CreateSubList(100))
-                .Returns(100);
+                .Returns(IdsOnList(100));
         }
     }
 
@@ -131,9 +153,6 @@ public class DataClass
     {
         get
         {
-            yield return new TestCaseData(new IdsForMatchDto())
-                .Returns(new MatchValidationResponse());
-            
             yield return new TestCaseData(new IdsForMatchDto
             {
                 EmployerId = 1,
@@ -191,7 +210,7 @@ public class DataClass
     private static List<Gig> CreateGigList(int amount)
     {
         List<Gig> gigs = new List<Gig>();
-        for (int i = 0; i < amount; i++)
+        for (int i = 1; i <= amount; i++)
         {
             gigs.Add(new Gig()
             {
@@ -205,7 +224,7 @@ public class DataClass
     private static List<Substitute> CreateSubList(int amount)
     {
         List<Substitute> substitutes = new List<Substitute>();
-        for (int i = 0; i < amount; i++)
+        for (int i = 1; i <= amount; i++)
         {
             substitutes.Add(new Substitute
             {
@@ -214,5 +233,17 @@ public class DataClass
         }
 
         return substitutes;
+    }
+
+    private static List<int> IdsOnList(int amount)
+    {
+        List<int> expectedIds = new List<int>();
+        
+        for (int i = 1; i <= amount; i++)
+        {
+            expectedIds.Add(i);
+        }
+
+        return expectedIds;
     }
 }
