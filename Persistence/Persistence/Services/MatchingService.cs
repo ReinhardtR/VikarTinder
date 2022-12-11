@@ -15,7 +15,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         _dao = dao;
     }
 
-    public override async Task<MatchValidation> SendMatchFromSubstitute(MatchRequest request, ServerCallContext context)
+    public override async Task<MatchValidationResponse> SendMatchFromSubstitute(MatchRequest request, ServerCallContext context)
     {
         Console.WriteLine("IDs: [Sub]:" + request.CurrentUser + " [Gig]:" + request.ToBeMatchedId);
         Console.WriteLine(request.WantToMatch);
@@ -30,13 +30,13 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         
         Console.WriteLine("Gig Id = " + matchedGig.GigId);
         
-        MatchValidation validation = MatchFactory.ConvertToValidation(matchedGig);
+        MatchValidationResponse validation = MatchFactory.ConvertToValidation(matchedGig);
         Console.WriteLine("Conversion success");
 
         return validation;
     }
     
-    public override async Task<MatchValidation> SendMatchFromEmployer(MatchRequest request, ServerCallContext context)
+    public override async Task<MatchValidationResponse> SendMatchFromEmployer(MatchRequest request, ServerCallContext context)
     {
         Console.WriteLine("IDs: [Employer]:" + request.CurrentUser + " [Substitute]:" + request.ToBeMatchedId);
         
@@ -47,13 +47,13 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
             request.WantToMatch));
    
         //Conversion
-        MatchValidation validation = MatchFactory.ConvertToValidation(matchedSubstitute);
+        MatchValidationResponse validation = MatchFactory.ConvertToValidation(matchedSubstitute);
         
         Console.WriteLine("Conversion success: [SUB ID]"+ validation.SubstituteId + "[ISMATCHED]" + validation.IsMatched);
         return validation;
     }
 
-    public override async Task<MatchingSubstitutes> GetSubstitutes(SubstituteSearchParameters request,
+    public override async Task<SubstitutesForMatchingResponse> GetSubstitutes(SubstituteSearchParametersRequest request,
         ServerCallContext context)
     {
         // Resetter dem man har sagt nej til så de kan swipes igen
@@ -63,12 +63,12 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         List<Substitute> subsFromDatabase = await _dao.GetSubstitutesForMatching(request.CurrentUserId);
 
         // Convert til en reply
-        MatchingSubstitutes subs =MatchFactory.ConvertSubList(subsFromDatabase);
+        SubstitutesForMatchingResponse subs =MatchFactory.ConvertSubList(subsFromDatabase);
 
         return subs;
     }
 
-    public override async Task<MatchingGigs> GetGigs(GigSearchParameters request, ServerCallContext context)
+    public override async Task<GigsForMatchingResponse> GetGigs(GigSearchParametersRequest request, ServerCallContext context)
     {
         //Resetter dem man har sagt nej til så de kan swipes igen
         await _dao.RemoveWhereTimerIsOut(request.CurrentUserId,DaoRequestType.Substitute);
@@ -77,7 +77,7 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
         List<Gig> gigsFromDatabase = await _dao.GetGigsForMatching(request.CurrentUserId);
 
         //Convert til en reply
-        MatchingGigs gigs = MatchFactory.ConvertGigList(gigsFromDatabase);
+        GigsForMatchingResponse gigs = MatchFactory.ConvertGigList(gigsFromDatabase);
 
         return gigs;
     }

@@ -7,17 +7,20 @@ namespace Persistence.Converter;
 
 public class MatchFactory
 {
-    public static MatchingSubstitutes ConvertSubList(List<Substitute> substitutes)
+    public static SubstitutesForMatchingResponse ConvertSubList(List<Substitute> substitutes)
     {
         if (substitutes == null)
             throw new FactoryNullReference("Substitute list");
         
-        MatchingSubstitutes subs = new();
+        SubstitutesForMatchingResponse subs = new();
 
         if (substitutes.Count == 0) return subs;
         
         foreach (Substitute sub in substitutes)
         {
+            if (sub.Id == 0)
+                throw new FactoryNullReference("Substitute id");
+            
             subs.Substitutes.Add(new SubstituteToBeMatched
             {
                 Id = sub.Id
@@ -27,17 +30,20 @@ public class MatchFactory
         return subs;
     }
     
-    public static MatchingGigs ConvertGigList(List<Gig> gigs)
+    public static GigsForMatchingResponse ConvertGigList(List<Gig> gigs)
     {
         if (gigs == null)
             throw new FactoryNullReference("Gigs list");
         
-        MatchingGigs gigsGrpc = new();
+        GigsForMatchingResponse gigsGrpc = new();
 
         if (gigs.Count != 0)
         {
             foreach (var gig in gigs)
             {
+                if (gig.Id == 0)
+                    throw new FactoryNullReference("Gig id");
+                
                 gigsGrpc.Gigs.Add(new GigToBeMatched
                 {
                     Id = gig.Id
@@ -48,12 +54,12 @@ public class MatchFactory
         return gigsGrpc;
     }
 
-    public static MatchValidation ConvertToValidation(IdsForMatchDto dto)
+    public static MatchValidationResponse ConvertToValidation(IdsForMatchDto dto)
     {
-        if (dto == null)
+        if (dto == null || dto.EmployerId == 0 || dto.SubstituteId == 0)
             throw new FactoryNullReference("IdsForMatch argument ");
         
-        MatchValidation val = new()
+        MatchValidationResponse val = new()
             {
                 EmployerId = dto.EmployerId,
                 GigId = dto.GigId,

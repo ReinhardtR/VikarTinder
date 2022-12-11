@@ -1,0 +1,103 @@
+@page "/opret"
+@using System.ComponentModel.DataAnnotations
+@using System.Security.Claims
+
+<PageTitle>Opret dig</PageTitle>
+
+<MudPaper Class="pa-16 mx-auto" MaxWidth="600px">
+    <AuthorizeView>
+        <NotAuthorized Context="Auth">
+            <EditForm Model="formModel" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator/>
+            
+                <MudStack Spacing="6">
+                    <MudStack Row="true" Spacing="4">
+                        <MudTextField Label="Fornavn" Variant="Variant.Outlined" @bind-Value="formModel.FirstName" For="() => formModel.FirstName"/>
+                        <MudTextField Label="Efternavn" Variant="Variant.Outlined" @bind-Value="formModel.LastName" For="() => formModel.LastName"/>                       
+                    </MudStack>
+
+                    <MudTextField Label="Email" Variant="Variant.Outlined" InputType="InputType.Email" @bind-Value="formModel.Email" For="() => formModel.Email"/>
+                    
+                    <MudDatePicker Label="Fødselsdato" Variant="Variant.Outlined" @bind-Value="formModel.BirthDate" For="() => formModel.BirthDate"/>
+                    
+                    <MudTextField Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" @bind-Value="formModel.Password" For="() => formModel.Password"/>
+                    <MudTextField Label="Gentag Password" Variant="Variant.Outlined" InputType="InputType.Password" @bind-Value="formModel.ConfirmPassword" For="() => formModel.ConfirmPassword" />
+                    
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Log ind</MudButton>
+
+                    @if (apiError != null)
+                    {
+                        <MudAlert Severity="Severity.Error">
+                            @apiError
+                        </MudAlert>
+                    }
+                </MudStack>
+            </EditForm>
+        </NotAuthorized>
+        
+        <Authorized>
+            <MudText>Du er allerede logget ind.</MudText>
+        </Authorized>
+    </AuthorizeView>
+</MudPaper>
+
+@code {
+    [CascadingParameter] 
+    public Task<AuthenticationState> AuthState { get; set; }
+    
+    public class FormModel
+    {
+        [Required]
+        [StringLength(100, MinimumLength = 1)]
+        public string FirstName { get; set; }
+        
+        [Required]
+        [StringLength(100, MinimumLength = 1)]
+        public string LastName { get; set; }
+        
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        [Range(typeof(DateTime), "1900-01-01", DateTime.Now.AddYears(-18).ToString("d"), ErrorMessage = "Du skal være mindst 18 år")]
+        public DateTime BirthDate { get; set; }
+        
+        [Required]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password skal være mellem 6 og 100 tegn.")]
+        [RegularExpression("/^(?=.*[A-Z])/", ErrorMessage = "Password skal indeholde et stort bogstav")] // Minimum 1 uppercase
+        public string Password { get; set; }
+        
+        [Required]
+        [Compare("Password", ErrorMessage = "Password matcher ikke.")]
+        public string ConfirmPassword { get; set; }
+    }
+
+    private FormModel formModel = new();
+    private string? apiError;
+    
+    private async void OnValidSubmit()
+    {
+        apiError = null;
+
+        try
+        {
+            await AuthService.LoginAsync(formModel.Email, formModel.Password);
+            
+    // temporary checks if the user is logged in
+            AuthenticationState state = await AuthState;
+            ClaimsPrincipal principal = state.User;
+ 
+            foreach (Claim principalClaim in principal.Claims)
+            {
+                Console.WriteLine($"Name: {principalClaim.Type}, Value: {principalClaim.Value}");
+            }
+        }
+        catch (Exception e)
+        {
+            apiError = e.Message;
+        }
+
+        StateHasChanged();
+    }
+}

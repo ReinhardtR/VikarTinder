@@ -19,7 +19,7 @@ public class ChatServiceServer : ChatService.ChatServiceBase
     
     public override async Task<SendMessageResponse> SendMessage(SendMessageRequest request, ServerCallContext context)
     {
-        Message message = await _chatDao.SendMessageAsync(request.Content,request.Author.Id,request.ChatId);
+        Message message = await _chatDao.SendMessageAsync(request.Content,request.AuthorId,request.ChatId);
 
         SendMessageResponse reply = ChatServiceFactory.ToSendMessageResponse(message);
         
@@ -38,7 +38,7 @@ public class ChatServiceServer : ChatService.ChatServiceBase
 
     public override async Task<GetChatOverviewResponse> GetChatOverview(GetChatOverviewRequest request, ServerCallContext context)
     {
-        List<Chat> chats = await _chatDao.GetAllChatsAsync(request.User.Id);
+        List<Chat> chats = await _chatDao.GetAllChatsAsync(request.UserId);
 
         Console.WriteLine("Chats: " + chats.Count);
         

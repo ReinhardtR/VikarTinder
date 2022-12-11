@@ -3,6 +3,7 @@
 @using HttpClients
 @using WebSockets
 @using System.Security.Claims
+@using WebClient.Utils
 @inject ChatSocket ChatSocket
 @inject ChatService ChatService
 @inject JobConfirmationService JobConfirmationService
@@ -33,7 +34,7 @@ else if (chatHistory != null)
                 } 
                 else
                 {
-                    <AuthorizeView Roles="@AuthRoles.Employer">
+                    <AuthorizeView Policy="@AuthPolicies.EmployerOnly">
                         @if (jobConfirmation?.Status == JobConfirmationDTOStatus.DECLINED)
                         {
                             <MudButton OnClick="@SendJobConfirmationRequest" Variant="@Variant.Outlined">
@@ -53,7 +54,7 @@ else if (chatHistory != null)
         
         <MudDivider Class="my-1" />
         
-        <AuthorizeView Roles="@AuthRoles.Substitute">
+        <AuthorizeView Policy="@AuthPolicies.SubstituteOnly">
             @if (jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
             {
                 <JobConfirmationRequest JobConfirmation="@jobConfirmation" />
@@ -66,7 +67,9 @@ else if (chatHistory != null)
                 <MudStack Spacing="4">
                     @foreach (MessageDTO message in chatHistory.Messages)
                     {
-                        int userId = int.Parse(context.User.Claims.First((c) => c.Type == ClaimTypes.NameIdentifier).Value);
+                        Claim? idClaim = AuthClaims.GetClaim(context, AuthClaims.Id);
+                        if (idClaim == null) throw new Exception("Couldn't find the user id.");
+                        int userId = int.Parse(idClaim.Value);
                         <ChatMessage UserId="@userId" AuthorId="@message.AuthorId" Content="@message.Content" />
                     }
                 </MudStack>
@@ -197,7 +200,7 @@ else if (chatHistory != null)
         try
         {
             AuthenticationState authState = await AuthState;
-            Claim? claim = authState.User.Claims.FirstOrDefault((c) => c.Type == ClaimTypes.NameIdentifier);
+            Claim? claim = AuthClaims.GetClaim(authState, AuthClaims.Id);
             if (claim == null) throw new Exception("Couldn't find the user id.");
             int userId = int.Parse(claim.Value);
             

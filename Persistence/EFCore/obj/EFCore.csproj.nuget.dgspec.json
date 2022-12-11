@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj": {}
+    "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\efcore\\EFCore.csproj": {}
   },
   "projects": {
-    "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj": {
+    "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\efcore\\EFCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj",
+        "projectUniqueName": "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\efcore\\EFCore.csproj",
         "projectName": "EFCore",
-        "projectPath": "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj",
+        "projectPath": "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\efcore\\EFCore.csproj",
         "packagesPath": "C:\\Users\\simon\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\obj\\",
+        "outputPath": "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\efcore\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Visual studio\\Shared\\NuGetPackages"
@@ -47,6 +47,12 @@
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[6.0.11, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.1, )"
             },
             "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",

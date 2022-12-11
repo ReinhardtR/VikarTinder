@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Persistence.DAOs.Interfaces;
 using Persistence.Dto;
+using Persistence.Exceptions.DaoExceptions;
 using Persistence.Models;
 
 namespace Persistence.DAOs;
@@ -16,8 +17,14 @@ public class MatchDao : IMatchDao
     
     public async Task<IdsForMatchDto> MatchingGig(ToBeMatchedDto dto)
     {
-        Substitute substitute = await GetSubstituteById(dto.UserId);
-        Gig gig = await GetGigById(dto.MatchId);
+        Substitute? substitute = await GetSubstituteById(dto.UserId);
+        if (substitute == null)
+            throw new DaoNullReference("Substitute not found");
+        
+        Gig? gig = await GetGigById(dto.MatchId);
+        if (gig == null)
+            throw new DaoNullReference("Gig not found");
+            
 
         //Adder den valgte gig under sig
         substitute.GigSubstitutes.Add(new GigSubstitute
@@ -47,10 +54,15 @@ public class MatchDao : IMatchDao
     
     public async Task<IdsForMatchDto> MatchingSubstitute(ToBeMatchedDto dto)
     {
-        Employer employer = await GetEmployerById(dto.UserId);
+        Employer? employer = await GetEmployerById(dto.UserId);
+        if (employer == null)
+            throw new DaoNullReference("Employer not found");
+        
         Console.WriteLine(employer.Id + " EMPLOYER");
 
-        Substitute substitute = await GetSubstituteById(dto.MatchId);
+        Substitute? substitute = await GetSubstituteById(dto.MatchId);
+        if (substitute == null)
+            throw new DaoNullReference("Substitute not found");
         
         employer.EmployerSubstitutes.Add(new EmployerSubstitute
         {
@@ -129,8 +141,9 @@ public class MatchDao : IMatchDao
     private async void RemoveWhereTimerIsOutSubGig(int id, DateTime currentDateTime, TimeSpan span)
     {
 
-        Substitute? substitute = await _dataContext.Substitutes.Include(sub =>
-            sub.EmployerSubstitutes).FirstOrDefaultAsync(sub => sub.Id == id);
+        Substitute? substitute = await GetSubstituteById(id);
+        if (substitute == null)
+            throw new DaoNullReference("Substitute not found");
 
         foreach (var gigSub in substitute.GigSubstitutes)
         {
@@ -149,8 +162,9 @@ public class MatchDao : IMatchDao
 
     private async void RemoveWhereTimerIsOutEmpSub(int id, DateTime currentDateTime, TimeSpan span)
     {
-        Employer? employer = await _dataContext.Employers.Include(emp =>
-            emp.EmployerSubstitutes).FirstOrDefaultAsync(emp => emp.Id == id);
+        Employer? employer = await GetEmployerById(id);
+        if (employer == null)
+            throw new DaoNullReference("Employer not found");
         
 
         foreach (var empSub in employer.EmployerSubstitutes)
@@ -231,7 +245,7 @@ public class MatchDao : IMatchDao
 
     private Task<Substitute?> GetSubstituteById(int id)
     {
-        return _dataContext.Substitutes.Include((s) => s.GigSubstitutes).FirstOrDefaultAsync(sub => sub.Id == id);;
+        return _dataContext.Substitutes.Include((s) => s.GigSubstitutes).FirstOrDefaultAsync(sub => sub.Id == id);
     }
     
     private Task<Gig?> GetGigById(int id)

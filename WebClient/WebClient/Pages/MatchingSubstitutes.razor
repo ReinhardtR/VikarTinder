@@ -1,8 +1,9 @@
 ﻿@page "/Matching/Substitutes"
 @using HttpClients.Services
 @using HttpClients
+@using WebClient.Utils
 @inject MatchingService MatchingService
-@attribute [Authorize]
+@attribute [Authorize(Policy = AuthPolicies.EmployerOnly)]
 
 <h3>Substitutes</h3>
 <div>

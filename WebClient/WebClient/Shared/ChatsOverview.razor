@@ -1,5 +1,7 @@
 @using HttpClients
 @using HttpClients.Services
+@using WebClient.Utils
+@using System.Security.Claims
 @inject ChatService ChatService
 @inject NavigationManager NavigationManager
 
@@ -16,7 +18,7 @@ else if (chats != null)
     <MudStack AlignItems="AlignItems.Stretch" Style="width: 100%" >
         <MudText Typo="Typo.h6">Chats</MudText>
 
-        <AuthorizeView Roles="@AuthRoles.Employer">
+        <AuthorizeView Policy="@AuthPolicies.EmployerOnly">
             <MudStack Spacing="2">
                 @foreach (BasicChatDTO chat in chats)
                 {
@@ -35,7 +37,7 @@ else if (chats != null)
             </MudStack>
         </AuthorizeView>
         
-        <AuthorizeView Roles="@AuthRoles.Substitute">
+         <AuthorizeView Policy="@AuthPolicies.SubstituteOnly">
             <MudStack Spacing="2">
                 @foreach (BasicChatDTO chat in chats)
                 {
@@ -60,15 +62,16 @@ else if (chats != null)
     
     [Parameter]
     public int? GigId { get; set; }
-    
-    // TODO replace with auth stuff
-    private int userId = 1;
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
     
     private ICollection<BasicChatDTO>? chats;
     private string? errorLabel;
     
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("ON INIT");
         await FetchChats();
     }
 
@@ -79,8 +82,18 @@ else if (chats != null)
             errorLabel = null;
 
             ChatOverviewDTO? chatOverview;
+
+            AuthenticationState authState = await AuthState;
+            Claim? idClaim = AuthClaims.GetClaim(authState, AuthClaims.Id);
             
-            if (GigId != null)
+            if (idClaim == null)
+            {
+                throw new Exception("Couldn't find id claim");
+            }
+
+            int userId = int.Parse(idClaim.Value);
+            
+            if (GigId == null)
             {
                 chatOverview = await ChatService.GetChatOverviewAsync(userId);
             }

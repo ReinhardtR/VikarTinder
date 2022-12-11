@@ -7,6 +7,7 @@ namespace Persistence.Services.Factories;
 
 public class AdministrationFactory
 {
+    
     public static CreateUserResponse CreateSubstiuteUserResponse(Substitute substitute)
     {
         if (substitute == null)
@@ -20,9 +21,9 @@ public class AdministrationFactory
             };
             return response;
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw new FactoryNullReference("A substitute attribute " + e.Message);
+            throw new FactoryNullReference("A substitute attribute");
         }
         
     }
@@ -40,9 +41,9 @@ public class AdministrationFactory
             };
             return response;
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw new FactoryNullReference("An employer attribute " + e.Message);
+            throw new FactoryNullReference("An employer attribute");
         }
     }
 
@@ -61,9 +62,9 @@ public class AdministrationFactory
             return response;
 
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw new FactoryNullReference("A substitute attribute " + e.Message);
+            throw new FactoryNullReference("A substitute attribute");
         }
         
     }
@@ -84,51 +85,67 @@ public class AdministrationFactory
 
             return response;
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw new FactoryNullReference("An employer attribute " + e.Message);
+            throw new FactoryNullReference("An employer attribute");
         }
     }
 
-    public static LoginUserResponse LoginSubstituteUserResponse(Substitute substitute)
+    public static LoginUserResponse CreateLoginUserResponse(User user)
     {
-        if (substitute == null)
-            throw new FactoryNullReference("substitute");
+        if (user == null)
+            throw new FactoryNullReference("User");
 
         try
         {
-            LoginUserResponse response = new LoginUserResponse
+            LoginUserResponse response = new();
+            if (user is Substitute)
             {
-                User = CreateSubstituteUserObject(substitute)
-            };
-            return response;
+                Substitute substitute = (Substitute)user;
+                response.User = CreateSubstituteUserObject(substitute);
+                return response;
+            }
+            else
+            {
+                Employer employer = (Employer)user;
+                response.User = CreateEmployerUserObject(employer);
+                return response;
+            }
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw new FactoryNullReference("A substitute attribute " + e.Message);
+            throw new FactoryNullReference("Values in User");
         }
     }
     
-    public static LoginUserResponse LoginEmployerUserResponse(Employer employer)
+
+    public static GetUserResponse CreateGetUserResponse(User user)
     {
-        if (employer == null)
-            throw new FactoryNullReference("employer");
+        if (user == null)
+            throw new FactoryNullReference("User");
 
         try
         {
-
-            LoginUserResponse response = new LoginUserResponse
+            GetUserResponse response = new();
+            if (user is Substitute)
             {
-                User = CreateEmployerUserObject(employer)
-            };
-            return response;
+                Substitute substitute = (Substitute)user;
+                response.User = CreateSubstituteUserObject(substitute);
+                return response;
+            }
+            else
+            {
+                Employer employer = (Employer)user;
+                response.User = CreateEmployerUserObject(employer);
+                return response;
+            }
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw new FactoryNullReference("An employer attribute " + e.Message);
+            throw new FactoryNullReference("Values in User");
         }
     }
-
+    
     private static UserObject CreateSubstituteUserObject(Substitute substitute)
     {
         if (substitute == null)
@@ -140,7 +157,8 @@ public class AdministrationFactory
             UserData = new UserData
             {
                 Email = substitute.Email,
-                Name = substitute.Name,
+                FirstName = substitute.FirstName,
+                LastName = substitute.LastName,
                 PasswordHash = substitute.PasswordHash,
                 Sub = new SubstituteObject
                 {
@@ -163,7 +181,8 @@ public class AdministrationFactory
             UserData = new UserData
             {
                 Email = employer.Email,
-                Name = employer.Name,
+                FirstName = employer.FirstName,
+                LastName = employer.LastName,
                 PasswordHash = employer.PasswordHash,
                 Emp = new EmployerObject
                 {
@@ -173,45 +192,38 @@ public class AdministrationFactory
             }
         };
     }
-
+    
     public static DeleteUserResponse CreateDeleteUserResponse(DeleteUserDto dto)
     {
-        if (dto == null)
-            throw new FactoryNullReference("DeleteUserDto");
-
-        try
-        {
-
-            return new DeleteUserResponse
+        if (dto == null || dto.Id == 0)
+            throw new FactoryNullReference("DeleteUserDto or id");
+        
+        return new DeleteUserResponse
             {
-                Validation = dto.validation,
-                User = new UserToDeleteParams
+                Validation = dto.Validation,
+                User = new GetUserParams
                 {
-                    Id = dto.id,
-                    Role = dto.role == DaoRequestType.Substitute
-                        ? UserToDeleteParams.Types.Role.Substitute
-                        : UserToDeleteParams.Types.Role.Employer
+                    Id = dto.Id,
+                    Role = dto.Role == DaoRequestType.Substitute
+                        ? GetUserParams.Types.Role.Substitute
+                        : GetUserParams.Types.Role.Employer
                 }
             };
-        }
-        catch (Exception e)
-        {
-            throw new FactoryNullReference("A DeleteUserDto attribute " + e.Message);
-        }
     }
-
+    
+    
     public static Substitute MakeSubstituteDomainObject(UpdateUserRequest updateUserRequest)
     {
-        if (updateUserRequest == null)
-            throw new FactoryNullReference("UpdateUserRequest");
-
         try
         {
+            if (updateUserRequest == null || updateUserRequest.User.Id == 0)
+                throw new FactoryNullReference("UpdateUserRequest object or id");
 
             return new Substitute
             {
                 Id = updateUserRequest.User.Id,
-                Name = updateUserRequest.User.UserData.Name,
+                FirstName = updateUserRequest.User.UserData.FirstName,
+                LastName = updateUserRequest.User.UserData.LastName,
                 PasswordHash = updateUserRequest.User.UserData.PasswordHash,
                 Email = updateUserRequest.User.UserData.Email,
                 Age = updateUserRequest.User.UserData.Sub.Age,
@@ -219,33 +231,34 @@ public class AdministrationFactory
                 Address = updateUserRequest.User.UserData.Sub.Address
             };
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw new FactoryNullReference("An UpdateUserRequest attribute " + e.Message);
+            throw new FactoryNullReference("An UpdateUserRequest attribute");
         }
     }
 
     public static Employer MakeEmployerDomainObject(UpdateUserRequest updateUserRequest)
     {
-        if (updateUserRequest == null)
-            throw new FactoryNullReference("UpdateUserRequest");
 
         try
         {
+            if (updateUserRequest == null || updateUserRequest.User.Id == 0)
+                throw new FactoryNullReference("UpdateUserRequest object or id");
 
             return new Employer
             {
                 Id = updateUserRequest.User.Id,
-                Name = updateUserRequest.User.UserData.Name,
+                FirstName = updateUserRequest.User.UserData.FirstName,
+                LastName = updateUserRequest.User.UserData.LastName,
                 PasswordHash = updateUserRequest.User.UserData.PasswordHash,
                 Email = updateUserRequest.User.UserData.Email,
                 Title = updateUserRequest.User.UserData.Emp.Title,
                 WorkPlace = updateUserRequest.User.UserData.Emp.Workplace
             };
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            throw new FactoryNullReference("An UpdateUserRequest attribute " + e.Message);
+            throw new FactoryNullReference("An UpdateUserRequest attribute");
         }
     }
 }

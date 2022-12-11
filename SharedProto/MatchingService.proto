@@ -5,6 +5,8 @@ option java_multiple_files = true;
 
 package MatchingProto;
 
+//PROTO OBJECTS
+
 message GigToBeMatched {
   int32 id = 1;
 }
@@ -13,37 +15,35 @@ message SubstituteToBeMatched {
   int32 id = 1;
 }
 
-message GigSearchParameters {
+
+//------------------------------
+
+
+//GET SUBSTITUTES
+message SubstituteSearchParametersRequest {
   int32 currentUserId = 1;
 }
-
-message SubstituteSearchParameters {
-  int32 currentUserId = 1;
-}
-
-//
-
-message MatchingGigs {
-  repeated GigToBeMatched gigs = 1;
-}
-
-message MatchingSubstitutes {
+message SubstitutesForMatchingResponse {
   repeated SubstituteToBeMatched substitutes = 1;
 }
 
-//
+//GET GIGS
+message GigSearchParametersRequest {
+  int32 currentUserId = 1;
+}
 
-//Ja eller Nej bool
+message GigsForMatchingResponse {
+  repeated GigToBeMatched gigs = 1;
+}
+
+//MATCHING
 message MatchRequest {
   int32 currentUser = 1;
   int32 toBeMatchedId =2 ;
   bool wantToMatch = 3;
 }
 
-//
-
-//Tilføj 
-message MatchValidation {
+message MatchValidationResponse {
   bool isMatched = 1;
   int32 employerId = 2;
   int32 substituteId = 3;
@@ -51,11 +51,11 @@ message MatchValidation {
 }
 
 service MatchingService {
-  rpc GetSubstitutes(SubstituteSearchParameters) returns (MatchingSubstitutes);
-  rpc GetGigs(GigSearchParameters) returns (MatchingGigs);
+  rpc GetSubstitutes(SubstituteSearchParametersRequest) returns (SubstitutesForMatchingResponse);
+  rpc GetGigs(GigSearchParametersRequest) returns (GigsForMatchingResponse);
 
-  rpc SendMatchFromSubstitute(MatchRequest) returns (MatchValidation);
-  rpc SendMatchFromEmployer(MatchRequest) returns (MatchValidation);
+  rpc SendMatchFromSubstitute(MatchRequest) returns (MatchValidationResponse);
+  rpc SendMatchFromEmployer(MatchRequest) returns (MatchValidationResponse);
 }
 
 
