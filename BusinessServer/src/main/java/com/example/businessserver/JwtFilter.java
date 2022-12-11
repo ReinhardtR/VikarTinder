@@ -1,4 +1,4 @@
-package com.example.businessserver.logic;
+package com.example.businessserver;
 
 
 import com.example.businessserver.services.implementations.AuthServiceImpl;
@@ -25,7 +25,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JWTUtility jwtUtility;
-
     @Autowired
     private AuthServiceImpl userService;
 
@@ -41,6 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         if (null != userName && SecurityContextHolder.getContext().getAuthentication() == null) {
+            System.out.println(userName);
             UserDetails userDetails = userService.loadUserByUsername(userName);
 
             if (jwtUtility.validateToken(token, userDetails)) {

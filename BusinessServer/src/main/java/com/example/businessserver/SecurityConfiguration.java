@@ -1,6 +1,5 @@
 package com.example.businessserver;
 
-import com.example.businessserver.logic.JwtFilter;
 import com.example.businessserver.services.implementations.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -1,7 +1,8 @@
 package com.example.businessserver.restcontrollers;
 
-import com.example.businessserver.dtos.auth.JwtRequest;
-import com.example.businessserver.dtos.auth.JwtResponse;
+import com.example.businessserver.dtos.auth.LoginRequestDTO;
+import com.example.businessserver.dtos.auth.JwtResponseDTO;
+import com.example.businessserver.logic.interfaces.AuthLogic;
 import com.example.businessserver.services.implementations.AuthServiceImpl;
 import com.example.businessserver.services.utils.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class AuthController {
 	@Autowired
 	private AuthServiceImpl userService;
 
+	@Autowired
+	private AuthLogic authLogic;
+
 	@GetMapping("/yo")
 	public String test()
 	{
@@ -32,22 +36,20 @@ public class AuthController {
 	}
 
 	@PostMapping("/authenticate")
-	public JwtResponse authenticate(@RequestBody JwtRequest jwtRequest) throws Exception {
-		try {
+	public JwtResponseDTO authenticate(@RequestBody LoginRequestDTO loginRequest) throws Exception {
+		//TODO:Ved ikke endnu om denne lille del er nødvendig. Behold den til vi har checked om ROLE lock af metoder virker. BT ser det ud til at virke uden. Måske validater på return
+		//TODO: Hvis det er nødvendig, ved ikke om den burde rykkes til logik da password skal hashes
+		/*try {
 			authenticationManager.authenticate(
 							new UsernamePasswordAuthenticationToken(
-											jwtRequest.getUsername(),
-											jwtRequest.getPassword()
+											loginRequest.getEmail(),
+											loginRequest.getPassword()
 							)
 			);
 		} catch (BadCredentialsException e) {
 			throw new Exception("INVALID_CREDENTIALS", e);
-		}
+		}*/
 
-		UserDetails userDetails = userService.loadUserByUsername(jwtRequest.getUsername());
-
-		String token = jwtUtility.generateToken(userDetails);
-
-		return new JwtResponse(token);
+		return authLogic.login(loginRequest);
 	}
 }
