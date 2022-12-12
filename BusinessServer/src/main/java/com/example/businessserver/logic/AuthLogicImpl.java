@@ -9,6 +9,7 @@ import com.example.businessserver.services.implementations.AuthServiceImpl;
 import com.example.businessserver.services.utils.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -25,6 +26,8 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
 
     @Autowired
     private AuthServiceImpl userService;
+
+    private Pbkdf2PasswordEncoder encoder = new Pbkdf2PasswordEncoder();
 
     private final Pattern emailPattern;
 

@@ -1,9 +1,9 @@
 package com.example.businessserver.services.implementations;
 
-import MatchingProto.MatchValidation;
-import MatchingProto.MatchingGigs;
+import MatchingProto.GigsForMatchingResponse;
+import MatchingProto.MatchValidationResponse;
 import MatchingProto.MatchingServiceGrpc;
-import MatchingProto.MatchingSubstitutes;
+import MatchingProto.SubstitutesForMatchingResponse;
 import com.example.businessserver.dtos.matching.*;
 import com.example.businessserver.services.factories.MatchServiceFactory;
 import com.example.businessserver.services.interfaces.MatchingService;
@@ -18,7 +18,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 	@Override
 	public SubstituteMatchingDTOs getSubstitutes(SubstituteSearchParametersDTO searchParameters) {
-		MatchingSubstitutes possibleMatches = userServiceBlockingStub.getSubstitutes(
+		SubstitutesForMatchingResponse possibleMatches = userServiceBlockingStub.getSubstitutes(
 						MatchServiceFactory.substituteSearchParameters(searchParameters)
 		);
 
@@ -27,7 +27,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 	@Override
 	public GigMatchingDTOs getGigs(GigSearchParametersDTO searchParameters) {
-		MatchingGigs possibleMatches = userServiceBlockingStub.getGigs(
+		GigsForMatchingResponse possibleMatches = userServiceBlockingStub.getGigs(
 						MatchServiceFactory.gigsSearchParameters(searchParameters)
 		);
 
@@ -36,7 +36,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 	@Override
 	public MatchValidationDTO gigsMatchRequest(MatchRequestDTO matchRequest) {
-		MatchValidation validation = userServiceBlockingStub.sendMatchFromSubstitute(
+		MatchValidationResponse validation = userServiceBlockingStub.sendMatchFromSubstitute(
 						MatchServiceFactory.matchRequest(matchRequest)
 		);
 
@@ -45,7 +45,7 @@ public class MatchingServiceImpl implements MatchingService {
 
 	@Override
 	public MatchValidationDTO substitutesMatchRequest(MatchRequestDTO matchRequest) {
-		MatchValidation validation = userServiceBlockingStub.sendMatchFromEmployer(
+		MatchValidationResponse validation = userServiceBlockingStub.sendMatchFromEmployer(
 						MatchServiceFactory.matchRequest(matchRequest)
 		);
 

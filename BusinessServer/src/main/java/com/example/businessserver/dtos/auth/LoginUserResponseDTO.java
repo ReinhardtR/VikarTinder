@@ -1,6 +1,6 @@
 package com.example.businessserver.dtos.auth;
 
-public abstract class UserObjectDTO {
+public abstract class LoginUserResponseDTO {
     private int id;
     private String firstName;
     private String lastName;
@@ -12,7 +12,7 @@ public abstract class UserObjectDTO {
         EMPLOYER
     }
 
-    public UserObjectDTO(int id, String firstName, String lastName, String passwordHashed, String email, String role) {
+    public LoginUserResponseDTO(int id, String firstName, String lastName, String passwordHashed, String email, String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

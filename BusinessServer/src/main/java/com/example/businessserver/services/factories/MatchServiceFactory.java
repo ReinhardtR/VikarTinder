@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MatchServiceFactory {
-	public static SubstituteMatchingDTOs substituteMatchingDTOs(MatchingSubstitutes possibleMatches) {
+	public static SubstituteMatchingDTOs substituteMatchingDTOs(SubstitutesForMatchingResponse possibleMatches) {
 		List<SubstituteMatchingDTO> substituteDatingDTOs = new ArrayList<>();
 		for (SubstituteToBeMatched id : possibleMatches.getSubstitutesList()) {
 			substituteDatingDTOs.add(new SubstituteMatchingDTO(id.getId()));
@@ -15,7 +15,7 @@ public class MatchServiceFactory {
 		return new SubstituteMatchingDTOs(substituteDatingDTOs);
 	}
 
-	public static GigMatchingDTOs gigMatchingDTOs(MatchingGigs possibleMatches) {
+	public static GigMatchingDTOs gigMatchingDTOs(GigsForMatchingResponse possibleMatches) {
 		List<GigMatchingDTO> gigMatchingDTOs = new ArrayList<>();
 		for (GigToBeMatched id : possibleMatches.getGigsList()) {
 			gigMatchingDTOs.add(new GigMatchingDTO(id.getId()));
@@ -23,7 +23,7 @@ public class MatchServiceFactory {
 		return new GigMatchingDTOs(gigMatchingDTOs);
 	}
 
-	public static MatchValidationDTO matchValidationDTO(MatchValidation validation) {
+	public static MatchValidationDTO matchValidationDTO(MatchValidationResponse validation) {
 		return new MatchValidationDTO(
 						validation.getIsMatched(),
 						validation.getEmployerId(),
@@ -32,13 +32,13 @@ public class MatchServiceFactory {
 		);
 	}
 
-	public static SubstituteSearchParameters substituteSearchParameters(SubstituteSearchParametersDTO parameters) {
-		return SubstituteSearchParameters.newBuilder()
+	public static SubstituteSearchParametersRequest substituteSearchParameters(SubstituteSearchParametersDTO parameters) {
+		return SubstituteSearchParametersRequest.newBuilder()
 						.setCurrentUserId(parameters.getCurrentEmployerId()).build();
 	}
 
-	public static GigSearchParameters gigsSearchParameters(GigSearchParametersDTO parameters) {
-		return GigSearchParameters.newBuilder()
+	public static GigSearchParametersRequest gigsSearchParameters(GigSearchParametersDTO parameters) {
+		return GigSearchParametersRequest.newBuilder()
 						.setCurrentUserId(parameters.getCurrentSubstituteId()).build();
 	}
 

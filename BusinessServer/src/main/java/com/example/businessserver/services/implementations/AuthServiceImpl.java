@@ -1,8 +1,7 @@
 package com.example.businessserver.services.implementations;
 
 import AdministrationService.*;
-import ChatService.ChatServiceGrpc;
-import com.example.businessserver.dtos.auth.UserObjectDTO;
+import com.example.businessserver.dtos.auth.LoginUserResponseDTO;
 import com.example.businessserver.exceptions.BuildingException;
 import com.example.businessserver.services.factories.AuthServiceFactory;
 import com.example.businessserver.services.interfaces.AuthService;
@@ -15,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 // TODO : Refactor navngivning til gruppens standard
@@ -61,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
                     .setId(id)
                     .setUserData(s2)
                     .build();
-            UserObjectDTO dto;
+            LoginUserResponseDTO dto;
             try {
                 dto = AuthServiceFactory.userObjectDTO(s3);
             } catch (BuildingException e) {throw new RuntimeException(e);}
@@ -72,12 +70,17 @@ public class AuthServiceImpl implements AuthService {
     }
 
     //TODO: Burde der laves en extended class med claims i stedet for at sige Auth
-    private UserDetails createUser(UserObjectDTO userObjectDTO) {
+    private UserDetails createUser(LoginUserResponseDTO userObjectDTO) {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + userObjectDTO.getRole()));
         authorities.add(new SimpleGrantedAuthority("NAMEF_" + userObjectDTO.getFirstName()));
         authorities.add(new SimpleGrantedAuthority("NAMEL_" + userObjectDTO.getLastName()));
         authorities.add(new SimpleGrantedAuthority("ID_" + userObjectDTO.getId()));
         return new User(userObjectDTO.getEmail(), userObjectDTO.getPasswordHashed(), authorities);
+    }
+
+    @Override
+    public LoginUserResponseDTO SignUp(LoginUserResponseDTO dto) {
+        return null;
     }
 }

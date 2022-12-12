@@ -1,13 +1,11 @@
 package com.example.businessserver.services.factories;
 
 import AdministrationService.*;
-import com.example.businessserver.dtos.auth.EmployerDTO;
-import com.example.businessserver.dtos.auth.LoginRequestDTO;
-import com.example.businessserver.dtos.auth.SubstituteDTO;
-import com.example.businessserver.dtos.auth.UserObjectDTO;
+import com.example.businessserver.dtos.auth.LoginEmployerResponseDTO;
+import com.example.businessserver.dtos.auth.LoginSubstituteResponseDTO;
+import com.example.businessserver.dtos.auth.LoginUserResponseDTO;
 import com.example.businessserver.exceptions.BuildingException;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.core.userdetails.User;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +47,7 @@ class AuthServiceFactoryTest {
         UserData userDataTest = buildUserDataObj(firstName, lastName, password, email, empTest);
         UserObject testGrpc = buildUserObj(id, userDataTest);
 
-        EmployerDTO testResult = (EmployerDTO) AuthServiceFactory.userObjectDTO(testGrpc);
+        LoginEmployerResponseDTO testResult = (LoginEmployerResponseDTO) AuthServiceFactory.userObjectDTO(testGrpc);
         assertAll(
                 ()-> assertEquals(testResult.getFirstName(), firstName),
                 ()-> assertEquals(testResult.getLastName(), lastName),
@@ -57,7 +55,7 @@ class AuthServiceFactoryTest {
                 ()-> assertEquals(testResult.getEmail(), email),
                 ()-> assertEquals(testResult.getTitle(), title),
                 ()-> assertEquals(workplace,testResult.getWorkplace()),
-                ()-> assertEquals(UserObjectDTO.Role.EMPLOYER, testResult.getRole())
+                ()-> assertEquals(LoginUserResponseDTO.Role.EMPLOYER, testResult.getRole())
         );
     }
 
@@ -66,7 +64,7 @@ class AuthServiceFactoryTest {
         UserData userDataTest = buildUserDataObj(firstName, lastName, password, email, subTest);
         UserObject testGrpc = buildUserObj(id, userDataTest);
 
-        SubstituteDTO testResult = (SubstituteDTO) AuthServiceFactory.userObjectDTO(testGrpc);
+        LoginSubstituteResponseDTO testResult = (LoginSubstituteResponseDTO) AuthServiceFactory.userObjectDTO(testGrpc);
         assertAll(
                 ()-> assertEquals(firstName,testResult.getFirstName()),
                 ()-> assertEquals(lastName, testResult.getLastName()),
@@ -74,7 +72,7 @@ class AuthServiceFactoryTest {
                 ()-> assertEquals(email, testResult.getEmail()),
                 ()-> assertEquals(age, testResult.getAge()),
                 ()-> assertEquals(bio, testResult.getBio()),
-                ()-> assertEquals(UserObjectDTO.Role.SUBSTITUTE, testResult.getRole())
+                ()-> assertEquals(LoginUserResponseDTO.Role.SUBSTITUTE, testResult.getRole())
         );
     }
 
