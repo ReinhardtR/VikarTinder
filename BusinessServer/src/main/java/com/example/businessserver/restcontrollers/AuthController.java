@@ -1,19 +1,13 @@
 package com.example.businessserver.restcontrollers;
 
-import com.example.businessserver.dtos.auth.JwtResponseDTO;
-import com.example.businessserver.dtos.auth.LoginRequestDTO;
-import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
-import com.example.businessserver.dtos.auth.SignUpSubstituteRequestDTO;
+import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.logic.interfaces.AuthLogic;
 import com.example.businessserver.services.implementations.AuthServiceImpl;
 import com.example.businessserver.services.utils.JWTUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 // TODO : Refactor navngivning til gruppens standard
 
 @RestController
@@ -58,5 +52,15 @@ public class AuthController {
 	@PostMapping("/register/substitute")
 	public void registerSubstitute(@RequestBody SignUpSubstituteRequestDTO substituteRequest) throws DTOException {
 		authLogic.signUpSubstitute(substituteRequest);
+	}
+
+	@GetMapping("/EmployerInfo/{id}{role}")
+	public void getEmployerInformation(@PathVariable int id, @PathVariable LoginUserResponseDTO.Role role)
+	{
+		try {
+			authLogic.getEmployerInfo(new GetEmployerInfoParamsDTO(id, role));
+		} catch (DTOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

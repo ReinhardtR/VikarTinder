@@ -79,6 +79,16 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         userService.SignUpSubstitute(new SignUpWrapperSubstituteDTO(saltHashedPassword[0], saltHashedPassword[1], requestDTO));
     }
 
+    @Override
+    public void getEmployerInfo(GetEmployerInfoParamsDTO getEmployerInfoParamsDTO) throws DTOException {
+        objectNullCheck(getEmployerInfoParamsDTO, "employerInfoParams");
+        objectNullCheck(getEmployerInfoParamsDTO.getRole(), "Role");
+        checkId(getEmployerInfoParamsDTO.getId());
+        if (!getEmployerInfoParamsDTO.getRole().equals(LoginUserResponseDTO.Role.EMPLOYER))
+            throw new DTOOutOfBoundsException("Wrong role");
+        userService.getEmployerInfo(getEmployerInfoParamsDTO);
+    }
+
     public void checkAge(LocalDate dob) throws DTOOutOfBoundsException {
         int yearsDifference = Period.between(dob, LocalDate.now()).getYears();
         if (yearsDifference < 18 || yearsDifference > 99)

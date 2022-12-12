@@ -82,4 +82,18 @@ public class AuthServiceFactory {
 					).build()
 			).build();
 	}
+
+    public static GetUserRequest getUserRequest(GetEmployerInfoParamsDTO getEmployerInfoParamsDTO) {
+		return GetUserRequest.newBuilder()
+				.setUser(
+						GetUserParams.newBuilder()
+								.setId(getEmployerInfoParamsDTO.getId())
+								.setRole(GetUserParams.Role.valueOf(getEmployerInfoParamsDTO.getRole().name()))
+								.build()
+				).build();
+    }
+
+	public static EmployerInfoDTO employerInfoDTO(GetUserResponse getUserResponse) {
+		return null;
+	}
 }
