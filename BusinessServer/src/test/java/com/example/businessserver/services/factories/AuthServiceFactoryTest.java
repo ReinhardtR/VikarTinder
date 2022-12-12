@@ -1,9 +1,7 @@
 package com.example.businessserver.services.factories;
 
 import AdministrationService.*;
-import com.example.businessserver.dtos.auth.LoginEmployerResponseDTO;
-import com.example.businessserver.dtos.auth.LoginSubstituteResponseDTO;
-import com.example.businessserver.dtos.auth.LoginUserResponseDTO;
+import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.BuildingException;
 import org.junit.jupiter.api.Test;
 
@@ -77,12 +75,41 @@ class AuthServiceFactoryTest {
     }
 
     @Test
-    void test_userObjectDTO_SubstituteDTOBuildUp()
+    void test_userObjectDTO_BuildingException()
     {
         UserData data = UserData.newBuilder().build();
         UserObject obj = UserObject.newBuilder().setUserData(data).build();
 
         assertThrows(BuildingException.class, ()-> AuthServiceFactory.userObjectDTO(obj), "Checks if system throws exception in case more roles being added to UserData");
+    }
+
+    @Test
+    void test_createUserRequestEmployer() throws Exception {
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+        String password = "testPassword";
+        String email = "test@email.test";
+        String title = "testTitle";
+        String workplace = "testWorkplace";
+        SignUpEmployerRequestDTO testDTO = new SignUpEmployerRequestDTO(
+            firstName,
+            lastName,
+            password,
+            email,
+            title,
+            workplace
+        );
+
+        CreateUserRequest test = AuthServiceFactory.createUserRequestEmployer(testDTO);
+
+        assertAll(
+                ()->assertEquals(firstName, test.getUser().getFirstName()),
+                ()-> assertEquals(lastName, test.getUser().getLastName()),
+                ()->assertEquals(password, test.getUser().getPasswordHash()),
+                ()->assertEquals(email, test.getUser().getEmail()),
+                ()->assertEquals(title, test.getUser().getEmp().getTitle()),
+                ()->assertEquals(workplace, test.getUser().getEmp().getWorkplace())
+        );
     }
 
     private SubstituteObject buildSubstituteObj(int age, String bio, String address) {

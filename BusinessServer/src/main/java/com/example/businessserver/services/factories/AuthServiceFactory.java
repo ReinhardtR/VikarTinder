@@ -4,6 +4,7 @@ import AdministrationService.*;
 import com.example.businessserver.dtos.auth.LoginEmployerResponseDTO;
 import com.example.businessserver.dtos.auth.LoginSubstituteResponseDTO;
 import com.example.businessserver.dtos.auth.LoginUserResponseDTO;
+import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
 import com.example.businessserver.exceptions.BuildingException;
 
 public class AuthServiceFactory {
@@ -46,5 +47,21 @@ public class AuthServiceFactory {
             );
         }
         throw new BuildingException("unrecognised user type: " + userData.getRoleCase().getClass());
+    }
+
+    public static CreateUserRequest createUserRequestEmployer(SignUpEmployerRequestDTO employerRequestDTO) {
+        return CreateUserRequest.newBuilder()
+                .setUser(
+                        UserData.newBuilder()
+                                .setFirstName(employerRequestDTO.getFirstName())
+                                .setLastName(employerRequestDTO.getLastName())
+                                .setPasswordHash(employerRequestDTO.getPassword())
+                                .setEmail(employerRequestDTO.getEmail())
+                                .setEmp(
+                                        EmployerObject.newBuilder()
+                                                .setTitle(employerRequestDTO.getTitle())
+                                                .setWorkplace(employerRequestDTO.getWorkplace()).build()
+                                ).build()
+                ).build();
     }
 }

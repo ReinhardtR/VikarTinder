@@ -2,6 +2,7 @@ package com.example.businessserver.logic;
 
 import com.example.businessserver.dtos.auth.JwtResponseDTO;
 import com.example.businessserver.dtos.auth.LoginRequestDTO;
+import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import com.example.businessserver.logic.interfaces.AuthLogic;
@@ -50,10 +51,21 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         return new JwtResponseDTO(jwtUtility.generateToken(userDetails));
     }
 
+    @Override
+    public void signUpEmployer(SignUpEmployerRequestDTO requestDTO) throws DTOException {
+        objectNullCheck(requestDTO, "signUpRequest");
+        checkEmail(requestDTO.getEmail());
+        checkPassword(requestDTO.getPassword());
+        checkStringMinimumValues(requestDTO.getFirstName(), "First name", 1);
+        checkStringMinimumValues(requestDTO.getLastName(), "Last name", 1);
+        checkStringMinimumValues(requestDTO.getTitle(), "Title", 1);
+        checkStringMinimumValues(requestDTO.getWorkplace(), "Workplace", 1);
+        userService.SignUpEmployer(requestDTO);
+    }
+
     public void checkPassword(String password) throws DTOException {
         objectNullCheck(password, "Password");
-        if (password.length() < 6)
-            throw new DTOOutOfBoundsException("Password is too short, min 6 chars long");
+        checkStringMinimumValues(password, "Password", 6);
         char[] characters = password.toCharArray();
         for (int i = 0; i < characters.length; i++) {
             if (Character.isUpperCase(characters[i]))
@@ -69,6 +81,13 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
             throw new DTOOutOfBoundsException("Email does not follow the email standard");
     }
 
+
+    public void checkStringMinimumValues(String name, String typeOfName, int min) throws DTOException{
+        objectNullCheck(name, typeOfName);
+        if(name.trim().length() < min)
+            throw new DTOOutOfBoundsException(typeOfName + " has to be at least "+ min +" character long");
+    }
+
     public void checkPasswordsForMatch(String savedPassword, String loginRequestPassword, String salt) throws DTOOutOfBoundsException {
         String requestWithSalt = generatePasswordWithKnownSalt(salt, loginRequestPassword);
         if (!savedPassword.equals(loginRequestPassword))
@@ -82,15 +101,7 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         SecureRandom random = new SecureRandom();;
         byte[] salt = new byte[16];
         random.nextBytes(salt);
-        MessageDigest md;
-        try {
-            md = MessageDigest.getInstance("SHA-512");
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-        md.update(salt);
-        byte[] hashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
-        return Arrays.toString(hashedPassword);
+        return generatePasswordWithKnownSalt(salt.toString(), password);
     }
 
     public String generatePasswordWithKnownSalt(String salt, String password)

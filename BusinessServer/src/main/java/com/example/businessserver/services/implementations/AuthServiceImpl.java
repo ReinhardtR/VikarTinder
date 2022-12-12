@@ -2,6 +2,7 @@ package com.example.businessserver.services.implementations;
 
 import AdministrationService.*;
 import com.example.businessserver.dtos.auth.LoginUserResponseDTO;
+import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
 import com.example.businessserver.exceptions.BuildingException;
 import com.example.businessserver.services.factories.AuthServiceFactory;
 import com.example.businessserver.services.interfaces.AuthService;
@@ -59,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
                     .setId(id)
                     .setUserData(s2)
                     .build();
+
             LoginUserResponseDTO dto;
             try {
                 dto = AuthServiceFactory.userObjectDTO(s3);
@@ -80,7 +82,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginUserResponseDTO SignUp(LoginUserResponseDTO dto) {
-        return null;
+    public void SignUpEmployer(SignUpEmployerRequestDTO employerRequestDTO) {
+        chatServiceBlockingStub.createUser(
+                AuthServiceFactory.createUserRequestEmployer(employerRequestDTO)
+        );
     }
 }
