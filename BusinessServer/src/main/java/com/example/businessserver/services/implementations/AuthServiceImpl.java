@@ -1,8 +1,6 @@
 package com.example.businessserver.services.implementations;
 
-import AdministrationService.AdministrationServiceGrpc;
-import AdministrationService.LoginUserResponse;
-import AdministrationService.UserObject;
+import AdministrationService.*;
 import ChatService.ChatServiceGrpc;
 import com.example.businessserver.dtos.auth.UserObjectDTO;
 import com.example.businessserver.exceptions.BuildingException;
@@ -38,22 +36,36 @@ public class AuthServiceImpl implements AuthService {
 
         return createUser(userObjectDTO);*/
 
-        if (userName.equals("admin"))
+        if (userName.equals("heysa@hej.hej"))
         {
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_SUBSTITUTE"));
-            authorities.add(new SimpleGrantedAuthority("AGE_5"));
-            authorities.add(new SimpleGrantedAuthority("EMAIL_VIKAR@VIKAR.VIKAR"));
-            return new User("admin", "password", authorities);
-        }
-        if (userName.equals("heysa"))
-        {
-            System.out.println("here");
-            List<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_SUBSTITUTE"));
-            authorities.add(new SimpleGrantedAuthority("AGE_5"));
-            authorities.add(new SimpleGrantedAuthority("EMAIL_VIKAR@VIKAR.VIKAR"));
-            return new User("heysa", "carl", authorities);
+            int id = 1;
+            String firstName = "firstNameTest";
+            String lastName = "lastNameTest";
+            String password = "testPassword";
+            int age = 55;
+            String bio = "This is a test";
+            String address = "testAddress";
+            SubstituteObject s1 = SubstituteObject.newBuilder()
+                    .setAge(age)
+                    .setBio(bio)
+                    .setAddress(address)
+                    .build();
+            UserData s2 = UserData.newBuilder()
+                    .setFirstName(firstName)
+                    .setLastName(lastName)
+                    .setPasswordHash("Carlos")
+                    .setEmail(userName)
+                    .setSub(s1)
+                    .build();
+            UserObject s3 = UserObject.newBuilder()
+                    .setId(id)
+                    .setUserData(s2)
+                    .build();
+            UserObjectDTO dto;
+            try {
+                dto = AuthServiceFactory.userObjectDTO(s3);
+            } catch (BuildingException e) {throw new RuntimeException(e);}
+            return createUser(dto);
         }
 
         return null;
