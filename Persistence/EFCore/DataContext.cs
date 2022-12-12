@@ -23,6 +23,19 @@ public class DataContext : DbContext
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>()
+            .HasIndex(user => user.Id)
+            .IsUnique();
+        
+        modelBuilder.Entity<User>()
+            .HasIndex(user => user.Email)
+            .IsUnique();
+
+        modelBuilder.Entity<Gig>()
+            .HasIndex(gig => gig.Id)
+            .IsUnique();
+        
+        
         // Explicit many to many relationships
         modelBuilder.Entity<Substitute>()
             .HasMany(p => p.Positions)

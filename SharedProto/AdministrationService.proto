@@ -31,7 +31,7 @@ message SubstituteObject{
   string address = 3;
 }
 
-message UserToDeleteParams{
+message GetUserParams{
   int32 id = 1;
   enum Role {EMPLOYER = 0 ; SUBSTITUTE = 1;}
   Role role = 2;
@@ -67,12 +67,21 @@ message UpdateUserResponse {
 
 //DELETE
 message DeleteUserRequest {
-  UserToDeleteParams user = 1;
+  GetUserParams user = 1;
 }
 
 message DeleteUserResponse {
-  UserToDeleteParams user = 1;
+  GetUserParams user = 1;
   bool validation = 2;
+}
+
+//GET USER DATA
+
+message GetUserRequest {
+  GetUserParams user = 1;
+}
+message GetUserResponse {
+  UserObject user = 1;
 }
 
 //
@@ -82,4 +91,5 @@ service AdministrationService {
     rpc Login(CreateLoginRequest) returns (LoginUserResponse);
     rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
     rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse);
+    rpc GetUser(GetUserRequest) returns (GetUserResponse);
 }

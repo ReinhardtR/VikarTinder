@@ -14,7 +14,7 @@ public class ChatServiceFactory
             Message = new MessageObject()
             {
                 Id = message.Id,
-                Author = ToChatUserObject(new User() { Id = message.AuthorId}),
+                AuthorId = message.AuthorId,
                 ChatId = message.ChatId,
                 Content = message.Content,
                 CreatedAt = message.CreatedAt.ToTimestamp()
@@ -27,8 +27,8 @@ public class ChatServiceFactory
             return new CreateChatResponse
         {
             Id = chat.Id,
-            Employer = ToChatUserObject(new User() {Id = chat.EmployerId}),
-            Substitute = ToChatUserObject(new User(){Id = chat.SubstituteId})
+            Employer = ToEmployerUserObject(new Employer {Id = chat.EmployerId}),
+            Substitute = ToSubstituteUserObject(new Substitute{Id = chat.SubstituteId})
         };
     }
 
@@ -41,8 +41,8 @@ public class ChatServiceFactory
             chatOverviewObjects.Add(new ChatOverviewObject()
             {
                 Id = chat.Id,
-                Employer = ToChatUserObject(new User() {Id = chat.EmployerId}),
-                Substitute = ToChatUserObject(new User(){Id = chat.SubstituteId}) //skal ændres når vi merger usecases
+                Employer = ToEmployerUserObject(new Employer{Id = chat.EmployerId}),
+                Substitute = ToSubstituteUserObject(new Substitute{Id = chat.SubstituteId}) //skal ændres når vi merger usecases
             });
         }
         
@@ -54,11 +54,18 @@ public class ChatServiceFactory
         return getChatOverviewResponse;
     }
 
-    private static ChatUserObject ToChatUserObject(User user)
+    private static EmployerUserObject ToEmployerUserObject(Employer employer)
     {
-        return new ChatUserObject()
+        return new EmployerUserObject()
         {
-            Id = user.Id
+            Id = employer.Id
+        };
+    }
+    private static SubstituteUserObject ToSubstituteUserObject(Substitute substitute)
+    {
+        return new SubstituteUserObject()
+        {
+            Id = substitute.Id
         };
     }
 
@@ -71,7 +78,7 @@ public class ChatServiceFactory
             messageObjects.Add(new MessageObject()
             {
                 Id = message.Id,
-                Author = ToChatUserObject(new User() {Id = message.AuthorId}),
+                AuthorId = message.AuthorId,
                 ChatId = message.ChatId,
                 Content = message.Content,
                 CreatedAt = message.CreatedAt.ToTimestamp()
@@ -94,8 +101,8 @@ public class ChatServiceFactory
         {
             Messages = { messageObjects },
             JobConfirmation =  jobConfirmation ,
-            Employer = ToChatUserObject(new User() { Id = chat.EmployerId }),
-            Substitute = ToChatUserObject(new User() { Id = chat.SubstituteId })
+            Employer = ToEmployerUserObject(new Employer { Id = chat.EmployerId }),
+            Substitute = ToSubstituteUserObject(new Substitute { Id = chat.SubstituteId })
         };
     }
 }

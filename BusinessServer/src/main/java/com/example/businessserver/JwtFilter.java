@@ -1,4 +1,4 @@
-package com.example.businessserver.logic;
+package com.example.businessserver;
 
 
 import com.example.businessserver.services.implementations.AuthServiceImpl;
@@ -25,7 +25,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Autowired
     private JWTUtility jwtUtility;
-
     @Autowired
     private AuthServiceImpl userService;
 

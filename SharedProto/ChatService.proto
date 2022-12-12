@@ -18,7 +18,7 @@ service ChatService {
 
 // Send Message
 message SendMessageRequest {
-  ChatUserObject author = 1;
+  int32 author_id = 1;
   int32 chat_id = 2;
   string content = 3;
 }
@@ -28,7 +28,7 @@ message SendMessageResponse {
 }
 //Get all chats
 message GetChatOverviewRequest{
-  ChatUserObject user = 1;
+  int32 user_id = 1;
 }
 
 message GetChatOverviewResponse{ //Skal indeholder en liste af usernames for dem som er i chatten
@@ -43,26 +43,26 @@ message GetChatHistoryRequest{
 message GetChatHistoryResponse{ 
   repeated MessageObject messages = 1;
   JobConfirmationService.JobConfirmationObject jobConfirmation = 2;
-  ChatUserObject substitute = 3;
-  ChatUserObject employer = 4;
+  SubstituteUserObject substitute = 3;
+  EmployerUserObject employer = 4;
 }
 
 // Create Chat
 message CreateChatRequest {
-  ChatUserObject substitute = 1;
-  ChatUserObject employer =3;
+  SubstituteUserObject substitute = 1;
+  EmployerUserObject employer =3;
 }
 
 message CreateChatResponse{
   int32 id = 1;
-  ChatUserObject substitute = 2;
-  ChatUserObject employer = 3;
+  SubstituteUserObject substitute = 2;
+  EmployerUserObject employer = 3;
 }
 
 // Shared objects
 message MessageObject {
   int32 id = 1; 
-  ChatUserObject author = 2;
+  int32 author_id = 2;
   int32 chat_id = 3;
   string content = 4;
   google.protobuf.Timestamp created_at = 5;
@@ -70,20 +70,23 @@ message MessageObject {
 
 message ChatOverviewObject {
   int32 id = 1;
-  ChatUserObject substitute = 2;
-  ChatUserObject employer = 3;
+  SubstituteUserObject substitute = 2;
+  EmployerUserObject employer = 3;
 }
 
 message ChatObject { 
   int32 id = 1;
-  ChatUserObject substitute = 2;
-  ChatUserObject employer = 3;
+  SubstituteUserObject substitute = 2;
+  EmployerUserObject employer = 3;
   repeated MessageObject messages = 4;
 }
 
-message ChatUserObject{
+message EmployerUserObject{
+  int32 id =1;
+}
+
+message SubstituteUserObject{
   int32 id = 1;
-  
 }
 
 

@@ -1,6 +1,5 @@
 package com.example.businessserver;
 
-import com.example.businessserver.logic.JwtFilter;
 import com.example.businessserver.services.implementations.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -43,8 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 						.csrf()
 						.disable()
 						.authorizeRequests()
-						.antMatchers("/auth/authenticate", "/api-docs")
-						.permitAll()
+						.antMatchers("/auth/**", "/api-docs").permitAll().antMatchers("/test/**").hasRole("SUBSTITUTE")
 						.anyRequest()
 						.authenticated()
 						.and()
