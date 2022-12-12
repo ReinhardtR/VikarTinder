@@ -50,12 +50,12 @@ public class AuthController {
 		return authLogic.login(loginRequest);
 	}
 
-	@PostMapping("/register")
+	@PostMapping("/register/employer")
 	public void registerEmployer(@RequestBody SignUpEmployerRequestDTO employerRequest) throws DTOException {
 		authLogic.signUpEmployer(employerRequest);
 	}
 
-	@PostMapping("/register")
+	@PostMapping("/register/substitute")
 	public void registerEmployer(@RequestBody SignUpSubstituteRequestDTO substituteRequest) throws DTOException {
 		authLogic.signUpSubstitute(substituteRequest);
 	}
