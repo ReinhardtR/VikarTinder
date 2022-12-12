@@ -2,6 +2,7 @@
 using Persistence;
 using Persistence.Dto;
 using Persistence.Dto.Administration;
+using Persistence.Dto.Auth;
 using Persistence.Exceptions.ConverterExceptions;
 using Persistence.Models;
 using Persistence.Services.Factories;

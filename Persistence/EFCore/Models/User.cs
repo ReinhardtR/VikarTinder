@@ -13,6 +13,9 @@ public abstract class User
     [Required]
     public string PasswordHash { get; set; }
     
+    [Required]
+    public string Salt { get; set; }
+    
     public string FirstName { get; set; }
     
     public string LastName { get; set; }

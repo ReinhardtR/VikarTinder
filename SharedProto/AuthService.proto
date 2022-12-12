@@ -20,6 +20,7 @@ message UserData {
   string password_hash = 3;
   string email = 4;
   oneof role {SubstituteObject sub = 5; EmployerObject emp = 6;}
+  string salt = 7;
 }
 
 message EmployerObject {
