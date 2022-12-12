@@ -44,7 +44,7 @@ public class AuthServiceFactory {
 		throw new BuildingException("unrecognised user type: " + userData.getRoleCase().getClass());
 	}
 
-	public static CreateUserRequest createUserRequestEmployer(SignUpEmployerRequestDTO employerRequestDTO) {
+	public static CreateUserRequest createUserRequestEmployer(RegisterEmployerRequestDTO employerRequestDTO) {
 		return CreateUserRequest.newBuilder()
 						.setUser(
 										UserData.newBuilder()
@@ -60,7 +60,7 @@ public class AuthServiceFactory {
 						).build();
 	}
 
-	public static CreateUserRequest createUserRequestSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO) {
+	public static CreateUserRequest createUserRequestSubstitute(RegisterSubstituteRequestDTO substituteRequestDTO) {
 		return CreateUserRequest.newBuilder()
 						.setUser(
 										UserData.newBuilder()

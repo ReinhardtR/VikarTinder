@@ -3,8 +3,8 @@ package com.example.businessserver.services.implementations;
 import AuthService.AuthServiceGrpc;
 import AuthService.LoginUserResponse;
 import com.example.businessserver.dtos.auth.LoginUserResponseDTO;
-import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
-import com.example.businessserver.dtos.auth.SignUpSubstituteRequestDTO;
+import com.example.businessserver.dtos.auth.RegisterEmployerRequestDTO;
+import com.example.businessserver.dtos.auth.RegisterSubstituteRequestDTO;
 import com.example.businessserver.exceptions.BuildingException;
 import com.example.businessserver.services.factories.AuthServiceFactory;
 import com.example.businessserver.services.interfaces.AuthService;
@@ -53,16 +53,16 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public void SignUpEmployer(SignUpEmployerRequestDTO employerRequestDTO) {
+	public void SignUpEmployer(RegisterEmployerRequestDTO employerRequestDTO) {
 		authServiceBlockingStub.createUser(
-			AuthServiceFactory.createUserRequestEmployer(employerRequestDTO)
+						AuthServiceFactory.createUserRequestEmployer(employerRequestDTO)
 		);
 	}
 
 	@Override
-	public void SignUpSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO) {
+	public void SignUpSubstitute(RegisterSubstituteRequestDTO substituteRequestDTO) {
 		authServiceBlockingStub.createUser(
-			AuthServiceFactory.createUserRequestSubstitute(substituteRequestDTO)
+						AuthServiceFactory.createUserRequestSubstitute(substituteRequestDTO)
 		);
 	}
 }

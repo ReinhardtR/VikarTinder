@@ -1,8 +1,12 @@
-@page "/opret"
+@page "/opret/arbejdsudgiver"
 @using System.ComponentModel.DataAnnotations
-@using System.Security.Claims
+@using HttpClients
+@using HttpClients.Services.Interfaces
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
 
-<PageTitle>Opret dig</PageTitle>
+<PageTitle>Opret dig som arbejdsudgiver</PageTitle>
 
 <MudPaper Class="pa-16 mx-auto" MaxWidth="600px">
     <AuthorizeView>
@@ -11,19 +15,22 @@
                 <DataAnnotationsValidator/>
             
                 <MudStack Spacing="6">
+                    <MudText Typo="Typo.h5" Align="Align.Center">Arbejdsudgiver</MudText>
+                    
                     <MudStack Row="true" Spacing="4">
                         <MudTextField Label="Fornavn" Variant="Variant.Outlined" @bind-Value="formModel.FirstName" For="() => formModel.FirstName"/>
-                        <MudTextField Label="Efternavn" Variant="Variant.Outlined" @bind-Value="formModel.LastName" For="() => formModel.LastName"/>                       
+                        <MudTextField Label="Efternavn" Variant="Variant.Outlined" @bind-Value="formModel.LastName" For="() => formModel.LastName"/>
                     </MudStack>
 
                     <MudTextField Label="Email" Variant="Variant.Outlined" InputType="InputType.Email" @bind-Value="formModel.Email" For="() => formModel.Email"/>
-                    
-                    <MudDatePicker Label="Fødselsdato" Variant="Variant.Outlined" @bind-Value="formModel.BirthDate" For="() => formModel.BirthDate"/>
-                    
+
+                    <MudTextField Label="Arbejdstitel" Variant="Variant.Outlined" @bind-Value="formModel.Title" For="() => formModel.Title"/>
+                    <MudTextField Label="Arbejdssted" Variant="Variant.Outlined" @bind-Value="formModel.Workplace" For="() => formModel.Workplace"/>
+
                     <MudTextField Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" @bind-Value="formModel.Password" For="() => formModel.Password"/>
-                    <MudTextField Label="Gentag Password" Variant="Variant.Outlined" InputType="InputType.Password" @bind-Value="formModel.ConfirmPassword" For="() => formModel.ConfirmPassword" />
-                    
-                    <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Log ind</MudButton>
+                    <MudTextField Label="Gentag Password" Variant="Variant.Outlined" InputType="InputType.Password" @bind-Value="formModel.ConfirmPassword" For="() => formModel.ConfirmPassword"/>
+
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Opret dig</MudButton>
 
                     @if (apiError != null)
                     {
@@ -60,10 +67,6 @@
         public string Email { get; set; }
 
         [Required]
-        // [Range(typeof(DateTime), "1900-01-01", DateTime.Now.AddYears(-18).ToString("d"), ErrorMessage = "Du skal være mindst 18 år")]
-        public DateTime BirthDate { get; set; }
-        
-        [Required]
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password skal være mellem 6 og 100 tegn.")]
         [RegularExpression("/^(?=.*[A-Z])/", ErrorMessage = "Password skal indeholde et stort bogstav")] // Minimum 1 uppercase
         public string Password { get; set; }
@@ -71,6 +74,12 @@
         [Required]
         [Compare("Password", ErrorMessage = "Password matcher ikke.")]
         public string ConfirmPassword { get; set; }
+        
+        [Required]
+        public string Title { get; set; }
+        
+        [Required]
+        public string Workplace { get; set; }
     }
 
     private FormModel formModel = new();
@@ -82,16 +91,18 @@
 
         try
         {
-            // await AuthService.LoginAsync(formModel.Email, formModel.Password);
-            //
-    // temporary checks if the user is logged in
-            AuthenticationState state = await AuthState;
-            ClaimsPrincipal principal = state.User;
- 
-            foreach (Claim principalClaim in principal.Claims)
+            await AuthService.RegisterEmployerAsync(new RegisterEmployerRequestDTO()
             {
-                Console.WriteLine($"Name: {principalClaim.Type}, Value: {principalClaim.Value}");
-            }
+                FirstName = formModel.FirstName,
+                LastName = formModel.LastName,
+                Email = formModel.Email,
+                Password = formModel.Password,
+                Title = formModel.Title,
+                Workplace = formModel.Workplace
+            });
+            
+            Snackbar.Add("Du er nu oprettet som arbejdsudgiver.", Severity.Success);
+            NavigationManager.NavigateTo("/");
         }
         catch (Exception e)
         {

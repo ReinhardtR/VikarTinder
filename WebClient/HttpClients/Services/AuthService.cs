@@ -37,10 +37,14 @@ public class JwtAuthService : IAuthService
         return Task.CompletedTask;
     }
 
-    public Task RegisterAsync()
+    public Task RegisterEmployerAsync(RegisterEmployerRequestDTO dto)
     {
-        // call api
-        throw new NotImplementedException();
+        return _client.RegisterEmployerAsync(dto);
+    }
+    
+    public Task RegisterSubstituteAsync(RegisterSubstituteRequestDTO dto)
+    {
+        return _client.RegisterSubstituteAsync(dto);
     }
     
     private void UpdateJwtToken(string? jwtToken)

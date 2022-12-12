@@ -1,0 +1,122 @@
+@page "/opret/vikar"
+@using System.ComponentModel.DataAnnotations
+@using HttpClients
+@using HttpClients.Services.Interfaces
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+@inject ISnackbar Snackbar
+
+
+<PageTitle>Opret dig som vikar</PageTitle>
+
+<MudPaper Class="pa-16 mx-auto" MaxWidth="600px">
+    <AuthorizeView>
+        <NotAuthorized Context="Auth">
+            <EditForm Model="formModel" OnValidSubmit="OnValidSubmit">
+                <DataAnnotationsValidator/>
+            
+                <MudStack Spacing="6">
+                    <MudText Typo="Typo.h5" Align="Align.Center">Vikar</MudText>
+
+                    <MudStack Row="true" Spacing="4">
+                        <MudTextField Label="Fornavn" Variant="Variant.Outlined" @bind-Value="formModel.FirstName" For="() => formModel.FirstName"/>
+                        <MudTextField Label="Efternavn" Variant="Variant.Outlined" @bind-Value="formModel.LastName" For="() => formModel.LastName"/>
+                    </MudStack>
+
+                    <MudTextField Label="Email" Variant="Variant.Outlined" InputType="InputType.Email" @bind-Value="formModel.Email" For="() => formModel.Email"/>
+                    
+                    <MudDatePicker Label="Fødselsdato" PickerVariant="PickerVariant.Dialog" Editable="true" @bind-Date="formModel.BirthDate" For="() => formModel.BirthDate" MaxDate="@DateTime.Now.AddYears(-18)" />
+                    
+                    <MudTextField Label="Adresse" Variant="Variant.Outlined" @bind-Value="formModel.Address" For="() => formModel.Address"/>
+
+                    <MudTextField Label="Bio" Variant="Variant.Outlined" @bind-Value="formModel.Bio" For="() => formModel.Bio"/>
+
+                    <MudTextField Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" @bind-Value="formModel.Password" For="() => formModel.Password"/>
+                    <MudTextField Label="Gentag Password" Variant="Variant.Outlined" InputType="InputType.Password" @bind-Value="formModel.ConfirmPassword" For="() => formModel.ConfirmPassword"/>
+
+                    <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Opret dig</MudButton>
+
+                    @if (apiError != null)
+                    {
+                        <MudAlert Severity="Severity.Error">
+                            @apiError
+                        </MudAlert>
+                    }
+                </MudStack>
+            </EditForm>
+        </NotAuthorized>
+        
+        <Authorized>
+            <MudText>Du er allerede logget ind.</MudText>
+        </Authorized>
+    </AuthorizeView>
+</MudPaper>
+
+@code {
+    [CascadingParameter] 
+    public Task<AuthenticationState> AuthState { get; set; }
+    
+    public class FormModel
+    {
+        [Required]
+        [StringLength(100, MinimumLength = 1)]
+        public string FirstName { get; set; }
+        
+        [Required]
+        [StringLength(100, MinimumLength = 1)]
+        public string LastName { get; set; }
+        
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Required]
+        public DateTime? BirthDate { get; set; } = DateTime.Today.AddYears(-18);
+        
+        public string? Bio { get; set; }
+        
+        [Required]
+        public string Address { get; set; }
+        
+        [Required]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password skal være mellem 6 og 100 tegn.")]
+         // Minimum 1 uppercase
+        [RegularExpression(@"^(?=.*[A-Z]).{6,100}$", ErrorMessage = "Password skal indeholde mindst 1 stort bogstav")]
+        public string Password { get; set; }
+        
+        [Required]
+        [Compare("Password", ErrorMessage = "Password matcher ikke.")]
+        public string ConfirmPassword { get; set; }
+    }
+
+    private FormModel formModel = new();
+    private string? apiError;
+    
+    private async void OnValidSubmit()
+    {
+        apiError = null;
+
+        try
+        {
+            await AuthService.RegisterSubstituteAsync(new RegisterSubstituteRequestDTO()
+            {
+                FirstName = formModel.FirstName,
+                LastName = formModel.LastName,
+                Email = formModel.Email,
+                Password = formModel.Password,
+                BirthDate = formModel.BirthDate!.Value,
+                Address = formModel.Address,
+                Bio = formModel.Bio
+            });
+            
+            Snackbar.Add("Du er nu oprettet som vikar.", Severity.Success);
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            apiError = e.Message;
+        }
+
+        StateHasChanged();
+    }
+}

@@ -175,7 +175,30 @@
         }
       }
     },
-    "/auth/register": {
+    "/auth/register/substitute": {
+      "post": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "registerSubstitute",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterSubstituteRequestDTO"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/register/employer": {
       "post": {
         "tags": [
           "auth-controller"
@@ -185,7 +208,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SignUpEmployerRequestDTO"
+                "$ref": "#/components/schemas/RegisterEmployerRequestDTO"
               }
             }
           },
@@ -573,7 +596,34 @@
           }
         }
       },
-      "SignUpEmployerRequestDTO": {
+      "RegisterSubstituteRequestDTO": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bio": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          }
+        }
+      },
+      "RegisterEmployerRequestDTO": {
         "type": "object",
         "properties": {
           "firstName": {

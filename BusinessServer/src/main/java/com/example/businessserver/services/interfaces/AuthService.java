@@ -1,11 +1,11 @@
 package com.example.businessserver.services.interfaces;
 
-import com.example.businessserver.dtos.auth.LoginUserResponseDTO;
-import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
-import com.example.businessserver.dtos.auth.SignUpSubstituteRequestDTO;
+import com.example.businessserver.dtos.auth.RegisterEmployerRequestDTO;
+import com.example.businessserver.dtos.auth.RegisterSubstituteRequestDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface AuthService extends UserDetailsService {
-    void SignUpEmployer(SignUpEmployerRequestDTO employerRequestDTO);
-    void SignUpSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO);
+	void SignUpEmployer(RegisterEmployerRequestDTO employerRequestDTO);
+
+	void SignUpSubstitute(RegisterSubstituteRequestDTO substituteRequestDTO);
 }

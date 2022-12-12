@@ -2,7 +2,7 @@ package com.example.businessserver.dtos.auth;
 
 import java.time.LocalDateTime;
 
-public class SignUpSubstituteRequestDTO {
+public class RegisterSubstituteRequestDTO {
 	private String firstName;
 	private String lastName;
 	private String password;
@@ -11,7 +11,7 @@ public class SignUpSubstituteRequestDTO {
 	private String bio;
 	private String address;
 
-	public SignUpSubstituteRequestDTO(String firstName, String lastName, String password, String email, LocalDateTime birthDate, String bio, String address) {
+	public RegisterSubstituteRequestDTO(String firstName, String lastName, String password, String email, LocalDateTime birthDate, String bio, String address) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = password;
