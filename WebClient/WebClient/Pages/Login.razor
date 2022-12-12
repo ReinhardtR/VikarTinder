@@ -47,8 +47,8 @@
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password skal være mellem 6 og 100 tegn.")]
-        // [RegularExpression("/^(?=.*[A-Z])/", ErrorMessage = "Password skal indeholde et stort bogstav")] // Minimum 1 uppercase
+        [MinLength(6, ErrorMessage = "Password skal være mindst 6 characters")]
+        [RegularExpression(@"^(?=.*[A-Z]).{6,}$", ErrorMessage = "Password skal indeholde mindst ét stort bogstav")]
         public string Password { get; set; }
     }
 

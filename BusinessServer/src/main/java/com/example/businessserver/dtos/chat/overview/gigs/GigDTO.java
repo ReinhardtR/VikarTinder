@@ -1,13 +1,13 @@
 package com.example.businessserver.dtos.chat.overview.gigs;
 
 public class GigDTO {
-	private int gigId;
+	private int id;
 
-	public GigDTO(int gigId) {
-		this.gigId = gigId;
+	public GigDTO(int id) {
+		this.id = id;
 	}
 
-	public int getGigId() {
-		return gigId;
+	public int getId() {
+		return id;
 	}
 }

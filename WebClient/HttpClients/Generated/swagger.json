@@ -705,7 +705,7 @@
       "GigDTO": {
         "type": "object",
         "properties": {
-          "gigId": {
+          "id": {
             "type": "integer",
             "format": "int32"
           }
