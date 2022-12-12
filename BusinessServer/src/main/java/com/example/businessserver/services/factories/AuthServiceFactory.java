@@ -1,10 +1,7 @@
 package com.example.businessserver.services.factories;
 
 import AuthService.*;
-import com.example.businessserver.dtos.auth.LoginEmployerResponseDTO;
-import com.example.businessserver.dtos.auth.LoginSubstituteResponseDTO;
-import com.example.businessserver.dtos.auth.LoginUserResponseDTO;
-import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
+import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.BuildingException;
 
 public class AuthServiceFactory {
@@ -60,6 +57,24 @@ public class AuthServiceFactory {
                                         EmployerObject.newBuilder()
                                                 .setTitle(employerRequestDTO.getTitle())
                                                 .setWorkplace(employerRequestDTO.getWorkplace()).build()
+                                ).build()
+                ).build();
+    }
+
+    public static CreateUserRequest createUserRequestSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO) {
+        return CreateUserRequest.newBuilder()
+                .setUser(
+                        UserData.newBuilder()
+                                .setFirstName(substituteRequestDTO.getFirstName())
+                                .setLastName(substituteRequestDTO.getLastName())
+                                .setPasswordHash(substituteRequestDTO.getPassword())
+                                .setEmail(substituteRequestDTO.getEmail())
+                                .setSub(
+                                        SubstituteObject.newBuilder()
+                                                .setAge(substituteRequestDTO.getAge())
+                                                .setBio(substituteRequestDTO.getBio())
+                                                .setAddress(substituteRequestDTO.getAddress()
+                                                ).build()
                                 ).build()
                 ).build();
     }

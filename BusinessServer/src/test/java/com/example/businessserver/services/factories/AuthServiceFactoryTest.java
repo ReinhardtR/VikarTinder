@@ -1,6 +1,6 @@
 package com.example.businessserver.services.factories;
 
-import AdministrationService.*;
+import AuthService.*;
 import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.BuildingException;
 import org.junit.jupiter.api.Test;
