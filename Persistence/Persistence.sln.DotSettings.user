@@ -12,5 +12,8 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f331f84e_002D6bcc_002D4418_002D9aff_002D3a7312cffc6f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Tests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;NUnit3x::272AABF7-0E2B-4C9F-8886-7CF5656ABC93::net6.0::UnitTest.Administration.ConverterTestAdministration&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::272AABF7-0E2B-4C9F-8886-7CF5656ABC93::net6.0::UnitTest.Chat.ChatServiceFactoryTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::272AABF7-0E2B-4C9F-8886-7CF5656ABC93::net6.0::UnitTest.Chat.JobConfirmationFactoryTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::272AABF7-0E2B-4C9F-8886-7CF5656ABC93::net6.0::UnitTest.Matching.MatchingFactoryTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
