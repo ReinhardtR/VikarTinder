@@ -3,12 +3,16 @@ package com.example.businessserver.services.factories;
 import AuthService.*;
 import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.BuildingException;
+import com.google.protobuf.Timestamp;
 import org.junit.jupiter.api.Test;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthServiceFactoryTest {
-/*
     @Test
     void test_createLoginRequest() {
         String email = "testEmail";
@@ -33,7 +37,7 @@ class AuthServiceFactoryTest {
         test_userObjectDTO_EmployerDTOBuildUp(id, firstName, lastName, password, email, title, workplace);
 
         //substitute
-        int age = 55;
+        LocalDateTime age = LocalDateTime.now();
         String bio = "This is a test";
         String address = "testAddress";
 
@@ -57,7 +61,7 @@ class AuthServiceFactoryTest {
         );
     }
 
-    void test_userObjectDTO_SubstituteDTOBuildUp(int id, String firstName, String lastName, String password, String email, int age, String bio, String address) throws Exception {
+    void test_userObjectDTO_SubstituteDTOBuildUp(int id, String firstName, String lastName, String password, String email, LocalDateTime age, String bio, String address) throws Exception {
         SubstituteObject subTest = buildSubstituteObj(age, bio, address);
         UserData userDataTest = buildUserDataObj(firstName, lastName, password, email, subTest);
         UserObject testGrpc = buildUserObj(id, userDataTest);
@@ -68,7 +72,7 @@ class AuthServiceFactoryTest {
                 ()-> assertEquals(lastName, testResult.getLastName()),
                 ()-> assertEquals(password, testResult.getPasswordHashed()),
                 ()-> assertEquals(email, testResult.getEmail()),
-                //()-> assertEquals(age, testResult.getAge()),
+                ()-> assertEquals(age.withNano(0), testResult.getBirthDate()),
                 ()-> assertEquals(bio, testResult.getBio()),
                 ()-> assertEquals(LoginUserResponseDTO.Role.SUBSTITUTE, testResult.getRole())
         );
@@ -83,7 +87,7 @@ class AuthServiceFactoryTest {
         assertThrows(BuildingException.class, ()-> AuthServiceFactory.userObjectDTO(obj), "Checks if system throws exception in case more roles being added to UserData");
     }
 
-    @Test
+    @Test //TODO : Generaliser test createUserRequestEmployer/Substitute
     void test_createUserRequestEmployer() throws Exception {
         String firstName = "firstNameTest";
         String lastName = "lastNameTest";
@@ -102,7 +106,7 @@ class AuthServiceFactoryTest {
 
         String[] saltAndPassword = new String[]{"testSalt", "testWord"};
 
-        CreateUserRequest test = AuthServiceFactory.createUserRequestEmployer(testDTO, saltAndPassword);
+        CreateUserRequest test = AuthServiceFactory.createUserRequestEmployer(new SignUpWrapperEmployerDTO(saltAndPassword[0], saltAndPassword[1], testDTO));
 
         assertAll(
                 ()->assertEquals(firstName, test.getUser().getFirstName()),
@@ -115,9 +119,44 @@ class AuthServiceFactoryTest {
         );
     }
 
-    private SubstituteObject buildSubstituteObj(int age, String bio, String address) {
+    @Test
+    void test_createUserRequestSubstitute()
+    {
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+        String password = "testPassword";
+        String email = "test@email.test";
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String bio = "This is a test";
+        String address = "testDress";
+        SignUpSubstituteRequestDTO testDTO = new SignUpSubstituteRequestDTO(
+                firstName,
+                lastName,
+                password,
+                email,
+                localDateTime,
+                bio,
+                address
+        );
+
+        String[] saltAndPassword = new String[]{"testSalt", "testWord"};
+
+        CreateUserRequest test = AuthServiceFactory.createUserRequestSubstitute(new SignUpWrapperSubstituteDTO(saltAndPassword[0], saltAndPassword[1], testDTO));
+        assertAll(
+                ()->assertEquals(firstName, test.getUser().getFirstName()),
+                ()->assertEquals(lastName, test.getUser().getLastName()),
+                ()->assertEquals(saltAndPassword[0], test.getUser().getSalt()),
+                ()->assertEquals(saltAndPassword[1], test.getUser().getPasswordHash()),
+                ()->assertEquals(email, test.getUser().getEmail()),
+                ()->assertEquals(localDateTime.withNano(0), SharedFactory.toLocalDateTime(test.getUser().getSub().getBirthDate())),
+                ()->assertEquals(bio, test.getUser().getSub().getBio()),
+                ()->assertEquals(address, test.getUser().getSub().getAddress())
+        );
+    }
+
+    private SubstituteObject buildSubstituteObj(LocalDateTime age, String bio, String address) {
         return SubstituteObject.newBuilder()
-                //.setAge(age)
+                .setBirthDate(SharedFactory.toTimestamp(age))
                 .setBio(bio)
                 .setAddress(address)
                 .build();
@@ -156,6 +195,4 @@ class AuthServiceFactoryTest {
                 .setUserData(userData)
                 .build();
     }
-
- */
 }

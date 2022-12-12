@@ -1,9 +1,6 @@
 package com.example.businessserver.logic;
 
-import com.example.businessserver.dtos.auth.JwtResponseDTO;
-import com.example.businessserver.dtos.auth.LoginRequestDTO;
-import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
-import com.example.businessserver.dtos.auth.SignUpSubstituteRequestDTO;
+import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import com.example.businessserver.logic.interfaces.AuthLogic;
@@ -18,6 +15,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
@@ -31,12 +31,11 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
 
     private final Pattern emailPattern;
 
+    private final int nameMinLength = 1;
+
     public AuthLogicImpl() {
         //Taget fra geeksforgeeks      https://www.geeksforgeeks.org/check-email-address-valid-not-java/
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\."+
-                "[a-zA-Z0-9_+&*-]+)*@" +
-                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                "A-Z]{2,7}$";
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         emailPattern = Pattern.compile(emailRegex);
     }
 
@@ -45,7 +44,8 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         objectNullCheck(loginRequest, "loginRequest");
         checkEmail(loginRequest.getEmail());
         checkPassword(loginRequest.getPassword());
-        UserSaltHolder userDetails =(UserSaltHolder) userService.loadUserByUsername(loginRequest.getEmail());
+
+        UserSaltHolder userDetails = (UserSaltHolder) userService.loadUserByUsername(loginRequest.getEmail());
         String hashedPassword = userDetails.getPassword();
         checkPasswordsForMatch(hashedPassword, loginRequest.getPassword(), userDetails.getSalt());
         return new JwtResponseDTO(jwtUtility.generateToken(userDetails));
@@ -56,12 +56,12 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         objectNullCheck(requestDTO, "signUpRequest");
         checkEmail(requestDTO.getEmail());
         checkPassword(requestDTO.getPassword());
-        checkStringMinimumValues(requestDTO.getFirstName(), "First name", 1);
-        checkStringMinimumValues(requestDTO.getLastName(), "Last name", 1);
+        checkStringMinimumValues(requestDTO.getFirstName(), "Firstname", nameMinLength);
+        checkStringMinimumValues(requestDTO.getLastName(), "Lastname", nameMinLength);
         checkStringMinimumValues(requestDTO.getTitle(), "Title", 1);
         checkStringMinimumValues(requestDTO.getWorkplace(), "Workplace", 1);
         String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
-        userService.SignUpEmployer(requestDTO, saltHashedPassword);
+        userService.SignUpEmployer(new SignUpWrapperEmployerDTO(saltHashedPassword[0], saltHashedPassword[1], requestDTO));
     }
 
     @Override
@@ -69,16 +69,23 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         objectNullCheck(requestDTO, "signUpRequest");
         checkEmail(requestDTO.getEmail());
         checkPassword(requestDTO.getPassword());
-        checkStringMinimumValues(requestDTO.getFirstName(), "First name", 1);
-        checkStringMinimumValues(requestDTO.getLastName(), "Last name", 1);
-        //TODO : Check dob når det implementeres
+        checkStringMinimumValues(requestDTO.getFirstName(), "Firstname", nameMinLength);
+        checkStringMinimumValues(requestDTO.getLastName(), "Lastname", nameMinLength);
+        checkAge(requestDTO.getBirthDate().toLocalDate());
         checkBio(requestDTO.getBio());
         checkStringMinimumValues(requestDTO.getAddress(), "Address", 1);
+
         String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
-        userService.SignUpSubstitute(requestDTO, saltHashedPassword);
+        userService.SignUpSubstitute(new SignUpWrapperSubstituteDTO(saltHashedPassword[0], saltHashedPassword[1], requestDTO));
     }
 
-    private void checkBio(String bio) throws DTOException { //TODO:Burde generalise de er string checks
+    public void checkAge(LocalDate dob) throws DTOOutOfBoundsException {
+        int yearsDifference = Period.between(dob, LocalDate.now()).getYears();
+        if (yearsDifference < 18 || yearsDifference > 99)
+            throw new DTOOutOfBoundsException("User has to be older than 18 and less than 100: DOB given: " + dob);
+    }
+
+    public void checkBio(String bio) throws DTOException {
         objectNullCheck(bio, "Bio");
         if (bio.length() > 300)
             throw new DTOOutOfBoundsException("Bio cant be over 300 characters");
@@ -102,11 +109,14 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
             throw new DTOOutOfBoundsException("Email does not follow the email standard");
     }
 
+    //TODO : Den kan trimme mellemrummene mellem ord/navne. DTO'erne burde få disse rettede strings tilbage
+    public void checkStringMinimumValues(String string, String typeOfName, int minLength) throws DTOException{
+        objectNullCheck(string, typeOfName);
 
-    public void checkStringMinimumValues(String name, String typeOfName, int min) throws DTOException{
-        objectNullCheck(name, typeOfName);
-        if(name.trim().length() < min)
-            throw new DTOOutOfBoundsException(typeOfName + " has to be at least "+ min +" character long");
+        string = string.replaceAll("( )+", " "); //Efterlader kun et mellemrum efter ord
+
+        if(string.trim().length() < minLength)
+            throw new DTOOutOfBoundsException(typeOfName + " has to be at least "+ minLength +" character long");
     }
 
     public void checkPasswordsForMatch(String savedPassword, String loginRequestPassword, String salt) throws DTOOutOfBoundsException {
@@ -115,10 +125,8 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
             throw new DTOOutOfBoundsException("Wrong Password");
     }
 
-    //TODO der skal laves lidt om i hvordan kommunikation virker til database, skal også retunere salt som skal gemmes på database
     //https://www.baeldung.com/java-password-hashing
-    public String[] generateHashedPassword(String password)
-    {
+    public String[] generateHashedPassword(String password) { //Returnerer string array, [0] = salt, [1] = hashedPassword
         SecureRandom random = new SecureRandom();;
         byte[] salt = new byte[16];
         random.nextBytes(salt);
@@ -127,16 +135,15 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         return new String[]{saltString, hashedPassword};
     }
 
-    public String generatePasswordWithKnownSalt(String salt, String password)
-    {
-        MessageDigest md;
+    public String generatePasswordWithKnownSalt(String salt, String password) {
+        MessageDigest digest;
         try {
-            md = MessageDigest.getInstance("SHA-512");
+            digest = MessageDigest.getInstance("SHA-512");
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
-        md.update(salt.getBytes());
-        byte[] hashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
+        digest.update(salt.getBytes());
+        byte[] hashedPassword = digest.digest(password.getBytes(StandardCharsets.UTF_8));
         return Arrays.toString(hashedPassword);
     }
 }

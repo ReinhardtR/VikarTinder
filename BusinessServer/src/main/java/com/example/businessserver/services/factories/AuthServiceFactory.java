@@ -47,14 +47,14 @@ public class AuthServiceFactory {
 		throw new BuildingException("unrecognised user type: " + userData.getRoleCase().getClass());
 	}
 
-	public static CreateUserRequest createUserRequestEmployer(SignUpEmployerRequestDTO employerRequestDTO, String[] saltHashedPassword) {
+	public static CreateUserRequest createUserRequestEmployer(SignUpWrapperEmployerDTO employerRequestDTO) {
 		return CreateUserRequest.newBuilder()
 			.setUser(
 				UserData.newBuilder()
 					.setFirstName(employerRequestDTO.getFirstName())
 					.setLastName(employerRequestDTO.getLastName())
-					.setSalt(saltHashedPassword[0])
-					.setPasswordHash(saltHashedPassword[1])
+					.setSalt(employerRequestDTO.getSalt())
+					.setPasswordHash(employerRequestDTO.getPassword())
 					.setEmail(employerRequestDTO.getEmail())
 					.setEmp(
 						EmployerObject.newBuilder()
@@ -64,14 +64,14 @@ public class AuthServiceFactory {
 			).build();
 	}
 
-	public static CreateUserRequest createUserRequestSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO, String[] saltHashedPassword) {
+	public static CreateUserRequest createUserRequestSubstitute(SignUpWrapperSubstituteDTO substituteRequestDTO) {
 		return CreateUserRequest.newBuilder()
 			.setUser(
 				UserData.newBuilder()
 					.setFirstName(substituteRequestDTO.getFirstName())
 					.setLastName(substituteRequestDTO.getLastName())
-					.setSalt(saltHashedPassword[0])
-					.setPasswordHash(saltHashedPassword[1])
+					.setSalt(substituteRequestDTO.getSalt())
+					.setPasswordHash(substituteRequestDTO.getPassword())
 					.setEmail(substituteRequestDTO.getEmail())
 					.setSub(
 						SubstituteObject.newBuilder()
