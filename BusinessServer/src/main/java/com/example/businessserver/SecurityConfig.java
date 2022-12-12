@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AuthServiceImpl userService;
@@ -38,16 +38,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	//Sets the rules for requests through spring framework
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf()
+		http.cors()
+						.and()
+						.csrf()
 						.disable()
 						.authorizeRequests()
-						.antMatchers("/authenticate", "/api-docs")
+						.antMatchers("/auth/authenticate", "/api-docs")
 						.permitAll()
 						.anyRequest()
 						.authenticated()
 						.and()
 						.sessionManagement()
-						.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+						.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+						.and()
+						.httpBasic();
 
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 	}

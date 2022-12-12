@@ -4,8 +4,8 @@ import ChatService.*;
 import com.example.businessserver.dtos.chat.*;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
-import com.example.businessserver.services.interfaces.ChatServiceClient;
 import com.example.businessserver.services.factories.ChatServiceFactory;
+import com.example.businessserver.services.interfaces.ChatServiceClient;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.stereotype.Service;
 

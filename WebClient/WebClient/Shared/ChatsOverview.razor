@@ -100,10 +100,7 @@ else if (chats != null)
             else
             {
                 // TODO fetch chats for gig
-                chatOverview = new ChatOverviewDTO()
-                {
-                    Chats = new List<BasicChatDTO>()
-                };
+                chatOverview = await ChatService.GetChatOverviewAsync(userId);
             }
 
             if (chatOverview == null)

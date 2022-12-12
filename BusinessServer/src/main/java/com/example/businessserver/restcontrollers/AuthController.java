@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 // TODO : Refactor navngivning til gruppens standard
 
 @RestController
-@CrossOrigin
+@RequestMapping("/auth")
 public class AuthController {
 
 	@Autowired
@@ -26,8 +26,7 @@ public class AuthController {
 	private AuthServiceImpl userService;
 
 	@GetMapping("/yo")
-	public String test()
-	{
+	public String test() {
 		return "Numse";
 	}
 

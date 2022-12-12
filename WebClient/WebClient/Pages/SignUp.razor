@@ -60,7 +60,7 @@
         public string Email { get; set; }
 
         [Required]
-        [Range(typeof(DateTime), "1900-01-01", DateTime.Now.AddYears(-18).ToString("d"), ErrorMessage = "Du skal være mindst 18 år")]
+        // [Range(typeof(DateTime), "1900-01-01", DateTime.Now.AddYears(-18).ToString("d"), ErrorMessage = "Du skal være mindst 18 år")]
         public DateTime BirthDate { get; set; }
         
         [Required]
@@ -82,8 +82,8 @@
 
         try
         {
-            await AuthService.LoginAsync(formModel.Email, formModel.Password);
-            
+            // await AuthService.LoginAsync(formModel.Email, formModel.Password);
+            //
     // temporary checks if the user is logged in
             AuthenticationState state = await AuthState;
             ClaimsPrincipal principal = state.User;

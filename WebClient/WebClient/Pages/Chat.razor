@@ -35,17 +35,17 @@ else if (chatHistory != null)
                 else
                 {
                     <AuthorizeView Policy="@AuthPolicies.EmployerOnly">
-                        @if (jobConfirmation?.Status == JobConfirmationDTOStatus.DECLINED)
-                        {
-                            <MudButton OnClick="@SendJobConfirmationRequest" Variant="@Variant.Outlined">
-                                Send Job Anmodning
-                            </MudButton>
-                        }
-                        else if (jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
+                        @if (jobConfirmation?.Status == JobConfirmationDTOStatus.UNANSWERED)
                         {
                             <MudText Typo="@Typo.h6" Color="@Color.Info">
                                 JOB ANMODNING ER SENDT
                             </MudText>
+                        }
+                        else
+                        {
+                            <MudButton OnClick="@SendJobConfirmationRequest" Variant="@Variant.Outlined">
+                                Send Job Anmodning
+                            </MudButton>
                         }
                     </AuthorizeView>
                 }
@@ -231,7 +231,7 @@ else if (chatHistory != null)
             }
 
             AuthenticationState authState = await AuthState;
-            Claim? claim = authState.User.Claims.FirstOrDefault((c) => c.Type == ClaimTypes.NameIdentifier);
+            Claim? claim = AuthClaims.GetClaim(authState, AuthClaims.Id);
             if (claim == null) throw new Exception("Couldn't find the user id.");
             int userId = int.Parse(claim.Value);
             
