@@ -7,18 +7,22 @@ public abstract class LoginUserResponseDTO {
     private String passwordHashed;
     private String email;
     private Role role;
+    private String salt;
+
+
     public enum Role{
         SUBSTITUTE,
         EMPLOYER
     }
 
-    public LoginUserResponseDTO(int id, String firstName, String lastName, String passwordHashed, String email, String role) {
+    public LoginUserResponseDTO(int id, String firstName, String lastName, String passwordHashed, String email, String role, String salt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.passwordHashed = passwordHashed;
         this.email = email;
         this.role = Role.valueOf(role);
+        this.salt = salt;
     }
 
     public int getId() {
@@ -43,5 +47,9 @@ public abstract class LoginUserResponseDTO {
 
     public Role getRole() {
         return role;
+    }
+
+    public String getSalt() {
+        return salt;
     }
 }

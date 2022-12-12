@@ -4,8 +4,8 @@ public class LoginEmployerResponseDTO extends LoginUserResponseDTO {
     private String title;
     private String workplace;
 
-    public LoginEmployerResponseDTO(int id, String firstName, String lastName, String passwordHashed, String email, String title, String workplace) {
-        super(id, firstName, lastName, passwordHashed, email, "EMPLOYER");
+    public LoginEmployerResponseDTO(int id, String firstName, String lastName, String passwordHashed, String email, String title, String workplace, String salt) {
+        super(id, firstName, lastName, passwordHashed, email, "EMPLOYER", salt);
         this.title = title;
         this.workplace = workplace;
     }

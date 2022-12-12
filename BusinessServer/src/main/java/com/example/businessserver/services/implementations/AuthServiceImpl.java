@@ -8,10 +8,10 @@ import com.example.businessserver.dtos.auth.SignUpSubstituteRequestDTO;
 import com.example.businessserver.exceptions.BuildingException;
 import com.example.businessserver.services.factories.AuthServiceFactory;
 import com.example.businessserver.services.interfaces.AuthService;
+import com.example.businessserver.services.utils.UserSaltHolder;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -49,20 +49,20 @@ public class AuthServiceImpl implements AuthService {
 		authorities.add(new SimpleGrantedAuthority("NAMEF_" + userObjectDTO.getFirstName()));
 		authorities.add(new SimpleGrantedAuthority("NAMEL_" + userObjectDTO.getLastName()));
 		authorities.add(new SimpleGrantedAuthority("ID_" + userObjectDTO.getId()));
-		return new User(userObjectDTO.getEmail(), userObjectDTO.getPasswordHashed(), authorities);
+		return new UserSaltHolder(userObjectDTO.getEmail(), userObjectDTO.getPasswordHashed(), authorities, userObjectDTO.getSalt());
 	}
 
 	@Override
-	public void SignUpEmployer(SignUpEmployerRequestDTO employerRequestDTO) {
+	public void SignUpEmployer(SignUpEmployerRequestDTO employerRequestDTO, String[] saltHashedPassword) {
 		authServiceBlockingStub.createUser(
-			AuthServiceFactory.createUserRequestEmployer(employerRequestDTO)
+			AuthServiceFactory.createUserRequestEmployer(employerRequestDTO, saltHashedPassword)
 		);
 	}
 
 	@Override
-	public void SignUpSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO) {
+	public void SignUpSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO, String[] saltHashedPassword) {
 		authServiceBlockingStub.createUser(
-			AuthServiceFactory.createUserRequestSubstitute(substituteRequestDTO)
+			AuthServiceFactory.createUserRequestSubstitute(substituteRequestDTO, saltHashedPassword)
 		);
 	}
 }

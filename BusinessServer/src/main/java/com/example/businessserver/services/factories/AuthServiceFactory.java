@@ -20,61 +20,66 @@ public class AuthServiceFactory {
 		if (userData.hasSub()) {
 			SubstituteObject sub = userData.getSub();
 			return new LoginSubstituteResponseDTO(
-							userObjectGRPC.getId(),
-							userData.getFirstName(),
-							userData.getLastName(),
-							userData.getPasswordHash(),
-							userData.getEmail(),
-							SharedFactory.toLocalDateTime(sub.getBirthDate()),
-							sub.getBio(),
-							sub.getAddress());
+					userObjectGRPC.getId(),
+					userData.getFirstName(),
+					userData.getLastName(),
+					userData.getPasswordHash(),
+					userData.getEmail(),
+					SharedFactory.toLocalDateTime(sub.getBirthDate()),
+					sub.getBio(),
+					sub.getAddress(),
+					userData.getSalt()
+			);
 		}
 		if (userData.hasEmp()) {
 			EmployerObject emp = userData.getEmp();
 			return new LoginEmployerResponseDTO(
-							userObjectGRPC.getId(),
-							userData.getFirstName(),
-							userData.getLastName(),
-							userData.getPasswordHash(),
-							userData.getEmail(),
-							emp.getTitle(),
-							emp.getWorkplace()
+					userObjectGRPC.getId(),
+					userData.getFirstName(),
+					userData.getLastName(),
+					userData.getPasswordHash(),
+					userData.getEmail(),
+					emp.getTitle(),
+					emp.getWorkplace(),
+					userData.getSalt()
 			);
 		}
 		throw new BuildingException("unrecognised user type: " + userData.getRoleCase().getClass());
 	}
 
-	public static CreateUserRequest createUserRequestEmployer(SignUpEmployerRequestDTO employerRequestDTO) {
+	public static CreateUserRequest createUserRequestEmployer(SignUpEmployerRequestDTO employerRequestDTO, String[] saltHashedPassword) {
 		return CreateUserRequest.newBuilder()
-						.setUser(
-										UserData.newBuilder()
-														.setFirstName(employerRequestDTO.getFirstName())
-														.setLastName(employerRequestDTO.getLastName())
-														.setPasswordHash(employerRequestDTO.getPassword())
-														.setEmail(employerRequestDTO.getEmail())
-														.setEmp(
-																		EmployerObject.newBuilder()
-																						.setTitle(employerRequestDTO.getTitle())
-																						.setWorkplace(employerRequestDTO.getWorkplace()).build()
-														).build()
-						).build();
+			.setUser(
+				UserData.newBuilder()
+					.setFirstName(employerRequestDTO.getFirstName())
+					.setLastName(employerRequestDTO.getLastName())
+					.setSalt(saltHashedPassword[0])
+					.setPasswordHash(saltHashedPassword[1])
+					.setEmail(employerRequestDTO.getEmail())
+					.setEmp(
+						EmployerObject.newBuilder()
+							.setTitle(employerRequestDTO.getTitle())
+							.setWorkplace(employerRequestDTO.getWorkplace()).build()
+					).build()
+			).build();
 	}
 
-	public static CreateUserRequest createUserRequestSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO) {
+	public static CreateUserRequest createUserRequestSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO, String[] saltHashedPassword) {
 		return CreateUserRequest.newBuilder()
-						.setUser(
-										UserData.newBuilder()
-														.setFirstName(substituteRequestDTO.getFirstName())
-														.setLastName(substituteRequestDTO.getLastName())
-														.setPasswordHash(substituteRequestDTO.getPassword())
-														.setEmail(substituteRequestDTO.getEmail())
-														.setSub(
-																		SubstituteObject.newBuilder()
-																						.setBirthDate(SharedFactory.toTimestamp(substituteRequestDTO.getBirthDate()))
-																						.setBio(substituteRequestDTO.getBio())
-																						.setAddress(substituteRequestDTO.getAddress()
-																						).build()
-														).build()
-						).build();
+			.setUser(
+				UserData.newBuilder()
+					.setFirstName(substituteRequestDTO.getFirstName())
+					.setLastName(substituteRequestDTO.getLastName())
+					.setSalt(saltHashedPassword[0])
+					.setPasswordHash(saltHashedPassword[1])
+					.setEmail(substituteRequestDTO.getEmail())
+					.setSub(
+						SubstituteObject.newBuilder()
+										.setBirthDate(SharedFactory.toTimestamp(substituteRequestDTO.getBirthDate()))
+										.setBio(substituteRequestDTO.getBio())
+										.setAddress(substituteRequestDTO.getAddress()
+										).build()
+					).build()
+			).build();
 	}
 }

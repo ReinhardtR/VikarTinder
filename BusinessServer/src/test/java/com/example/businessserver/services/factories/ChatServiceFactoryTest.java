@@ -152,7 +152,7 @@ class ChatServiceFactoryTest {
 		for (int i = 0; i < getChatHistoryResponse.getMessagesList().size(); i++) {
 			assertEquals(getChatHistoryResponse.getMessagesList().get(i).getId(), chatHistoryDTO.getMessages().get(i).getId());
 			assertEquals(getChatHistoryResponse.getMessagesList().get(i).getChatId(), chatHistoryDTO.getMessages().get(i).getChatId());
-			assertEquals(getChatHistoryResponse.getMessagesList().get(i).getAuthor().getId(), chatHistoryDTO.getMessages().get(i).getAuthorId());
+			assertEquals(getChatHistoryResponse.getMessagesList().get(i).getAuthorId(), chatHistoryDTO.getMessages().get(i).getAuthorId());
 			assertEquals(getChatHistoryResponse.getMessagesList().get(i).getContent(), chatHistoryDTO.getMessages().get(i).getContent());
 		}
 	}
@@ -166,7 +166,7 @@ class ChatServiceFactoryTest {
 
 		//Check if all fields in class SendMessage and SendMessageRequest are equal
 		assertEquals(sendMessageDTO.getChatId(), sendMessageRequest.getChatId());
-		assertEquals(sendMessageDTO.getAuthorId(), sendMessageRequest.getAuthor().getId());
+		assertEquals(sendMessageDTO.getAuthorId(), sendMessageRequest.getAuthorId());
 		assertEquals(sendMessageDTO.getContent(), sendMessageRequest.getContent());
 	}
 
@@ -175,44 +175,44 @@ class ChatServiceFactoryTest {
 	void toGetChatOverviewRequest(int userId) {
 		GetChatOverviewByUserDTO getChatOverviewByUserDTO = new GetChatOverviewByUserDTO(userId);
 
-		GetChatOverviewRequest getChatOverviewRequest = ChatServiceFactory.toGetChatOverviewRequest(getChatOverviewByUserDTO);
+		GetUserChatsRequest getUserChatsRequest = ChatServiceFactory.toGetUserChatsRequest(getChatOverviewByUserDTO);
 
 		//Check if all fields in class GetChatOverviewDTO and GetChatOverviewRequest are equal
-		assertEquals(getChatOverviewByUserDTO.getUserId(), getChatOverviewRequest.getUser().getId(), "Userids are not equal in GetChatOverviewDTO and GetChatOverviewRequest");
+		assertEquals(getChatOverviewByUserDTO.getUserId(), getUserChatsRequest.getUserId(), "Userids are not equal in GetChatOverviewDTO and GetChatOverviewRequest");
 	}
 
 	@Test
 	void toChatOverviewDTO() {
-		GetChatOverviewResponse getChatOverviewResponse = GetChatOverviewResponse.newBuilder()
+		GetUserChatsResponse getUserChatsResponse = GetUserChatsResponse.newBuilder()
 						.addAllChats(new ArrayList<>(Arrays.asList(
 										ChatOverviewObject.newBuilder()
 														.setId(1)
-														.setSubstitute(ChatUserObject.newBuilder().setId(1).build())
-														.setEmployer(ChatUserObject.newBuilder().setId(2).build())
+														.setEmployer(EmployerUserObject.newBuilder().setId(1).build())
+														.setSubstitute(SubstituteUserObject.newBuilder().setId(2).build())
 														.build(),
 										ChatOverviewObject.newBuilder()
 														.setId(-2)
-														.setSubstitute(ChatUserObject.newBuilder().setId(3).build())
-														.setEmployer(ChatUserObject.newBuilder().setId(4).build())
+														.setSubstitute(SubstituteUserObject.newBuilder().setId(3).build())
+														.setEmployer(EmployerUserObject.newBuilder().setId(4).build())
 														.build(),
 										ChatOverviewObject.newBuilder()
 														.setId(0)
-														.setSubstitute(ChatUserObject.newBuilder().setId(-5).build())
-														.setEmployer(ChatUserObject.newBuilder().setId(Integer.MAX_VALUE).build())
+														.setSubstitute(SubstituteUserObject.newBuilder().setId(-5).build())
+														.setEmployer(EmployerUserObject.newBuilder().setId(Integer.MAX_VALUE).build())
 														.build()
 						))).build();
 
-		ChatOverviewDTO chatOverviewDTO = ChatServiceFactory.toChatOverviewDTO(getChatOverviewResponse);
+		ChatOverviewDTO chatOverviewDTO = ChatServiceFactory.toChatOverviewDTO(getUserChatsResponse);
 
 		//Check if all fields in class GetChatOverviewResponse and ChatOverviewDTO are equal
 		//Null check
 		assertNotNull(chatOverviewDTO.getChats(), "ChatOverviewDTO.getChats is null");
 
 		//check if all fields are equal
-		for (int i = 0; i < getChatOverviewResponse.getChatsCount(); i++) {
-			assertEquals(getChatOverviewResponse.getChats(i).getId(), chatOverviewDTO.getChats().get(i).getId());
-			assertEquals(getChatOverviewResponse.getChats(i).getEmployer().getId(), chatOverviewDTO.getChats().get(i).getEmployerId());
-			assertEquals(getChatOverviewResponse.getChats(i).getSubstitute().getId(), chatOverviewDTO.getChats().get(i).getSubstituteId());
+		for (int i = 0; i < getUserChatsResponse.getChatsCount(); i++) {
+			assertEquals(getUserChatsResponse.getChats(i).getId(), chatOverviewDTO.getChats().get(i).getId());
+			assertEquals(getUserChatsResponse.getChats(i).getEmployer().getId(), chatOverviewDTO.getChats().get(i).getEmployerId());
+			assertEquals(getUserChatsResponse.getChats(i).getSubstitute().getId(), chatOverviewDTO.getChats().get(i).getSubstituteId());
 		}
 	}
 
@@ -221,11 +221,11 @@ class ChatServiceFactoryTest {
 	void toBasicChatDTO(int chatId, int employerId, int substituteId) {
 		ChatOverviewObject chatOverviewObject = ChatOverviewObject.newBuilder()
 						.setId(chatId)
-						.setEmployer(ChatUserObject
+						.setEmployer(EmployerUserObject
 										.newBuilder()
 										.setId(employerId)
 										.build())
-						.setSubstitute(ChatUserObject
+						.setSubstitute(SubstituteUserObject
 										.newBuilder()
 										.setId(substituteId)
 										.build())
@@ -246,7 +246,7 @@ class ChatServiceFactoryTest {
 		MessageObject messageObject = MessageObject.newBuilder()
 						.setId(messageId)
 						.setChatId(chatId)
-						.setAuthor(ChatUserObject.newBuilder().setId(authorId).build())
+						.setAuthorId(authorId)
 						.setContent(content)
 						.setCreatedAt(Timestamp.newBuilder().setNanos(LocalDateTime.now().getNano()).build())
 						.build();
@@ -257,7 +257,7 @@ class ChatServiceFactoryTest {
 		//Check if all fields in class MessageObject and MessageDTO are equal
 		assertEquals(messageObject.getId(), messageDTO.getId(), "MessageObject.getId() is not equal to MessageDTO.getId()");
 		assertEquals(messageObject.getChatId(), messageDTO.getChatId(), "MessageObject.getChatId() is not equal to MessageDTO.getChatId()");
-		assertEquals(messageObject.getAuthor().getId(), messageDTO.getAuthorId(), "MessageObject.getAuthorId() is not equal to MessageDTO.getAuthorId()");
+		assertEquals(messageObject.getAuthorId(), messageDTO.getAuthorId(), "MessageObject.getAuthorId() is not equal to MessageDTO.getAuthorId()");
 		assertEquals(messageObject.getContent(), messageDTO.getContent(), "MessageObject.getContent() is not equal to MessageDTO.getContent()");
 	}
 
@@ -271,7 +271,7 @@ class ChatServiceFactoryTest {
 		//Check if all fields in class MessageDTO and MessageObject are equal
 		assertEquals(messageDTO.getId(), messageObject.getId(), "MessageDTO.getId() is not equal to MessageObject.getId()");
 		assertEquals(messageDTO.getChatId(), messageObject.getChatId(), "MessageDTO.getChatId() is not equal to MessageObject.getChatId()");
-		assertEquals(messageDTO.getAuthorId(), messageObject.getAuthor().getId(), "MessageDTO.getAuthorId() is not equal to MessageObject.getAuthorId()");
+		assertEquals(messageDTO.getAuthorId(), messageObject.getAuthorId(), "MessageDTO.getAuthorId() is not equal to MessageObject.getAuthorId()");
 		assertEquals(messageDTO.getContent(), messageObject.getContent(), "MessageDTO.getContent() is not equal to MessageObject.getContent()");
 	}
 }
