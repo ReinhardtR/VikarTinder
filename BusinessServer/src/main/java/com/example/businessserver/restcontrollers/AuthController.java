@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 // TODO : Refactor navngivning til gruppens standard
 
 @RestController
-@CrossOrigin
 @RequestMapping("/auth")
 public class AuthController {
 

@@ -5,10 +5,10 @@ namespace WebClient.Utils;
 
 public static class AuthClaims
 {
-    public const string Id = "id";
-    public const string Name = "name";
-    public const string Email = "email";
-    public const string Role = "role";
+    public const string Id = "ID";
+    public const string Name = "NAME";
+    public const string Email = "EMAIL";
+    public const string Role = "ROLE";
     
     public static Claim? GetClaim(AuthenticationState state, string claim)
     {

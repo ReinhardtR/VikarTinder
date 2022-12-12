@@ -3,9 +3,9 @@ namespace HttpClients.Services;
 //TODO: Interface definition
 public class ChatService
 {
-    private readonly IClient _client;
+    private readonly IGeneratedClient _client;
     
-    public ChatService(IClient client)
+    public ChatService(IGeneratedClient client)
     {
         _client = client;
     }
@@ -17,6 +17,7 @@ public class ChatService
 
     public Task<MessageDTO> SendMessageAsync(SendMessageDTO dto)
     {
+        Console.WriteLine(dto.Content);
         return _client.SendMessageAsync(dto);
     }
     

@@ -1,6 +1,8 @@
+using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Text.Json;
 using HttpClients.Services.Interfaces;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace HttpClients.Services;
 
@@ -8,10 +10,10 @@ public class JwtAuthService : IAuthService
 {
     // cache the token
     public static string? Jwt { get; private set; } = "";
+
+    private readonly IGeneratedClient _client;
     
-    private readonly IClient _client;
-    
-    public JwtAuthService(IClient client)
+    public JwtAuthService(IGeneratedClient client)
     {
         _client = client;
     }
@@ -26,18 +28,12 @@ public class JwtAuthService : IAuthService
             Password = "password"
         });
         
-        Jwt = jwtResponse.JwtToken;
-        
-        ClaimsPrincipal principal = CreateClaimsPrincipal();
-        
-        OnAuthStateChanged.Invoke(principal);
+        UpdateJwtToken(jwtResponse.JwtToken);
     }
 
     public Task LogoutAsync()
     {
-        Jwt = null;
-        ClaimsPrincipal principal = new();
-        OnAuthStateChanged.Invoke(principal);
+        UpdateJwtToken(null);
         return Task.CompletedTask;
     }
 
@@ -45,6 +41,13 @@ public class JwtAuthService : IAuthService
     {
         // call api
         throw new NotImplementedException();
+    }
+    
+    private void UpdateJwtToken(string? jwtToken)
+    {
+        Jwt = jwtToken;
+        ClaimsPrincipal principal = CreateClaimsPrincipal();
+        OnAuthStateChanged.Invoke(principal);
     }
 
     public Task<ClaimsPrincipal> GetAuthAsync()

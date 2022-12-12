@@ -16,7 +16,7 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped<HttpClient>();
-builder.Services.AddScoped<IClient, Client>();
+builder.Services.AddScoped<IGeneratedClient, GeneratedClient>();
 
 builder.Services.AddScoped<IAuthService, JwtAuthService>();
 builder.Services.AddScoped<ChatService>();

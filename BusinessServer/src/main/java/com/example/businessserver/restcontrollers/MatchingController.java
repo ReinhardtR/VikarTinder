@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/matching")
-@CrossOrigin
 public class MatchingController {
 
 	@Autowired

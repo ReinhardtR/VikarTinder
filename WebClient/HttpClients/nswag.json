@@ -4,7 +4,7 @@
   "documentGenerator": {
     "fromDocument": {
       "url": "http://localhost:8080/api-docs",
-      "output": "swagger.json",
+      "output": "./Generated/swagger.json",
       "newLineBehavior": "Auto"
     }
   },
@@ -28,7 +28,7 @@
       "generateBaseUrlProperty": true,
       "generateSyncMethods": false,
       "generatePrepareRequestAndProcessResponseAsAsyncMethods": false,
-      "exposeJsonSerializerSettings": false,
+      "exposeJsonSerializerSettings": true,
       "clientClassAccessModifier": "public",
       "typeAccessModifier": "public",
       "generateContractsOutput": false,
@@ -40,7 +40,7 @@
       "useRequestAndResponseSerializationSettings": false,
       "serializeTypeInformation": false,
       "queryNullValue": "",
-      "className": "{controller}Client",
+      "className": "{controller}GeneratedClient",
       "operationGenerationMode": "MultipleClientsFromOperationId",
       "additionalNamespaceUsages": [],
       "additionalContractNamespaceUsages": [],
@@ -92,7 +92,7 @@
       "enumNameGeneratorType": null,
       "serviceHost": null,
       "serviceSchemes": null,
-      "output": "NswagClient.cs",
+      "output": "./Generated/GeneratedClient.cs",
       "newLineBehavior": "Auto"
     }
   }

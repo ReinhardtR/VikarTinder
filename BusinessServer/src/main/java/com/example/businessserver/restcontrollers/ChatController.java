@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/chat")
 public class ChatController {
 
@@ -38,7 +37,6 @@ public class ChatController {
 
 	@PostMapping("/message")
 	public MessageDTO sendMessage(@RequestBody SendMessageDTO dto) {
-		System.out.println("SEND MESSAGE");
 		MessageDTO messageDTO = chatLogic.sendMessage(dto);
 
 		// Send message to websocket for real-time message receiving
