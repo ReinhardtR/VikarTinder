@@ -16,7 +16,7 @@ public class AuthDao : IAuthDao
         _dataContext = dataContext;
     }
 
-    public async Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash, string email, DateTime birthDate, string bio,
+    public async Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash,string salt, string email, DateTime birthDate, string bio,
         string address)
     {
         try
@@ -26,6 +26,7 @@ public class AuthDao : IAuthDao
                 FirstName = firstName,
                 LastName = lastName,
                 PasswordHash = passwordHash,
+                Salt = salt,
                 Email = email,
                 Address = address,
                 BirthDate = birthDate,
@@ -44,7 +45,7 @@ public class AuthDao : IAuthDao
         }
     }
 
-    public async Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash, string email,
+    public async Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash, string salt, string email,
         string title, string workPlace)
     {
         try
@@ -54,6 +55,7 @@ public class AuthDao : IAuthDao
                 FirstName = firstName,
                 LastName = lastName,
                 PasswordHash = passwordHash,
+                Salt = salt,
                 Email = email,
                 Title = title,
                 WorkPlace = workPlace

@@ -5,6 +5,7 @@ namespace Persistence.Models;
 public class Substitute : User
 {
     private DateTime _birthDate;
+    
     public DateTime BirthDate {
         get => _birthDate.ToUniversalTime();
         set => _birthDate = value.ToUniversalTime();
