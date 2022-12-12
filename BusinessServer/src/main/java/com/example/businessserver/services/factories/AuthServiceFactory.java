@@ -44,37 +44,37 @@ public class AuthServiceFactory {
 		throw new BuildingException("unrecognised user type: " + userData.getRoleCase().getClass());
 	}
 
-    public static CreateUserRequest createUserRequestEmployer(SignUpEmployerRequestDTO employerRequestDTO) {
-        return CreateUserRequest.newBuilder()
-                .setUser(
-                        UserData.newBuilder()
-                                .setFirstName(employerRequestDTO.getFirstName())
-                                .setLastName(employerRequestDTO.getLastName())
-                                .setPasswordHash(employerRequestDTO.getPassword())
-                                .setEmail(employerRequestDTO.getEmail())
-                                .setEmp(
-                                        EmployerObject.newBuilder()
-                                                .setTitle(employerRequestDTO.getTitle())
-                                                .setWorkplace(employerRequestDTO.getWorkplace()).build()
-                                ).build()
-                ).build();
-    }
+	public static CreateUserRequest createUserRequestEmployer(SignUpEmployerRequestDTO employerRequestDTO) {
+		return CreateUserRequest.newBuilder()
+						.setUser(
+										UserData.newBuilder()
+														.setFirstName(employerRequestDTO.getFirstName())
+														.setLastName(employerRequestDTO.getLastName())
+														.setPasswordHash(employerRequestDTO.getPassword())
+														.setEmail(employerRequestDTO.getEmail())
+														.setEmp(
+																		EmployerObject.newBuilder()
+																						.setTitle(employerRequestDTO.getTitle())
+																						.setWorkplace(employerRequestDTO.getWorkplace()).build()
+														).build()
+						).build();
+	}
 
-    public static CreateUserRequest createUserRequestSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO) {
-        return CreateUserRequest.newBuilder()
-                .setUser(
-                        UserData.newBuilder()
-                                .setFirstName(substituteRequestDTO.getFirstName())
-                                .setLastName(substituteRequestDTO.getLastName())
-                                .setPasswordHash(substituteRequestDTO.getPassword())
-                                .setEmail(substituteRequestDTO.getEmail())
-                                .setSub(
-                                        SubstituteObject.newBuilder()
-                                                .setAge(substituteRequestDTO.getAge())
-                                                .setBio(substituteRequestDTO.getBio())
-                                                .setAddress(substituteRequestDTO.getAddress()
-                                                ).build()
-                                ).build()
-                ).build();
-    }
+	public static CreateUserRequest createUserRequestSubstitute(SignUpSubstituteRequestDTO substituteRequestDTO) {
+		return CreateUserRequest.newBuilder()
+						.setUser(
+										UserData.newBuilder()
+														.setFirstName(substituteRequestDTO.getFirstName())
+														.setLastName(substituteRequestDTO.getLastName())
+														.setPasswordHash(substituteRequestDTO.getPassword())
+														.setEmail(substituteRequestDTO.getEmail())
+														.setSub(
+																		SubstituteObject.newBuilder()
+																						.setBirthDate(SharedFactory.toTimestamp(substituteRequestDTO.getBirthDate()))
+																						.setBio(substituteRequestDTO.getBio())
+																						.setAddress(substituteRequestDTO.getAddress()
+																						).build()
+														).build()
+						).build();
+	}
 }
