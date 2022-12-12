@@ -3,6 +3,7 @@ package com.example.businessserver.restcontrollers;
 import com.example.businessserver.dtos.auth.JwtResponseDTO;
 import com.example.businessserver.dtos.auth.LoginRequestDTO;
 import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
+import com.example.businessserver.dtos.auth.SignUpSubstituteRequestDTO;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.logic.interfaces.AuthLogic;
 import com.example.businessserver.services.implementations.AuthServiceImpl;
@@ -52,5 +53,10 @@ public class AuthController {
 	@PostMapping("/register")
 	public void registerEmployer(@RequestBody SignUpEmployerRequestDTO employerRequest) throws DTOException {
 		authLogic.signUpEmployer(employerRequest);
+	}
+
+	@PostMapping("/register")
+	public void registerEmployer(@RequestBody SignUpSubstituteRequestDTO substituteRequest) throws DTOException {
+		authLogic.signUpSubstitute(substituteRequest);
 	}
 }

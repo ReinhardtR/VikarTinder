@@ -3,6 +3,7 @@ package com.example.businessserver.logic;
 import com.example.businessserver.dtos.auth.JwtResponseDTO;
 import com.example.businessserver.dtos.auth.LoginRequestDTO;
 import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
+import com.example.businessserver.dtos.auth.SignUpSubstituteRequestDTO;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import com.example.businessserver.logic.interfaces.AuthLogic;
@@ -61,6 +62,25 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         checkStringMinimumValues(requestDTO.getTitle(), "Title", 1);
         checkStringMinimumValues(requestDTO.getWorkplace(), "Workplace", 1);
         userService.SignUpEmployer(requestDTO);
+    }
+
+    @Override
+    public void signUpSubstitute(SignUpSubstituteRequestDTO requestDTO) throws DTOException {
+        objectNullCheck(requestDTO, "signUpRequest");
+        checkEmail(requestDTO.getEmail());
+        checkPassword(requestDTO.getPassword());
+        checkStringMinimumValues(requestDTO.getFirstName(), "First name", 1);
+        checkStringMinimumValues(requestDTO.getLastName(), "Last name", 1);
+        //TODO : Check dob når det implementeres
+        checkBio(requestDTO.getBio());
+        checkStringMinimumValues(requestDTO.getAddress(), "Address", 1);
+        userService.SignUpSubstitute(requestDTO);
+    }
+
+    private void checkBio(String bio) throws DTOException { //TODO:Burde generalise de er string checks
+        objectNullCheck(bio, "Bio");
+        if (bio.length() > 300)
+            throw new DTOOutOfBoundsException("Bio cant be over 300 characters");
     }
 
     public void checkPassword(String password) throws DTOException {
