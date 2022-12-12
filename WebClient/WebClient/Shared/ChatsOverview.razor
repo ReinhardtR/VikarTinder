@@ -84,15 +84,8 @@ else if (chats != null)
             ChatOverviewDTO? chatOverview;
 
             AuthenticationState authState = await AuthState;
-            Claim? idClaim = AuthClaims.GetClaim(authState, AuthClaims.Id);
-            
-            if (idClaim == null)
-            {
-                throw new Exception("Couldn't find id claim");
-            }
+            int userId = AuthClaims.GetUserId(authState);
 
-            int userId = int.Parse(idClaim.Value);
-            
             if (GigId == null)
             {
                 chatOverview = await ChatService.GetChatOverviewAsync(userId);

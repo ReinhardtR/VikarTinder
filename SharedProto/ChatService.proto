@@ -11,7 +11,8 @@ package ChatService;
 
 service ChatService {
     rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
-    rpc GetChatOverview (GetChatOverviewRequest) returns (GetChatOverviewResponse);
+    rpc GetUserChats (GetUserChatsRequest) returns (GetUserChatsResponse);
+    rpc GetGigChats (GetGigChatsRequest) returns (GetGigChatsResponse);
     rpc GetChatHistory (GetChatHistoryRequest) returns (GetChatHistoryResponse);
     rpc CreateChat (CreateChatRequest) returns (CreateChatResponse);
 }
@@ -26,37 +27,50 @@ message SendMessageRequest {
 message SendMessageResponse {
   MessageObject message = 1;
 }
-//Get all chats
-message GetChatOverviewRequest{
+
+// Get all chats for a user
+message GetUserChatsRequest {
   int32 user_id = 1;
 }
 
-message GetChatOverviewResponse{ //Skal indeholder en liste af usernames for dem som er i chatten
+message GetUserChatsResponse {
+  repeated ChatOverviewObject chats = 1;
+}
+
+// Get all chats for a gig
+message GetGigChatsRequest {
+  int32 gig_id = 1;
+}
+
+message GetGigChatsResponse {
   repeated ChatOverviewObject chats = 1;
 }
 
 // Get Chat History
-message GetChatHistoryRequest{
-  int32 chatId = 1;
+message GetChatHistoryRequest {
+  int32 chat_id = 1;
 }
 
-message GetChatHistoryResponse{ 
-  repeated MessageObject messages = 1;
-  JobConfirmationService.JobConfirmationObject jobConfirmation = 2;
-  SubstituteUserObject substitute = 3;
-  EmployerUserObject employer = 4;
+message GetChatHistoryResponse {
+  int32 gig_id = 1;
+  repeated MessageObject messages = 2;
+  JobConfirmationService.JobConfirmationObject jobConfirmation = 3;
+  SubstituteUserObject substitute = 4;
+  EmployerUserObject employer = 5;
 }
 
 // Create Chat
 message CreateChatRequest {
-  SubstituteUserObject substitute = 1;
-  EmployerUserObject employer =3;
-}
-
-message CreateChatResponse{
-  int32 id = 1;
+  int32 gig_id = 1;
   SubstituteUserObject substitute = 2;
   EmployerUserObject employer = 3;
+}
+
+message CreateChatResponse {
+  int32 id = 1;
+  int32 gig_id = 2;
+  SubstituteUserObject substitute = 3;
+  EmployerUserObject employer = 4;
 }
 
 // Shared objects
@@ -70,8 +84,9 @@ message MessageObject {
 
 message ChatOverviewObject {
   int32 id = 1;
-  SubstituteUserObject substitute = 2;
-  EmployerUserObject employer = 3;
+  int32 gig_id = 2;
+  SubstituteUserObject substitute = 3;
+  EmployerUserObject employer = 4;
 }
 
 message ChatObject { 
@@ -81,12 +96,16 @@ message ChatObject {
   repeated MessageObject messages = 4;
 }
 
-message EmployerUserObject{
-  int32 id =1;
+message EmployerUserObject {
+  int32 id = 1;
+  string first_name = 2;
+  string last_name = 3;
 }
 
-message SubstituteUserObject{
+message SubstituteUserObject {
   int32 id = 1;
+  string first_name = 2;
+  string last_name = 3;
 }
 
 

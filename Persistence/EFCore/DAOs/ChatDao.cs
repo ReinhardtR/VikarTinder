@@ -13,7 +13,7 @@ public class ChatDao : IChatDao
         _dataContext = dataContext;
     }
 
-    public async Task<Chat> CreateChatAsync(int employerId, int substituteId)
+    public async Task<Chat> CreateChatAsync(int gigId, int employerId, int substituteId)
     {
         Chat chat = new()
         {
@@ -42,11 +42,16 @@ public class ChatDao : IChatDao
        return sentMessage.Entity;
     }
 
-    public Task<List<Chat>> GetAllChatsAsync(int userId)
+    public Task<List<Chat>> GetUserChatsAsync(int userId)
     {
         return _dataContext.Chats.Where(c => c.EmployerId == userId || c.SubstituteId == userId).ToListAsync();
     }
 
+    public Task<List<Chat>> GetGigChatsAsync(int gigId)
+    {
+        return _dataContext.Chats.Where((c) => c.GigId == gigId).ToListAsync();
+    }
+    
     public Task<Chat> GetChatHistoryAsync(int requestChatId)
     {
         return _dataContext.Chats

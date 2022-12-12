@@ -89,27 +89,25 @@ public class ChatServiceFactoryTest
         });
     }
     
-    //TODO: THIS TEST DONT WORK NO MORE
-    /*
     [Test, TestCaseSource(nameof(ToGetChatOverviewResponseTestData))]
     public void ToGetChatOverviewResponseTest(int user1Id, int user2Id)
     {
         //Make a list of Chats
-        List<Persistence.Models.Chat> chats = new List<Persistence.Models.Chat>();
+        List<Persistence.Models.Chat> chats = new();
+        
         //Make a list of users and put users into the list
-    
-        List<User> users = new List<User>();
-        users.Add(new User
+        Employer employer = new()
         {
-            Id = user1Id,
-        });
-        users.Add(new User
+            Id = 1,
+        };
+        
+        Substitute substitute = new()
         {
-            Id = user2Id,
-        });
+            Id = 2,
+        };
     
         //Make a list of messages and put messages into the list
-        List<Message> messages = new List<Message>();
+        List<Message> messages = new();
     
         messages.Add(new Message
         {
@@ -131,24 +129,28 @@ public class ChatServiceFactoryTest
         {
             Id = 1,
             Messages = messages,
+            Employer = employer,
+            Substitute = substitute
         });
         chats.Add(new Persistence.Models.Chat
         {
             Id = 2,
             Messages = messages,
+            Employer = employer,
+            Substitute = substitute
         });
     
     
-        GetChatOverviewResponse chatsToTest = ChatServiceFactory.ToGetChatOverviewResponse(chats);
+        GetUserChatsResponse chatsToTest = ChatServiceFactory.ToGetUserChatsResponse(chats);
     
         //Assert that all matching fields in chats and chatsToTest are equal
         foreach (var originalChat in chats)
         {
-            Assert.That(originalChat.Id, Is.EqualTo(chatsToTest.Chats[originalChat.Id - 1].Id));
+            Assert.That(originalChat.Employer.Id, Is.EqualTo(chatsToTest.Chats[originalChat.Id - 1].Employer.Id));
+            Assert.That(originalChat.Substitute.Id, Is.EqualTo(chatsToTest.Chats[originalChat.Id - 1].Substitute.Id));
         }
     }
-    */
-    
+
     [Test, TestCaseSource(nameof(ToGetChatHistoryResponseTestData))]
     public static void ToGetChatHistoryResponseTest(int chatId, int substituteId, int employerId)
     {

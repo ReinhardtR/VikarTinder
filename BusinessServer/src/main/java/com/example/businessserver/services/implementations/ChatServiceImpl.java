@@ -4,6 +4,8 @@ import ChatService.*;
 import com.example.businessserver.dtos.chat.*;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
+import com.example.businessserver.dtos.chat.overview.GetChatOverviewByGigDTO;
+import com.example.businessserver.dtos.chat.overview.GetChatOverviewByUserDTO;
 import com.example.businessserver.services.factories.ChatServiceFactory;
 import com.example.businessserver.services.interfaces.ChatServiceClient;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -41,12 +43,18 @@ public class ChatServiceImpl implements ChatServiceClient {
 
 
 	@Override
-	public ChatOverviewDTO getChatOverview(GetChatOverviewDTO dto) {
-		GetChatOverviewRequest request = ChatServiceFactory.toGetChatOverviewRequest(dto);
-		GetChatOverviewResponse response = chatServiceBlockingStub.getChatOverview(request);
+	public ChatOverviewDTO getChatOverviewByUser(GetChatOverviewByUserDTO dto) {
+		GetUserChatsRequest request = ChatServiceFactory.toGetUserChatsRequest(dto);
+		GetUserChatsResponse response = chatServiceBlockingStub.getUserChats(request);
 
 		return ChatServiceFactory.toChatOverviewDTO(response);
 	}
 
+	@Override
+	public ChatOverviewDTO getChatOverviewByGig(GetChatOverviewByGigDTO dto) {
+		GetGigChatsRequest request = ChatServiceFactory.toGetGigChatsRequest(dto);
+		GetGigChatsResponse response = chatServiceBlockingStub.getGigChats(request);
 
+		return ChatServiceFactory.toChatOverviewDTO(response);
+	}
 }

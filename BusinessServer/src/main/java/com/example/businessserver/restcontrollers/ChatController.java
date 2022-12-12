@@ -3,6 +3,8 @@ package com.example.businessserver.restcontrollers;
 import com.example.businessserver.dtos.chat.*;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
+import com.example.businessserver.dtos.chat.overview.GetChatOverviewByGigDTO;
+import com.example.businessserver.dtos.chat.overview.GetChatOverviewByUserDTO;
 import com.example.businessserver.logic.interfaces.ChatLogic;
 import com.example.businessserver.websockets.SocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +20,14 @@ public class ChatController {
 	@Autowired
 	private SocketHandler socketHandler;
 
-	@GetMapping("/{id}")
-	public ChatOverviewDTO getChatOverview(@PathVariable int id) {
-		return chatLogic.getChatOverview(new GetChatOverviewDTO(id));
+	@GetMapping("/user/{id}")
+	public ChatOverviewDTO getChatOverviewByUser(@PathVariable int userId) {
+		return chatLogic.getChatOverviewByUser(new GetChatOverviewByUserDTO(userId));
+	}
+
+	@GetMapping("/gig/{id}")
+	public ChatOverviewDTO getChatOverviewByGig(@PathVariable int gigId) {
+		return chatLogic.getChatOverviewByGig(new GetChatOverviewByGigDTO(gigId));
 	}
 
 	@PostMapping("/")

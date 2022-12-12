@@ -10,8 +10,28 @@ public static class AuthClaims
     public const string Email = "EMAIL";
     public const string Role = "ROLE";
     
-    public static Claim? GetClaim(AuthenticationState state, string claim)
+    public static Claim GetClaim(AuthenticationState state, string claimName)
     {
-        return state.User.Claims.FirstOrDefault((c) => c.Type.Equals(claim));
+        Claim? claim = state.User.Claims.FirstOrDefault((c) => c.Type.Equals(claimName));
+        if (claim == null) throw new Exception($"Claim {claimName} not found");
+        return claim;
+    }
+    
+    public static int GetUserId(AuthenticationState state)
+    {
+        Claim claim = GetClaim(state, Id);
+        return int.Parse(claim.Value);;
+    }
+    
+    public static string GetEmail(AuthenticationState state)
+    {
+        Claim claim = GetClaim(state, Email);
+        return claim.Value;
+    }
+    
+    public static string GetRole(AuthenticationState state)
+    {
+        Claim claim = GetClaim(state, Role);
+        return claim.Value;
     }
 }

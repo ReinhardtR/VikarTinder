@@ -28,7 +28,7 @@ public class ChatServiceServer : ChatService.ChatServiceBase
 
     public override async Task<CreateChatResponse> CreateChat(CreateChatRequest request, ServerCallContext context)
     {
-        Chat chat = await _chatDao.CreateChatAsync(request.Employer.Id,request.Substitute.Id);
+        Chat chat = await _chatDao.CreateChatAsync(request.GigId ,request.Employer.Id,request.Substitute.Id);
 
         CreateChatResponse reply = ChatServiceFactory.ToCreateChatResponse(chat);
 
@@ -36,13 +36,24 @@ public class ChatServiceServer : ChatService.ChatServiceBase
         
     }
 
-    public override async Task<GetChatOverviewResponse> GetChatOverview(GetChatOverviewRequest request, ServerCallContext context)
+    public override async Task<GetUserChatsResponse> GetUserChats(GetUserChatsRequest request, ServerCallContext context)
     {
-        List<Chat> chats = await _chatDao.GetAllChatsAsync(request.UserId);
+        List<Chat> chats = await _chatDao.GetUserChatsAsync(request.UserId);
 
         Console.WriteLine("Chats: " + chats.Count);
         
-        GetChatOverviewResponse reply = ChatServiceFactory.ToGetChatOverviewResponse(chats);
+        GetUserChatsResponse reply = ChatServiceFactory.ToGetUserChatsResponse(chats);
+
+        return reply;
+    }
+    
+    public override async Task<GetGigChatsResponse> GetGigChats(GetGigChatsRequest request, ServerCallContext context)
+    {
+        List<Chat> chats = await _chatDao.GetGigChatsAsync(request.GigId);
+
+        Console.WriteLine("Chats: " + chats.Count);
+        
+        GetGigChatsResponse reply = ChatServiceFactory.ToGigChatsResponse(chats);
 
         return reply;
     }

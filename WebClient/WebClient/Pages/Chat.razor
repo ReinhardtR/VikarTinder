@@ -95,9 +95,6 @@ else if (chatHistory != null)
     
     // TODO replace with data from server
     private string chatName = "John Doe";
-    
-    // TODO replace with data from server
-    private int substituteId = 1;
 
     // TODO replace with data from server
     private int gigId = 1;
@@ -200,15 +197,13 @@ else if (chatHistory != null)
         try
         {
             AuthenticationState authState = await AuthState;
-            Claim? claim = AuthClaims.GetClaim(authState, AuthClaims.Id);
-            if (claim == null) throw new Exception("Couldn't find the user id.");
-            int userId = int.Parse(claim.Value);
+            int userId = AuthClaims.GetUserId(authState);
             
             CreateJobConfirmationDTO createJobConfirmationDto = new()
             {
                 ChatId = ChatId,
                 EmployerId = userId,
-                SubstituteId = substituteId
+                SubstituteId = chatHistory!.SubstituteId
             };
             
             await JobConfirmationService.CreateJobConfirmationAsync(createJobConfirmationDto);

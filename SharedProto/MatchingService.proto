@@ -21,7 +21,7 @@ message SubstituteToBeMatched {
 
 //GET SUBSTITUTES
 message SubstituteSearchParametersRequest {
-  int32 currentUserId = 1;
+  int32 current_user_id = 1;
 }
 message SubstitutesForMatchingResponse {
   repeated SubstituteToBeMatched substitutes = 1;
@@ -29,7 +29,7 @@ message SubstitutesForMatchingResponse {
 
 //GET GIGS
 message GigSearchParametersRequest {
-  int32 currentUserId = 1;
+  int32 current_user_id = 1;
 }
 
 message GigsForMatchingResponse {
@@ -38,16 +38,16 @@ message GigsForMatchingResponse {
 
 //MATCHING
 message MatchRequest {
-  int32 currentUser = 1;
-  int32 toBeMatchedId =2 ;
-  bool wantToMatch = 3;
+  int32 current_user = 1;
+  int32 to_be_matched_id =2 ;
+  bool want_to_match = 3;
 }
 
 message MatchValidationResponse {
-  bool isMatched = 1;
-  int32 employerId = 2;
-  int32 substituteId = 3;
-  int32 gigId = 4;
+  bool is_matched = 1;
+  int32 employer_id = 2;
+  int32 substitute_id = 3;
+  int32 gig_id = 4;
 }
 
 service MatchingService {
