@@ -1,9 +1,9 @@
 package com.example.businessserver.services.factories;
 
 import MatchingProto.MatchRequest;
-import MatchingProto.MatchValidation;
-import MatchingProto.MatchingSubstitutes;
+import MatchingProto.MatchValidationResponse;
 import MatchingProto.SubstituteToBeMatched;
+import MatchingProto.SubstitutesForMatchingResponse;
 import com.example.businessserver.dtos.matching.*;
 import org.junit.jupiter.api.Test;
 
@@ -76,7 +76,7 @@ class MatchServiceFactoryTest {
 
 	@Test
 	void test_substituteMatchingDTOs_CorrectPossibleMatchesBuildUp() {
-		MatchingSubstitutes grpc = createMatchingSubstitutes(10);
+		SubstitutesForMatchingResponse grpc = createMatchingSubstitutes(10);
 		SubstituteMatchingDTOs test = MatchServiceFactory.substituteMatchingDTOs(grpc);
 		for (int i = 0; i < test.getPossibleMatches().size(); i++) {
 			assertEquals(i, test.getPossibleMatches().get(i).getId(), "Substitute id should have been " + i);
@@ -86,7 +86,7 @@ class MatchServiceFactoryTest {
 
 	@Test
 	void test_matchValidationDTO_CorrectBuildUp() {
-		MatchValidation validation = MatchValidation.newBuilder()
+		MatchValidationResponse validation = MatchValidationResponse.newBuilder()
 						.setIsMatched(true)
 						.setEmployerId(25)
 						.setSubstituteId(5)
@@ -112,8 +112,8 @@ class MatchServiceFactoryTest {
 		);
 	}
 
-	private MatchingSubstitutes createMatchingSubstitutes(int length) {
-		return MatchingSubstitutes.newBuilder().
+	private SubstitutesForMatchingResponse createMatchingSubstitutes(int length) {
+		return SubstitutesForMatchingResponse.newBuilder().
 						addAllSubstitutes(
 										validListOfSubstitutesToBeMatched(length)
 						).build();
