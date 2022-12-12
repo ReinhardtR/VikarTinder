@@ -130,7 +130,7 @@ public class ChatServiceFactory {
 		return new MessageDTO(
 						message.getId(),
 						message.getChatId(),
-						message.getId(),
+						message.getAuthorId(),
 						message.getContent(),
 						SharedFactory.toLocalDateTime(message.getCreatedAt())
 		);

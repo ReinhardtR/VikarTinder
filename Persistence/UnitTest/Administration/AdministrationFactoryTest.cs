@@ -1,11 +1,12 @@
 ﻿using System.Collections;
+using System.Text;
+using Google.Protobuf.WellKnownTypes;
 using Persistence;
 using Persistence.Dto;
-using Persistence.Dto.Administration;
+using Persistence.Dto.Auth;
 using Persistence.Exceptions.ConverterExceptions;
 using Persistence.Models;
 using Persistence.Services.Factories;
-using static System.String;
 
 namespace UnitTest.Administration;
 
@@ -205,7 +206,6 @@ public class ConverterTestAdministration
                         Sub = new SubstituteObject
                         {
                             Address = "Testroad 1",
-                            Age = 18,
                             Bio = "I love testing"
                         }
                     }
@@ -226,9 +226,10 @@ public class ConverterTestAdministration
            response.User.UserData.FirstName,
            response.User.UserData.LastName,
            response.User.UserData.PasswordHash,
+           response.User.UserData.Salt,
            response.User.UserData.Email,
            response.User.UserData.Sub.Address,
-           response.User.UserData.Sub.Age,
+           response.User.UserData.Sub.BirthDate.ToDateTime(),
            response.User.UserData.Sub.Bio
         };
     }
@@ -245,6 +246,7 @@ public class ConverterTestAdministration
             response.User.UserData.FirstName,
             response.User.UserData.LastName,
             response.User.UserData.PasswordHash,
+            response.User.UserData.Salt,
             response.User.UserData.Email,
             response.User.UserData.Emp.Title,
             response.User.UserData.Emp.Workplace
@@ -264,9 +266,10 @@ public class ConverterTestAdministration
                 response.User.UserData.FirstName,
                 response.User.UserData.LastName,
                 response.User.UserData.PasswordHash,
+                response.User.UserData.Salt,
                 response.User.UserData.Email,
                 response.User.UserData.Sub.Address,
-                response.User.UserData.Sub.Age,
+                response.User.UserData.Sub.BirthDate.ToDateTime(),
                 response.User.UserData.Sub.Bio
             }
             : new List<dynamic>
@@ -275,6 +278,7 @@ public class ConverterTestAdministration
                 response.User.UserData.FirstName,
                 response.User.UserData.LastName,
                 response.User.UserData.PasswordHash,
+                response.User.UserData.Salt,
                 response.User.UserData.Email,
                 response.User.UserData.Emp.Title,
                 response.User.UserData.Emp.Workplace
@@ -296,9 +300,10 @@ public class ConverterTestAdministration
                 response.User.UserData.FirstName,
                 response.User.UserData.LastName,
                 response.User.UserData.PasswordHash,
+                response.User.UserData.Salt,
                 response.User.UserData.Email,
                 response.User.UserData.Sub.Address,
-                response.User.UserData.Sub.Age,
+                response.User.UserData.Sub.BirthDate.ToDateTime(),
                 response.User.UserData.Sub.Bio
             }
             : new List<dynamic>
@@ -307,6 +312,7 @@ public class ConverterTestAdministration
                 response.User.UserData.FirstName,
                 response.User.UserData.LastName,
                 response.User.UserData.PasswordHash,
+                response.User.UserData.Salt,
                 response.User.UserData.Email,
                 response.User.UserData.Emp.Title,
                 response.User.UserData.Emp.Workplace
@@ -341,9 +347,10 @@ public class ConverterTestAdministration
             substitute.FirstName,
             substitute.LastName,
             substitute.PasswordHash,
+            substitute.Salt,
             substitute.Email,
             substitute.Address,
-            substitute.Age,
+            substitute.BirthDate,
             substitute.Bio
         };
     }
@@ -360,14 +367,16 @@ public class ConverterTestAdministration
             employer.FirstName,
             employer.LastName,
             employer.PasswordHash,
+            employer.Salt,
             employer.Email,
             employer.Title,
             employer.WorkPlace
         };
     }
 
-    public class DataClass
+    private class DataClass
     {
+        private static readonly string _longString = ExpandString("Test",10000);
         public static IEnumerable ConvertToResponseAsSubstitute
         {
             get
@@ -378,25 +387,41 @@ public class ConverterTestAdministration
                     FirstName = "Test",
                     LastName = "Tester",
                     PasswordHash = "123",
+                    Salt = "TestSalt",
                     Email = "Testmail@test.com",
                     Address = "Testroad 1",
-                    Age = 19,
+                    BirthDate = new DateTime(2000,01,01),
                     Bio = "I am test man, pick me!"
                 }).Returns(
-                    new List<dynamic>{1,"Test","Tester","123","Testmail@test.com","Testroad 1", 19, "I am test man, pick me!"});
+                    new List<dynamic>{1,"Test","Tester","123","TestSalt","Testmail@test.com","Testroad 1", new DateTime(2000,01,01).ToUniversalTime(), "I am test man, pick me!"});
                 
                 yield return new TestCaseData(new Substitute
                 {
                     Id = Int32.MinValue,
-                    FirstName = Empty,
-                    LastName = Empty,
-                    PasswordHash = Empty,
-                    Email = Empty,
-                    Address = Empty,
-                    Age = Int32.MinValue,
-                    Bio = Empty
+                    FirstName = String.Empty,
+                    LastName = String.Empty,
+                    PasswordHash = String.Empty,
+                    Salt = String.Empty,
+                    Email = String.Empty,
+                    Address = String.Empty,
+                    BirthDate = new DateTime(1,01,01),
+                    Bio = String.Empty
                 }).Returns(
-                    new List<dynamic>{Int32.MinValue,Empty,Empty,Empty,Empty,Empty, Int32.MinValue, Empty});
+                    new List<dynamic>{Int32.MinValue,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty, new DateTime(1,01,01).ToUniversalTime(), String.Empty});
+                
+                yield return new TestCaseData(new Substitute
+                {
+                    Id = Int32.MaxValue,
+                    FirstName = _longString,
+                    LastName = _longString,
+                    PasswordHash = _longString,
+                    Salt = _longString,
+                    Email = _longString,
+                    Address = _longString,
+                    BirthDate = new DateTime(9999,12,31),
+                    Bio = _longString
+                }).Returns(
+                    new List<dynamic>{Int32.MaxValue,_longString,_longString,_longString,_longString,_longString,_longString, new DateTime(9999,12,31).ToUniversalTime(), _longString});
                 
             }
         }
@@ -411,23 +436,38 @@ public class ConverterTestAdministration
                     FirstName = "Test",
                     LastName = "Tester",
                     PasswordHash = "123",
+                    Salt = "TestSalt",
                     Email = "Testmail@test.com",
                     Title = "Test CEO",
                     WorkPlace = "Testland"
                 }).Returns(
-                    new List<dynamic>{1,"Test","Tester","123","Testmail@test.com","Test CEO","Testland"});
+                    new List<dynamic>{1,"Test","Tester","123","TestSalt","Testmail@test.com","Test CEO","Testland"});
                 
                 yield return new TestCaseData(new Employer()
                 {
                     Id = Int32.MinValue,
-                    FirstName = Empty,
-                    LastName = Empty,
-                    PasswordHash = Empty,
-                    Email = Empty,
-                    Title = Empty,
-                    WorkPlace = Empty
+                    FirstName = String.Empty,
+                    LastName = String.Empty,
+                    PasswordHash = String.Empty,
+                    Salt = String.Empty,
+                    Email = String.Empty,
+                    Title = String.Empty,
+                    WorkPlace = String.Empty
                 }).Returns(
-                    new List<dynamic>{Int32.MinValue,Empty,Empty,Empty,Empty,Empty, Empty});
+                    new List<dynamic>{Int32.MinValue,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty, String.Empty});
+                
+                yield return new TestCaseData(new Employer()
+                {
+                    Id = Int32.MaxValue,
+                    FirstName = _longString,
+                    LastName = _longString,
+                    PasswordHash = _longString,
+                    Salt = _longString,
+                    Email = _longString,
+                    Title = _longString,
+                    WorkPlace = _longString
+                }).Returns(
+                    new List<dynamic>{Int32.MaxValue,_longString,_longString,_longString,_longString,_longString,_longString,_longString});
             }
         }
 
@@ -441,12 +481,13 @@ public class ConverterTestAdministration
                     FirstName = "Test",
                     LastName = "Tester",
                     PasswordHash = "123",
+                    Salt = "TestSalt",
                     Email = "Testmail@test.com",
                     Address = "Testroad 1",
-                    Age = 19,
+                    BirthDate = new DateTime(2000,01,01),
                     Bio = "I am test man, pick me!"
                 }).Returns(
-                    new List<dynamic> { 1, "Test", "Tester", "123", "Testmail@test.com", "Testroad 1", 19, "I am test man, pick me!" });
+                    new List<dynamic> { 1, "Test", "Tester", "123","TestSalt", "Testmail@test.com", "Testroad 1", new DateTime(2000,01,01).ToUniversalTime(), "I am test man, pick me!" });
                 
                 yield return new TestCaseData(new Employer
                 {
@@ -455,35 +496,65 @@ public class ConverterTestAdministration
                     FirstName = "Test",
                     LastName = "Tester",
                     PasswordHash = "123",
+                    Salt = "TestSalt",
                     Email = "Testmail@test.com",
                     Title = "Test CEO",
                     WorkPlace = "Testland"
-                }).Returns(new List<dynamic>{1,"Test","Tester","123","Testmail@test.com","Test CEO","Testland"});
+                }).Returns(new List<dynamic>{1,"Test","Tester","123","TestSalt","Testmail@test.com","Test CEO","Testland"});
                 
                 yield return new TestCaseData(new Substitute
                 {
                     Id = Int32.MinValue,
-                    FirstName = Empty,
-                    LastName = Empty,
-                    PasswordHash = Empty,
-                    Email = Empty,
-                    Address = Empty,
-                    Age = Int32.MinValue,
-                    Bio = Empty
+                    FirstName = String.Empty,
+                    LastName = String.Empty,
+                    PasswordHash = String.Empty,
+                    Salt = String.Empty,
+                    Email = String.Empty,
+                    Address = String.Empty,
+                    BirthDate = new DateTime(1,01,01),
+                    Bio = String.Empty
                 }).Returns(
-                    new List<dynamic>{Int32.MinValue,Empty,Empty,Empty,Empty,Empty, Int32.MinValue, Empty});
+                    new List<dynamic>{Int32.MinValue,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty, new DateTime(1,01,01).ToUniversalTime(), String.Empty});
                 
                 yield return new TestCaseData(new Employer
                 {
                     Id = Int32.MinValue,
-                    FirstName = Empty,
-                    LastName = Empty,
-                    PasswordHash = Empty,
-                    Email = Empty,
-                    Title = Empty,
-                    WorkPlace = Empty
+                    FirstName = String.Empty,
+                    LastName = String.Empty,
+                    PasswordHash = String.Empty,
+                    Salt = String.Empty,
+                    Email = String.Empty,
+                    Title = String.Empty,
+                    WorkPlace = String.Empty
                 }).Returns(
-                    new List<dynamic>{Int32.MinValue,Empty,Empty,Empty,Empty,Empty, Empty});
+                    new List<dynamic>{Int32.MinValue,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty, String.Empty});
+                
+                yield return new TestCaseData(new Substitute
+                {
+                    Id = Int32.MaxValue,
+                    FirstName = _longString,
+                    LastName = _longString,
+                    PasswordHash = _longString,
+                    Salt = _longString,
+                    Email = _longString,
+                    Address = _longString,
+                    BirthDate = new DateTime(9999,12,31),
+                    Bio = _longString
+                }).Returns(
+                    new List<dynamic>{Int32.MaxValue,_longString,_longString,_longString,_longString,_longString,_longString, new DateTime(9999,12,31).ToUniversalTime(), _longString});
+                
+                yield return new TestCaseData(new Employer
+                {
+                    Id = Int32.MaxValue,
+                    FirstName = _longString,
+                    LastName = _longString,
+                    PasswordHash = _longString,
+                    Salt = _longString,
+                    Email = _longString,
+                    Title = _longString,
+                    WorkPlace = _longString
+                }).Returns(
+                    new List<dynamic>{Int32.MaxValue,_longString,_longString,_longString,_longString,_longString,_longString, _longString});
             }
         }
 
@@ -518,6 +589,20 @@ public class ConverterTestAdministration
                     Id = Int32.MinValue,
                     Role = DaoRequestType.Employer
                 }).Returns(new List<dynamic> { false, Int32.MinValue, GetUserParams.Types.Role.Employer });
+                
+                yield return new TestCaseData(new DeleteUserDto
+                {
+                    Validation = true,
+                    Id = Int32.MaxValue,
+                    Role = DaoRequestType.Substitute
+                }).Returns(new List<dynamic> { true, Int32.MaxValue, GetUserParams.Types.Role.Substitute });
+                
+                yield return new TestCaseData(new DeleteUserDto
+                {
+                    Validation = true,
+                    Id = Int32.MaxValue,
+                    Role = DaoRequestType.Employer
+                }).Returns(new List<dynamic> { true, Int32.MaxValue, GetUserParams.Types.Role.Employer });
             }
         }
 
@@ -535,17 +620,18 @@ public class ConverterTestAdministration
                             FirstName = "Testman",
                             LastName = "Tester",
                             PasswordHash = "123",
+                            Salt = "TestSalt",
                             Email = "Testmail@Test.com",
                             Sub = new SubstituteObject
                             {
                                 Address = "Testroad 1",
-                                Age = 18,
+                                BirthDate = Timestamp.FromDateTime(new DateTime(1999,01,01).ToUniversalTime()),
                                 Bio = "I am testman!!!"
                             }
                         }
                     }
                 }).Returns(new List<dynamic>
-                    { 1, "Testman", "Tester", "123", "Testmail@Test.com", "Testroad 1", 18, "I am testman!!!" });
+                    { 1, "Testman", "Tester", "123","TestSalt", "Testmail@Test.com", "Testroad 1", new DateTime(1999,01,01).ToUniversalTime(), "I am testman!!!" });
                 
                 
                 yield return new TestCaseData(new UpdateUserRequest
@@ -555,20 +641,44 @@ public class ConverterTestAdministration
                         Id = Int32.MinValue,
                         UserData = new UserData
                         {
-                            FirstName = Empty,
-                            LastName = Empty,
-                            PasswordHash = Empty,
-                            Email = Empty,
+                            FirstName = String.Empty,
+                            LastName = String.Empty,
+                            PasswordHash = String.Empty,
+                            Salt = String.Empty,
+                            Email = String.Empty,
                             Sub = new SubstituteObject
                             {
-                                Address = Empty,
-                                Age = Int32.MinValue,
-                                Bio = Empty
+                                Address = String.Empty,
+                                BirthDate = Timestamp.FromDateTime(new DateTime(1,01,01).ToUniversalTime()),
+                                Bio = String.Empty
                             }
                         }
                     }
                 }).Returns(new List<dynamic>
-                    { Int32.MinValue, Empty, Empty, Empty, Empty, Empty, Int32.MinValue, Empty });
+                    { Int32.MinValue, String.Empty,String.Empty, String.Empty, String.Empty, String.Empty, String.Empty, new DateTime(1,01,01).ToUniversalTime(), String.Empty });
+               
+                yield return new TestCaseData(new UpdateUserRequest
+                {
+                    User = new UserObject
+                    {
+                        Id = Int32.MaxValue,
+                        UserData = new UserData
+                        {
+                            FirstName = _longString,
+                            LastName = _longString,
+                            PasswordHash = _longString,
+                            Salt = _longString,
+                            Email = _longString,
+                            Sub = new SubstituteObject
+                            {
+                                Address = _longString,
+                                BirthDate = Timestamp.FromDateTime(new DateTime(9999,12,31).ToUniversalTime()),
+                                Bio = _longString
+                            }
+                        }
+                    }
+                }).Returns(new List<dynamic>
+                    { Int32.MaxValue, _longString,_longString, _longString,_longString, _longString, _longString, new DateTime(9999,12,31).ToUniversalTime(), _longString });
             }
         }
 
@@ -586,6 +696,7 @@ public class ConverterTestAdministration
                             FirstName = "Testman",
                             LastName = "Tester",
                             PasswordHash = "123",
+                            Salt = "TestSalt",
                             Email = "Testmail@Test.com",
                             Emp = new EmployerObject
                             {
@@ -595,7 +706,7 @@ public class ConverterTestAdministration
                         }
                     }
                 }).Returns(new List<dynamic>
-                    { 1, "Testman", "Tester", "123", "Testmail@Test.com","Test CEO","Testland"});
+                    { 1, "Testman", "Tester", "123","TestSalt", "Testmail@Test.com","Test CEO","Testland"});
                 
                 yield return new TestCaseData(new UpdateUserRequest
                 {
@@ -604,20 +715,54 @@ public class ConverterTestAdministration
                         Id = Int32.MinValue,
                         UserData = new UserData
                         {
-                            FirstName = Empty,
-                            LastName = Empty,
-                            PasswordHash = Empty,
-                            Email = Empty,
+                            FirstName = String.Empty,
+                            LastName = String.Empty,
+                            PasswordHash = String.Empty,
+                            Salt = String.Empty,
+                            Email = String.Empty,
                             Emp = new EmployerObject
                             {
-                                Title = Empty,
-                                Workplace = Empty
+                                Title = String.Empty,
+                                Workplace = String.Empty
                             }
                         }
                     }
                 }).Returns(new List<dynamic>
-                    { Int32.MinValue, Empty, Empty, Empty, Empty,Empty,Empty});
+                    { Int32.MinValue, String.Empty,String.Empty, String.Empty, String.Empty, String.Empty,String.Empty,String.Empty});
+                
+                yield return new TestCaseData(new UpdateUserRequest
+                {
+                    User = new UserObject
+                    {
+                        Id = Int32.MaxValue,
+                        UserData = new UserData
+                        {
+                            FirstName = _longString,
+                            LastName = _longString,
+                            PasswordHash = _longString,
+                            Salt = _longString,
+                            Email = _longString,
+                            Emp = new EmployerObject
+                            {
+                                Title = _longString,
+                                Workplace = _longString
+                            }
+                        }
+                    }
+                }).Returns(new List<dynamic>
+                    { Int32.MaxValue, _longString, _longString, _longString,_longString, _longString, _longString, _longString });
             }
+        }
+        
+        private static string ExpandString(string str, int length)
+        {
+            if (length <= str.Length) return str.Substring(0, length);
+            var result = new StringBuilder(str);
+            for (var i = str.Length; i < length; i++)
+            {
+                result.Append(str[i % str.Length]);
+            }
+            return result.ToString();
         }
     }
 }

@@ -27,6 +27,7 @@ public class AuthServiceServer : AuthService.AuthServiceBase
                     createUserRequest.User.FirstName,
                     createUserRequest.User.LastName,
                     createUserRequest.User.PasswordHash,
+                    createUserRequest.User.Salt,
                     createUserRequest.User.Email,
                     createUserRequest.User.Sub.BirthDate.ToDateTime(),
                     createUserRequest.User.Sub.Bio,
@@ -35,6 +36,7 @@ public class AuthServiceServer : AuthService.AuthServiceBase
                     createUserRequest.User.FirstName,
                     createUserRequest.User.LastName,
                     createUserRequest.User.PasswordHash,
+                    createUserRequest.User.Salt,
                     createUserRequest.User.Email,
                     createUserRequest.User.Emp.Title,
                     createUserRequest.User.Emp.Workplace);

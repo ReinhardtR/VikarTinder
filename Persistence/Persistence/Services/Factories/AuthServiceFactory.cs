@@ -151,6 +151,8 @@ public class AuthServiceFactory
     {
         if (substitute == null)
             throw new FactoryNullReference("substitute");
+
+        var birthdate = Timestamp.FromDateTime(substitute.BirthDate);
         
         return new UserObject
         {
@@ -161,10 +163,11 @@ public class AuthServiceFactory
                 FirstName = substitute.FirstName,
                 LastName = substitute.LastName,
                 PasswordHash = substitute.PasswordHash,
+                Salt = substitute.Salt,
                 Sub = new SubstituteObject
                 {
                     Address = substitute.Address,
-                    BirthDate = substitute.BirthDate.ToTimestamp(),
+                    BirthDate = birthdate,
                     Bio = substitute.Bio
                 }
             }
@@ -185,6 +188,7 @@ public class AuthServiceFactory
                 FirstName = employer.FirstName,
                 LastName = employer.LastName,
                 PasswordHash = employer.PasswordHash,
+                Salt = employer.Salt,
                 Emp = new EmployerObject
                 {
                     Title = employer.Title,
@@ -226,6 +230,7 @@ public class AuthServiceFactory
                 FirstName = updateUserRequest.User.UserData.FirstName,
                 LastName = updateUserRequest.User.UserData.LastName,
                 PasswordHash = updateUserRequest.User.UserData.PasswordHash,
+                Salt = updateUserRequest.User.UserData.Salt,
                 Email = updateUserRequest.User.UserData.Email,
                 BirthDate = updateUserRequest.User.UserData.Sub.BirthDate.ToDateTime(),
                 Bio = updateUserRequest.User.UserData.Sub.Bio,
@@ -252,6 +257,7 @@ public class AuthServiceFactory
                 FirstName = updateUserRequest.User.UserData.FirstName,
                 LastName = updateUserRequest.User.UserData.LastName,
                 PasswordHash = updateUserRequest.User.UserData.PasswordHash,
+                Salt = updateUserRequest.User.UserData.Salt,
                 Email = updateUserRequest.User.UserData.Email,
                 Title = updateUserRequest.User.UserData.Emp.Title,
                 WorkPlace = updateUserRequest.User.UserData.Emp.Workplace
