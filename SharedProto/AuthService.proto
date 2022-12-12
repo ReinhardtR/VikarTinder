@@ -54,8 +54,8 @@ message CreateUserResponse {
 //LOGIN
 message CreateLoginRequest {
   string email = 1;
-  string password_hash = 2;
 }
+
 message LoginUserResponse {
   UserObject user = 1;
 }
