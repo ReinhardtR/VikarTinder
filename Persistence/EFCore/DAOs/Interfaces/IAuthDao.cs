@@ -6,7 +6,7 @@ namespace EFCore.DAOs.Interfaces;
 
 public interface IAuthDao
 {
-    public Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash, string email, Int32 age, string bio, string address);
+    public Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash, string email, DateTime birthDate, string bio, string address);
     public Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash, string email, string title, string workPlace);
     public Task<User> UpdateUserAsync(User user);
     public Task<User> LoginAsync(string email);

@@ -17,9 +17,6 @@ import com.example.businessserver.dtos.chat.overview.gigs.GetEmployerGigsDTO;
 import com.example.businessserver.dtos.chat.overview.gigs.GigDTO;
 import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 public class ChatServiceFactory {
@@ -135,8 +132,7 @@ public class ChatServiceFactory {
 						message.getChatId(),
 						message.getId(),
 						message.getContent(),
-						LocalDateTime.ofInstant(
-										Instant.ofEpochSecond(message.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
+						SharedFactory.toLocalDateTime(message.getCreatedAt())
 		);
 	}
 

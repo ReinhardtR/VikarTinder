@@ -78,6 +78,31 @@ public class DataContext : DbContext
             .HasMany((e) => e.Gigs)
             .WithOne((g) => g.Employer)
             .IsRequired();
+        
+        Seed();
+    }
+
+    private void Seed()
+    {
+        Employer employer = new()
+        {
+            Email = "emp-test@example.com",
+            Title = "Lager Manager",
+            FirstName = "John",
+            LastName = "Doe",
+            WorkPlace = "Bilka",
+            PasswordHash = "TestingHash"
+        };
+
+        Substitute substitute = new()
+        {
+            Email = "sub-test@example.com",
+            Address = "Testvej 1, 8700 Horsens",
+            FirstName = "Jane",
+            LastName = "Doe",
+            PasswordHash = "TestingHash",
+            
+        };
     }
     
     public override int SaveChanges()

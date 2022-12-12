@@ -1,5 +1,7 @@
 ﻿syntax = "proto3";
 
+import "google/protobuf/timestamp.proto";
+
 option csharp_namespace = "Persistence";
 option java_multiple_files = true;
 
@@ -7,12 +9,12 @@ package AuthService;
 
 //PROTO OBJECTS
 
-message UserObject{
+message UserObject {
   int32 id = 1;
   UserData user_data = 2;
 }
 
-message UserData{
+message UserData {
   string first_name = 1;
   string last_name = 2;
   string password_hash = 3;
@@ -25,15 +27,15 @@ message EmployerObject {
   string workplace = 2;
 }
 
-message SubstituteObject{
-  int32 age = 1;
+message SubstituteObject {
+  google.protobuf.Timestamp birth_date = 1;
   string bio = 2;
   string address = 3;
 }
 
-message GetUserParams{
+message GetUserParams {
   int32 id = 1;
-  enum Role {EMPLOYER = 0 ; SUBSTITUTE = 1;}
+  enum Role {EMPLOYER = 0; SUBSTITUTE = 1;}
   Role role = 2;
 }
 
@@ -41,7 +43,7 @@ message GetUserParams{
 //MESSAGES
 
 //CREATE
-message CreateUserRequest{
+message CreateUserRequest {
   UserData user = 1;
 }
 message CreateUserResponse {
@@ -58,7 +60,7 @@ message LoginUserResponse {
 }
 
 //UPDATE
-message UpdateUserRequest{
+message UpdateUserRequest {
   UserObject user = 1;
 }
 message UpdateUserResponse {

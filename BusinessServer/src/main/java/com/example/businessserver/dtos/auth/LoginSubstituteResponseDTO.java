@@ -1,26 +1,28 @@
 package com.example.businessserver.dtos.auth;
 
+import java.time.LocalDateTime;
+
 public class LoginSubstituteResponseDTO extends LoginUserResponseDTO {
-    private int age;
-    private String bio;
-    private String address;
+	private LocalDateTime birthDate;
+	private String bio;
+	private String address;
 
-    public LoginSubstituteResponseDTO(int id, String firstName, String lastName, String passwordHashed, String email, int age, String bio, String address) {
-        super(id, firstName, lastName, passwordHashed, email, "SUBSTITUTE");
-        this.age = age;
-        this.bio = bio;
-        this.address = address;
-    }
+	public LoginSubstituteResponseDTO(int id, String firstName, String lastName, String passwordHashed, String email, LocalDateTime birthDate, String bio, String address) {
+		super(id, firstName, lastName, passwordHashed, email, "SUBSTITUTE");
+		this.birthDate = birthDate;
+		this.bio = bio;
+		this.address = address;
+	}
 
-    public int getAge() {
-        return age;
-    }
+	public LocalDateTime getBirthDate() {
+		return birthDate;
+	}
 
-    public String getBio() {
-        return bio;
-    }
+	public String getBio() {
+		return bio;
+	}
 
-    public String getAddress() {
-        return address;
-    }
+	public String getAddress() {
+		return address;
+	}
 }

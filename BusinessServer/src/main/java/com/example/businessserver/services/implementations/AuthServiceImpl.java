@@ -1,9 +1,7 @@
 package com.example.businessserver.services.implementations;
 
 import AuthService.AuthServiceGrpc;
-import AuthService.SubstituteObject;
-import AuthService.UserData;
-import AuthService.UserObject;
+import AuthService.LoginUserResponse;
 import com.example.businessserver.dtos.auth.LoginUserResponseDTO;
 import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
 import com.example.businessserver.exceptions.BuildingException;
@@ -28,51 +26,19 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        /*LoginUserResponse returnedUser = chatServiceBlockingStub.login(
-                AuthServiceFactory.createLoginRequest(userName)
-        );
-        UserObjectDTO userObjectDTO;
-        try {
-            userObjectDTO = AuthServiceFactory.userObjectDTO(returnedUser);
-        } catch (BuildingException e) {throw new RuntimeException(e);}
+		LoginUserResponse returnedUser = authServiceBlockingStub.login(
+						AuthServiceFactory.createLoginRequest(userName)
+		);
 
-        return createUser(userObjectDTO);*/
+		LoginUserResponseDTO userObjectDTO;
 
-		if (userName.equals("heysa@hej.hej")) {
-			int id = 1;
-			String firstName = "firstNameTest";
-			String lastName = "lastNameTest";
-			String password = "testPassword";
-			int age = 55;
-			String bio = "This is a test";
-			String address = "testAddress";
-			SubstituteObject s1 = SubstituteObject.newBuilder()
-							.setAge(age)
-							.setBio(bio)
-							.setAddress(address)
-							.build();
-			UserData s2 = UserData.newBuilder()
-							.setFirstName(firstName)
-							.setLastName(lastName)
-							.setPasswordHash("Carlos")
-							.setEmail(userName)
-							.setSub(s1)
-							.build();
-			UserObject s3 = UserObject.newBuilder()
-							.setId(id)
-							.setUserData(s2)
-							.build();
-
-			LoginUserResponseDTO dto;
-			try {
-				dto = AuthServiceFactory.userObjectDTO(s3);
-			} catch (BuildingException e) {
-				throw new RuntimeException(e);
-			}
-			return createUser(dto);
+		try {
+			userObjectDTO = AuthServiceFactory.userObjectDTO(returnedUser);
+		} catch (BuildingException e) {
+			throw new RuntimeException(e);
 		}
 
-		return null;
+		return createUser(userObjectDTO);
 	}
 
 	//TODO: Burde der laves en extended class med claims i stedet for at sige Auth

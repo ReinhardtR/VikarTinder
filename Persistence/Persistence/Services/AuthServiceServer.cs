@@ -28,7 +28,7 @@ public class AuthServiceServer : AuthService.AuthServiceBase
                     createUserRequest.User.LastName,
                     createUserRequest.User.PasswordHash,
                     createUserRequest.User.Email,
-                    createUserRequest.User.Sub.Age,
+                    createUserRequest.User.Sub.BirthDate.ToDateTime(),
                     createUserRequest.User.Sub.Bio,
                     createUserRequest.User.Sub.Address)
                 : await _dao.CreateUserAsync(

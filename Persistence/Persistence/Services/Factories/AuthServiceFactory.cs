@@ -1,4 +1,5 @@
-﻿using Persistence.Dto;
+﻿using Google.Protobuf.WellKnownTypes;
+using Persistence.Dto;
 using Persistence.Dto.Auth;
 using Persistence.Exceptions.ConverterExceptions;
 using Persistence.Models;
@@ -163,7 +164,7 @@ public class AuthServiceFactory
                 Sub = new SubstituteObject
                 {
                     Address = substitute.Address,
-                    Age = substitute.Age,
+                    BirthDate = substitute.BirthDate.ToTimestamp(),
                     Bio = substitute.Bio
                 }
             }
@@ -226,7 +227,7 @@ public class AuthServiceFactory
                 LastName = updateUserRequest.User.UserData.LastName,
                 PasswordHash = updateUserRequest.User.UserData.PasswordHash,
                 Email = updateUserRequest.User.UserData.Email,
-                Age = updateUserRequest.User.UserData.Sub.Age,
+                BirthDate = updateUserRequest.User.UserData.Sub.BirthDate.ToDateTime(),
                 Bio = updateUserRequest.User.UserData.Sub.Bio,
                 Address = updateUserRequest.User.UserData.Sub.Address
             };

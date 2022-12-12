@@ -7,10 +7,6 @@ import com.example.businessserver.dtos.jobconfirmation.CreateJobConfirmationDTO;
 import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
 import com.example.businessserver.dtos.jobconfirmation.JobConfirmationStatus;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
 public class JobConfirmationServiceFactory {
 
 
@@ -67,7 +63,7 @@ public class JobConfirmationServiceFactory {
 						jobConfirmation.getSubstituteId(),
 						jobConfirmation.getEmployerId(),
 						toJobConfirmationStatus(jobConfirmation.getStatus()),
-						LocalDateTime.ofInstant(Instant.ofEpochSecond(jobConfirmation.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
+						SharedFactory.toLocalDateTime(jobConfirmation.getCreatedAt())
 		);
 	}
 

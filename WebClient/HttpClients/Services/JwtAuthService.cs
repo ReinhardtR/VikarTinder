@@ -24,8 +24,8 @@ public class JwtAuthService : IAuthService
     {
         JwtResponseDTO jwtResponse = await _client.AuthenticateAsync(new LoginRequestDTO()
         {
-            Email = "admin@gmail.com",
-            Password = "password"
+            Email = email,
+            Password = password
         });
         
         UpdateJwtToken(jwtResponse.JwtToken);

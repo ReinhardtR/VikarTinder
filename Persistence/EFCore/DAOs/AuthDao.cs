@@ -16,7 +16,7 @@ public class AuthDao : IAuthDao
         _dataContext = dataContext;
     }
 
-    public async Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash, string email, int age, string bio,
+    public async Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash, string email, DateTime birthDate, string bio,
         string address)
     {
         try
@@ -28,7 +28,7 @@ public class AuthDao : IAuthDao
                 PasswordHash = passwordHash,
                 Email = email,
                 Address = address,
-                Age = age,
+                BirthDate = birthDate,
                 Bio = bio
             });
             await _dataContext.SaveChangesAsync();
@@ -91,7 +91,7 @@ public class AuthDao : IAuthDao
             substituteToUpdate.PasswordHash = newSubstituteData.PasswordHash;
 
             substituteToUpdate.Address = newSubstituteData.Address;
-            substituteToUpdate.Age = newSubstituteData.Age;
+            substituteToUpdate.BirthDate = newSubstituteData.BirthDate;
             substituteToUpdate.Bio = newSubstituteData.Bio;
             
             _dataContext.Substitutes.Update(substituteToUpdate);
