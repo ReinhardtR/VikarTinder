@@ -38,38 +38,39 @@ public class AuthServiceImpl implements AuthService {
 
         return createUser(userObjectDTO);*/
 
-        if (userName.equals("heysa@hej.hej"))
-        {
-            int id = 1;
-            String firstName = "firstNameTest";
-            String lastName = "lastNameTest";
-            String password = "testPassword";
-            int age = 55;
-            String bio = "This is a test";
-            String address = "testAddress";
-            SubstituteObject s1 = SubstituteObject.newBuilder()
-                    .setAge(age)
-                    .setBio(bio)
-                    .setAddress(address)
-                    .build();
-            UserData s2 = UserData.newBuilder()
-                    .setFirstName(firstName)
-                    .setLastName(lastName)
-                    .setPasswordHash("Carlos")
-                    .setEmail(userName)
-                    .setSub(s1)
-                    .build();
-            UserObject s3 = UserObject.newBuilder()
-                    .setId(id)
-                    .setUserData(s2)
-                    .build();
+		if (userName.equals("heysa@hej.hej")) {
+			int id = 1;
+			String firstName = "firstNameTest";
+			String lastName = "lastNameTest";
+			String password = "testPassword";
+			int age = 55;
+			String bio = "This is a test";
+			String address = "testAddress";
+			SubstituteObject s1 = SubstituteObject.newBuilder()
+							.setAge(age)
+							.setBio(bio)
+							.setAddress(address)
+							.build();
+			UserData s2 = UserData.newBuilder()
+							.setFirstName(firstName)
+							.setLastName(lastName)
+							.setPasswordHash("Carlos")
+							.setEmail(userName)
+							.setSub(s1)
+							.build();
+			UserObject s3 = UserObject.newBuilder()
+							.setId(id)
+							.setUserData(s2)
+							.build();
 
-            LoginUserResponseDTO dto;
-            try {
-                dto = AuthServiceFactory.userObjectDTO(s3);
-            } catch (BuildingException e) {throw new RuntimeException(e);}
-            return createUser(dto);
-        }
+			LoginUserResponseDTO dto;
+			try {
+				dto = AuthServiceFactory.userObjectDTO(s3);
+			} catch (BuildingException e) {
+				throw new RuntimeException(e);
+			}
+			return createUser(dto);
+		}
 
 		return null;
 	}
@@ -84,10 +85,10 @@ public class AuthServiceImpl implements AuthService {
 		return new User(userObjectDTO.getEmail(), userObjectDTO.getPasswordHashed(), authorities);
 	}
 
-    @Override
-    public void SignUpEmployer(SignUpEmployerRequestDTO employerRequestDTO) {
-        chatServiceBlockingStub.createUser(
-                AuthServiceFactory.createUserRequestEmployer(employerRequestDTO)
-        );
-    }
+	@Override
+	public void SignUpEmployer(SignUpEmployerRequestDTO employerRequestDTO) {
+		authServiceBlockingStub.createUser(
+						AuthServiceFactory.createUserRequestEmployer(employerRequestDTO)
+		);
+	}
 }
