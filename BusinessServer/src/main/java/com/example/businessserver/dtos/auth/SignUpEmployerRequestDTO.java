@@ -1,6 +1,6 @@
 package com.example.businessserver.dtos.auth;
 
-public class RegisterEmployerRequestDTO {
+public class SignUpEmployerRequestDTO {
 	private String firstName;
 	private String lastName;
 	private String password;
@@ -8,7 +8,7 @@ public class RegisterEmployerRequestDTO {
 	private String title;
 	private String workplace;
 
-	public RegisterEmployerRequestDTO(String firstName, String lastName, String password, String email, String title, String workplace) {
+	public SignUpEmployerRequestDTO(String firstName, String lastName, String password, String email, String title, String workplace) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = password;
