@@ -1,8 +1,16 @@
 package com.example.businessserver.logic;
 
-import com.example.businessserver.dtos.chat.*;
+import com.example.businessserver.dtos.chat.CreateChatDTO;
+import com.example.businessserver.dtos.chat.history.ChatHistoryDTO;
+import com.example.businessserver.dtos.chat.history.GetChatHistoryDTO;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
+import com.example.businessserver.dtos.chat.overview.BasicChatDTO;
+import com.example.businessserver.dtos.chat.overview.ChatOverviewDTO;
+import com.example.businessserver.dtos.chat.overview.GetChatOverviewByGigDTO;
+import com.example.businessserver.dtos.chat.overview.GetChatOverviewByUserDTO;
+import com.example.businessserver.dtos.chat.overview.gigs.EmployerGigsDTO;
+import com.example.businessserver.dtos.chat.overview.gigs.GetEmployerGigsDTO;
 import com.example.businessserver.logic.interfaces.ChatLogic;
 import com.example.businessserver.services.interfaces.ChatServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +39,17 @@ public class ChatLogicImpl implements ChatLogic {
 	}
 
 	@Override
-	public ChatOverviewDTO getChatOverview(GetChatOverviewDTO dto) {
-		return chatServiceClient.getChatOverview(dto);
+	public ChatOverviewDTO getChatOverviewByUser(GetChatOverviewByUserDTO dto) {
+		return chatServiceClient.getChatOverviewByUser(dto);
+	}
+
+	@Override
+	public ChatOverviewDTO getChatOverviewByGig(GetChatOverviewByGigDTO dto) {
+		return chatServiceClient.getChatOverviewByGig(dto);
+	}
+
+	@Override
+	public EmployerGigsDTO getEmployerGigs(GetEmployerGigsDTO dto) {
+		return chatServiceClient.getEmployerGigs(dto);
 	}
 }

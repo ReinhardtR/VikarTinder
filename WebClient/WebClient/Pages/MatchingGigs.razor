@@ -40,13 +40,14 @@
 </div>
 
 @code {
-    // TODO: replace with auth stuff
-    private int userId = 1; 
     
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
     private Stack<GigMatchingDTO> gigs = new();
     private bool isLoading = true;
     private string? errorLabel;
-
+    
     protected override async Task OnInitializedAsync()
     {
         await GetGigsAsync();
@@ -58,6 +59,9 @@
         
         try
         {
+            AuthenticationState authState = await AuthState;
+            int userId = AuthClaims.GetUserId(authState);
+            
             GigMatchingDTOs gigsResult = await MatchingService.GetGigsAsync(userId);
             
             gigsResult.PossibleMatches.ToList().ForEach((g) => gigs.Push(g));
@@ -73,6 +77,9 @@
     
     private async void SendGigMatchRequestAsync(bool wantsToMatch)
     {
+        AuthenticationState authState = await AuthState;
+        int userId = AuthClaims.GetUserId(authState);
+        
         GigMatchingDTO gig = gigs.Pop();
         
         await MatchingService.SendGigsMatchRequestAsync(new MatchRequestDTO()

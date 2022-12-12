@@ -1,18 +1,18 @@
 ﻿using EFCore.DAOs.Interfaces;
 using Grpc.Core;
 using Persistence.Dto;
-using Persistence.Dto.Administration;
+using Persistence.Dto.Auth;
 using Persistence.Exceptions.DaoExceptions;
 using Persistence.Models;
 using Persistence.Services.Factories;
 
 namespace Persistence.Services;
 
-public class AdministrationService : Persistence.AdministrationService.AdministrationServiceBase
+public class AuthServiceServer : AuthService.AuthServiceBase
 {
-    private readonly IAdministrationDao _dao;
+    private readonly IAuthDao _dao;
 
-    public AdministrationService(IAdministrationDao dao)
+    public AuthServiceServer(IAuthDao dao)
     {
         _dao = dao;
     }
@@ -40,8 +40,8 @@ public class AdministrationService : Persistence.AdministrationService.Administr
                     createUserRequest.User.Emp.Workplace);
             
             CreateUserResponse userResponse = user is Substitute
-                ? AdministrationFactory.CreateSubstiuteUserResponse((Substitute)user)
-                : AdministrationFactory.CreateEmployerUserResponse((Employer)user);
+                ? AuthServiceFactory.CreateSubstituteUserResponse((Substitute)user)
+                : AuthServiceFactory.CreateEmployerUserResponse((Employer)user);
 
             return userResponse;
         }
@@ -58,7 +58,7 @@ public class AdministrationService : Persistence.AdministrationService.Administr
         try
         {
             User user = await _dao.LoginAsync(createLoginRequest.Email);
-            LoginUserResponse userResponse = AdministrationFactory.CreateLoginUserResponse(user);
+            LoginUserResponse userResponse = AuthServiceFactory.CreateLoginUserResponse(user);
 
             return userResponse;
         }
@@ -72,12 +72,12 @@ public class AdministrationService : Persistence.AdministrationService.Administr
         ServerCallContext serverCallContext)
     {
         User user = updateUserRequest.User.UserData.RoleCase == UserData.RoleOneofCase.Sub
-            ? await _dao.UpdateUserAsync(AdministrationFactory.MakeSubstituteDomainObject(updateUserRequest))
-            : await _dao.UpdateUserAsync(AdministrationFactory.MakeEmployerDomainObject(updateUserRequest));
+            ? await _dao.UpdateUserAsync(AuthServiceFactory.MakeSubstituteDomainObject(updateUserRequest))
+            : await _dao.UpdateUserAsync(AuthServiceFactory.MakeEmployerDomainObject(updateUserRequest));
 
         UpdateUserResponse userResponse = user is Substitute
-            ? AdministrationFactory.UpdateSubstituteUserResponse((Substitute)user)
-            : AdministrationFactory.UpdateEmployerUserResponse((Employer)user);
+            ? AuthServiceFactory.UpdateSubstituteUserResponse((Substitute)user)
+            : AuthServiceFactory.UpdateEmployerUserResponse((Employer)user);
 
         return userResponse;
     }
@@ -91,7 +91,7 @@ public class AdministrationService : Persistence.AdministrationService.Administr
         
         DeleteUserDto deletedUser = await _dao.DeleteAccount(deleteUserRequest.User.Id, userRole);
 
-        DeleteUserResponse deletedUserResponse = AdministrationFactory.CreateDeleteUserResponse(deletedUser);
+        DeleteUserResponse deletedUserResponse = AuthServiceFactory.CreateDeleteUserResponse(deletedUser);
 
         return deletedUserResponse;
     }
@@ -104,7 +104,7 @@ public class AdministrationService : Persistence.AdministrationService.Administr
             : DaoRequestType.Employer;
         User user = await _dao.GetUser(getUserRequest.User.Id, role);
 
-        GetUserResponse userResponse = AdministrationFactory.CreateGetUserResponse(user);
+        GetUserResponse userResponse = AuthServiceFactory.CreateGetUserResponse(user);
 
         return userResponse;
     }

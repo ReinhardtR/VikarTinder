@@ -1,10 +1,10 @@
 ﻿using Persistence.Dto;
-using Persistence.Dto.Administration;
+using Persistence.Dto.Auth;
 using Persistence.Models;
 
 namespace EFCore.DAOs.Interfaces;
 
-public interface IAdministrationDao
+public interface IAuthDao
 {
     public Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash, string email, Int32 age, string bio, string address);
     public Task<User> CreateUserAsync(string firstName, string lastName, string passwordHash, string email, string title, string workPlace);

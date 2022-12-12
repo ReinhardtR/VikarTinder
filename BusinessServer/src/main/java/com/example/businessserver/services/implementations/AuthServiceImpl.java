@@ -1,6 +1,9 @@
 package com.example.businessserver.services.implementations;
 
-import AdministrationService.*;
+import AuthService.AuthServiceGrpc;
+import AuthService.SubstituteObject;
+import AuthService.UserData;
+import AuthService.UserObject;
 import com.example.businessserver.dtos.auth.LoginUserResponseDTO;
 import com.example.businessserver.dtos.auth.SignUpEmployerRequestDTO;
 import com.example.businessserver.exceptions.BuildingException;
@@ -20,11 +23,11 @@ import java.util.List;
 // TODO : Refactor navngivning til gruppens standard
 @Service
 public class AuthServiceImpl implements AuthService {
-    @GrpcClient("grpc-server")
-    private AdministrationServiceGrpc.AdministrationServiceBlockingStub chatServiceBlockingStub;
+	@GrpcClient("grpc-server")
+	private AuthServiceGrpc.AuthServiceBlockingStub authServiceBlockingStub;
 
-    @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+	@Override
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         /*LoginUserResponse returnedUser = chatServiceBlockingStub.login(
                 AuthServiceFactory.createLoginRequest(userName)
         );
@@ -68,18 +71,18 @@ public class AuthServiceImpl implements AuthService {
             return createUser(dto);
         }
 
-        return null;
-    }
+		return null;
+	}
 
-    //TODO: Burde der laves en extended class med claims i stedet for at sige Auth
-    private UserDetails createUser(LoginUserResponseDTO userObjectDTO) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + userObjectDTO.getRole()));
-        authorities.add(new SimpleGrantedAuthority("NAMEF_" + userObjectDTO.getFirstName()));
-        authorities.add(new SimpleGrantedAuthority("NAMEL_" + userObjectDTO.getLastName()));
-        authorities.add(new SimpleGrantedAuthority("ID_" + userObjectDTO.getId()));
-        return new User(userObjectDTO.getEmail(), userObjectDTO.getPasswordHashed(), authorities);
-    }
+	//TODO: Burde der laves en extended class med claims i stedet for at sige Auth
+	private UserDetails createUser(LoginUserResponseDTO userObjectDTO) {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_" + userObjectDTO.getRole()));
+		authorities.add(new SimpleGrantedAuthority("NAMEF_" + userObjectDTO.getFirstName()));
+		authorities.add(new SimpleGrantedAuthority("NAMEL_" + userObjectDTO.getLastName()));
+		authorities.add(new SimpleGrantedAuthority("ID_" + userObjectDTO.getId()));
+		return new User(userObjectDTO.getEmail(), userObjectDTO.getPasswordHashed(), authorities);
+	}
 
     @Override
     public void SignUpEmployer(SignUpEmployerRequestDTO employerRequestDTO) {

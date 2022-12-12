@@ -1,4 +1,4 @@
-﻿namespace Persistence.Dto.Administration;
+﻿namespace Persistence.Dto.Auth;
 
 public class DeleteUserDto
 {

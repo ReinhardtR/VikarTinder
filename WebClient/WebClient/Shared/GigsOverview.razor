@@ -1,5 +1,9 @@
+@using HttpClients.Services
+@using WebClient.Utils
+@using HttpClients
+@inject ChatService ChatService
 
-@if (gigs == null && errorLabel == null)
+@if (gigsDto == null && errorLabel == null)
 {
     <p>Loading...</p>
 }
@@ -7,18 +11,18 @@ else if (errorLabel != null)
 {
     <p>Error: @errorLabel</p>
 }
-else if (gigs != null)
+else if (gigsDto != null)
 {
     <MudStack>
         <MudText Typo="Typo.h6">Dine stillinger</MudText>
         <MudGrid>
-            @foreach (int gig in gigs)
+            @foreach (GigDTO gig in gigsDto.Gigs)
             {
                 <MudItem xs="6">
                     <MudButton FullWidth="true" OnClick="() => OnGigSelected(gig)">
                         <MudPaper Width="100%" Class="py-12">
                             <MudStack Justify="Justify.Center" AlignItems="AlignItems.Center">
-                                <MudText Typo="Typo.h6">@gig</MudText>
+                                <MudText Typo="Typo.h6">ID: @gig.Id</MudText>
                             </MudStack>
                         </MudPaper>
                     </MudButton>
@@ -31,10 +35,12 @@ else if (gigs != null)
 @code {
     
     [Parameter]
-    public Action<int> OnGigSelected { get; set; }
+    public Action<GigDTO> OnGigSelected { get; set; }
     
-    // TODO replace with real gigs
-    private ICollection<int>? gigs;
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    
+    private EmployerGigsDTO? gigsDto;
     private string? errorLabel; 
     
     protected override async Task OnInitializedAsync()
@@ -48,11 +54,13 @@ else if (gigs != null)
         {
             errorLabel = null;
 
-            gigs = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            AuthenticationState authState = await AuthState;
+            int userId = AuthClaims.GetUserId(authState);
+            gigsDto = await ChatService.GetEmployerGigsAsync(userId);
         }
         catch (Exception e)
         {
-            gigs = null;
+            gigsDto = null;
             
             errorLabel = e.Message;
         }

@@ -1,17 +1,17 @@
 ﻿using EFCore.DAOs.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Dto;
-using Persistence.Dto.Administration;
+using Persistence.Dto.Auth;
 using Persistence.Exceptions.DaoExceptions;
 using Persistence.Models;
 
 namespace Persistence.DAOs;
 
-public class AdministrationDao : IAdministrationDao
+public class AuthDao : IAuthDao
 {
     private readonly DataContext _dataContext;
     
-    public AdministrationDao(DataContext dataContext)
+    public AuthDao(DataContext dataContext)
     {
         _dataContext = dataContext;
     }

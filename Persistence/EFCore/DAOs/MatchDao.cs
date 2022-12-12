@@ -9,10 +9,12 @@ namespace Persistence.DAOs;
 public class MatchDao : IMatchDao
 {
     private readonly DataContext _dataContext;
+    private readonly IChatDao _chatDao;
 
-    public MatchDao(DataContext dataContext)
+    public MatchDao(DataContext dataContext, IChatDao chatDao)
     {
         _dataContext = dataContext;
+        _chatDao = chatDao;
     }
     
     public async Task<IdsForMatchDto> MatchingGig(ToBeMatchedDto dto)
@@ -50,7 +52,6 @@ public class MatchDao : IMatchDao
         
         return idsForMatch;
     }
-    
     
     public async Task<IdsForMatchDto> MatchingSubstitute(ToBeMatchedDto dto)
     {
@@ -181,10 +182,7 @@ public class MatchDao : IMatchDao
         _dataContext.Employers.Update(employer);
         await _dataContext.SaveChangesAsync();
     }
-
     
-    //TODO: Lige no returnerer den om der er en match mellem givet Sub og Emp, skal i bruge alle gigs der er matched?
-    //TODO: Eller vil i give en specifik gig for at se om den er matched eller what the frank is going on
     private async Task<CheckMatchDto> CheckMatchQuery(IdsForMatchDto dto)
     {
         //Check om employer-substitute har et element med hhv. subid og empid
@@ -225,14 +223,13 @@ public class MatchDao : IMatchDao
                 WasAMatch = false
             };
 
-        if (result != null)
-        {
-            Console.WriteLine("MATCH: " + checkDto.WasAMatch + checkDto.GigId);
-        }
-        else
-        {
-            Console.WriteLine("NO MATCH");
-        }
+        if (!checkDto.WasAMatch) return checkDto;
+        
+        // Create chat for the match
+        int substituteId = dto.SubstituteId;
+        int employerId = dto.EmployerId;
+        int gigId = checkDto.GigId;
+        await _chatDao.CreateChatAsync(gigId, substituteId, employerId);
 
         return checkDto;
     }
@@ -240,7 +237,7 @@ public class MatchDao : IMatchDao
     private Task<Employer?> GetEmployerById(int id)
     {
         return _dataContext.Employers.Include((e) => e.EmployerSubstitutes).FirstOrDefaultAsync(emp =>
-            emp.Id == id);;
+            emp.Id == id);
     }
 
     private Task<Substitute?> GetSubstituteById(int id)

@@ -10,6 +10,11 @@ public class ChatService
         _client = client;
     }
 
+    public Task<EmployerGigsDTO> GetEmployerGigsAsync(int employerId)
+    {
+        return _client.GetEmployerGigsAsync(employerId);
+    }
+
     public Task<BasicChatDTO> CreateChatAsync(CreateChatDTO dto)
     {
         return _client.CreateChatAsync(dto);
@@ -33,8 +38,13 @@ public class ChatService
         return chatHistoryDto;
     }
     
-    public Task<ChatOverviewDTO> GetChatOverviewAsync(int id)
+    public Task<ChatOverviewDTO> GetChatOverviewByUserAsync(int userId)
     {
-        return _client.GetChatOverviewAsync(id);
+        return _client.GetChatOverviewByUserAsync(userId);
+    }
+    
+    public Task<ChatOverviewDTO> GetChatOverviewByGigAsync(int gigId)
+    {
+        return _client.GetChatOverviewByGigAsync(gigId);
     }
 }

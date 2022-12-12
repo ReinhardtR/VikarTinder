@@ -1,9 +1,20 @@
 package com.example.businessserver.services.factories;
 
 import ChatService.*;
-import com.example.businessserver.dtos.chat.*;
+import com.example.businessserver.dtos.chat.CreateChatDTO;
+import com.example.businessserver.dtos.chat.history.ChatEmployerDTO;
+import com.example.businessserver.dtos.chat.history.ChatHistoryDTO;
+import com.example.businessserver.dtos.chat.history.ChatSubstituteDTO;
+import com.example.businessserver.dtos.chat.history.GetChatHistoryDTO;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
+import com.example.businessserver.dtos.chat.overview.BasicChatDTO;
+import com.example.businessserver.dtos.chat.overview.ChatOverviewDTO;
+import com.example.businessserver.dtos.chat.overview.GetChatOverviewByGigDTO;
+import com.example.businessserver.dtos.chat.overview.GetChatOverviewByUserDTO;
+import com.example.businessserver.dtos.chat.overview.gigs.EmployerGigsDTO;
+import com.example.businessserver.dtos.chat.overview.gigs.GetEmployerGigsDTO;
+import com.example.businessserver.dtos.chat.overview.gigs.GigDTO;
 import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
 
 import java.time.Instant;
@@ -14,23 +25,35 @@ import java.util.List;
 public class ChatServiceFactory {
 	// Create Chat
 	public static CreateChatRequest toCreateChatRequest(CreateChatDTO dto) {
-		return null;
-		/*return CreateChatRequest
+		return CreateChatRequest
 						.newBuilder()
-						.setEmployer(toChatUserObject(dto.getEmployerId()))
-						.setSubstitute(toChatUserObject(dto.getSubstituteId()))
+						.setEmployer(toEmployerObject(dto.getEmployerId()))
+						.setSubstitute(toSubstituteObject(dto.getSubstituteId()))
 						.build();
-	*/}
+	}
+
+	private static SubstituteUserObject toSubstituteObject(int substituteId) {
+		return SubstituteUserObject
+						.newBuilder()
+						.setId(substituteId)
+						.build();
+	}
+
+	private static EmployerUserObject toEmployerObject(int employerId) {
+		return EmployerUserObject
+						.newBuilder()
+						.setId(employerId)
+						.build();
+	}
 
 
 	// Chat History
 	public static GetChatHistoryRequest toGetChatHistoryRequest(GetChatHistoryDTO dto) {
-		return null;
-		/*return GetChatHistoryRequest
+		return GetChatHistoryRequest
 						.newBuilder()
 						.setChatId(dto.getChatId())
 						.build();
-	*/}
+	}
 
 	public static ChatHistoryDTO toChatHistoryDto(GetChatHistoryResponse response) {
 		List<MessageDTO> messages = response.getMessagesList()
@@ -40,36 +63,49 @@ public class ChatServiceFactory {
 
 		JobConfirmationDTO jobConfirmation = JobConfirmationServiceFactory.toJobConfirmationDTO(response.getJobConfirmation());
 
-		return new ChatHistoryDTO(messages, jobConfirmation, response.getSubstitute().getId(), response.getEmployer().getId());
+		return new ChatHistoryDTO(messages, jobConfirmation, toChatEmployerDTO(response.getEmployer()), toChatSubstituteDTO(response.getSubstitute()));
 
+	}
+
+	public static ChatEmployerDTO toChatEmployerDTO(EmployerUserObject employer) {
+		return new ChatEmployerDTO(employer.getId(), employer.getFirstName(), employer.getLastName());
+	}
+
+	public static ChatSubstituteDTO toChatSubstituteDTO(SubstituteUserObject substitute) {
+		return new ChatSubstituteDTO(substitute.getId(), substitute.getFirstName(), substitute.getLastName());
 	}
 
 
 	// Send Message
 	public static SendMessageRequest toSendMessageRequest(SendMessageDTO dto) {
-		return null;
-		/*return SendMessageRequest
+		return SendMessageRequest
 						.newBuilder()
 						.setChatId(dto.getChatId())
-						.setAuthor(toChatUserObject(dto.getAuthorId()))
+						.setAuthorId(dto.getAuthorId())
 						.setContent(dto.getContent())
 						.build();
-	*/}
+	}
 
 	// Chat Overview
-	public static GetChatOverviewRequest toGetChatOverviewRequest(GetChatOverviewDTO dto) {
-		return null;
-		/*return GetChatOverviewRequest
+	public static GetUserChatsRequest toGetUserChatsRequest(GetChatOverviewByUserDTO dto) {
+		return GetUserChatsRequest
 						.newBuilder()
-						.setUser(toChatUserObject(dto.getUserId()))
+						.setUserId(dto.getUserId())
 						.build();
-	*/}
+	}
+
+	public static GetGigChatsRequest toGetGigsChatsRequest(GetChatOverviewByGigDTO dto) {
+		return GetGigChatsRequest
+						.newBuilder()
+						.setGigId(dto.getGigId())
+						.build();
+	}
 
 	public static BasicChatDTO toBasicChatDTO(CreateChatResponse response) {
 		return new BasicChatDTO(response.getId(), response.getSubstitute().getId(), response.getEmployer().getId());
 	}
 
-	public static ChatOverviewDTO toChatOverviewDTO(GetChatOverviewResponse response) {
+	public static ChatOverviewDTO toChatOverviewDTO(GetUserChatsResponse response) {
 		List<BasicChatDTO> chats = response.getChatsList()
 						.stream()
 						.map(ChatServiceFactory::toBasicChatDTO)
@@ -78,46 +114,66 @@ public class ChatServiceFactory {
 		return new ChatOverviewDTO(chats);
 	}
 
+	public static ChatOverviewDTO toChatOverviewDTO(GetGigChatsResponse response) {
+		List<BasicChatDTO> chats = response.getChatsList()
+						.stream()
+						.map(ChatServiceFactory::toBasicChatDTO)
+						.toList();
+
+		return new ChatOverviewDTO(chats);
+	}
+
+
 	// Shared Methods
 	public static BasicChatDTO toBasicChatDTO(ChatOverviewObject chat) {
 		return new BasicChatDTO(chat.getId(), chat.getSubstitute().getId(), chat.getEmployer().getId());
 	}
 
 	public static MessageDTO toMessageDTO(MessageObject message) {
-		return null;
-		/*return new MessageDTO(
+		return new MessageDTO(
 						message.getId(),
 						message.getChatId(),
-						message.getAuthor().getId(),
+						message.getId(),
 						message.getContent(),
 						LocalDateTime.ofInstant(
 										Instant.ofEpochSecond(message.getCreatedAt().getSeconds()), ZoneId.of("UTC"))
-		);*/
+		);
 	}
 
 	public static MessageObject toMessageObject(MessageDTO dto) {
-		return null;
-		/*return MessageObject
+		return MessageObject
 						.newBuilder()
 						.setId(dto.getId())
 						.setChatId(dto.getChatId())
-						.setAuthor(toChatUserObject(dto.getAuthorId()))
+						.setAuthorId(dto.getAuthorId())
 						.setContent(dto.getContent())
 						.build();
-*/
 	}
 
-	private static ChatObject toChatUserObject(int authorId) {
-		return ChatObject.newBuilder()
-						.setId(authorId)
-						.build();
-	}
-
-	//TO DO Hvaa skal disse ikke bruges i future? Venter lige med at slette dem.
-	private ChatObject toChatUserObject(ChatUserDTO dto) {
-		return ChatObject
+	public static GetGigChatsRequest toGetGigChatsRequest(GetChatOverviewByGigDTO dto) {
+		return GetGigChatsRequest
 						.newBuilder()
-						.setId(dto.getId())
+						.setGigId(dto.getGigId())
 						.build();
+	}
+
+	public static GetEmployerGigsRequest toGetEmployerGigsRequest(GetEmployerGigsDTO dto) {
+		return GetEmployerGigsRequest
+						.newBuilder()
+						.setEmployerId(dto.getEmployerId())
+						.build();
+	}
+
+	public static EmployerGigsDTO toEmployerGigsDTO(GetEmployerGigsResponse response) {
+		List<GigDTO> gigs = response.getGigsList()
+						.stream()
+						.map(ChatServiceFactory::toGigDTO)
+						.toList();
+
+		return new EmployerGigsDTO(gigs);
+	}
+
+	public static GigDTO toGigDTO(GigObject gig) {
+		return new GigDTO(gig.getId());
 	}
 }

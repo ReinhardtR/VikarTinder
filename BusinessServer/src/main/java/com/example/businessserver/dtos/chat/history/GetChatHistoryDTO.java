@@ -1,4 +1,4 @@
-package com.example.businessserver.dtos.chat;
+package com.example.businessserver.dtos.chat.history;
 
 public class GetChatHistoryDTO {
 	private int chatId;

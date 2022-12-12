@@ -22,9 +22,9 @@ public class JwtAuthService : IAuthService
     
     public async Task LoginAsync(string email, string password)
     {
-        JwtResponse jwtResponse = await _client.AuthenticateAsync(new JwtRequest()
+        JwtResponseDTO jwtResponse = await _client.AuthenticateAsync(new LoginRequestDTO()
         {
-            Username = "admin",
+            Email = "admin@gmail.com",
             Password = "password"
         });
         

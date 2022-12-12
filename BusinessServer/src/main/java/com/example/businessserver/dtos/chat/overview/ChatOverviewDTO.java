@@ -1,4 +1,4 @@
-package com.example.businessserver.dtos.chat;
+package com.example.businessserver.dtos.chat.overview;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ public class ChatOverviewDTO {
 		return chats;
 	}
 
-	@Override public String toString()
-	{
+	@Override
+	public String toString() {
 		return "[" + chats + "]";
 	}
 }

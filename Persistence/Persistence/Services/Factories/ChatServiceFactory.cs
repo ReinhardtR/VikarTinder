@@ -27,26 +27,28 @@ public class ChatServiceFactory
             return new CreateChatResponse
         {
             Id = chat.Id,
+            GigId = chat.GigId,
             Employer = ToEmployerUserObject(new Employer {Id = chat.EmployerId}),
             Substitute = ToSubstituteUserObject(new Substitute{Id = chat.SubstituteId})
         };
     }
 
-    public static GetChatOverviewResponse ToGetChatOverviewResponse(List<Chat> chats)
+    public static GetUserChatsResponse ToGetUserChatsResponse(List<Chat> chats)
     {
-        RepeatedField<ChatOverviewObject> chatOverviewObjects = new RepeatedField<ChatOverviewObject>();
+        RepeatedField<ChatOverviewObject> chatOverviewObjects = new();
 
         foreach (Chat chat in chats)
         {
             chatOverviewObjects.Add(new ChatOverviewObject()
             {
                 Id = chat.Id,
-                Employer = ToEmployerUserObject(new Employer{Id = chat.EmployerId}),
-                Substitute = ToSubstituteUserObject(new Substitute{Id = chat.SubstituteId}) //skal ændres når vi merger usecases
+                GigId = chat.GigId,
+                Employer = ToEmployerUserObject(new Employer{ Id = chat.EmployerId }),
+                Substitute = ToSubstituteUserObject(new Substitute{ Id = chat.SubstituteId })
             });
         }
         
-        GetChatOverviewResponse getChatOverviewResponse = new()
+        GetUserChatsResponse getChatOverviewResponse = new()
         {
             Chats = { chatOverviewObjects }
         };
@@ -58,14 +60,18 @@ public class ChatServiceFactory
     {
         return new EmployerUserObject()
         {
-            Id = employer.Id
+            Id = employer.Id,
+            FirstName = employer.FirstName,
+            LastName = employer.LastName
         };
     }
     private static SubstituteUserObject ToSubstituteUserObject(Substitute substitute)
     {
         return new SubstituteUserObject()
         {
-            Id = substitute.Id
+            Id = substitute.Id,
+            FirstName = substitute.FirstName,
+            LastName = substitute.LastName
         };
     }
 
@@ -104,5 +110,48 @@ public class ChatServiceFactory
             Employer = ToEmployerUserObject(new Employer { Id = chat.EmployerId }),
             Substitute = ToSubstituteUserObject(new Substitute { Id = chat.SubstituteId })
         };
+    }
+
+    public static GetGigChatsResponse ToGigChatsResponse(List<Chat> chats)
+    {
+        RepeatedField<ChatOverviewObject> chatOverviewObjects = new();
+
+        foreach (Chat chat in chats)
+        {
+            chatOverviewObjects.Add(new ChatOverviewObject()
+            {
+                Id = chat.Id,
+                GigId = chat.GigId,
+                Employer = ToEmployerUserObject(new Employer{ Id = chat.EmployerId }),
+                Substitute = ToSubstituteUserObject(new Substitute{ Id = chat.SubstituteId })
+            });
+        }
+        
+        GetGigChatsResponse getGigChatsResponse = new()
+        {
+            Chats = { chatOverviewObjects }
+        };
+        
+        return getGigChatsResponse;
+    }
+
+    public static GetEmployerGigsResponse ToGetEmployerGigsResponse(List<Gig> gigs)
+    {
+        RepeatedField<GigObject> gigObjects = new();
+
+        foreach (Gig gig in gigs)
+        {
+            gigObjects.Add(new GigObject()
+            {
+                Id = gig.Id,
+            });
+        }
+        
+        GetEmployerGigsResponse getEmployerGigsResponse = new()
+        {
+            Gigs = { gigObjects }
+        };
+        
+        return getEmployerGigsResponse;
     }
 }

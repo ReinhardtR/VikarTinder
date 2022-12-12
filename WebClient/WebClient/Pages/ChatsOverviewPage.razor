@@ -1,5 +1,6 @@
 @page "/chat"
 @using WebClient.Utils
+@using HttpClients
 @attribute [Authorize]
 
 <PageTitle>Chat</PageTitle>
@@ -32,9 +33,9 @@
         StateHasChanged();
     }
     
-    private void OnGigSelected(int gigId)
+    private void OnGigSelected(GigDTO gig)
     {
-        selectedGigId = gigId;
+        selectedGigId = gig.Id;
         StateHasChanged();
     }
 
