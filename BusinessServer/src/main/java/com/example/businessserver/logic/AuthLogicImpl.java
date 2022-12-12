@@ -1,135 +1,149 @@
 package com.example.businessserver.logic;
 
-import com.example.businessserver.dtos.auth.JwtResponseDTO;
-import com.example.businessserver.dtos.auth.LoginRequestDTO;
-import com.example.businessserver.dtos.auth.RegisterEmployerRequestDTO;
-import com.example.businessserver.dtos.auth.RegisterSubstituteRequestDTO;
+import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import com.example.businessserver.logic.interfaces.AuthLogic;
 import com.example.businessserver.services.implementations.AuthServiceImpl;
 import com.example.businessserver.services.utils.JWTUtility;
+import com.example.businessserver.services.utils.UserSaltHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.Arrays;
 import java.util.regex.Pattern;
 
 @Service
 public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
-	private final Pattern emailPattern;
-	@Autowired
-	private JWTUtility jwtUtility;
-	@Autowired
-	private AuthServiceImpl userService;
-	private Pbkdf2PasswordEncoder encoder = new Pbkdf2PasswordEncoder();
+    @Autowired
+    private JWTUtility jwtUtility;
 
-	public AuthLogicImpl() {
-		//Taget fra geeksforgeeks      https://www.geeksforgeeks.org/check-email-address-valid-not-java/
-		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
-						"[a-zA-Z0-9_+&*-]+)*@" +
-						"(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-						"A-Z]{2,7}$";
-		emailPattern = Pattern.compile(emailRegex);
-	}
+    @Autowired
+    private AuthServiceImpl userService;
 
-	@Override
-	public JwtResponseDTO login(LoginRequestDTO loginRequest) throws DTOException {
-		objectNullCheck(loginRequest, "loginRequest");
-		checkEmail(loginRequest.getEmail());
-		checkPassword(loginRequest.getPassword());
-		UserDetails userDetails = userService.loadUserByUsername(loginRequest.getEmail());
-		String password = userDetails.getPassword();
-		return new JwtResponseDTO(jwtUtility.generateToken(userDetails));
-	}
+    private final Pattern emailPattern;
 
-	@Override
-	public void signUpEmployer(RegisterEmployerRequestDTO requestDTO) throws DTOException {
-		objectNullCheck(requestDTO, "signUpRequest");
-		checkEmail(requestDTO.getEmail());
-		checkPassword(requestDTO.getPassword());
-		checkStringMinimumValues(requestDTO.getFirstName(), "First name", 1);
-		checkStringMinimumValues(requestDTO.getLastName(), "Last name", 1);
-		checkStringMinimumValues(requestDTO.getTitle(), "Title", 1);
-		checkStringMinimumValues(requestDTO.getWorkplace(), "Workplace", 1);
-		userService.SignUpEmployer(requestDTO);
-	}
+    private final int nameMinLength = 1;
 
-	@Override
-	public void signUpSubstitute(RegisterSubstituteRequestDTO requestDTO) throws DTOException {
-		objectNullCheck(requestDTO, "signUpRequest");
-		checkEmail(requestDTO.getEmail());
-		checkPassword(requestDTO.getPassword());
-		checkStringMinimumValues(requestDTO.getFirstName(), "First name", 1);
-		checkStringMinimumValues(requestDTO.getLastName(), "Last name", 1);
-		//TODO : Check dob når det implementeres
-		checkBio(requestDTO.getBio());
-		checkStringMinimumValues(requestDTO.getAddress(), "Address", 1);
-		userService.SignUpSubstitute(requestDTO);
-	}
+    public AuthLogicImpl() {
+        //Taget fra geeksforgeeks      https://www.geeksforgeeks.org/check-email-address-valid-not-java/
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+        emailPattern = Pattern.compile(emailRegex);
+    }
 
-	private void checkBio(String bio) throws DTOException { //TODO:Burde generalise de er string checks
-		objectNullCheck(bio, "Bio");
-		if (bio.length() > 300)
-			throw new DTOOutOfBoundsException("Bio cant be over 300 characters");
-	}
+    @Override
+    public JwtResponseDTO login(LoginRequestDTO loginRequest) throws DTOException {
+        objectNullCheck(loginRequest, "loginRequest");
+        checkEmail(loginRequest.getEmail());
+        checkPassword(loginRequest.getPassword());
 
-	public void checkPassword(String password) throws DTOException {
-		objectNullCheck(password, "Password");
-		checkStringMinimumValues(password, "Password", 6);
-		char[] characters = password.toCharArray();
-		for (int i = 0; i < characters.length; i++) {
-			if (Character.isUpperCase(characters[i]))
-				break;
-			if (i == characters.length - 1)
-				throw new DTOOutOfBoundsException("Password needs at least one uppercase letter");
-		}
-	}
+        UserSaltHolder userDetails = (UserSaltHolder) userService.loadUserByUsername(loginRequest.getEmail());
+        String hashedPassword = userDetails.getPassword();
+        checkPasswordsForMatch(hashedPassword, loginRequest.getPassword(), userDetails.getSalt());
+        return new JwtResponseDTO(jwtUtility.generateToken(userDetails));
+    }
 
-	public void checkEmail(String email) throws DTOException {
-		objectNullCheck(email, "Email");
-		if (!emailPattern.matcher(email).matches())
-			throw new DTOOutOfBoundsException("Email does not follow the email standard");
-	}
+    @Override
+    public void signUpEmployer(SignUpEmployerRequestDTO requestDTO) throws DTOException {
+        objectNullCheck(requestDTO, "signUpRequest");
+        checkEmail(requestDTO.getEmail());
+        checkPassword(requestDTO.getPassword());
+        checkStringMinimumValues(requestDTO.getFirstName(), "Firstname", nameMinLength);
+        checkStringMinimumValues(requestDTO.getLastName(), "Lastname", nameMinLength);
+        checkStringMinimumValues(requestDTO.getTitle(), "Title", 1);
+        checkStringMinimumValues(requestDTO.getWorkplace(), "Workplace", 1);
+        String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
+        userService.SignUpEmployer(new SignUpWrapperEmployerDTO(saltHashedPassword[0], saltHashedPassword[1], requestDTO));
+    }
 
+    @Override
+    public void signUpSubstitute(SignUpSubstituteRequestDTO requestDTO) throws DTOException {
+        objectNullCheck(requestDTO, "signUpRequest");
+        checkEmail(requestDTO.getEmail());
+        checkPassword(requestDTO.getPassword());
+        checkStringMinimumValues(requestDTO.getFirstName(), "Firstname", nameMinLength);
+        checkStringMinimumValues(requestDTO.getLastName(), "Lastname", nameMinLength);
+        checkAge(requestDTO.getBirthDate().toLocalDate());
+        checkBio(requestDTO.getBio());
+        checkStringMinimumValues(requestDTO.getAddress(), "Address", 1);
 
-	public void checkStringMinimumValues(String name, String typeOfName, int min) throws DTOException {
-		objectNullCheck(name, typeOfName);
-		if (name.trim().length() < min)
-			throw new DTOOutOfBoundsException(typeOfName + " has to be at least " + min + " character long");
-	}
+        String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
+        userService.SignUpSubstitute(new SignUpWrapperSubstituteDTO(saltHashedPassword[0], saltHashedPassword[1], requestDTO));
+    }
 
-	public void checkPasswordsForMatch(String savedPassword, String loginRequestPassword, String salt) throws DTOOutOfBoundsException {
-		String requestWithSalt = generatePasswordWithKnownSalt(salt, loginRequestPassword);
-		if (!savedPassword.equals(loginRequestPassword))
-			throw new DTOOutOfBoundsException("Wrong Password");
-	}
+    public void checkAge(LocalDate dob) throws DTOOutOfBoundsException {
+        int yearsDifference = Period.between(dob, LocalDate.now()).getYears();
+        if (yearsDifference < 18 || yearsDifference > 99)
+            throw new DTOOutOfBoundsException("User has to be older than 18 and less than 100: DOB given: " + dob);
+    }
 
-	//TODO der skal laves lidt om i hvordan kommunikation virker til database, skal også retunere salt som skal gemmes på database
-	//https://www.baeldung.com/java-password-hashing
-	public String generateHashedPassword(String password) {
-		SecureRandom random = new SecureRandom();
-		;
-		byte[] salt = new byte[16];
-		random.nextBytes(salt);
-		return generatePasswordWithKnownSalt(salt.toString(), password);
-	}
+    public void checkBio(String bio) throws DTOException {
+        objectNullCheck(bio, "Bio");
+        if (bio.length() > 300)
+            throw new DTOOutOfBoundsException("Bio cant be over 300 characters");
+    }
 
-	public String generatePasswordWithKnownSalt(String salt, String password) {
-		MessageDigest md;
-		try {
-			md = MessageDigest.getInstance("SHA-512");
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
-		}
-		md.update(salt.getBytes());
-		byte[] hashedPassword = md.digest(password.getBytes(StandardCharsets.UTF_8));
-		return Arrays.toString(hashedPassword);
-	}
+    public void checkPassword(String password) throws DTOException {
+        objectNullCheck(password, "Password");
+        checkStringMinimumValues(password, "Password", 6);
+        char[] characters = password.toCharArray();
+        for (int i = 0; i < characters.length; i++) {
+            if (Character.isUpperCase(characters[i]))
+                break;
+            if (i == characters.length-1)
+                throw new DTOOutOfBoundsException("Password needs at least one uppercase letter");
+        }
+    }
+
+    public void checkEmail(String email) throws DTOException {
+        objectNullCheck(email, "Email");
+        if (!emailPattern.matcher(email).matches())
+            throw new DTOOutOfBoundsException("Email does not follow the email standard");
+    }
+
+    //TODO : Den kan trimme mellemrummene mellem ord/navne. DTO'erne burde få disse rettede strings tilbage
+    public void checkStringMinimumValues(String string, String typeOfName, int minLength) throws DTOException{
+        objectNullCheck(string, typeOfName);
+
+        string = string.replaceAll("( )+", " "); //Efterlader kun et mellemrum efter ord
+
+        if(string.trim().length() < minLength)
+            throw new DTOOutOfBoundsException(typeOfName + " has to be at least "+ minLength +" character long");
+    }
+
+    public void checkPasswordsForMatch(String savedPassword, String loginRequestPassword, String salt) throws DTOOutOfBoundsException {
+        String requestWithSalt = generatePasswordWithKnownSalt(salt, loginRequestPassword);
+        if (!savedPassword.equals(requestWithSalt))
+            throw new DTOOutOfBoundsException("Wrong Password");
+    }
+
+    //https://www.baeldung.com/java-password-hashing
+    public String[] generateHashedPassword(String password) { //Returnerer string array, [0] = salt, [1] = hashedPassword
+        SecureRandom random = new SecureRandom();;
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        String saltString = Arrays.toString(salt);
+        String hashedPassword = generatePasswordWithKnownSalt(saltString, password);
+        return new String[]{saltString, hashedPassword};
+    }
+
+    public String generatePasswordWithKnownSalt(String salt, String password) {
+        MessageDigest digest;
+        try {
+            digest = MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
+        digest.update(salt.getBytes());
+        byte[] hashedPassword = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+        return Arrays.toString(hashedPassword);
+    }
 }

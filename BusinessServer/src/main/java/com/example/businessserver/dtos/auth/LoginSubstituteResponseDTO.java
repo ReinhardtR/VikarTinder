@@ -7,8 +7,8 @@ public class LoginSubstituteResponseDTO extends LoginUserResponseDTO {
 	private String bio;
 	private String address;
 
-	public LoginSubstituteResponseDTO(int id, String firstName, String lastName, String passwordHashed, String email, LocalDateTime birthDate, String bio, String address) {
-		super(id, firstName, lastName, passwordHashed, email, "SUBSTITUTE");
+	public LoginSubstituteResponseDTO(int id, String firstName, String lastName, String passwordHashed, String email, LocalDateTime birthDate, String bio, String address, String salt) {
+		super(id, firstName, lastName, passwordHashed, email, "SUBSTITUTE", salt);
 		this.birthDate = birthDate;
 		this.bio = bio;
 		this.address = address;

@@ -4,6 +4,10 @@ import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthLogicImplTest {
@@ -75,28 +79,49 @@ class AuthLogicImplTest {
         }
     }
 
-    @Test //Denne test omfanger ikke alt, hvad nu hvis man skriver i fornavn "Simon             Sohn", trim fjærner kun front af string. TODO hvis vi når til det. Ligenu får næste lag heller ikke et trimmed version af navnet, så databasen kan godt gemme "       Simion  ", hva nu hvis vi giver den en -value af længde?
-    void test_checkName_DTOOutOfBoundsException() throws DTOException {
+    @Test
+    void test_checkStringMinimumValues_DTOOutOfBoundsException() {
         String name1 = "";
         String name2 = "            ";
         String name3 = "Casper";
+        String name4 = "         Simon    Sohn              ";
 
         assertAll(
             ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkStringMinimumValues(name1, "empty",1), "Should throw since it is empty"),
             ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkStringMinimumValues(name2, "Empty with many spaces", 1), "Should throw since its trimmed and checked for length"),
-            ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkStringMinimumValues(name3, "Long min", 25))
+            ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkStringMinimumValues(name3, "Long min", 25)),
+                ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkStringMinimumValues(name4, "LongStringWithSpaces", 11))
         );
     }
 
+    @Test
+    void test_checkAge()
+    {
+        LocalDate now = LocalDate.now();
+        LocalDate time1 = LocalDate.of(now.getYear()-99, now.getMonth(), now.getDayOfMonth());
+        LocalDate time2 = LocalDate.of(now.getYear()-18, now.getMonth(), now.getDayOfMonth());
 
+        try {
+            testLogic.checkAge(time1);
+            testLogic.checkAge(time2);
+        } catch (DTOOutOfBoundsException e) {
+            fail(e.getMessage());
+        }
+    }
 
+    @Test
+    void test_checkAge_DTOOutOfBoundsException()
+    {
+        LocalDate now = LocalDate.now();
+        LocalDate time1 = LocalDate.of(now.getYear()-100, now.getMonth(), now.getDayOfMonth());
+        LocalDate time2 = LocalDate.of(now.getYear()-17, now.getMonth(), now.getDayOfMonth());
 
+        assertAll(
+                ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkAge(time1)),
+                ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkAge(time2))
+        );
+    }
 
-
-
-
-    /*
-    //TODO:Skriv om i testene for hashing
     @Test
     void test_generateHashedPassword()
     {
@@ -111,5 +136,25 @@ class AuthLogicImplTest {
         String salt = "[B@3cc2931c";
         assertEquals(testLogic.generatePasswordWithKnownSalt(salt,password), testLogic.generatePasswordWithKnownSalt(salt,password), "Should be the same");
     }
-    */
+
+    @Test
+    void test_checkPasswordsForMatch()
+    {
+        String password = "This is a test to se if the same hashed code is generated";
+        String[] saltAndHashedPassword = testLogic.generateHashedPassword(password);
+        try {
+            testLogic.checkPasswordsForMatch(saltAndHashedPassword[1], password, saltAndHashedPassword[0]);
+        } catch (DTOOutOfBoundsException e) {
+            fail("Should match");
+        }
+    }
+
+    @Test
+    void test_checkPasswordsForMatch_DTOOutOfBoundsException()
+    {
+        String password = "This is a test to se if the same hashed code is generated";
+        String[] saltAndHashedPassword = testLogic.generateHashedPassword(password);
+
+        assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkPasswordsForMatch("saltAndHashedPassword[1]", password, saltAndHashedPassword[0]));
+    }
 }
