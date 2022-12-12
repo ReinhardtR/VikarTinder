@@ -1,11 +1,20 @@
 package com.example.businessserver.services.factories;
 
 import ChatService.*;
-import com.example.businessserver.dtos.chat.*;
+import com.example.businessserver.dtos.chat.CreateChatDTO;
+import com.example.businessserver.dtos.chat.history.ChatEmployerDTO;
+import com.example.businessserver.dtos.chat.history.ChatHistoryDTO;
+import com.example.businessserver.dtos.chat.history.ChatSubstituteDTO;
+import com.example.businessserver.dtos.chat.history.GetChatHistoryDTO;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
+import com.example.businessserver.dtos.chat.overview.BasicChatDTO;
+import com.example.businessserver.dtos.chat.overview.ChatOverviewDTO;
 import com.example.businessserver.dtos.chat.overview.GetChatOverviewByGigDTO;
 import com.example.businessserver.dtos.chat.overview.GetChatOverviewByUserDTO;
+import com.example.businessserver.dtos.chat.overview.gigs.EmployerGigsDTO;
+import com.example.businessserver.dtos.chat.overview.gigs.GetEmployerGigsDTO;
+import com.example.businessserver.dtos.chat.overview.gigs.GigDTO;
 import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
 
 import java.time.Instant;
@@ -54,8 +63,16 @@ public class ChatServiceFactory {
 
 		JobConfirmationDTO jobConfirmation = JobConfirmationServiceFactory.toJobConfirmationDTO(response.getJobConfirmation());
 
-		return new ChatHistoryDTO(messages, jobConfirmation, response.getSubstitute().getId(), response.getEmployer().getId());
+		return new ChatHistoryDTO(messages, jobConfirmation, toChatEmployerDTO(response.getEmployer()), toChatSubstituteDTO(response.getSubstitute()));
 
+	}
+
+	public static ChatEmployerDTO toChatEmployerDTO(EmployerUserObject employer) {
+		return new ChatEmployerDTO(employer.getId(), employer.getFirstName(), employer.getLastName());
+	}
+
+	public static ChatSubstituteDTO toChatSubstituteDTO(SubstituteUserObject substitute) {
+		return new ChatSubstituteDTO(substitute.getId(), substitute.getFirstName(), substitute.getLastName());
 	}
 
 
@@ -138,5 +155,25 @@ public class ChatServiceFactory {
 						.newBuilder()
 						.setGigId(dto.getGigId())
 						.build();
+	}
+
+	public static GetEmployerGigsRequest toGetEmployerGigsRequest(GetEmployerGigsDTO dto) {
+		return GetEmployerGigsRequest
+						.newBuilder()
+						.setEmployerId(dto.getEmployerId())
+						.build();
+	}
+
+	public static EmployerGigsDTO toEmployerGigsDTO(GetEmployerGigsResponse response) {
+		List<GigDTO> gigs = response.getGigsList()
+						.stream()
+						.map(ChatServiceFactory::toGigDTO)
+						.toList();
+
+		return new EmployerGigsDTO(gigs);
+	}
+
+	public static GigDTO toGigDTO(GigObject gig) {
+		return new GigDTO(gig.getId());
 	}
 }

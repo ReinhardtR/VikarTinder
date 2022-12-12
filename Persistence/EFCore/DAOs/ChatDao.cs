@@ -13,6 +13,11 @@ public class ChatDao : IChatDao
         _dataContext = dataContext;
     }
 
+    public Task<List<Gig>> GetEmployerGigs(int employerId)
+    {
+        return _dataContext.Gigs.Where((g) => g.EmployerId == employerId).ToListAsync();
+    }
+
     public async Task<Chat> CreateChatAsync(int gigId, int employerId, int substituteId)
     {
         Chat chat = new()

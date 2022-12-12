@@ -134,4 +134,24 @@ public class ChatServiceFactory
         
         return getGigChatsResponse;
     }
+
+    public static GetEmployerGigsResponse ToGetEmployerGigsResponse(List<Gig> gigs)
+    {
+        RepeatedField<GigObject> gigObjects = new();
+
+        foreach (Gig gig in gigs)
+        {
+            gigObjects.Add(new GigObject()
+            {
+                Id = gig.Id,
+            });
+        }
+        
+        GetEmployerGigsResponse getEmployerGigsResponse = new()
+        {
+            Gigs = { gigObjects }
+        };
+        
+        return getEmployerGigsResponse;
+    }
 }

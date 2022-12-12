@@ -4,7 +4,7 @@ namespace Persistence.DAOs;
 
 public interface IChatDao
 {
-    
+    public Task<List<Gig>> GetEmployerGigs(int employerId);
 
     public Task<Chat> CreateChatAsync(int gigId, int employerId, int substituteId);
 

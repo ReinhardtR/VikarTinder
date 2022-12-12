@@ -70,13 +70,13 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
 
     public override async Task<GigsForMatchingResponse> GetGigs(GigSearchParametersRequest request, ServerCallContext context)
     {
-        //Resetter dem man har sagt nej til så de kan swipes igen
+        // Resetter dem man har sagt nej til så de kan swipes igen
         await _dao.RemoveWhereTimerIsOut(request.CurrentUserId,DaoRequestType.Substitute);
             
-        //Databasekald for at få en liste af substitutes til matching
+        // Databasekald for at få en liste af substitutes til matching
         List<Gig> gigsFromDatabase = await _dao.GetGigsForMatching(request.CurrentUserId);
 
-        //Convert til en reply
+        // Convert til en reply
         GigsForMatchingResponse gigs = MatchFactory.ConvertGigList(gigsFromDatabase);
 
         return gigs;

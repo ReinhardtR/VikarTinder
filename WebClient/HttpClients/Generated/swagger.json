@@ -175,7 +175,7 @@
         }
       }
     },
-    "/auth/authenticate": {
+    "/auth/login": {
       "post": {
         "tags": [
           "auth-controller"
@@ -185,7 +185,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/JwtRequest"
+                "$ref": "#/components/schemas/LoginRequestDTO"
               }
             }
           },
@@ -197,7 +197,27 @@
             "content": {
               "*/*": {
                 "schema": {
-                  "$ref": "#/components/schemas/JwtResponse"
+                  "$ref": "#/components/schemas/JwtResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/test/yo": {
+      "get": {
+        "tags": [
+          "auth-test-controller"
+        ],
+        "operationId": "test",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
                 }
               }
             }
@@ -267,15 +287,15 @@
         }
       }
     },
-    "/chat/{id}": {
+    "/chat/user/{userId}": {
       "get": {
         "tags": [
           "chat-controller"
         ],
-        "operationId": "getChatOverview",
+        "operationId": "getChatOverviewByUser",
         "parameters": [
           {
-            "name": "id",
+            "name": "userId",
             "in": "path",
             "required": true,
             "schema": {
@@ -329,19 +349,61 @@
         }
       }
     },
-    "/auth/yo": {
+    "/chat/gigs/{employerId}": {
       "get": {
         "tags": [
-          "auth-controller"
+          "chat-controller"
         ],
-        "operationId": "test",
+        "operationId": "getEmployerGigs",
+        "parameters": [
+          {
+            "name": "employerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "*/*": {
                 "schema": {
-                  "type": "string"
+                  "$ref": "#/components/schemas/EmployerGigsDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chat/gig/{gigId}": {
+      "get": {
+        "tags": [
+          "chat-controller"
+        ],
+        "operationId": "getChatOverviewByGig",
+        "parameters": [
+          {
+            "name": "gigId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChatOverviewDTO"
                 }
               }
             }
@@ -488,10 +550,10 @@
           }
         }
       },
-      "JwtRequest": {
+      "LoginRequestDTO": {
         "type": "object",
         "properties": {
-          "username": {
+          "email": {
             "type": "string"
           },
           "password": {
@@ -499,7 +561,7 @@
           }
         }
       },
-      "JwtResponse": {
+      "JwtResponseDTO": {
         "type": "object",
         "properties": {
           "jwtToken": {
@@ -579,6 +641,21 @@
           }
         }
       },
+      "ChatEmployerDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
       "ChatHistoryDTO": {
         "type": "object",
         "properties": {
@@ -591,11 +668,44 @@
           "jobConfirmation": {
             "$ref": "#/components/schemas/JobConfirmationDTO"
           },
-          "substituteId": {
+          "employer": {
+            "$ref": "#/components/schemas/ChatEmployerDTO"
+          },
+          "substitute": {
+            "$ref": "#/components/schemas/ChatSubstituteDTO"
+          }
+        }
+      },
+      "ChatSubstituteDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
             "type": "integer",
             "format": "int32"
           },
-          "employerId": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        }
+      },
+      "EmployerGigsDTO": {
+        "type": "object",
+        "properties": {
+          "gigs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GigDTO"
+            }
+          }
+        }
+      },
+      "GigDTO": {
+        "type": "object",
+        "properties": {
+          "gigId": {
             "type": "integer",
             "format": "int32"
           }

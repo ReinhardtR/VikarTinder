@@ -1,10 +1,16 @@
 package com.example.businessserver.services.interfaces;
 
-import com.example.businessserver.dtos.chat.*;
+import com.example.businessserver.dtos.chat.CreateChatDTO;
+import com.example.businessserver.dtos.chat.history.ChatHistoryDTO;
+import com.example.businessserver.dtos.chat.history.GetChatHistoryDTO;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
+import com.example.businessserver.dtos.chat.overview.BasicChatDTO;
+import com.example.businessserver.dtos.chat.overview.ChatOverviewDTO;
 import com.example.businessserver.dtos.chat.overview.GetChatOverviewByGigDTO;
 import com.example.businessserver.dtos.chat.overview.GetChatOverviewByUserDTO;
+import com.example.businessserver.dtos.chat.overview.gigs.EmployerGigsDTO;
+import com.example.businessserver.dtos.chat.overview.gigs.GetEmployerGigsDTO;
 
 public interface ChatServiceClient {
 	BasicChatDTO createChat(CreateChatDTO dto);
@@ -17,4 +23,6 @@ public interface ChatServiceClient {
 
 	ChatOverviewDTO getChatOverviewByGig(GetChatOverviewByGigDTO dto);
 
+
+	EmployerGigsDTO getEmployerGigs(GetEmployerGigsDTO dto);
 }

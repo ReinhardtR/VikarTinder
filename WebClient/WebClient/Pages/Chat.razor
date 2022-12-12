@@ -24,8 +24,15 @@ else if (chatHistory != null)
     <MudStack Justify="Justify.Center" Spacing="4" Style="height: 80vh">
         <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween">
             <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
-                <MudAvatar Size="Size.Medium" Color="Color.Secondary">@chatName[0]</MudAvatar>
-                <MudText Typo="Typo.h6">@chatName</MudText> 
+                <AuthorizeView Policy="@AuthPolicies.EmployerOnly">
+                        <MudAvatar Size="Size.Medium" Color="Color.Secondary">@chatHistory.Substitute.FirstName[0]</MudAvatar>
+                        <MudText Typo="Typo.h6">@chatHistory.Substitute.FirstName @chatHistory.Substitute.LastName</MudText>
+                </AuthorizeView>
+                
+                <AuthorizeView Policy="@AuthPolicies.SubstituteOnly">
+                        <MudAvatar Size="Size.Medium" Color="Color.Secondary">@chatHistory.Employer.FirstName[0]</MudAvatar>
+                        <MudText Typo="Typo.h6">@chatHistory.Employer.FirstName @chatHistory.Employer.LastName</MudText>
+                </AuthorizeView>
             </MudStack>
 
             <MudStack Row="@true" Spacing="4" AlignItems="AlignItems.Center">
@@ -67,9 +74,7 @@ else if (chatHistory != null)
                 <MudStack Spacing="4">
                     @foreach (MessageDTO message in chatHistory.Messages)
                     {
-                        Claim? idClaim = AuthClaims.GetClaim(context, AuthClaims.Id);
-                        if (idClaim == null) throw new Exception("Couldn't find the user id.");
-                        int userId = int.Parse(idClaim.Value);
+                        int userId = AuthClaims.GetUserId(context);
                         <ChatMessage UserId="@userId" AuthorId="@message.AuthorId" Content="@message.Content" />
                     }
                 </MudStack>
@@ -92,12 +97,6 @@ else if (chatHistory != null)
 
     [CascadingParameter]
     public Task<AuthenticationState> AuthState { get; set; } = null!;
-    
-    // TODO replace with data from server
-    private string chatName = "John Doe";
-
-    // TODO replace with data from server
-    private int gigId = 1;
     
     private JobConfirmationDTO? jobConfirmation;
     private ChatHistoryDTO? chatHistory;
@@ -203,7 +202,7 @@ else if (chatHistory != null)
             {
                 ChatId = ChatId,
                 EmployerId = userId,
-                SubstituteId = chatHistory!.SubstituteId
+                SubstituteId = chatHistory!.Substitute.Id
             };
             
             await JobConfirmationService.CreateJobConfirmationAsync(createJobConfirmationDto);

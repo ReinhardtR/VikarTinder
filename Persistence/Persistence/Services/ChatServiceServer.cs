@@ -16,56 +16,43 @@ public class ChatServiceServer : ChatService.ChatServiceBase
         _logger = logger;
         _chatDao = chatDao;
     }
+
+    public override async Task<GetEmployerGigsResponse> GetEmployerGigs(GetEmployerGigsRequest request,
+        ServerCallContext context)
+    {
+        List<Gig> gigs = await _chatDao.GetEmployerGigs(request.EmployerId);
+        return ChatServiceFactory.ToGetEmployerGigsResponse(gigs);
+    }
     
     public override async Task<SendMessageResponse> SendMessage(SendMessageRequest request, ServerCallContext context)
     {
         Message message = await _chatDao.SendMessageAsync(request.Content,request.AuthorId,request.ChatId);
-
-        SendMessageResponse reply = ChatServiceFactory.ToSendMessageResponse(message);
-        
-        return reply;
+        return ChatServiceFactory.ToSendMessageResponse(message);
     }
 
     public override async Task<CreateChatResponse> CreateChat(CreateChatRequest request, ServerCallContext context)
     {
         Chat chat = await _chatDao.CreateChatAsync(request.GigId ,request.Employer.Id,request.Substitute.Id);
-
-        CreateChatResponse reply = ChatServiceFactory.ToCreateChatResponse(chat);
-
-        return reply;
+        return ChatServiceFactory.ToCreateChatResponse(chat);
         
     }
 
     public override async Task<GetUserChatsResponse> GetUserChats(GetUserChatsRequest request, ServerCallContext context)
     {
         List<Chat> chats = await _chatDao.GetUserChatsAsync(request.UserId);
-
-        Console.WriteLine("Chats: " + chats.Count);
-        
-        GetUserChatsResponse reply = ChatServiceFactory.ToGetUserChatsResponse(chats);
-
-        return reply;
+        return ChatServiceFactory.ToGetUserChatsResponse(chats);
     }
     
     public override async Task<GetGigChatsResponse> GetGigChats(GetGigChatsRequest request, ServerCallContext context)
     {
         List<Chat> chats = await _chatDao.GetGigChatsAsync(request.GigId);
-
-        Console.WriteLine("Chats: " + chats.Count);
-        
-        GetGigChatsResponse reply = ChatServiceFactory.ToGigChatsResponse(chats);
-
-        return reply;
+        return ChatServiceFactory.ToGigChatsResponse(chats);
     }
-    
-    
+
     public override async Task<GetChatHistoryResponse> GetChatHistory(GetChatHistoryRequest request,
         ServerCallContext context)
     {
         Chat chat = await _chatDao.GetChatHistoryAsync(request.ChatId);
-        
-        GetChatHistoryResponse reply = ChatServiceFactory.ToGetChatHistoryResponse(chat);
-
-        return reply;
+        return ChatServiceFactory.ToGetChatHistoryResponse(chat);
     }
 }

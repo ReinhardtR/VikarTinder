@@ -11,8 +11,8 @@ using Persistence;
 namespace EFCore.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221211152404_dbupdate")]
-    partial class dbupdate
+    [Migration("20221212093931_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -28,10 +28,19 @@ namespace EFCore.Migrations
                     b.Property<int>("EmployerId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("GigId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<int>("SubstituteId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployerId");
+
+                    b.HasIndex("GigId");
+
+                    b.HasIndex("SubstituteId");
 
                     b.ToTable("Chats");
                 });
@@ -71,6 +80,9 @@ namespace EFCore.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("EmployerId");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.ToTable("Gigs");
                 });
@@ -196,6 +208,12 @@ namespace EFCore.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Id")
+                        .IsUnique();
+
                     b.ToTable("Users");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("User");
@@ -232,6 +250,33 @@ namespace EFCore.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasDiscriminator().HasValue("Substitute");
+                });
+
+            modelBuilder.Entity("Persistence.Models.Chat", b =>
+                {
+                    b.HasOne("Persistence.Models.Employer", "Employer")
+                        .WithMany()
+                        .HasForeignKey("EmployerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Persistence.Models.Gig", "Gig")
+                        .WithMany()
+                        .HasForeignKey("GigId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Persistence.Models.Substitute", "Substitute")
+                        .WithMany()
+                        .HasForeignKey("SubstituteId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employer");
+
+                    b.Navigation("Gig");
+
+                    b.Navigation("Substitute");
                 });
 
             modelBuilder.Entity("Persistence.Models.EmployerSubstitute", b =>

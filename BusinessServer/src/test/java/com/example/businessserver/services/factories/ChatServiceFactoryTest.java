@@ -1,9 +1,13 @@
 package com.example.businessserver.services.factories;
 
 import ChatService.*;
-import com.example.businessserver.dtos.chat.*;
+import com.example.businessserver.dtos.chat.CreateChatDTO;
+import com.example.businessserver.dtos.chat.history.ChatHistoryDTO;
+import com.example.businessserver.dtos.chat.history.GetChatHistoryDTO;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
 import com.example.businessserver.dtos.chat.message.SendMessageDTO;
+import com.example.businessserver.dtos.chat.overview.BasicChatDTO;
+import com.example.businessserver.dtos.chat.overview.ChatOverviewDTO;
 import com.example.businessserver.dtos.chat.overview.GetChatOverviewByUserDTO;
 import com.google.protobuf.Timestamp;
 import org.junit.jupiter.api.Test;

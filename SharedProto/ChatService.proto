@@ -10,11 +10,25 @@ option java_multiple_files = true;
 package ChatService;
 
 service ChatService {
+    rpc GetEmployerGigs (GetEmployerGigsRequest) returns (GetEmployerGigsResponse);
     rpc SendMessage (SendMessageRequest) returns (SendMessageResponse);
     rpc GetUserChats (GetUserChatsRequest) returns (GetUserChatsResponse);
     rpc GetGigChats (GetGigChatsRequest) returns (GetGigChatsResponse);
     rpc GetChatHistory (GetChatHistoryRequest) returns (GetChatHistoryResponse);
     rpc CreateChat (CreateChatRequest) returns (CreateChatResponse);
+}
+
+// Get employer gigs
+message GetEmployerGigsRequest {
+    int32 employerId = 1;
+}
+
+message GigObject {
+  int32 id = 1;
+}
+
+message GetEmployerGigsResponse {
+  repeated GigObject gigs = 1;
 }
 
 // Send Message

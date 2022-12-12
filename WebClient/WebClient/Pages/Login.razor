@@ -14,7 +14,7 @@
                 <DataAnnotationsValidator/>
             
                 <MudStack Spacing="6">
-                    <MudTextField Label="Email" Variant="Variant.Outlined" @bind-Value="formModel.Email" For="() => formModel.Email"/>
+                    <MudTextField Label="Email" Variant="Variant.Outlined" InputType="InputType.Email" @bind-Value="formModel.Email" For="() => formModel.Email"/>
                     <MudTextField Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" @bind-Value="formModel.Password" For="() => formModel.Password"/>
             
                     <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Log ind</MudButton>

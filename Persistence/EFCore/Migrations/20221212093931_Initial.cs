@@ -5,24 +5,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EFCore.Migrations
 {
-    public partial class dbupdate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Chats",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    SubstituteId = table.Column<int>(type: "INTEGER", nullable: false),
-                    EmployerId = table.Column<int>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chats", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -85,6 +71,65 @@ namespace EFCore.Migrations
                     table.ForeignKey(
                         name: "FK_Gigs_Users_EmployerId",
                         column: x => x.EmployerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Chats",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    SubstituteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    EmployerId = table.Column<int>(type: "INTEGER", nullable: false),
+                    GigId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chats", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Chats_Gigs_GigId",
+                        column: x => x.GigId,
+                        principalTable: "Gigs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Chats_Users_EmployerId",
+                        column: x => x.EmployerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Chats_Users_SubstituteId",
+                        column: x => x.SubstituteId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GigSubstitute",
+                columns: table => new
+                {
+                    SubstituteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    GigId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PublicationDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    WantsToMatch = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GigSubstitute", x => new { x.SubstituteId, x.GigId });
+                    table.ForeignKey(
+                        name: "FK_GigSubstitute_Gigs_GigId",
+                        column: x => x.GigId,
+                        principalTable: "Gigs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GigSubstitute_Users_SubstituteId",
+                        column: x => x.SubstituteId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -156,31 +201,20 @@ namespace EFCore.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "GigSubstitute",
-                columns: table => new
-                {
-                    SubstituteId = table.Column<int>(type: "INTEGER", nullable: false),
-                    GigId = table.Column<int>(type: "INTEGER", nullable: false),
-                    PublicationDate = table.Column<DateTime>(type: "TEXT", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
-                    WantsToMatch = table.Column<bool>(type: "INTEGER", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_GigSubstitute", x => new { x.SubstituteId, x.GigId });
-                    table.ForeignKey(
-                        name: "FK_GigSubstitute_Gigs_GigId",
-                        column: x => x.GigId,
-                        principalTable: "Gigs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_GigSubstitute_Users_SubstituteId",
-                        column: x => x.SubstituteId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.CreateIndex(
+                name: "IX_Chats_EmployerId",
+                table: "Chats",
+                column: "EmployerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chats_GigId",
+                table: "Chats",
+                column: "GigId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chats_SubstituteId",
+                table: "Chats",
+                column: "SubstituteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployerSubstitute_SubstituteId",
@@ -191,6 +225,12 @@ namespace EFCore.Migrations
                 name: "IX_Gigs_EmployerId",
                 table: "Gigs",
                 column: "EmployerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Gigs_Id",
+                table: "Gigs",
+                column: "Id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GigSubstitute_GigId",
@@ -222,6 +262,18 @@ namespace EFCore.Migrations
                 name: "IX_Messages_ChatId",
                 table: "Messages",
                 column: "ChatId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Id",
+                table: "Users",
+                column: "Id",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -239,10 +291,10 @@ namespace EFCore.Migrations
                 name: "Messages");
 
             migrationBuilder.DropTable(
-                name: "Gigs");
+                name: "Chats");
 
             migrationBuilder.DropTable(
-                name: "Chats");
+                name: "Gigs");
 
             migrationBuilder.DropTable(
                 name: "Users");

@@ -71,7 +71,6 @@ else if (chats != null)
     
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("ON INIT");
         await FetchChats();
     }
 
@@ -88,12 +87,11 @@ else if (chats != null)
 
             if (GigId == null)
             {
-                chatOverview = await ChatService.GetChatOverviewAsync(userId);
+                chatOverview = await ChatService.GetChatOverviewByUserAsync(userId);
             }
             else
             {
-                // TODO fetch chats for gig
-                chatOverview = await ChatService.GetChatOverviewAsync(userId);
+                chatOverview = await ChatService.GetChatOverviewByGigAsync(GigId.Value);
             }
 
             if (chatOverview == null)

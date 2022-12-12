@@ -1,21 +1,21 @@
 ﻿using Persistence.Dto;
-using Persistence.Dto.Administration;
+using Persistence.Dto.Auth;
 using Persistence.Exceptions.ConverterExceptions;
 using Persistence.Models;
 
 namespace Persistence.Services.Factories;
 
-public class AdministrationFactory
+public class AuthServiceFactory
 {
     
-    public static CreateUserResponse CreateSubstiuteUserResponse(Substitute substitute)
+    public static CreateUserResponse CreateSubstituteUserResponse(Substitute substitute)
     {
         if (substitute == null)
             throw new FactoryNullReference("substitute");
 
         try
         {
-            CreateUserResponse response = new CreateUserResponse
+            CreateUserResponse response = new()
             {
                 User = CreateSubstituteUserObject(substitute)
             };
@@ -72,12 +72,12 @@ public class AdministrationFactory
     public static UpdateUserResponse UpdateEmployerUserResponse(Employer employer)
     {
         if (employer == null)
+        {
             throw new FactoryNullReference("employer");
-
+        }
 
         try
         {
-
             UpdateUserResponse response = new UpdateUserResponse
             {
                 User = CreateEmployerUserObject(employer)

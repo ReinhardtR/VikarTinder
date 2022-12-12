@@ -3,7 +3,7 @@
 option csharp_namespace = "Persistence";
 option java_multiple_files = true;
 
-package AdministrationService;
+package AuthService;
 
 //PROTO OBJECTS
 
@@ -86,7 +86,7 @@ message GetUserResponse {
 
 //
 
-service AdministrationService {
+service AuthService {
     rpc CreateUser(CreateUserRequest) returns (CreateUserResponse);
     rpc Login(CreateLoginRequest) returns (LoginUserResponse);
     rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse);
