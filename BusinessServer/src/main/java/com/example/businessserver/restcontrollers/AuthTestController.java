@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 @CrossOrigin
 public class AuthTestController {
-    //Virker ikke
-    //@PreAuthorize("hasRole('SUBSTITUTE')")
+
     @GetMapping("/yo")
     public String test()
     {

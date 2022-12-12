@@ -68,7 +68,7 @@ class AuthServiceFactoryTest {
                 ()-> assertEquals(lastName, testResult.getLastName()),
                 ()-> assertEquals(password, testResult.getPasswordHashed()),
                 ()-> assertEquals(email, testResult.getEmail()),
-                ()-> assertEquals(age, testResult.getAge()),
+                //()-> assertEquals(age, testResult.getAge()),
                 ()-> assertEquals(bio, testResult.getBio()),
                 ()-> assertEquals(LoginUserResponseDTO.Role.SUBSTITUTE, testResult.getRole())
         );
@@ -100,12 +100,15 @@ class AuthServiceFactoryTest {
             workplace
         );
 
-        CreateUserRequest test = AuthServiceFactory.createUserRequestEmployer(testDTO);
+        String[] saltAndPassword = new String[]{"testSalt", "testWord"};
+
+        CreateUserRequest test = AuthServiceFactory.createUserRequestEmployer(testDTO, saltAndPassword);
 
         assertAll(
                 ()->assertEquals(firstName, test.getUser().getFirstName()),
                 ()-> assertEquals(lastName, test.getUser().getLastName()),
-                ()->assertEquals(password, test.getUser().getPasswordHash()),
+                ()-> assertEquals(saltAndPassword[0], test.getUser().getSalt()),
+                ()->assertEquals(saltAndPassword[1], test.getUser().getPasswordHash()),
                 ()->assertEquals(email, test.getUser().getEmail()),
                 ()->assertEquals(title, test.getUser().getEmp().getTitle()),
                 ()->assertEquals(workplace, test.getUser().getEmp().getWorkplace())
@@ -114,7 +117,7 @@ class AuthServiceFactoryTest {
 
     private SubstituteObject buildSubstituteObj(int age, String bio, String address) {
         return SubstituteObject.newBuilder()
-                .setAge(age)
+                //.setAge(age)
                 .setBio(bio)
                 .setAddress(address)
                 .build();

@@ -9,9 +9,9 @@ import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import com.example.businessserver.logic.interfaces.AuthLogic;
 import com.example.businessserver.services.implementations.AuthServiceImpl;
 import com.example.businessserver.services.utils.JWTUtility;
+import com.example.businessserver.services.utils.UserSaltHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -29,8 +29,6 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
     @Autowired
     private AuthServiceImpl userService;
 
-    private Pbkdf2PasswordEncoder encoder = new Pbkdf2PasswordEncoder();
-
     private final Pattern emailPattern;
 
     public AuthLogicImpl() {
@@ -47,8 +45,9 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         objectNullCheck(loginRequest, "loginRequest");
         checkEmail(loginRequest.getEmail());
         checkPassword(loginRequest.getPassword());
-        UserDetails userDetails = userService.loadUserByUsername(loginRequest.getEmail());
-        String password = userDetails.getPassword();
+        UserSaltHolder userDetails =(UserSaltHolder) userService.loadUserByUsername(loginRequest.getEmail());
+        String hashedPassword = userDetails.getPassword();
+        checkPasswordsForMatch(hashedPassword, loginRequest.getPassword(), userDetails.getSalt());
         return new JwtResponseDTO(jwtUtility.generateToken(userDetails));
     }
 
@@ -61,7 +60,8 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         checkStringMinimumValues(requestDTO.getLastName(), "Last name", 1);
         checkStringMinimumValues(requestDTO.getTitle(), "Title", 1);
         checkStringMinimumValues(requestDTO.getWorkplace(), "Workplace", 1);
-        userService.SignUpEmployer(requestDTO);
+        String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
+        userService.SignUpEmployer(requestDTO, saltHashedPassword);
     }
 
     @Override
@@ -74,7 +74,8 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         //TODO : Check dob når det implementeres
         checkBio(requestDTO.getBio());
         checkStringMinimumValues(requestDTO.getAddress(), "Address", 1);
-        userService.SignUpSubstitute(requestDTO);
+        String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
+        userService.SignUpSubstitute(requestDTO, saltHashedPassword);
     }
 
     private void checkBio(String bio) throws DTOException { //TODO:Burde generalise de er string checks
@@ -110,18 +111,20 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
 
     public void checkPasswordsForMatch(String savedPassword, String loginRequestPassword, String salt) throws DTOOutOfBoundsException {
         String requestWithSalt = generatePasswordWithKnownSalt(salt, loginRequestPassword);
-        if (!savedPassword.equals(loginRequestPassword))
+        if (!savedPassword.equals(requestWithSalt))
             throw new DTOOutOfBoundsException("Wrong Password");
     }
 
     //TODO der skal laves lidt om i hvordan kommunikation virker til database, skal også retunere salt som skal gemmes på database
     //https://www.baeldung.com/java-password-hashing
-    public String generateHashedPassword(String password)
+    public String[] generateHashedPassword(String password)
     {
         SecureRandom random = new SecureRandom();;
         byte[] salt = new byte[16];
         random.nextBytes(salt);
-        return generatePasswordWithKnownSalt(salt.toString(), password);
+        String saltString = Arrays.toString(salt);
+        String hashedPassword = generatePasswordWithKnownSalt(saltString, password);
+        return new String[]{saltString, hashedPassword};
     }
 
     public String generatePasswordWithKnownSalt(String salt, String password)
