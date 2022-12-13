@@ -14,13 +14,11 @@ public class ConverterTestAdministration
 {
     
     //Null tests of all methods
-    [Test, Description("Testing all methods creating a User Response catches FactoryNullReference with given null as parameter")]
+    [Test, Description("Testing all factory Methods catches FactoryNullReference with given null as parameter")]
     public void UserResponseWithNullArgument()
     {
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateSubstituteUserResponse(null));
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateEmployerUserResponse(null));
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.UpdateSubstituteUserResponse(null));
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.UpdateEmployerUserResponse(null));
+        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateUserResponse(null));
+        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateUpdateUserResponse(null));
         Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateLoginUserResponse(null));
         Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateGetUserResponse(null));
         Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateDeleteUserResponse(null));
@@ -31,13 +29,13 @@ public class ConverterTestAdministration
     [Test, Description("Testing that creating a UserResponse catches a FactoryNullReference when given an object with no arguments")]
     public void UserResponseWithEmptyArgumentsInParameter()
     {
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateSubstituteUserResponse(
+        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateUserResponse(
             new Substitute()));
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateEmployerUserResponse(
+        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateUserResponse(
             new Employer()));
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.UpdateSubstituteUserResponse(
+        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateUpdateUserResponse(
             new Substitute()));
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.UpdateEmployerUserResponse(
+        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateUpdateUserResponse(
             new Employer()));
         Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateLoginUserResponse(
             new Substitute()));
@@ -55,10 +53,10 @@ public class ConverterTestAdministration
             new UpdateUserRequest()));
     }
     
-    [Test, Description("Testing that creating a UserResponse catches a FactoryNullReference when given an object with some empty arguments")]
+    [Test, Description("Testing that all factory methods catches a FactoryNullReference when given an object with some empty fields")]
     public void UserResponseWithNullArgumentsInParameter()
     {
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateSubstituteUserResponse(
+        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateUserResponse(
             new Substitute
             {
                 Id = 3,
@@ -66,7 +64,7 @@ public class ConverterTestAdministration
                 Email = "MailTest@mail.com",
                 Bio = "I am test!"
             }));
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateEmployerUserResponse(
+        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateUserResponse(
             new Employer
             {
                 Id = 3,
@@ -75,7 +73,7 @@ public class ConverterTestAdministration
                 Title = "Testman",
                 WorkPlace = "TestPlace"
             }));
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.UpdateSubstituteUserResponse(
+        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateUpdateUserResponse(
             new Substitute
             {
                 Id = 3,
@@ -83,7 +81,7 @@ public class ConverterTestAdministration
                 Email = "MailTest@mail.com",
                 Bio = "I am test!"
             }));
-        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.UpdateEmployerUserResponse(
+        Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateUpdateUserResponse(
             new Employer
             {
                 Id = 3,
@@ -128,7 +126,11 @@ public class ConverterTestAdministration
                 Email = "MailTest@mail.com",
                 WorkPlace = "TestPlace"
             })));
-        
+    }
+
+    [Test, Description("Testing for giving an empty id from request will throw as planned")]
+    public void DomainObjectAndDeleteUserResponse()
+    {
         Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.CreateDeleteUserResponse(
             new DeleteUserDto
             {
@@ -139,37 +141,27 @@ public class ConverterTestAdministration
         Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.MakeSubstituteDomainObject(
             new UpdateUserRequest
             {
-                User = new UserObject
+                User = new UserInfo
                 {
-                    UserData = new UserData
-                    {
-                        FirstName = "Testman",
-                        Email = "TestMail@Test.com",
-                        Sub = new SubstituteObject
+                    FirstName = "Testman",
+                    Sub = new SubstituteObject
                         {
                             Address = "Testroad 1"
                         }
-                    }
                 }
             }));
 
         Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.MakeSubstituteDomainObject(
             new UpdateUserRequest
             {
-                User = new UserObject
+                User = new UserInfo
                 {
-                    Id = 1,
-                    UserData = new UserData()
+                    FirstName = "Testman",
+                    LastName = "Tester",
+                    Emp = new EmployerObject
                     {
-                        FirstName = "Testman",
-                        LastName = "Tester",
-                        PasswordHash = "123",
-                        Email = "TestMail@Test.com",
-                        Emp = new EmployerObject
-                        {
-                            Title = "Test CEO",
-                            Workplace = "Testland"
-                        }
+                        Title = "Test CEO",
+                        Workplace = "Testland" 
                     }
                 }
             }));
@@ -177,16 +169,13 @@ public class ConverterTestAdministration
         Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.MakeEmployerDomainObject(
             new UpdateUserRequest
             {
-                User = new UserObject
+                User = new UserInfo
                 {
-                    UserData = new UserData
+                    FirstName = "Testman",
+                    LastName = "SDFSFD",
+                    Emp = new EmployerObject
                     {
-                        FirstName = "Testman",
-                        Email = "TestMail@Test.com",
-                        Emp = new EmployerObject
-                        {
-                            Title = "Test CEO"
-                        }
+                        Title = "Test CEO"
                     }
                 }
             }));
@@ -194,20 +183,14 @@ public class ConverterTestAdministration
         Assert.Catch<FactoryNullReference>(() => AuthServiceFactory.MakeEmployerDomainObject(
             new UpdateUserRequest
             {
-                User = new UserObject
+                User = new UserInfo
                 {
-                    Id = 1,
-                    UserData = new UserData()
+                    FirstName = "Testman",
+                    LastName = "Tester",
+                    Sub = new SubstituteObject
                     {
-                        FirstName = "Testman",
-                        LastName = "Tester",
-                        PasswordHash = "123",
-                        Email = "TestMail@Test.com",
-                        Sub = new SubstituteObject
-                        {
-                            Address = "Testroad 1",
-                            Bio = "I love testing"
-                        }
+                        Address = "Testroad 1",
+                        Bio = "I love testing"
                     }
                 }
             }));
@@ -215,47 +198,41 @@ public class ConverterTestAdministration
 
 
     //Success tests of conversion to UserResponse from DomainObject
-    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertToResponseAsSubstitute))
-        ,Description("Testing creation of User Response as substitute - boundary testing ")]
-    public List<dynamic> CreateUserResponseAsSubstitute(Substitute substitute)
+    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromUserFullData)),
+     Description("boundary testing - CreateUserResponse")]
+    public List<dynamic> CreateUserResponse(User user)
     {
-        CreateUserResponse response = AuthServiceFactory.CreateSubstituteUserResponse(substitute);
-        
-        return new List<dynamic> {
-           response.User.Id,
-           response.User.UserData.FirstName,
-           response.User.UserData.LastName,
-           response.User.UserData.PasswordHash,
-           response.User.UserData.Salt,
-           response.User.UserData.Email,
-           response.User.UserData.Sub.Address,
-           response.User.UserData.Sub.BirthDate.ToDateTime(),
-           response.User.UserData.Sub.Bio
-        };
+        CreateUserResponse response = AuthServiceFactory.CreateUserResponse(user);
+
+        var testDataResponse = response.User.UserData.RoleCase == UserData.RoleOneofCase.Sub
+            ? new List<dynamic>
+            {
+                response.User.Id,
+                response.User.UserData.FirstName,
+                response.User.UserData.LastName,
+                response.User.UserData.PasswordHash,
+                response.User.UserData.Salt,
+                response.User.UserData.Email,
+                response.User.UserData.Sub.Address,
+                response.User.UserData.Sub.BirthDate.ToDateTime(),
+                response.User.UserData.Sub.Bio
+            }:new List<dynamic>
+            {
+                response.User.Id,
+                response.User.UserData.FirstName,
+                response.User.UserData.LastName,
+                response.User.UserData.PasswordHash,
+                response.User.UserData.Salt,
+                response.User.UserData.Email,
+                response.User.UserData.Emp.Title,
+                response.User.UserData.Emp.Workplace
+            };
+        return testDataResponse;
     }
 
-    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertToResponseAsEmployer)),
-    Description("Testing creation of User Response as employer - boundary testing")]
-    public List<dynamic> CreateUserResponseAsEmployer(Employer employer)
-    {
-        CreateUserResponse response = AuthServiceFactory.CreateEmployerUserResponse(employer);
-
-        return new List<dynamic>
-        {
-            response.User.Id,
-            response.User.UserData.FirstName,
-            response.User.UserData.LastName,
-            response.User.UserData.PasswordHash,
-            response.User.UserData.Salt,
-            response.User.UserData.Email,
-            response.User.UserData.Emp.Title,
-            response.User.UserData.Emp.Workplace
-        };
-    }
-
-    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromUser)),
-    Description("Testing for CreateLoginUserResponse method")]
-    public List<dynamic> CreateLoginUserResponseFromUserDto(User user)
+    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromUserFullData)),
+    Description("boundary testing - CreateLoginUserResponse")]
+    public List<dynamic> CreateLoginUserResponse(User user)
     {
         LoginUserResponse response = AuthServiceFactory.CreateLoginUserResponse(user);
 
@@ -287,42 +264,61 @@ public class ConverterTestAdministration
         return testDataResponse;
     }
     
-    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromUser)),
-     Description("Testing for CreateGetUserResponse method")]
-    public List<dynamic> CreateGetUserResponseFromUserDto(User dto)
+    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromUserModifiableData)),
+     Description("boundary testing - CreateUpdateUserResponse")]
+    public List<dynamic> CreateUpdateUserResponse(User user)
     {
-        GetUserResponse response = AuthServiceFactory.CreateGetUserResponse(dto);
+        UpdateUserResponse response = AuthServiceFactory.CreateUpdateUserResponse(user);
 
-        var testDataResponse = response.User.UserData.RoleCase == UserData.RoleOneofCase.Sub
+        var testDataResponse = response.User.RoleCase == UserInfo.RoleOneofCase.Sub
             ? new List<dynamic>
             {
-                response.User.Id,
-                response.User.UserData.FirstName,
-                response.User.UserData.LastName,
-                response.User.UserData.PasswordHash,
-                response.User.UserData.Salt,
-                response.User.UserData.Email,
-                response.User.UserData.Sub.Address,
-                response.User.UserData.Sub.BirthDate.ToDateTime(),
-                response.User.UserData.Sub.Bio
+                response.User.FirstName,
+                response.User.LastName,
+                response.User.Sub.Address,
+                response.User.Sub.BirthDate.ToDateTime(),
+                response.User.Sub.Bio
             }
             : new List<dynamic>
             {
-                response.User.Id,
-                response.User.UserData.FirstName,
-                response.User.UserData.LastName,
-                response.User.UserData.PasswordHash,
-                response.User.UserData.Salt,
-                response.User.UserData.Email,
-                response.User.UserData.Emp.Title,
-                response.User.UserData.Emp.Workplace
+                response.User.FirstName,
+                response.User.LastName,
+                response.User.Emp.Title,
+                response.User.Emp.Workplace
+            };
+
+        return testDataResponse;
+    }
+    
+    
+    [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromUserModifiableData)),
+     Description("boundary testing - CreateGetUserResponse")]
+    public List<dynamic> CreateGetUserResponse(User user)
+    {
+        GetUserResponse response = AuthServiceFactory.CreateGetUserResponse(user);
+
+        var testDataResponse = response.User.RoleCase == UserInfo.RoleOneofCase.Sub
+            ? new List<dynamic>
+            {
+                response.User.FirstName,
+                response.User.LastName,
+                response.User.Sub.Address,
+                response.User.Sub.BirthDate.ToDateTime(),
+                response.User.Sub.Bio
+            }
+            : new List<dynamic>
+            {
+                response.User.FirstName,
+                response.User.LastName,
+                response.User.Emp.Title,
+                response.User.Emp.Workplace
             };
 
         return testDataResponse;
     }
 
     [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertFromDeleteUserDto)),
-    Description("Testing success scenarios of creating a DeleteUserResponse")]
+    Description("boundary testing - CreateDeleteUserResponse")]
     public List<dynamic> CreateDeleteUserResponse(DeleteUserDto dto)
     {
         DeleteUserResponse response = AuthServiceFactory.CreateDeleteUserResponse(dto);
@@ -336,19 +332,15 @@ public class ConverterTestAdministration
     }
 
     [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertToSubstituteDomainObject))
-    ,Description("Testing conversion from UpdateUserRequest to Substitute object success scenarios")]
+    ,Description("boundary testing - CreateSubstituteDomainObject")]
     public List<dynamic> MakeSubstituteDomainObject(UpdateUserRequest updateUserRequest)
     {
         Substitute substitute = AuthServiceFactory.MakeSubstituteDomainObject(updateUserRequest);
 
         return new List<dynamic>
         {
-            substitute.Id,
             substitute.FirstName,
             substitute.LastName,
-            substitute.PasswordHash,
-            substitute.Salt,
-            substitute.Email,
             substitute.Address,
             substitute.BirthDate,
             substitute.Bio
@@ -356,19 +348,15 @@ public class ConverterTestAdministration
     }
 
     [TestCaseSource(typeof(DataClass), nameof(DataClass.ConvertToEmployerDomainObject))
-    ,Description("Testing conversion from UpdateUserRequest to Employer object success scenarios")]
+    ,Description("boundary testing - CreateEmployerDomainObject")]
     public List<dynamic> MakeEmployerDomainObject(UpdateUserRequest updateUserRequest)
     {
         Employer employer = AuthServiceFactory.MakeEmployerDomainObject(updateUserRequest);
 
         return new List<dynamic>
         {
-            employer.Id,
             employer.FirstName,
             employer.LastName,
-            employer.PasswordHash,
-            employer.Salt,
-            employer.Email,
             employer.Title,
             employer.WorkPlace
         };
@@ -377,101 +365,70 @@ public class ConverterTestAdministration
     private class DataClass
     {
         private static readonly string _longString = ExpandString("Test",10000);
-        public static IEnumerable ConvertToResponseAsSubstitute
+        public static IEnumerable ConvertFromUserModifiableData
         {
             get
             {
                 yield return new TestCaseData(new Substitute
                 {
-                    Id = 1,
                     FirstName = "Test",
                     LastName = "Tester",
-                    PasswordHash = "123",
-                    Salt = "TestSalt",
-                    Email = "Testmail@test.com",
                     Address = "Testroad 1",
                     BirthDate = new DateTime(2000,01,01),
                     Bio = "I am test man, pick me!"
                 }).Returns(
-                    new List<dynamic>{1,"Test","Tester","123","TestSalt","Testmail@test.com","Testroad 1", new DateTime(2000,01,01).ToUniversalTime(), "I am test man, pick me!"});
+                    new List<dynamic>{"Test","Tester","Testroad 1", new DateTime(2000,01,01).ToUniversalTime(), "I am test man, pick me!"});
+                
+                yield return new TestCaseData(new Employer
+                {
+                    FirstName = "Test",
+                    LastName = "Tester",
+                    Title = "Test CEO",
+                    WorkPlace = "Testland"
+                }).Returns(
+                    new List<dynamic>{"Test","Tester","Test CEO","Testland"});
                 
                 yield return new TestCaseData(new Substitute
                 {
-                    Id = Int32.MinValue,
                     FirstName = String.Empty,
                     LastName = String.Empty,
-                    PasswordHash = String.Empty,
-                    Salt = String.Empty,
-                    Email = String.Empty,
                     Address = String.Empty,
                     BirthDate = new DateTime(1,01,01),
                     Bio = String.Empty
                 }).Returns(
-                    new List<dynamic>{Int32.MinValue,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty, new DateTime(1,01,01).ToUniversalTime(), String.Empty});
+                    new List<dynamic>{String.Empty,String.Empty,String.Empty, new DateTime(1,01,01).ToUniversalTime(), String.Empty});
+                
+                yield return new TestCaseData(new Employer()
+                {
+                    FirstName = String.Empty,
+                    LastName = String.Empty,
+                    Title = String.Empty,
+                    WorkPlace = String.Empty
+                }).Returns(
+                    new List<dynamic>{String.Empty,String.Empty,String.Empty, String.Empty});
                 
                 yield return new TestCaseData(new Substitute
                 {
-                    Id = Int32.MaxValue,
                     FirstName = _longString,
                     LastName = _longString,
-                    PasswordHash = _longString,
-                    Salt = _longString,
-                    Email = _longString,
                     Address = _longString,
                     BirthDate = new DateTime(9999,12,31),
                     Bio = _longString
                 }).Returns(
-                    new List<dynamic>{Int32.MaxValue,_longString,_longString,_longString,_longString,_longString,_longString, new DateTime(9999,12,31).ToUniversalTime(), _longString});
-                
-            }
-        }
-
-        public static IEnumerable ConvertToResponseAsEmployer
-        {
-            get
-            {
-                yield return new TestCaseData(new Employer
-                {
-                    Id = 1,
-                    FirstName = "Test",
-                    LastName = "Tester",
-                    PasswordHash = "123",
-                    Salt = "TestSalt",
-                    Email = "Testmail@test.com",
-                    Title = "Test CEO",
-                    WorkPlace = "Testland"
-                }).Returns(
-                    new List<dynamic>{1,"Test","Tester","123","TestSalt","Testmail@test.com","Test CEO","Testland"});
+                    new List<dynamic>{_longString,_longString,_longString, new DateTime(9999,12,31).ToUniversalTime(), _longString});
                 
                 yield return new TestCaseData(new Employer()
                 {
-                    Id = Int32.MinValue,
-                    FirstName = String.Empty,
-                    LastName = String.Empty,
-                    PasswordHash = String.Empty,
-                    Salt = String.Empty,
-                    Email = String.Empty,
-                    Title = String.Empty,
-                    WorkPlace = String.Empty
-                }).Returns(
-                    new List<dynamic>{Int32.MinValue,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty,String.Empty, String.Empty});
-                
-                yield return new TestCaseData(new Employer()
-                {
-                    Id = Int32.MaxValue,
                     FirstName = _longString,
                     LastName = _longString,
-                    PasswordHash = _longString,
-                    Salt = _longString,
-                    Email = _longString,
                     Title = _longString,
                     WorkPlace = _longString
                 }).Returns(
-                    new List<dynamic>{Int32.MaxValue,_longString,_longString,_longString,_longString,_longString,_longString,_longString});
+                    new List<dynamic>{_longString,_longString,_longString,_longString});
             }
         }
 
-        public static IEnumerable ConvertFromUser
+        public static IEnumerable ConvertFromUserFullData
         {
             get
             {
@@ -487,7 +444,7 @@ public class ConverterTestAdministration
                     BirthDate = new DateTime(2000,01,01),
                     Bio = "I am test man, pick me!"
                 }).Returns(
-                    new List<dynamic> { 1, "Test", "Tester", "123","TestSalt", "Testmail@test.com", "Testroad 1", new DateTime(2000,01,01).ToUniversalTime(), "I am test man, pick me!" });
+                    new List<dynamic> {1,"Test","Tester","123","TestSalt","Testmail@test.com", "Testroad 1", new DateTime(2000,01,01).ToUniversalTime(), "I am test man, pick me!" });
                 
                 yield return new TestCaseData(new Employer
                 {
@@ -612,73 +569,55 @@ public class ConverterTestAdministration
             {
                 yield return new TestCaseData(new UpdateUserRequest
                 {
-                    User = new UserObject
+                    Id = 1,
+                    User = new UserInfo
                     {
-                        Id = 1,
-                        UserData = new UserData
+                        FirstName = "Testman",
+                        LastName = "Tester",
+                        Sub = new SubstituteObject
                         {
-                            FirstName = "Testman",
-                            LastName = "Tester",
-                            PasswordHash = "123",
-                            Salt = "TestSalt",
-                            Email = "Testmail@Test.com",
-                            Sub = new SubstituteObject
-                            {
-                                Address = "Testroad 1",
-                                BirthDate = Timestamp.FromDateTime(new DateTime(1999,01,01).ToUniversalTime()),
-                                Bio = "I am testman!!!"
-                            }
+                            Address = "Testroad 1",
+                            BirthDate = Timestamp.FromDateTime(new DateTime(1999,01,01).ToUniversalTime()),
+                            Bio = "I am testman!!!"
                         }
                     }
                 }).Returns(new List<dynamic>
-                    { 1, "Testman", "Tester", "123","TestSalt", "Testmail@Test.com", "Testroad 1", new DateTime(1999,01,01).ToUniversalTime(), "I am testman!!!" });
+                    { "Testman", "Tester", "Testroad 1", new DateTime(1999,01,01).ToUniversalTime(), "I am testman!!!" });
                 
                 
                 yield return new TestCaseData(new UpdateUserRequest
                 {
-                    User = new UserObject
+                    Id = Int32.MinValue,
+                    User = new UserInfo
                     {
-                        Id = Int32.MinValue,
-                        UserData = new UserData
+                        FirstName = String.Empty,
+                        LastName = String.Empty,
+                        Sub = new SubstituteObject
                         {
-                            FirstName = String.Empty,
-                            LastName = String.Empty,
-                            PasswordHash = String.Empty,
-                            Salt = String.Empty,
-                            Email = String.Empty,
-                            Sub = new SubstituteObject
-                            {
-                                Address = String.Empty,
-                                BirthDate = Timestamp.FromDateTime(new DateTime(1,01,01).ToUniversalTime()),
-                                Bio = String.Empty
-                            }
+                            Address = String.Empty,
+                            BirthDate = Timestamp.FromDateTime(new DateTime(1,01,01).ToUniversalTime()),
+                            Bio = String.Empty
                         }
                     }
                 }).Returns(new List<dynamic>
-                    { Int32.MinValue, String.Empty,String.Empty, String.Empty, String.Empty, String.Empty, String.Empty, new DateTime(1,01,01).ToUniversalTime(), String.Empty });
+                    {String.Empty, String.Empty, String.Empty, new DateTime(1,01,01).ToUniversalTime(), String.Empty });
                
                 yield return new TestCaseData(new UpdateUserRequest
                 {
-                    User = new UserObject
+                    Id = Int32.MaxValue,
+                    User = new UserInfo
                     {
-                        Id = Int32.MaxValue,
-                        UserData = new UserData
+                        FirstName = _longString,
+                        LastName = _longString,
+                        Sub = new SubstituteObject
                         {
-                            FirstName = _longString,
-                            LastName = _longString,
-                            PasswordHash = _longString,
-                            Salt = _longString,
-                            Email = _longString,
-                            Sub = new SubstituteObject
-                            {
-                                Address = _longString,
-                                BirthDate = Timestamp.FromDateTime(new DateTime(9999,12,31).ToUniversalTime()),
-                                Bio = _longString
-                            }
+                            Address = _longString,
+                            BirthDate = Timestamp.FromDateTime(new DateTime(9999,12,31).ToUniversalTime()),
+                            Bio = _longString
                         }
                     }
                 }).Returns(new List<dynamic>
-                    { Int32.MaxValue, _longString,_longString, _longString,_longString, _longString, _longString, new DateTime(9999,12,31).ToUniversalTime(), _longString });
+                    {_longString, _longString, _longString, new DateTime(9999,12,31).ToUniversalTime(), _longString });
             }
         }
 
@@ -688,69 +627,51 @@ public class ConverterTestAdministration
             {
                 yield return new TestCaseData(new UpdateUserRequest
                 {
-                    User = new UserObject
+                    Id = 1,
+                    User = new UserInfo
                     {
-                        Id = 1,
-                        UserData = new UserData
+                        FirstName = "Testman",
+                        LastName = "Tester",
+                        Emp = new EmployerObject
                         {
-                            FirstName = "Testman",
-                            LastName = "Tester",
-                            PasswordHash = "123",
-                            Salt = "TestSalt",
-                            Email = "Testmail@Test.com",
-                            Emp = new EmployerObject
-                            {
-                                Title = "Test CEO",
-                                Workplace = "Testland"
-                            }
+                            Title = "Test CEO",
+                            Workplace = "Testland"
                         }
                     }
                 }).Returns(new List<dynamic>
-                    { 1, "Testman", "Tester", "123","TestSalt", "Testmail@Test.com","Test CEO","Testland"});
+                    {"Testman", "Tester","Test CEO","Testland"});
                 
                 yield return new TestCaseData(new UpdateUserRequest
                 {
-                    User = new UserObject
+                    Id = Int32.MinValue,
+                    User = new UserInfo
                     {
-                        Id = Int32.MinValue,
-                        UserData = new UserData
+                        FirstName = String.Empty,
+                        LastName = String.Empty,
+                        Emp = new EmployerObject
                         {
-                            FirstName = String.Empty,
-                            LastName = String.Empty,
-                            PasswordHash = String.Empty,
-                            Salt = String.Empty,
-                            Email = String.Empty,
-                            Emp = new EmployerObject
-                            {
-                                Title = String.Empty,
-                                Workplace = String.Empty
-                            }
+                            Title = String.Empty,
+                            Workplace = String.Empty
                         }
                     }
                 }).Returns(new List<dynamic>
-                    { Int32.MinValue, String.Empty,String.Empty, String.Empty, String.Empty, String.Empty,String.Empty,String.Empty});
+                    {String.Empty, String.Empty,String.Empty,String.Empty});
                 
                 yield return new TestCaseData(new UpdateUserRequest
                 {
-                    User = new UserObject
+                    Id = Int32.MaxValue,
+                    User = new UserInfo
                     {
-                        Id = Int32.MaxValue,
-                        UserData = new UserData
+                        FirstName = _longString,
+                        LastName = _longString,
+                        Emp = new EmployerObject
                         {
-                            FirstName = _longString,
-                            LastName = _longString,
-                            PasswordHash = _longString,
-                            Salt = _longString,
-                            Email = _longString,
-                            Emp = new EmployerObject
-                            {
                                 Title = _longString,
                                 Workplace = _longString
-                            }
                         }
                     }
                 }).Returns(new List<dynamic>
-                    { Int32.MaxValue, _longString, _longString, _longString,_longString, _longString, _longString, _longString });
+                    {_longString, _longString, _longString, _longString });
             }
         }
         

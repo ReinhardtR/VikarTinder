@@ -40,11 +40,8 @@ public class AuthServiceServer : AuthService.AuthServiceBase
                     createUserRequest.User.Email,
                     createUserRequest.User.Emp.Title,
                     createUserRequest.User.Emp.Workplace);
-            
-            CreateUserResponse userResponse = user is Substitute
-                ? AuthServiceFactory.CreateSubstituteUserResponse((Substitute)user)
-                : AuthServiceFactory.CreateEmployerUserResponse((Employer)user);
 
+            CreateUserResponse userResponse = AuthServiceFactory.CreateUserResponse(user);
             return userResponse;
         }
         catch (DaoNotUniqueEmail)
@@ -77,9 +74,7 @@ public class AuthServiceServer : AuthService.AuthServiceBase
             ? await _dao.UpdateUserAsync(AuthServiceFactory.MakeSubstituteDomainObject(updateUserRequest))
             : await _dao.UpdateUserAsync(AuthServiceFactory.MakeEmployerDomainObject(updateUserRequest));
 
-        UpdateUserResponse userResponse = user is Substitute
-            ? AuthServiceFactory.UpdateSubstituteUserResponse((Substitute)user)
-            : AuthServiceFactory.UpdateEmployerUserResponse((Employer)user);
+        UpdateUserResponse userResponse = AuthServiceFactory.CreateUpdateUserResponse(user);
 
         return userResponse;
     }
