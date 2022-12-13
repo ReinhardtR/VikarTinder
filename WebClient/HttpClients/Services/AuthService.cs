@@ -37,12 +37,12 @@ public class JwtAuthService : IAuthService
         return Task.CompletedTask;
     }
 
-    public Task RegisterEmployerAsync(RegisterEmployerRequestDTO dto)
+    public Task SignUpEmployerAsync(SignUpEmployerRequestDTO dto)
     {
         return _client.RegisterEmployerAsync(dto);
     }
     
-    public Task RegisterSubstituteAsync(RegisterSubstituteRequestDTO dto)
+    public Task SignUpSubstituteAsync(SignUpSubstituteRequestDTO dto)
     {
         return _client.RegisterSubstituteAsync(dto);
     }
