@@ -4,7 +4,7 @@ import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import com.example.businessserver.logic.interfaces.AuthLogic;
-import com.example.businessserver.services.implementations.AuthServiceImpl;
+import com.example.businessserver.services.interfaces.AuthService;
 import com.example.businessserver.services.utils.JWTUtility;
 import com.example.businessserver.services.utils.UserSaltHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 	@Autowired
 	private JWTUtility jwtUtility;
 	@Autowired
-	private AuthServiceImpl userService;
+	private AuthService userService;
 
 	public AuthLogicImpl() {
 		//Taget fra geeksforgeeks      https://www.geeksforgeeks.org/check-email-address-valid-not-java/
@@ -51,29 +51,30 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 		return new JwtResponseDTO(jwtUtility.generateToken(userDetails));
 	}
 
-	@Override
-	public void signUpEmployer(SignUpEmployerRequestDTO requestDTO) throws DTOException {
-		objectNullCheck(requestDTO, "signUpRequest");
-		checkEmail(requestDTO.getEmail());
-		checkPassword(requestDTO.getPassword());
-		checkStringMinimumValues(requestDTO.getFirstName(), "Firstname", nameMinLength);
-		checkStringMinimumValues(requestDTO.getLastName(), "Lastname", nameMinLength);
-		checkStringMinimumValues(requestDTO.getTitle(), "Title", 1);
-		checkStringMinimumValues(requestDTO.getWorkplace(), "Workplace", 1);
-		String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
-		userService.SignUpEmployer(new SignUpWrapperEmployerDTO(saltHashedPassword[0], saltHashedPassword[1], requestDTO));
-	}
+    @Override
+    public void signUpEmployer(SignUpEmployerRequestDTO requestDTO) throws DTOException {
+        objectNullCheck(requestDTO, "signUpRequest");
+        checkEmail(requestDTO.getEmail());
+        checkPassword(requestDTO.getPassword());
+        checkFirstName(requestDTO.getFirstName());
+        checkLastName(requestDTO.getLastName());
+        checkTitle(requestDTO.getTitle());
+        checkWorkplace(requestDTO.getTitle());
 
-	@Override
-	public void signUpSubstitute(SignUpSubstituteRequestDTO requestDTO) throws DTOException {
-		objectNullCheck(requestDTO, "signUpRequest");
-		checkEmail(requestDTO.getEmail());
-		checkPassword(requestDTO.getPassword());
-		checkStringMinimumValues(requestDTO.getFirstName(), "Firstname", nameMinLength);
-		checkStringMinimumValues(requestDTO.getLastName(), "Lastname", nameMinLength);
-		checkAge(requestDTO.getBirthDate().toLocalDate());
-		checkBio(requestDTO.getBio());
-		checkStringMinimumValues(requestDTO.getAddress(), "Address", 1);
+        String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
+        userService.SignUpEmployer(new SignUpWrapperEmployerDTO(saltHashedPassword[0], saltHashedPassword[1], requestDTO));
+    }
+
+    @Override
+    public void signUpSubstitute(SignUpSubstituteRequestDTO requestDTO) throws DTOException {
+        objectNullCheck(requestDTO, "signUpRequest");
+        checkEmail(requestDTO.getEmail());
+        checkPassword(requestDTO.getPassword());
+        checkFirstName(requestDTO.getFirstName());
+        checkLastName(requestDTO.getLastName());
+        checkAge(requestDTO.getBirthDate().toLocalDate());
+        checkBio(requestDTO.getBio());
+        checkAddress(requestDTO.getAddress());
 
 		String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
 		userService.SignUpSubstitute(new SignUpWrapperSubstituteDTO(saltHashedPassword[0], saltHashedPassword[1], requestDTO));
@@ -95,11 +96,79 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 		return userService.getSubstituteInfo(getUserInfoParamsDTO);
 	}
 
-	public void checkAge(LocalDate dob) throws DTOOutOfBoundsException {
-		int yearsDifference = Period.between(dob, LocalDate.now()).getYears();
-		if (yearsDifference < 18 || yearsDifference > 99)
-			throw new DTOOutOfBoundsException("User has to be older than 18 and less than 100: DOB given: " + dob);
-	}
+    @Override
+    public void updateEmployerInfo(UpdateEmployerInfoDTO updateRequest) throws DTOException {
+        objectNullCheck(updateRequest, "updateRequest");
+        checkId(updateRequest.getId());
+
+        EmployerInfoDTO updatedInfo = updateRequest.getUpdatedInfo();
+        checkFirstName(updatedInfo.getFirstName());
+        checkLastName(updatedInfo.getLastName());
+        checkTitle(updatedInfo.getTitle());
+        checkWorkplace(updatedInfo.getWorkplace());
+
+        userService.updateEmployerInfo(updateRequest);
+    }
+
+    @Override
+    public void updateSubstituteInfo(UpdateSubstituteInfoDTO updateRequest) throws DTOException {
+        objectNullCheck(updateRequest, "updateRequest");
+        checkId(updateRequest.getId());
+
+        SubstituteInfoDTO updatedInfo = updateRequest.getUpdatedInfo();
+        checkFirstName(updatedInfo.getFirstName());
+        checkLastName(updatedInfo.getLastName());
+        checkAge(updatedInfo.getBirthDate().toLocalDate());
+        checkBio(updatedInfo.getBio());
+        checkAddress(updatedInfo.getAddress());
+
+        userService.updateSubstituteInfo(updateRequest);
+    }
+
+    @Override
+    public void deleteUser(DeleteRequestDTO deleteRequest) throws DTOException {
+        objectNullCheck(deleteRequest, "deleteRequest");
+        objectNullCheck(deleteRequest.getRole(), "Role");
+        checkId(deleteRequest.getId());
+
+        userService.deleteUser(deleteRequest);
+    }
+
+    private void checkAddress(String address) throws DTOException {
+        String type = "Address";
+        objectNullCheck(address, type);
+        checkStringMinimumValues(address, type, 1);
+    }
+
+    private void checkWorkplace(String workplace) throws DTOException{
+        String type = "Workplace";
+        objectNullCheck(workplace, type);
+        checkStringMinimumValues(workplace, type, 1);
+    }
+
+    private void checkTitle(String title) throws DTOException {
+        String type = "Title";
+        objectNullCheck(title, type);
+        checkStringMinimumValues(title, type, 1);
+    }
+
+    private void checkLastName(String lastName) throws DTOException {
+        String type = "Lastname";
+        objectNullCheck(lastName, type);
+        checkStringMinimumValues(lastName, type, nameMinLength);
+    }
+
+    private void checkFirstName(String firstName) throws DTOException {
+        String type = "Firstname";
+        objectNullCheck(firstName, type);
+        checkStringMinimumValues(firstName, type, nameMinLength);
+    }
+
+    public void checkAge(LocalDate dob) throws DTOOutOfBoundsException {
+        int yearsDifference = Period.between(dob, LocalDate.now()).getYears();
+        if (yearsDifference < 18 || yearsDifference > 99)
+            throw new DTOOutOfBoundsException("User has to be older than 18 and less than 100: DOB given: " + dob);
+    }
 
 	public void checkBio(String bio) throws DTOException {
 		objectNullCheck(bio, "Bio");
@@ -125,11 +194,9 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 			throw new DTOOutOfBoundsException("Email does not follow the email standard");
 	}
 
-	//TODO : Den kan trimme mellemrummene mellem ord/navne. DTO'erne burde få disse rettede strings tilbage
-	public void checkStringMinimumValues(String string, String typeOfName, int minLength) throws DTOException {
-		objectNullCheck(string, typeOfName);
-
-		string = string.replaceAll("( )+", " "); //Efterlader kun et mellemrum efter ord
+    //TODO : Den kan trimme mellemrummene mellem ord/navne. DTO'erne burde få disse rettede strings tilbage
+    public void checkStringMinimumValues(String string, String typeOfName, int minLength) throws DTOException{
+        string = string.replaceAll("( )+", " "); //Efterlader kun et mellemrum efter ord
 
 		if (string.trim().length() < minLength)
 			throw new DTOOutOfBoundsException(typeOfName + " has to be at least " + minLength + " character long");
@@ -143,18 +210,15 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 			throw new DTOOutOfBoundsException("Wrong Password");
 	}
 
-	//https://www.baeldung.com/java-password-hashing
-	public String[] generateHashedPassword(String password) { //Returnerer string array, [0] = salt, [1] = hashedPassword
-		SecureRandom random = new SecureRandom();
-		;
-		byte[] salt = new byte[16];
-		random.nextBytes(salt);
-		String saltString = Arrays.toString(salt);
-		System.out.println("SALT: " + saltString);
-
-		String hashedPassword = generatePasswordWithKnownSalt(saltString, password);
-		return new String[]{saltString, hashedPassword};
-	}
+    //https://www.baeldung.com/java-password-hashing
+    public String[] generateHashedPassword(String password) { //Returnerer string array, [0] = salt, [1] = hashedPassword
+        SecureRandom random = new SecureRandom();
+        byte[] salt = new byte[16];
+        random.nextBytes(salt);
+        String saltString = Arrays.toString(salt);
+        String hashedPassword = generatePasswordWithKnownSalt(saltString, password);
+        return new String[]{saltString, hashedPassword};
+    }
 
 	public String generatePasswordWithKnownSalt(String salt, String password) {
 		MessageDigest digest;

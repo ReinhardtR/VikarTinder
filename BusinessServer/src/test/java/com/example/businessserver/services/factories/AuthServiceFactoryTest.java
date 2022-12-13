@@ -84,7 +84,7 @@ class AuthServiceFactoryTest {
         assertThrows(BuildingException.class, ()-> AuthServiceFactory.userObjectDTO(obj), "Checks if system throws exception in case more roles being added to UserData");
     }
 
-    @Test //TODO : Generaliser test createUserRequestEmployer/Substitute
+    @Test //TODO : Generaliser testne
     void test_createUserRequestEmployer() throws Exception {
         String firstName = "firstNameTest";
         String lastName = "lastNameTest";
@@ -217,9 +217,69 @@ class AuthServiceFactoryTest {
         assertAll(
                 ()->assertEquals(firstName, testDTO.getFirstName()),
                 ()->assertEquals(lastName, testDTO.getLastName()),
-                ()->assertEquals(localDateTime, testDTO.getBirthDate()),
+                ()->assertEquals(localDateTime.withNano(0), testDTO.getBirthDate()),
                 ()->assertEquals(bio, testDTO.getBio()),
                 ()->assertEquals(address, testDTO.getAddress())
+        );
+    }
+
+    @Test
+    void test_updateUserRequestSub()
+    {
+        int id = 1;
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String bio = "This is a test";
+        String address = "testDress";
+
+        SubstituteInfoDTO info = new SubstituteInfoDTO(firstName, lastName, localDateTime, bio, address);
+        UpdateSubstituteInfoDTO update = new UpdateSubstituteInfoDTO(id, info);
+        UpdateUserRequest updateTest = AuthServiceFactory.updateUserRequestSub(update);
+        assertAll(
+                ()->assertEquals(id, updateTest.getId()),
+                ()->assertEquals(firstName, updateTest.getUser().getFirstName()),
+                ()->assertEquals(lastName, updateTest.getUser().getLastName()),
+                ()->assertEquals(localDateTime.withNano(0), SharedFactory.toLocalDateTime(updateTest.getUser().getSub().getBirthDate())),
+                ()->assertEquals(bio, updateTest.getUser().getSub().getBio()),
+                ()->assertEquals(address, updateTest.getUser().getSub().getAddress())
+        );
+    }
+
+    @Test
+    void test_updateUserRequestEmp()
+    {
+        int id = 1;
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+        String title = "testTitle";
+        String workplace = "testWorkplace";
+
+        EmployerInfoDTO info = new EmployerInfoDTO(firstName, lastName, title, workplace);
+        UpdateEmployerInfoDTO update = new UpdateEmployerInfoDTO(id, info);
+        UpdateUserRequest updateTest = AuthServiceFactory.updateUserRequestEmp(update);
+
+        assertAll(
+                ()->assertEquals(id, updateTest.getId()),
+                ()->assertEquals(firstName, updateTest.getUser().getFirstName()),
+                ()->assertEquals(lastName, updateTest.getUser().getLastName()),
+                ()->assertEquals(title, updateTest.getUser().getEmp().getTitle()),
+                ()->assertEquals(workplace, updateTest.getUser().getEmp().getWorkplace())
+        );
+    }
+
+    @Test
+    void test_deleteUserRequest()
+    {
+        int id = 1;
+        LoginUserResponseDTO.Role role = LoginUserResponseDTO.Role.SUBSTITUTE;
+
+        DeleteRequestDTO dtoTest = new DeleteRequestDTO(id, role);
+        DeleteUserRequest deleteTest = AuthServiceFactory.deleteUserRequest(dtoTest);
+        
+        assertAll(
+                ()->assertEquals(id, deleteTest.getUser().getId()),
+                ()->assertEquals(role.toString(), deleteTest.getUser().getRole().toString())
         );
     }
 
