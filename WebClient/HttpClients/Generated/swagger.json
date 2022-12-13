@@ -457,7 +457,38 @@
         }
       }
     },
-    "/auth/EmployerInfo/{id}{role}": {
+    "/auth/SubstituteInfo/{id}": {
+      "get": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "getSubstituteInformation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubstituteInfoDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/EmployerInfo/{id}": {
       "get": {
         "tags": [
           "auth-controller"
@@ -472,23 +503,18 @@
               "type": "integer",
               "format": "int32"
             }
-          },
-          {
-            "name": "role",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "SUBSTITUTE",
-                "EMPLOYER"
-              ]
-            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmployerInfoDTO"
+                }
+              }
+            }
           }
         }
       }
@@ -840,6 +866,44 @@
           "id": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "SubstituteInfoDTO": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "bio": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          }
+        }
+      },
+      "EmployerInfoDTO": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "workplace": {
+            "type": "string"
           }
         }
       }

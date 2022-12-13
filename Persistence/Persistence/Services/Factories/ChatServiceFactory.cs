@@ -28,8 +28,8 @@ public class ChatServiceFactory
         {
             Id = chat.Id,
             GigId = chat.GigId,
-            Employer = ToEmployerUserObject(new Employer {Id = chat.EmployerId}),
-            Substitute = ToSubstituteUserObject(new Substitute{Id = chat.SubstituteId})
+            Employer = ToEmployerUserObject(chat.Employer),
+            Substitute = ToSubstituteUserObject(chat.Substitute)
         };
     }
 
@@ -43,8 +43,8 @@ public class ChatServiceFactory
             {
                 Id = chat.Id,
                 GigId = chat.GigId,
-                Employer = ToEmployerUserObject(new Employer{ Id = chat.EmployerId }),
-                Substitute = ToSubstituteUserObject(new Substitute{ Id = chat.SubstituteId })
+                Employer = ToEmployerUserObject(chat.Employer),
+                Substitute = ToSubstituteUserObject(chat.Substitute)
             });
         }
         

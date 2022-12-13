@@ -1,7 +1,7 @@
 package com.example.businessserver.services.implementations;
 
-import AuthService.GetUserResponse;
 import AuthService.AuthServiceGrpc;
+import AuthService.GetUserResponse;
 import AuthService.LoginUserResponse;
 import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.BuildingException;
@@ -54,21 +54,21 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public void SignUpEmployer(SignUpWrapperEmployerDTO employerRequestDTO) {
 		authServiceBlockingStub.createUser(
-			AuthServiceFactory.createUserRequestEmployer(employerRequestDTO)
+						AuthServiceFactory.createUserRequestEmployer(employerRequestDTO)
 		);
 	}
 
 	@Override
 	public void SignUpSubstitute(SignUpWrapperSubstituteDTO substituteRequestDTO) {
 		authServiceBlockingStub.createUser(
-			AuthServiceFactory.createUserRequestSubstitute(substituteRequestDTO)
+						AuthServiceFactory.createUserRequestSubstitute(substituteRequestDTO)
 		);
 	}
 
 	@Override
 	public EmployerInfoDTO getEmployerInfo(GetUserInfoParamsDTO getEmployerInfoParamsDTO) {
 		GetUserResponse response = authServiceBlockingStub.getUser(
-				AuthServiceFactory.getUserRequest(getEmployerInfoParamsDTO)
+						AuthServiceFactory.getUserRequest(getEmployerInfoParamsDTO)
 		);
 		return AuthServiceFactory.employerInfoDTO(response);
 	}

@@ -49,12 +49,18 @@ public class ChatDao : IChatDao
 
     public Task<List<Chat>> GetUserChatsAsync(int userId)
     {
-        return _dataContext.Chats.Where(c => c.EmployerId == userId || c.SubstituteId == userId).ToListAsync();
+        return _dataContext.Chats
+            .Include((c) => new { c.Employer, c.Substitute })
+            .Where(c => c.EmployerId == userId || c.SubstituteId == userId)
+            .ToListAsync();
     }
 
     public Task<List<Chat>> GetGigChatsAsync(int gigId)
     {
-        return _dataContext.Chats.Where((c) => c.GigId == gigId).ToListAsync();
+        return _dataContext.Chats
+            .Include((c) => new { c.Employer, c.Substitute })
+            .Where((c) => c.GigId == gigId)
+            .ToListAsync();
     }
     
     public Task<Chat> GetChatHistoryAsync(int requestChatId)

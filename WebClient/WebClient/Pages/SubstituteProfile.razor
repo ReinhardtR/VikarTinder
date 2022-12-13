@@ -1,0 +1,68 @@
+@page "/vikar/{ProfileUserId:int}"
+@using WebClient.Utils
+@using HttpClients.Services.Interfaces
+@using HttpClients
+@inject IAuthService AuthService
+
+@if (profile == null && errorLabel == null)
+{
+    <p>Loading...</p>
+}
+else if (errorLabel != null)
+{
+    <p>Error: @errorLabel</p>
+}
+else if (profile != null)
+{
+    <MudStack Spacing="4">
+        <MudStack Spacing="8" Row="true">
+            <MudAvatar Size="Size.Medium" Color="Color.Secondary">@profile.FirstName[0]</MudAvatar>
+            <MudText Typo="Typo.h6">@profile.FirstName @profile.LastName</MudText>
+        </MudStack>
+
+        <MudPaper Width="100%">
+            <MudText>@profile.Bio</MudText>
+        </MudPaper>
+        
+        <MudStack Spacing="4">
+            <MudText>@(DateTime.Today.Year - profile.BirthDate.Year) år gammel</MudText>
+            <MudText>@profile.Address</MudText>
+        </MudStack>
+    </MudStack>
+}
+
+@code {
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    
+    [Parameter]
+    public int ProfileUserId { get; set; }
+
+    private SubstituteInfoDTO? profile;
+    private string? errorLabel;
+    private bool isEditable = false;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProfileAsync();
+    }
+
+    private async Task GetProfileAsync()
+    {
+        try
+        {
+            profile = await AuthService.GetSubstituteInfoAsync(ProfileUserId);
+
+            AuthenticationState authState = await AuthState;
+            int currentUserId = AuthClaims.GetUserId(authState);
+
+            isEditable = currentUserId == ProfileUserId;
+        }
+        catch
+        {
+            errorLabel = "Der skete en fejl";
+        }
+    }
+
+}

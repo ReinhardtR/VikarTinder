@@ -46,7 +46,17 @@ public class JwtAuthService : IAuthService
     {
         return _client.RegisterSubstituteAsync(dto);
     }
+
+    public Task<EmployerInfoDTO> GetEmployerInfoAsync(int userId)
+    {
+        return _client.GetEmployerInformationAsync(userId);
+    }
     
+    public Task<SubstituteInfoDTO> GetSubstituteInfoAsync(int userId)
+    {
+        return _client.GetSubstituteInformationAsync(userId);
+    }
+
     private void UpdateJwtToken(string? jwtToken)
     {
         Jwt = jwtToken;
