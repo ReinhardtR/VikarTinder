@@ -82,9 +82,9 @@ public class DataContext : DbContext
         Seed();
     }
 
-    private void Seed()
+    private async void Seed()
     {
-        Employer employer = new()
+        Employer employer1 = new()
         {
             Email = "emp-test@example.com",
             Title = "Lager Manager",
@@ -94,15 +94,60 @@ public class DataContext : DbContext
             PasswordHash = "TestingHash"
         };
 
-        Substitute substitute = new()
+        Employer employer2 = new()
+        {
+            Email = "employee2@bilka.com",
+            Title = "Lager Manager",
+            FirstName = "James",
+            LastName = "Larsen",
+            WorkPlace = "Lidl",
+            PasswordHash = "TestingHash"
+        };
+
+        Employers.Add(employer1);
+        Employers.Add(employer2);
+        
+        Substitute substitute1 = new()
         {
             Email = "sub-test@example.com",
             Address = "Testvej 1, 8700 Horsens",
             FirstName = "Jane",
             LastName = "Doe",
             PasswordHash = "TestingHash",
-            
         };
+        
+        Substitute substitute2 = new()
+        {
+            Email = "substitute@home.com",
+            Address = "Testvej 1, 8700 Horsens",
+            FirstName = "Lise",
+            LastName = "Jørgensen",
+            PasswordHash = "TestingHash",
+        };
+        
+        Substitutes.Add(substitute1);
+        Substitutes.Add(substitute2);
+
+        Gig gig1 = new()
+        {
+            Employer = employer1,
+        };
+        
+        Gig gig2 = new()
+        {
+            Employer = employer1,
+        };
+
+        Gig gig3 = new()
+        {
+            Employer = employer2
+        };
+        
+        Gigs.Add(gig1);
+        Gigs.Add(gig2);
+        Gigs.Add(gig3);
+       
+        await SaveChangesAsync();
     }
     
     public override int SaveChanges()

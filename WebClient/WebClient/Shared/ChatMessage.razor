@@ -1,7 +1,12 @@
 @using System.Security.Claims
-<MudPaper Class="@GetMessageClasses()" Style="@GetMessageStyles()">
-  <MudText>@Content</MudText>
-</MudPaper>
+<MudStack>
+    <MudPaper Class="@GetMessageClasses()" Style="@GetMessageStyles()">
+        <MudText>@Content</MudText>
+    </MudPaper>
+    <MudText Typo="Typo.caption" Style="color: lightgray">
+        @DateTime.Now.Subtract(SentAt).ToString()
+    </MudText>
+</MudStack>
   
 @code {
     [Parameter]
@@ -12,8 +17,11 @@
       
     [Parameter]
     public string Content { get; set; }
+    
+    [Parameter]
+    public DateTime SentAt { get; set; }
 
-    private String GetMessageClasses()
+    private string GetMessageClasses()
     {
         const string baseClasses = "pa-3";
         string uniqueClasses = AuthorId == UserId ? "ml-auto" : "mr-auto";
