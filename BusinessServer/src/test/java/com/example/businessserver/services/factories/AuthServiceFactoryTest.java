@@ -246,6 +246,43 @@ class AuthServiceFactoryTest {
         );
     }
 
+    @Test
+    void test_updateUserRequestEmp()
+    {
+        int id = 1;
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+        String title = "testTitle";
+        String workplace = "testWorkplace";
+
+        EmployerInfoDTO info = new EmployerInfoDTO(firstName, lastName, title, workplace);
+        UpdateEmployerInfoDTO update = new UpdateEmployerInfoDTO(id, info);
+        UpdateUserRequest updateTest = AuthServiceFactory.updateUserRequestEmp(update);
+
+        assertAll(
+                ()->assertEquals(id, updateTest.getId()),
+                ()->assertEquals(firstName, updateTest.getUser().getFirstName()),
+                ()->assertEquals(lastName, updateTest.getUser().getLastName()),
+                ()->assertEquals(title, updateTest.getUser().getEmp().getTitle()),
+                ()->assertEquals(workplace, updateTest.getUser().getEmp().getWorkplace())
+        );
+    }
+
+    @Test
+    void test_deleteUserRequest()
+    {
+        int id = 1;
+        LoginUserResponseDTO.Role role = LoginUserResponseDTO.Role.SUBSTITUTE;
+
+        DeleteRequestDTO dtoTest = new DeleteRequestDTO(id, role);
+        DeleteUserRequest deleteTest = AuthServiceFactory.deleteUserRequest(dtoTest);
+        
+        assertAll(
+                ()->assertEquals(id, deleteTest.getUser().getId()),
+                ()->assertEquals(role.toString(), deleteTest.getUser().getRole().toString())
+        );
+    }
+
     private SubstituteObject buildSubstituteObj(LocalDateTime age, String bio, String address) {
         return SubstituteObject.newBuilder()
                 .setBirthDate(SharedFactory.toTimestamp(age))

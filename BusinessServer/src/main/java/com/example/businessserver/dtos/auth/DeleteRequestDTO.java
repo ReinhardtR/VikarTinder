@@ -1,10 +1,10 @@
 package com.example.businessserver.dtos.auth;
 
-public class GetUserInfoParamsDTO {
+public class DeleteRequestDTO {
     private int id;
     private LoginUserResponseDTO.Role role;
 
-    public GetUserInfoParamsDTO(int id, LoginUserResponseDTO.Role role) {
+    public DeleteRequestDTO(int id, LoginUserResponseDTO.Role role) {
         this.id = id;
         this.role = role;
     }

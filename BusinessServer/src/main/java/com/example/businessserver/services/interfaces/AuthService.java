@@ -14,4 +14,6 @@ public interface AuthService extends UserDetailsService {
     void updateEmployerInfo(UpdateEmployerInfoDTO updateRequest);
 
     void updateSubstituteInfo(UpdateSubstituteInfoDTO updateRequest);
+
+    void deleteUser(DeleteRequestDTO deleteRequest);
 }

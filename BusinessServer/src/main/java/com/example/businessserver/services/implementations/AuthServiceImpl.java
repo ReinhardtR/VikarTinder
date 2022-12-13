@@ -94,4 +94,11 @@ public class AuthServiceImpl implements AuthService {
 				AuthServiceFactory.updateUserRequestSub(updateRequest)
 		);
 	}
+
+	@Override
+	public void deleteUser(DeleteRequestDTO deleteRequest) {
+		authServiceBlockingStub.deleteUser(
+				AuthServiceFactory.deleteUserRequest(deleteRequest)
+		);
+	}
 }

@@ -15,4 +15,6 @@ public interface AuthLogic {
     void updateEmployerInfo(UpdateEmployerInfoDTO updateRequest) throws DTOException;
 
     void updateSubstituteInfo(UpdateSubstituteInfoDTO updateRequest) throws DTOException;
+
+    void deleteUser(DeleteRequestDTO deleteRequest) throws DTOException;
 }

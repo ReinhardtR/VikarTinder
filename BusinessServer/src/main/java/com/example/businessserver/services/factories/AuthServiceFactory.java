@@ -151,4 +151,13 @@ public class AuthServiceFactory {
 								).build()
 				).build();
 	}
+
+	public static DeleteUserRequest deleteUserRequest(DeleteRequestDTO deleteRequest) {
+		return DeleteUserRequest.newBuilder()
+				.setUser(
+						GetUserParams.newBuilder()
+								.setId(deleteRequest.getId())
+								.setRole(GetUserParams.Role.valueOf(deleteRequest.getRole().toString())).build()
+				).build();
+	}
 }
