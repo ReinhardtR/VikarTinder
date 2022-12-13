@@ -185,7 +185,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterSubstituteRequestDTO"
+                "$ref": "#/components/schemas/SignUpSubstituteRequestDTO"
               }
             }
           },
@@ -208,7 +208,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterEmployerRequestDTO"
+                "$ref": "#/components/schemas/SignUpEmployerRequestDTO"
               }
             }
           },
@@ -456,6 +456,42 @@
           }
         }
       }
+    },
+    "/auth/EmployerInfo/{id}{role}": {
+      "get": {
+        "tags": [
+          "auth-controller"
+        ],
+        "operationId": "getEmployerInformation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "role",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "SUBSTITUTE",
+                "EMPLOYER"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -596,7 +632,7 @@
           }
         }
       },
-      "RegisterSubstituteRequestDTO": {
+      "SignUpSubstituteRequestDTO": {
         "type": "object",
         "properties": {
           "firstName": {
@@ -623,7 +659,7 @@
           }
         }
       },
-      "RegisterEmployerRequestDTO": {
+      "SignUpEmployerRequestDTO": {
         "type": "object",
         "properties": {
           "firstName": {

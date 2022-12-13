@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Runtime.Serialization;
 using HttpClients.Services;
 using Newtonsoft.Json;
 
@@ -10,6 +11,7 @@ public partial class GeneratedClient
     {
         Console.WriteLine("UpdateJsonSerializerSettings");
         settings.NullValueHandling = NullValueHandling.Ignore;
+        settings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
     }
     
     partial void PrepareRequest(HttpClient client, HttpRequestMessage request, string url)
