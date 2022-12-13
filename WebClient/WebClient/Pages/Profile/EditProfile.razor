@@ -1,0 +1,15 @@
+@page "/rediger-profil"
+@using WebClient.Utils
+@attribute [Authorize]
+
+<AuthorizeView Policy="@AuthPolicies.EmployerOnly">
+    <EditEmployerProfile />
+</AuthorizeView>
+
+<AuthorizeView Policy="@AuthPolicies.SubstituteOnly">
+    <EditSubstituteProfile />
+</AuthorizeView>
+
+@code {
+    
+}

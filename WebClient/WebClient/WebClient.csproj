@@ -22,6 +22,28 @@
       <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css" />
       <_ContentIncludedByDefault Remove="wwwroot\css\bootstrap\bootstrap.min.css.map" />
       <_ContentIncludedByDefault Remove="wwwroot\sample-data\weather.json" />
+      <_ContentIncludedByDefault Remove="Pages\Auth\Login.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Auth\SignUpChoice.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Auth\SignUpEmployer.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Auth\SignUpSubstitute.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Matching\MatchingContainer.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Matching\MatchingGigs.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Matching\MatchingSubstitutes.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Profile\EditEmployerProfile.razor" />
+      <_ContentIncludedByDefault Remove="Shared\Profile\EditSubstituteProfile.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Auth\Login.razor" />
+      <AdditionalFiles Include="Components\Auth\SignUpChoice.razor" />
+      <AdditionalFiles Include="Components\Auth\SignUpEmployer.razor" />
+      <AdditionalFiles Include="Components\Auth\SignUpSubstitute.razor" />
+      <AdditionalFiles Include="Components\Chat\ChatMessage.razor" />
+      <AdditionalFiles Include="Components\Chat\ChatsOverview.razor" />
+      <AdditionalFiles Include="Components\Chat\GigsOverview.razor" />
+      <AdditionalFiles Include="Components\Chat\JobConfirmationRequest.razor" />
+      <AdditionalFiles Include="Components\Matching\MatchingGigs.razor" />
+      <AdditionalFiles Include="Components\Matching\MatchingSubstitutes.razor" />
     </ItemGroup>
 
 </Project>
