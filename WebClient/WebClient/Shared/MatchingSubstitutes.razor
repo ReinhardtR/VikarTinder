@@ -1,0 +1,93 @@
+﻿@using HttpClients.Services
+@using HttpClients
+@using WebClient.Utils
+@inject MatchingService MatchingService
+
+@if (errorLabel != null && !isLoading)
+{
+    <MudText Color="Color.Error">@errorLabel</MudText>   
+}
+else if (isLoading)
+{
+    <MudProgressCircular Color="Color.Secondary" Size="Size.Large" Indeterminate="true"/>
+}
+else if (substitutes.Count > 0)
+{
+    SubstituteMatchingDTO substitute = substitutes.Peek();
+    
+    <MatchingContainer
+        OnAccept="OnAccept"
+        OnDecline="OnDecline"
+    >
+        <MudStack Spacing="4">
+            <MudText>@substitute.Id</MudText>
+        </MudStack>    
+    </MatchingContainer>
+}
+else
+{
+    <MudText Color="Color.Info" Typo="Typo.h5">Ikke flere muligheder</MudText>
+}
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
+    
+    private Stack<SubstituteMatchingDTO> substitutes = new();
+    private bool isLoading = true;
+    private string? errorLabel;
+
+    protected override async Task OnInitializedAsync()
+    {
+       await GetSubstitutesAsync();
+    }
+
+    private async Task GetSubstitutesAsync()
+    {
+        isLoading = true;
+        
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            int userId = AuthClaims.GetUserId(authState);
+
+            SubstituteMatchingDTOs substitutesResult = await MatchingService.GetSubstitutesAsync(userId);
+            
+            substitutesResult.PossibleMatches.ToList().ForEach((s) => substitutes.Push(s));
+        }
+        catch
+        {
+            errorLabel = "Der skete en fejl";
+        }
+        
+        isLoading = false;
+        StateHasChanged();
+    }
+
+    private async void OnAccept()
+    {
+        await SendSubstituteMatchRequestAsync(true);
+    }
+    
+    private async void OnDecline()
+    {
+        await SendSubstituteMatchRequestAsync(false);
+    }
+    
+    private async Task SendSubstituteMatchRequestAsync(bool wantsToMatch)
+    {
+        AuthenticationState authState = await AuthState;
+        int userId = AuthClaims.GetUserId(authState);
+        
+        SubstituteMatchingDTO substitute = substitutes.Pop();
+        
+        await MatchingService.SendSubstituteMatchRequestAsync(new MatchRequestDTO()
+        {
+            CurrentUser = userId,
+            MatchId = substitute.Id,
+            WantsToMatch = wantsToMatch
+        });
+
+        StateHasChanged();
+    }
+}

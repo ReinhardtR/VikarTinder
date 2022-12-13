@@ -1,0 +1,24 @@
+
+<MudPaper Class="pa-6">
+    <MudStack Spacing="8" Justify="Justify.Center" AlignItems="AlignItems.Center">
+        @ChildContent
+
+        <MudStack Row="@true" Justify="Justify.Center" AlignItems="AlignItems.Center">
+            <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Success" OnClick="OnAccept">JA</MudButton>
+            <MudButton Variant="Variant.Filled" Size="Size.Large" Color="Color.Error" OnClick="OnDecline">NEJ</MudButton>
+        </MudStack>
+    </MudStack>
+</MudPaper>
+
+@code {
+    
+    [Parameter]
+    public Action OnAccept { get; set; }
+    
+    [Parameter]
+    public Action OnDecline { get; set; }
+    
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+    
+}

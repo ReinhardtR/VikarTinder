@@ -82,7 +82,7 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 	@Override
 	public EmployerInfoDTO getEmployerInfo(GetUserInfoParamsDTO getEmployerInfoParamsDTO) throws DTOException {
 		objectNullCheck(getEmployerInfoParamsDTO, "employerInfoParams");
-		// objectNullCheck(getEmployerInfoParamsDTO.getRole(), "Role");
+		objectNullCheck(getEmployerInfoParamsDTO.getRole(), "Role");
 		checkId(getEmployerInfoParamsDTO.getId());
 		return userService.getEmployerInfo(getEmployerInfoParamsDTO);
 	}
@@ -90,7 +90,7 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 	@Override
 	public SubstituteInfoDTO getSubstituteInfo(GetUserInfoParamsDTO getUserInfoParamsDTO) throws DTOException {
 		objectNullCheck(getUserInfoParamsDTO, "substituteInfoParams");
-		// objectNullCheck(getUserInfoParamsDTO.getRole(), "Role");
+		objectNullCheck(getUserInfoParamsDTO.getRole(), "Role");
 		checkId(getUserInfoParamsDTO.getId());
 		return userService.getSubstituteInfo(getUserInfoParamsDTO);
 	}

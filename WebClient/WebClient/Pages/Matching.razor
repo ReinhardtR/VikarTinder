@@ -1,0 +1,10 @@
+@page "/Matching"
+@using WebClient.Utils
+
+<AuthorizeView Policy="@AuthPolicies.EmployerOnly">
+    <MatchingSubstitutes />
+</AuthorizeView>
+
+<AuthorizeView Policy="@AuthPolicies.SubstituteOnly">
+    <MatchingGigs />
+</AuthorizeView>
