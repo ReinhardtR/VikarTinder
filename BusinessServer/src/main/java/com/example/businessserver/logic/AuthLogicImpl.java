@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.regex.Pattern;
 
 @Service
-public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
+public class AuthLogicImpl extends BasicLogic implements AuthLogic {
     @Autowired
     private JWTUtility jwtUtility;
 
@@ -82,8 +82,6 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         objectNullCheck(getEmployerInfoParamsDTO, "employerInfoParams");
         objectNullCheck(getEmployerInfoParamsDTO.getRole(), "Role");
         checkId(getEmployerInfoParamsDTO.getId());
-        if (!getEmployerInfoParamsDTO.getRole().equals(LoginUserResponseDTO.Role.EMPLOYER))
-            throw new DTOOutOfBoundsException("Wrong role");
         return userService.getEmployerInfo(getEmployerInfoParamsDTO);
     }
 
@@ -92,10 +90,7 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
         objectNullCheck(getUserInfoParamsDTO, "substituteInfoParams");
         objectNullCheck(getUserInfoParamsDTO.getRole(), "Role");
         checkId(getUserInfoParamsDTO.getId());
-        if(!getUserInfoParamsDTO.getRole().equals(LoginUserResponseDTO.Role.EMPLOYER))
-            throw new DTOOutOfBoundsException("Wrong role");
-        userService.getSubstituteInfo(getUserInfoParamsDTO);
-        return null;
+        return userService.getSubstituteInfo(getUserInfoParamsDTO);
     }
 
     public void checkAge(LocalDate dob) throws DTOOutOfBoundsException {
