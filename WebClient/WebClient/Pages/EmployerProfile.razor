@@ -1,8 +1,8 @@
-@page "/Profile/{ProfileUserId:Int}"
+@page "/arbejdsudgiver/{ProfileUserId:int}"
 @using WebClient.Utils
 @using HttpClients.Services.Interfaces
+@using HttpClients
 @inject IAuthService AuthService
-@attribute [Authorize]
 
 @if (profile == null && errorLabel == null)
 {
@@ -16,7 +16,12 @@ else if (profile != null)
 {
     <MudStack Spacing="4">
         <MudStack Spacing="8" Row="true">
-            @profile
+            <MudAvatar Size="Size.Medium" Color="Color.Secondary">@profile.FirstName[0]</MudAvatar>
+            <MudText Typo="Typo.h6">@profile.FirstName @profile.LastName</MudText>
+        </MudStack>
+
+        <MudStack Row="true" Spacing="4">
+            <MudText>@profile.Workplace - @profile.Title</MudText>
         </MudStack>
     </MudStack>
 }
@@ -29,7 +34,7 @@ else if (profile != null)
     [Parameter]
     public int ProfileUserId { get; set; }
 
-    private string? profile;
+    private EmployerInfoDTO? profile;
     private string? errorLabel;
     private bool isEditable = false;
     
@@ -42,7 +47,7 @@ else if (profile != null)
     {
         try
         {
-            await AuthService.GetUserInfoAsync(ProfileUserId);
+            profile = await AuthService.GetEmployerInfoAsync(ProfileUserId);
 
             AuthenticationState authState = await AuthState;
             int currentUserId = AuthClaims.GetUserId(authState);

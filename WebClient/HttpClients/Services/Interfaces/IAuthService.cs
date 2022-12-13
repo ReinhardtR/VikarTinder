@@ -9,6 +9,7 @@ public interface IAuthService
     public Task LogoutAsync();
     public Task SignUpEmployerAsync(SignUpEmployerRequestDTO dto);
     public Task SignUpSubstituteAsync(SignUpSubstituteRequestDTO dto);
-    public Task GetUserInfoAsync(int userId);
+    public Task<SubstituteInfoDTO> GetSubstituteInfoAsync(int userId);
+    public Task<EmployerInfoDTO> GetEmployerInfoAsync(int userId);
     public Task<ClaimsPrincipal> GetAuthAsync();
 }
