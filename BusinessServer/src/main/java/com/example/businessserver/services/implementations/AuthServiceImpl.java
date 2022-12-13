@@ -80,4 +80,18 @@ public class AuthServiceImpl implements AuthService {
 		);
 		return AuthServiceFactory.substituteInfoDTO(response);
 	}
+
+	@Override
+	public void updateEmployerInfo(UpdateEmployerInfoDTO updateRequest) {
+		authServiceBlockingStub.updateUser(
+				AuthServiceFactory.updateUserRequestEmp(updateRequest)
+		);
+	}
+
+	@Override
+	public void updateSubstituteInfo(UpdateSubstituteInfoDTO updateRequest) {
+		authServiceBlockingStub.updateUser(
+				AuthServiceFactory.updateUserRequestSub(updateRequest)
+		);
+	}
 }

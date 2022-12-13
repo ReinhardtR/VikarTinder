@@ -4,7 +4,7 @@ import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.DTOException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import com.example.businessserver.logic.interfaces.AuthLogic;
-import com.example.businessserver.services.implementations.AuthServiceImpl;
+import com.example.businessserver.services.interfaces.AuthService;
 import com.example.businessserver.services.utils.JWTUtility;
 import com.example.businessserver.services.utils.UserSaltHolder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,12 +23,9 @@ import java.util.regex.Pattern;
 public class AuthLogicImpl extends BasicLogic implements AuthLogic {
     @Autowired
     private JWTUtility jwtUtility;
-
     @Autowired
-    private AuthServiceImpl userService;
-
+    private AuthService userService;
     private final Pattern emailPattern;
-
     private final int nameMinLength = 1;
 
     public AuthLogicImpl() {
@@ -54,10 +51,11 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
         objectNullCheck(requestDTO, "signUpRequest");
         checkEmail(requestDTO.getEmail());
         checkPassword(requestDTO.getPassword());
-        checkStringMinimumValues(requestDTO.getFirstName(), "Firstname", nameMinLength);
-        checkStringMinimumValues(requestDTO.getLastName(), "Lastname", nameMinLength);
-        checkStringMinimumValues(requestDTO.getTitle(), "Title", 1);
-        checkStringMinimumValues(requestDTO.getWorkplace(), "Workplace", 1);
+        checkFirstName(requestDTO.getFirstName());
+        checkLastName(requestDTO.getLastName());
+        checkTitle(requestDTO.getTitle());
+        checkWorkplace(requestDTO.getTitle());
+
         String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
         userService.SignUpEmployer(new SignUpWrapperEmployerDTO(saltHashedPassword[0], saltHashedPassword[1], requestDTO));
     }
@@ -67,11 +65,11 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
         objectNullCheck(requestDTO, "signUpRequest");
         checkEmail(requestDTO.getEmail());
         checkPassword(requestDTO.getPassword());
-        checkStringMinimumValues(requestDTO.getFirstName(), "Firstname", nameMinLength);
-        checkStringMinimumValues(requestDTO.getLastName(), "Lastname", nameMinLength);
+        checkFirstName(requestDTO.getFirstName());
+        checkLastName(requestDTO.getLastName());
         checkAge(requestDTO.getBirthDate().toLocalDate());
         checkBio(requestDTO.getBio());
-        checkStringMinimumValues(requestDTO.getAddress(), "Address", 1);
+        checkAddress(requestDTO.getAddress());
 
         String[] saltHashedPassword = generateHashedPassword(requestDTO.getPassword());
         userService.SignUpSubstitute(new SignUpWrapperSubstituteDTO(saltHashedPassword[0], saltHashedPassword[1], requestDTO));
@@ -91,6 +89,65 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
         objectNullCheck(getUserInfoParamsDTO.getRole(), "Role");
         checkId(getUserInfoParamsDTO.getId());
         return userService.getSubstituteInfo(getUserInfoParamsDTO);
+    }
+
+    @Override
+    public void updateEmployerInfo(UpdateEmployerInfoDTO updateRequest) throws DTOException {
+        objectNullCheck(updateRequest, "updateRequest");
+        checkId(updateRequest.getId());
+
+        EmployerInfoDTO updatedInfo = updateRequest.getUpdatedInfo();
+        checkFirstName(updatedInfo.getFirstName());
+        checkLastName(updatedInfo.getLastName());
+        checkTitle(updatedInfo.getTitle());
+        checkWorkplace(updatedInfo.getWorkplace());
+
+        userService.updateEmployerInfo(updateRequest);
+    }
+
+    @Override
+    public void updateSubstituteInfo(UpdateSubstituteInfoDTO updateRequest) throws DTOException {
+        objectNullCheck(updateRequest, "updateRequest");
+        checkId(updateRequest.getId());
+
+        SubstituteInfoDTO updatedInfo = updateRequest.getUpdatedInfo();
+        checkFirstName(updatedInfo.getFirstName());
+        checkLastName(updatedInfo.getLastName());
+        checkAge(updatedInfo.getBirthDate().toLocalDate());
+        checkBio(updatedInfo.getBio());
+        checkAddress(updatedInfo.getAddress());
+
+        userService.updateSubstituteInfo(updateRequest);
+    }
+
+    private void checkAddress(String address) throws DTOException {
+        String type = "Address";
+        objectNullCheck(address, type);
+        checkStringMinimumValues(address, type, 1);
+    }
+
+    private void checkWorkplace(String workplace) throws DTOException{
+        String type = "Workplace";
+        objectNullCheck(workplace, type);
+        checkStringMinimumValues(workplace, type, 1);
+    }
+
+    private void checkTitle(String title) throws DTOException {
+        String type = "Title";
+        objectNullCheck(title, type);
+        checkStringMinimumValues(title, type, 1);
+    }
+
+    private void checkLastName(String lastName) throws DTOException {
+        String type = "Lastname";
+        objectNullCheck(lastName, type);
+        checkStringMinimumValues(lastName, type, nameMinLength);
+    }
+
+    private void checkFirstName(String firstName) throws DTOException {
+        String type = "Firstname";
+        objectNullCheck(firstName, type);
+        checkStringMinimumValues(firstName, type, nameMinLength);
     }
 
     public void checkAge(LocalDate dob) throws DTOOutOfBoundsException {
@@ -125,8 +182,6 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 
     //TODO : Den kan trimme mellemrummene mellem ord/navne. DTO'erne burde få disse rettede strings tilbage
     public void checkStringMinimumValues(String string, String typeOfName, int minLength) throws DTOException{
-        objectNullCheck(string, typeOfName);
-
         string = string.replaceAll("( )+", " "); //Efterlader kun et mellemrum efter ord
 
         if(string.trim().length() < minLength)
@@ -141,7 +196,7 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 
     //https://www.baeldung.com/java-password-hashing
     public String[] generateHashedPassword(String password) { //Returnerer string array, [0] = salt, [1] = hashedPassword
-        SecureRandom random = new SecureRandom();;
+        SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
         String saltString = Arrays.toString(salt);

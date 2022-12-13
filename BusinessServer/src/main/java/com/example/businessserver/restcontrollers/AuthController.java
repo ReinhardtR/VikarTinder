@@ -64,11 +64,31 @@ public class AuthController {
 		}
 	}
 
+	@PostMapping("/EmployerInfo")
+	public void updateEmployerInformation(@RequestBody UpdateEmployerInfoDTO updateRequest)
+	{
+		try {
+			authLogic.updateEmployerInfo(updateRequest);
+		} catch (DTOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	@GetMapping("/SubstituteInfo/{id}")
 	public SubstituteInfoDTO getSubstituteInformation(@PathVariable int id)
 	{
 		try {
 			return authLogic.getSubstituteInfo(new GetUserInfoParamsDTO(id, LoginUserResponseDTO.Role.SUBSTITUTE));
+		} catch (DTOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@PostMapping("/SubstituteInfo")
+	public void updateSubstituteInformation(@RequestBody UpdateSubstituteInfoDTO updateRequest)
+	{
+		try {
+			authLogic.updateSubstituteInfo(updateRequest);
 		} catch (DTOException e) {
 			throw new RuntimeException(e);
 		}

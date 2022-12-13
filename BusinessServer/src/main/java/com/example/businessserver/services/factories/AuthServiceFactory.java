@@ -1,5 +1,6 @@
 package com.example.businessserver.services.factories;
 
+
 import AuthService.*;
 import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.BuildingException;
@@ -115,5 +116,39 @@ public class AuthServiceFactory {
 				subInfo.getBio(),
 				subInfo.getAddress()
 		);
+	}
+
+	public static UpdateUserRequest updateUserRequestEmp(UpdateEmployerInfoDTO updateRequest) {
+		EmployerInfoDTO dto = updateRequest.getUpdatedInfo();
+		return UpdateUserRequest.newBuilder()
+				.setId(updateRequest.getId())
+				.setUser(
+						UserInfo.newBuilder()
+								.setFirstName(dto.getFirstName())
+								.setLastName(dto.getLastName())
+								.setEmp(
+										EmployerObject.newBuilder()
+												.setTitle(dto.getTitle())
+												.setWorkplace(dto.getWorkplace()).build()
+								).build()
+				).build();
+	}
+
+	public static UpdateUserRequest updateUserRequestSub(UpdateSubstituteInfoDTO updateRequest) {
+		SubstituteInfoDTO dto = updateRequest.getUpdatedInfo();
+		return UpdateUserRequest.newBuilder()
+				.setId(updateRequest.getId())
+				.setUser(
+						UserInfo.newBuilder()
+								.setFirstName(dto.getFirstName())
+								.setLastName(dto.getLastName())
+								.setSub(
+										SubstituteObject.newBuilder()
+												.setBio(dto.getBio())
+												.setAddress(dto.getAddress())
+												.setBirthDate(SharedFactory.toTimestamp(dto.getBirthDate()))
+												.build()
+								).build()
+				).build();
 	}
 }

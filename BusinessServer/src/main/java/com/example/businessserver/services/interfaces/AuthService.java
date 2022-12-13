@@ -10,4 +10,8 @@ public interface AuthService extends UserDetailsService {
     EmployerInfoDTO getEmployerInfo(GetUserInfoParamsDTO getEmployerInfoParamsDTO);
 
     SubstituteInfoDTO getSubstituteInfo(GetUserInfoParamsDTO getUserInfoParamsDTO);
+
+    void updateEmployerInfo(UpdateEmployerInfoDTO updateRequest);
+
+    void updateSubstituteInfo(UpdateSubstituteInfoDTO updateRequest);
 }

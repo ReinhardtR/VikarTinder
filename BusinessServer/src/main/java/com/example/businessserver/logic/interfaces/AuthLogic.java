@@ -11,4 +11,8 @@ public interface AuthLogic {
     EmployerInfoDTO getEmployerInfo(GetUserInfoParamsDTO getEmployerInfoParamsDTO) throws DTOException;
 
     SubstituteInfoDTO getSubstituteInfo(GetUserInfoParamsDTO getUserInfoParamsDTO) throws DTOException;
+
+    void updateEmployerInfo(UpdateEmployerInfoDTO updateRequest) throws DTOException;
+
+    void updateSubstituteInfo(UpdateSubstituteInfoDTO updateRequest) throws DTOException;
 }
