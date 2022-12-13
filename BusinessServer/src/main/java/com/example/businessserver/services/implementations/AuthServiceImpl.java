@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public EmployerInfoDTO getEmployerInfo(GetEmployerInfoParamsDTO getEmployerInfoParamsDTO) {
+	public EmployerInfoDTO getEmployerInfo(GetUserInfoParamsDTO getEmployerInfoParamsDTO) {
 		GetUserResponse response = authServiceBlockingStub.getUser(
 				AuthServiceFactory.getUserRequest(getEmployerInfoParamsDTO)
 		);

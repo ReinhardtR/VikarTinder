@@ -8,5 +8,7 @@ public interface AuthLogic {
     void signUpEmployer(SignUpEmployerRequestDTO requestDTO) throws DTOException;
     void signUpSubstitute(SignUpSubstituteRequestDTO requestDTO) throws DTOException;
 
-    void getEmployerInfo(GetEmployerInfoParamsDTO getEmployerInfoParamsDTO) throws DTOException;
+    EmployerInfoDTO getEmployerInfo(GetUserInfoParamsDTO getEmployerInfoParamsDTO) throws DTOException;
+
+    SubstituteInfoDTO getSubstituteInfo(GetUserInfoParamsDTO getUserInfoParamsDTO) throws DTOException;
 }

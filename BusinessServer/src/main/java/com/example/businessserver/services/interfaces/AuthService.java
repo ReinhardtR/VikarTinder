@@ -7,5 +7,7 @@ public interface AuthService extends UserDetailsService {
     void SignUpEmployer(SignUpWrapperEmployerDTO employerRequestDTO);
     void SignUpSubstitute(SignUpWrapperSubstituteDTO substituteRequestDTO);
 
-    EmployerInfoDTO getEmployerInfo(GetEmployerInfoParamsDTO getEmployerInfoParamsDTO);
+    EmployerInfoDTO getEmployerInfo(GetUserInfoParamsDTO getEmployerInfoParamsDTO);
+
+    void getSubstituteInfo(GetUserInfoParamsDTO getUserInfoParamsDTO);
 }
