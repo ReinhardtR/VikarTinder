@@ -3,12 +3,9 @@ package com.example.businessserver.services.factories;
 import AuthService.*;
 import com.example.businessserver.dtos.auth.*;
 import com.example.businessserver.exceptions.BuildingException;
-import com.google.protobuf.Timestamp;
 import org.junit.jupiter.api.Test;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -151,6 +148,78 @@ class AuthServiceFactoryTest {
                 ()->assertEquals(localDateTime.withNano(0), SharedFactory.toLocalDateTime(test.getUser().getSub().getBirthDate())),
                 ()->assertEquals(bio, test.getUser().getSub().getBio()),
                 ()->assertEquals(address, test.getUser().getSub().getAddress())
+        );
+    }
+
+    @Test
+    void test_getUserRequest()
+    {
+        LoginUserResponseDTO.Role role = LoginUserResponseDTO.Role.SUBSTITUTE;
+
+        GetUserInfoParamsDTO testInfo = new GetUserInfoParamsDTO(5, role);
+
+        assertAll(
+                ()->assertEquals(5, testInfo.getId()),
+                ()->assertEquals(role, testInfo.getRole())
+        );
+    }
+
+    @Test
+    void test_employerInfoDTO()
+    {
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+        String title = "testTitle";
+        String workplace = "testWorkplace";
+        GetUserResponse testResponse = GetUserResponse.newBuilder()
+                .setUser(
+                        UserInfo.newBuilder()
+                                .setFirstName(firstName)
+                                .setLastName(lastName)
+                                .setEmp(
+                                        EmployerObject.newBuilder()
+                                                .setTitle(title)
+                                                .setWorkplace(workplace)
+                                ).build()
+                ).build();
+        EmployerInfoDTO testDTO = AuthServiceFactory.employerInfoDTO(testResponse);
+        assertAll(
+                ()->assertEquals(firstName, testDTO.getFirstName()),
+                ()->assertEquals(lastName, testDTO.getLastName()),
+                ()->assertEquals(title, testDTO.getTitle()),
+                ()->assertEquals(workplace, testDTO.getWorkplace())
+        );
+    }
+
+    @Test
+    void test_substituteInfoDTO()
+    {
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String bio = "This is a test";
+        String address = "testDress";
+
+        GetUserResponse testResponse = GetUserResponse.newBuilder()
+                .setUser(
+                        UserInfo.newBuilder()
+                                .setFirstName(firstName)
+                                .setLastName(lastName)
+                                .setSub(
+                                        SubstituteObject.newBuilder()
+                                                .setBirthDate(SharedFactory.toTimestamp(localDateTime))
+                                                .setBio(bio)
+                                                .setAddress(address)
+                                ).build()
+                ).build();
+
+        SubstituteInfoDTO testDTO = AuthServiceFactory.substituteInfoDTO(testResponse);
+        assertAll(
+                ()->assertEquals(firstName, testDTO.getFirstName()),
+                ()->assertEquals(lastName, testDTO.getLastName()),
+                ()->assertEquals(localDateTime, testDTO.getBirthDate()),
+                ()->assertEquals(bio, testDTO.getBio()),
+                ()->assertEquals(address, testDTO.getAddress())
         );
     }
 

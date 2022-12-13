@@ -74,7 +74,10 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public void getSubstituteInfo(GetUserInfoParamsDTO getUserInfoParamsDTO) {
-
+	public SubstituteInfoDTO getSubstituteInfo(GetUserInfoParamsDTO getUserInfoParamsDTO) {
+		GetUserResponse response = authServiceBlockingStub.getUser(
+				AuthServiceFactory.getUserRequest(getUserInfoParamsDTO)
+		);
+		return AuthServiceFactory.substituteInfoDTO(response);
 	}
 }

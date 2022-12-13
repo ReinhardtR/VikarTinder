@@ -69,7 +69,8 @@ message LoginUserResponse {
 
 //UPDATE
 message UpdateUserRequest {
-  UserInfo user = 1;
+  int32 id = 1;
+  UserInfo user = 2;
 }
 message UpdateUserResponse {
   UserInfo user = 1;

@@ -57,7 +57,7 @@ public class AuthServiceFactory
         {
             UpdateUserResponse response = new UpdateUserResponse
             {
-                User = CreateSubstituteUserObject(substitute)
+                User = CreateSubstituteUserInfo(substitute)
             };
 
             return response;
@@ -81,7 +81,7 @@ public class AuthServiceFactory
         {
             UpdateUserResponse response = new UpdateUserResponse
             {
-                User = CreateEmployerUserObject(employer)
+                User = CreateEmployerUserInfo(employer)
             };
 
             return response;
@@ -131,13 +131,13 @@ public class AuthServiceFactory
             if (user is Substitute)
             {
                 Substitute substitute = (Substitute)user;
-                response.User = CreateSubstituteUserObject(substitute);
+                response.User = CreateSubstituteUserInfo(substitute);
                 return response;
             }
             else
             {
                 Employer employer = (Employer)user;
-                response.User = CreateEmployerUserObject(employer);
+                response.User = CreateEmployerUserInfo(employer);
                 return response;
             }
         }
@@ -170,6 +170,37 @@ public class AuthServiceFactory
                     BirthDate = birthdate,
                     Bio = substitute.Bio
                 }
+            }
+        };
+    }
+
+    private static UserInfo CreateSubstituteUserInfo(Substitute substitute)
+    {
+        var birthdate = Timestamp.FromDateTime(substitute.BirthDate);
+
+        return new UserInfo
+        {
+            FirstName = substitute.FirstName,
+            LastName = substitute.LastName,
+            Sub = new SubstituteObject
+            {
+                Address = substitute.Address,
+                BirthDate = birthdate,
+                Bio = substitute.Bio
+            }
+        };
+    }
+
+    private static UserInfo CreateEmployerUserInfo(Employer employer)
+    {
+        return new UserInfo
+        {
+            FirstName = employer.FirstName,
+            LastName = employer.LastName,
+            Emp = new EmployerObject
+            {
+                Title = employer.Title,
+                Workplace = employer.WorkPlace
             }
         };
     }
@@ -221,20 +252,16 @@ public class AuthServiceFactory
     {
         try
         {
-            if (updateUserRequest == null || updateUserRequest.User.Id == 0)
+            if (updateUserRequest == null)
                 throw new FactoryNullReference("UpdateUserRequest object or id");
 
             return new Substitute
             {
-                Id = updateUserRequest.User.Id,
-                FirstName = updateUserRequest.User.UserData.FirstName,
-                LastName = updateUserRequest.User.UserData.LastName,
-                PasswordHash = updateUserRequest.User.UserData.PasswordHash,
-                Salt = updateUserRequest.User.UserData.Salt,
-                Email = updateUserRequest.User.UserData.Email,
-                BirthDate = updateUserRequest.User.UserData.Sub.BirthDate.ToDateTime(),
-                Bio = updateUserRequest.User.UserData.Sub.Bio,
-                Address = updateUserRequest.User.UserData.Sub.Address
+                FirstName = updateUserRequest.User.FirstName,
+                LastName = updateUserRequest.User.LastName,
+                BirthDate = updateUserRequest.User.Sub.BirthDate.ToDateTime(),
+                Bio = updateUserRequest.User.Sub.Bio,
+                Address = updateUserRequest.User.Sub.Address
             };
         }
         catch (Exception)
@@ -248,19 +275,15 @@ public class AuthServiceFactory
 
         try
         {
-            if (updateUserRequest == null || updateUserRequest.User.Id == 0)
+            if (updateUserRequest == null)
                 throw new FactoryNullReference("UpdateUserRequest object or id");
 
             return new Employer
             {
-                Id = updateUserRequest.User.Id,
-                FirstName = updateUserRequest.User.UserData.FirstName,
-                LastName = updateUserRequest.User.UserData.LastName,
-                PasswordHash = updateUserRequest.User.UserData.PasswordHash,
-                Salt = updateUserRequest.User.UserData.Salt,
-                Email = updateUserRequest.User.UserData.Email,
-                Title = updateUserRequest.User.UserData.Emp.Title,
-                WorkPlace = updateUserRequest.User.UserData.Emp.Workplace
+                FirstName = updateUserRequest.User.FirstName,
+                LastName = updateUserRequest.User.LastName,
+                Title = updateUserRequest.User.Emp.Title,
+                WorkPlace = updateUserRequest.User.Emp.Workplace
             };
         }
         catch (Exception)

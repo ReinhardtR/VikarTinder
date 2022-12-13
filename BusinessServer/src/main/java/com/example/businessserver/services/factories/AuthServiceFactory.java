@@ -93,14 +93,27 @@ public class AuthServiceFactory {
 				).build();
     }
 
-	public static EmployerInfoDTO employerInfoDTO(GetUserResponse getUserResponse) {
-		UserInfo info = getUserResponse.getUser();
+	//TODO : De to nedre metoder kunne godt generaliseres lidt
+	public static EmployerInfoDTO employerInfoDTO(GetUserResponse response) {
+		UserInfo info = response.getUser();
 		EmployerObject empInfo = info.getEmp();
 		return new EmployerInfoDTO(
 				info.getFirstName(),
 				info.getLastName(),
 				empInfo.getTitle(),
 				empInfo.getWorkplace()
+		);
+	}
+
+	public static SubstituteInfoDTO substituteInfoDTO(GetUserResponse response) {
+		UserInfo info = response.getUser();
+		SubstituteObject subInfo = info.getSub();
+		return new SubstituteInfoDTO(
+				info.getFirstName(),
+				info.getLastName(),
+				SharedFactory.toLocalDateTime(subInfo.getBirthDate()),
+				subInfo.getBio(),
+				subInfo.getAddress()
 		);
 	}
 }

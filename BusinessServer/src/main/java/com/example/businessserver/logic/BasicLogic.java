@@ -3,7 +3,7 @@ package com.example.businessserver.logic;
 import com.example.businessserver.exceptions.DTONullPointerException;
 import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 
-public abstract class LogicDaddy {
+public abstract class BasicLogic {
     public void objectNullCheck(Object obj, String subjectName) throws DTONullPointerException {
         if (obj == null)
             throw new DTONullPointerException(subjectName + " cannot be Null!");
