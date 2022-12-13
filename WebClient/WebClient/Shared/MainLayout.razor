@@ -1,5 +1,6 @@
 ﻿@using HttpClients.Services.Interfaces
 @using System.Security.Claims
+@using HttpClients.Services
 @using WebClient.Utils
 @inherits LayoutComponentBase
 @inject NavigationManager NavigationManager
@@ -36,7 +37,7 @@
                    <ActivatorContent>
                        <MudStack Row="true" Spacing="2" Justify="Justify.Center" AlignItems="AlignItems.Center">
                            @{
-                                Claim nameClaim = AuthClaims.GetClaim(context, AuthClaims.Name);
+                                Claim nameClaim = AuthClaims.GetClaim(context, AuthClaims.FirstName);
                                 string name = nameClaim?.Value ?? "Unknown";
                            }
                            <MudAvatar Color="Color.Secondary">@name[0]</MudAvatar>
@@ -44,8 +45,11 @@
                        </MudStack>
                    </ActivatorContent>
                    <ChildContent>
+                       <MudMenuItem Icon="@Icons.Filled.Person" OnClick="NavigateToProfile">
+                           Se profil
+                       </MudMenuItem>
                        <MudMenuItem Icon="@Icons.Filled.Logout" OnClick="LogoutHandler">
-                           Logout
+                           Log ud
                        </MudMenuItem>
                    </ChildContent>
                </MudMenu>
@@ -70,6 +74,24 @@
         await AuthService.LogoutAsync();
     }
 
+    private async void NavigateToProfile()
+    {
+        AuthenticationState authState = await AuthState;
+
+        int userId = AuthClaims.GetUserId(authState);
+        string role = AuthClaims.GetRole(authState);
+        
+        switch (role)
+        {
+            case AuthRoles.Employer:
+                NavigationManager.NavigateTo($"/arbejdsugiver/{userId}");
+                break;
+            case AuthRoles.Substitute:
+                NavigationManager.NavigateTo($"/vikar/{userId}");
+                break;
+        }
+    }
+    
     private void NavigateToHome()
     {
         NavigationManager.NavigateTo("/");

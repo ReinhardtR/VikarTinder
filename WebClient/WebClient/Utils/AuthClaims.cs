@@ -6,7 +6,8 @@ namespace WebClient.Utils;
 public static class AuthClaims
 {
     public const string Id = "ID";
-    public const string Name = "NAME";
+    public const string FirstName = "NAMEF";
+    public const string LastName = "NAMEL";
     public const string Email = "EMAIL";
     public const string Role = "ROLE";
     

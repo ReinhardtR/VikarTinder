@@ -36,13 +36,18 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 
 	@Override
 	public JwtResponseDTO login(LoginRequestDTO loginRequest) throws DTOException {
+		System.out.println(loginRequest.getEmail() + " " + loginRequest.getPassword());
+
 		objectNullCheck(loginRequest, "loginRequest");
 		checkEmail(loginRequest.getEmail());
 		checkPassword(loginRequest.getPassword());
 
 		UserSaltHolder userDetails = (UserSaltHolder) userService.loadUserByUsername(loginRequest.getEmail());
 		String hashedPassword = userDetails.getPassword();
+		System.out.println("HASHED: " + hashedPassword);
+
 		checkPasswordsForMatch(hashedPassword, loginRequest.getPassword(), userDetails.getSalt());
+
 		return new JwtResponseDTO(jwtUtility.generateToken(userDetails));
 	}
 
@@ -85,7 +90,7 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 	@Override
 	public SubstituteInfoDTO getSubstituteInfo(GetUserInfoParamsDTO getUserInfoParamsDTO) throws DTOException {
 		objectNullCheck(getUserInfoParamsDTO, "substituteInfoParams");
-		objectNullCheck(getUserInfoParamsDTO.getRole(), "Role");
+		// objectNullCheck(getUserInfoParamsDTO.getRole(), "Role");
 		checkId(getUserInfoParamsDTO.getId());
 		return userService.getSubstituteInfo(getUserInfoParamsDTO);
 	}
@@ -132,6 +137,8 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 
 	public void checkPasswordsForMatch(String savedPassword, String loginRequestPassword, String salt) throws DTOOutOfBoundsException {
 		String requestWithSalt = generatePasswordWithKnownSalt(salt, loginRequestPassword);
+		System.out.println("SALT: " + salt);
+		System.out.println("REQUEST WITH SALT: " + requestWithSalt);
 		if (!savedPassword.equals(requestWithSalt))
 			throw new DTOOutOfBoundsException("Wrong Password");
 	}
@@ -143,6 +150,8 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 		byte[] salt = new byte[16];
 		random.nextBytes(salt);
 		String saltString = Arrays.toString(salt);
+		System.out.println("SALT: " + saltString);
+
 		String hashedPassword = generatePasswordWithKnownSalt(saltString, password);
 		return new String[]{saltString, hashedPassword};
 	}
