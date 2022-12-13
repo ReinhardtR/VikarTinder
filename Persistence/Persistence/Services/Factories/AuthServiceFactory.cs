@@ -9,86 +9,57 @@ namespace Persistence.Services.Factories;
 public class AuthServiceFactory
 {
     
-    public static CreateUserResponse CreateSubstituteUserResponse(Substitute substitute)
+    public static CreateUserResponse CreateUserResponse(User user)
     {
-        if (substitute == null)
-            throw new FactoryNullReference("substitute");
+        if (user == null)
+            throw new FactoryNullReference("User");
 
         try
         {
-            CreateUserResponse response = new()
+            CreateUserResponse response = new();
+            if (user is Substitute)
             {
-                User = CreateSubstituteUserObject(substitute)
-            };
-            return response;
+                Substitute substitute = (Substitute)user;
+                response.User = CreateSubstituteUserObject(substitute);
+                return response;
+            }
+            else
+            {
+                Employer employer = (Employer)user;
+                response.User = CreateEmployerUserObject(employer);
+                return response;
+            }
         }
         catch (Exception)
         {
-            throw new FactoryNullReference("A substitute attribute");
-        }
-        
-    }
-
-    public static CreateUserResponse CreateEmployerUserResponse(Employer employer)
-    {
-        if (employer == null)
-            throw new FactoryNullReference("employer");
-
-        try
-        {
-            CreateUserResponse response = new CreateUserResponse
-            {
-                User = CreateEmployerUserObject(employer)
-            };
-            return response;
-        }
-        catch (Exception)
-        {
-            throw new FactoryNullReference("An employer attribute");
+            throw new FactoryNullReference("Values in User");
         }
     }
 
-    public static UpdateUserResponse UpdateSubstituteUserResponse(Substitute substitute)
+    public static UpdateUserResponse CreateUpdateUserResponse(User user)
     {
-        if (substitute == null)
-            throw new FactoryNullReference("substitute");
+        if (user == null)
+            throw new FactoryNullReference("User");
 
         try
         {
-            UpdateUserResponse response = new UpdateUserResponse
+            UpdateUserResponse response = new();
+            if (user is Substitute)
             {
-                User = CreateSubstituteUserInfo(substitute)
-            };
-
-            return response;
-
+                Substitute substitute = (Substitute)user;
+                response.User = CreateSubstituteUserInfo(substitute);
+                return response;
+            }
+            else
+            {
+                Employer employer = (Employer)user;
+                response.User = CreateEmployerUserInfo(employer);
+                return response;
+            }
         }
         catch (Exception)
         {
-            throw new FactoryNullReference("A substitute attribute");
-        }
-        
-    }
-    
-    public static UpdateUserResponse UpdateEmployerUserResponse(Employer employer)
-    {
-        if (employer == null)
-        {
-            throw new FactoryNullReference("employer");
-        }
-
-        try
-        {
-            UpdateUserResponse response = new UpdateUserResponse
-            {
-                User = CreateEmployerUserInfo(employer)
-            };
-
-            return response;
-        }
-        catch (Exception)
-        {
-            throw new FactoryNullReference("An employer attribute");
+            throw new FactoryNullReference("Values in User");
         }
     }
 
@@ -176,6 +147,9 @@ public class AuthServiceFactory
 
     private static UserInfo CreateSubstituteUserInfo(Substitute substitute)
     {
+        if (substitute == null)
+            throw new FactoryNullReference("substitute");
+        
         var birthdate = Timestamp.FromDateTime(substitute.BirthDate);
 
         return new UserInfo
@@ -193,6 +167,9 @@ public class AuthServiceFactory
 
     private static UserInfo CreateEmployerUserInfo(Employer employer)
     {
+        if (employer == null)
+            throw new FactoryNullReference("Employer");
+        
         return new UserInfo
         {
             FirstName = employer.FirstName,
@@ -229,6 +206,7 @@ public class AuthServiceFactory
         };
     }
     
+    //Id == 0 should throw since it means getting an empty Id from gRPC client - Same logic to underlying methods
     public static DeleteUserResponse CreateDeleteUserResponse(DeleteUserDto dto)
     {
         if (dto == null || dto.Id == 0)
@@ -252,8 +230,8 @@ public class AuthServiceFactory
     {
         try
         {
-            if (updateUserRequest == null)
-                throw new FactoryNullReference("UpdateUserRequest object or id");
+            if (updateUserRequest == null ||updateUserRequest.Id == 0) 
+                throw new FactoryNullReference("UpdateUserRequest object or Id");
 
             return new Substitute
             {
@@ -275,8 +253,8 @@ public class AuthServiceFactory
 
         try
         {
-            if (updateUserRequest == null)
-                throw new FactoryNullReference("UpdateUserRequest object or id");
+            if (updateUserRequest == null || updateUserRequest.Id == 0)
+                throw new FactoryNullReference("UpdateUserRequest object or Id");
 
             return new Employer
             {
