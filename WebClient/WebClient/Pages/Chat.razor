@@ -75,7 +75,7 @@ else if (chatHistory != null)
                     @foreach (MessageDTO message in chatHistory.Messages)
                     {
                         int userId = AuthClaims.GetUserId(context);
-                        <ChatMessage UserId="@userId" AuthorId="@message.AuthorId" Content="@message.Content" />
+                        <ChatMessage UserId="@userId" AuthorId="@message.AuthorId" Content="@message.Content" SentAt="@message.CreatedAt" />
                     }
                 </MudStack>
             </MudStack>

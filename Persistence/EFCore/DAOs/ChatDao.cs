@@ -50,7 +50,8 @@ public class ChatDao : IChatDao
     public Task<List<Chat>> GetUserChatsAsync(int userId)
     {
         return _dataContext.Chats
-            .Include((c) => new { c.Employer, c.Substitute })
+            .Include((c) => c.Employer)
+            .Include((c) => c.Substitute)
             .Where(c => c.EmployerId == userId || c.SubstituteId == userId)
             .ToListAsync();
     }
@@ -58,7 +59,8 @@ public class ChatDao : IChatDao
     public Task<List<Chat>> GetGigChatsAsync(int gigId)
     {
         return _dataContext.Chats
-            .Include((c) => new { c.Employer, c.Substitute })
+            .Include((c) => c.Employer)
+            .Include((c) => c.Substitute)
             .Where((c) => c.GigId == gigId)
             .ToListAsync();
     }

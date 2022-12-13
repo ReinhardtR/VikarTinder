@@ -3,6 +3,7 @@
 @using HttpClients.Services.Interfaces
 @using HttpClients
 @inject IAuthService AuthService
+@attribute [Authorize]
 
 @if (profile == null && errorLabel == null)
 {

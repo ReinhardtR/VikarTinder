@@ -1,9 +1,10 @@
 @page "/log-ind"
 @using Microsoft.AspNetCore.Components
 @using System.ComponentModel.DataAnnotations
-@using System.Security.Claims
 @using HttpClients.Services.Interfaces
 @inject IAuthService AuthService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 
 <PageTitle>Log Ind</PageTitle>
 
@@ -62,15 +63,8 @@
         try
         {
             await AuthService.LoginAsync(formModel.Email, formModel.Password);
-            
-            // temporary checks if the user is logged in
-            AuthenticationState state = await AuthState;
-            ClaimsPrincipal principal = state.User;
- 
-            foreach (Claim principalClaim in principal.Claims)
-            {
-                Console.WriteLine($"Name: {principalClaim.Type}, Value: {principalClaim.Value}");
-            }
+            Snackbar.Add("Du er nu logget ind", Severity.Success);
+            NavigationManager.NavigateTo("/");
         }
         catch (Exception e)
         {

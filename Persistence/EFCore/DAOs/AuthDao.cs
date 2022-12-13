@@ -68,8 +68,9 @@ public class AuthDao : IAuthDao
 
             return employer.Entity;
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e.Message);
             throw new DaoNotUniqueEmail("Email is already in use");
         }
     }
@@ -89,8 +90,6 @@ public class AuthDao : IAuthDao
 
             substituteToUpdate.FirstName = newSubstituteData.FirstName;
             substituteToUpdate.LastName = newSubstituteData.LastName;
-            substituteToUpdate.Email = newSubstituteData.Email;
-            substituteToUpdate.PasswordHash = newSubstituteData.PasswordHash;
 
             substituteToUpdate.Address = newSubstituteData.Address;
             substituteToUpdate.BirthDate = newSubstituteData.BirthDate;
@@ -107,8 +106,6 @@ public class AuthDao : IAuthDao
 
             employerToUpdate.FirstName = newEmployerData.FirstName;
             employerToUpdate.LastName = newEmployerData.LastName;
-            employerToUpdate.Email = newEmployerData.Email;
-            employerToUpdate.PasswordHash = newEmployerData.PasswordHash;
 
             employerToUpdate.Title = newEmployerData.Title;
             employerToUpdate.WorkPlace = newEmployerData.WorkPlace;
