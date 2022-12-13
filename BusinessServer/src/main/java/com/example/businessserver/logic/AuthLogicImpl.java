@@ -26,7 +26,7 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 	@Autowired
 	private JWTUtility jwtUtility;
 	@Autowired
-	private AuthServiceImpl userService;
+	private AuthService userService;
 
 	public AuthLogicImpl() {
 		//Taget fra geeksforgeeks      https://www.geeksforgeeks.org/check-email-address-valid-not-java/
@@ -83,7 +83,7 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 	@Override
 	public EmployerInfoDTO getEmployerInfo(GetUserInfoParamsDTO getEmployerInfoParamsDTO) throws DTOException {
 		objectNullCheck(getEmployerInfoParamsDTO, "employerInfoParams");
-		// objectNullCheck(getEmployerInfoParamsDTO.getRole(), "Role");
+		objectNullCheck(getEmployerInfoParamsDTO.getRole(), "Role");
 		checkId(getEmployerInfoParamsDTO.getId());
 		return userService.getEmployerInfo(getEmployerInfoParamsDTO);
 	}
@@ -91,7 +91,7 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
 	@Override
 	public SubstituteInfoDTO getSubstituteInfo(GetUserInfoParamsDTO getUserInfoParamsDTO) throws DTOException {
 		objectNullCheck(getUserInfoParamsDTO, "substituteInfoParams");
-		// objectNullCheck(getUserInfoParamsDTO.getRole(), "Role");
+		objectNullCheck(getUserInfoParamsDTO.getRole(), "Role");
 		checkId(getUserInfoParamsDTO.getId());
 		return userService.getSubstituteInfo(getUserInfoParamsDTO);
 	}
@@ -123,6 +123,15 @@ public class AuthLogicImpl extends BasicLogic implements AuthLogic {
         checkAddress(updatedInfo.getAddress());
 
         userService.updateSubstituteInfo(updateRequest);
+    }
+
+    @Override
+    public void deleteUser(DeleteRequestDTO deleteRequest) throws DTOException {
+        objectNullCheck(deleteRequest, "deleteRequest");
+        objectNullCheck(deleteRequest.getRole(), "Role");
+        checkId(deleteRequest.getId());
+
+        userService.deleteUser(deleteRequest);
     }
 
     private void checkAddress(String address) throws DTOException {

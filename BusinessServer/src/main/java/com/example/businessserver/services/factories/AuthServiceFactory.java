@@ -21,28 +21,28 @@ public class AuthServiceFactory {
 		if (userData.hasSub()) {
 			SubstituteObject sub = userData.getSub();
 			return new LoginSubstituteResponseDTO(
-					userObjectGRPC.getId(),
-					userData.getFirstName(),
-					userData.getLastName(),
-					userData.getPasswordHash(),
-					userData.getEmail(),
-					SharedFactory.toLocalDateTime(sub.getBirthDate()),
-					sub.getBio(),
-					sub.getAddress(),
-					userData.getSalt()
+							userObjectGRPC.getId(),
+							userData.getFirstName(),
+							userData.getLastName(),
+							userData.getPasswordHash(),
+							userData.getEmail(),
+							SharedFactory.toLocalDateTime(sub.getBirthDate()),
+							sub.getBio(),
+							sub.getAddress(),
+							userData.getSalt()
 			);
 		}
 		if (userData.hasEmp()) {
 			EmployerObject emp = userData.getEmp();
 			return new LoginEmployerResponseDTO(
-					userObjectGRPC.getId(),
-					userData.getFirstName(),
-					userData.getLastName(),
-					userData.getPasswordHash(),
-					userData.getEmail(),
-					emp.getTitle(),
-					emp.getWorkplace(),
-					userData.getSalt()
+							userObjectGRPC.getId(),
+							userData.getFirstName(),
+							userData.getLastName(),
+							userData.getPasswordHash(),
+							userData.getEmail(),
+							emp.getTitle(),
+							emp.getWorkplace(),
+							userData.getSalt()
 			);
 		}
 		throw new BuildingException("unrecognised user type: " + userData.getRoleCase().getClass());
@@ -50,59 +50,59 @@ public class AuthServiceFactory {
 
 	public static CreateUserRequest createUserRequestEmployer(SignUpWrapperEmployerDTO employerRequestDTO) {
 		return CreateUserRequest.newBuilder()
-			.setUser(
-				UserData.newBuilder()
-					.setFirstName(employerRequestDTO.getFirstName())
-					.setLastName(employerRequestDTO.getLastName())
-					.setSalt(employerRequestDTO.getSalt())
-					.setPasswordHash(employerRequestDTO.getPassword())
-					.setEmail(employerRequestDTO.getEmail())
-					.setEmp(
-						EmployerObject.newBuilder()
-							.setTitle(employerRequestDTO.getTitle())
-							.setWorkplace(employerRequestDTO.getWorkplace()).build()
-					).build()
-			).build();
+						.setUser(
+										UserData.newBuilder()
+														.setFirstName(employerRequestDTO.getFirstName())
+														.setLastName(employerRequestDTO.getLastName())
+														.setSalt(employerRequestDTO.getSalt())
+														.setPasswordHash(employerRequestDTO.getPassword())
+														.setEmail(employerRequestDTO.getEmail())
+														.setEmp(
+																		EmployerObject.newBuilder()
+																						.setTitle(employerRequestDTO.getTitle())
+																						.setWorkplace(employerRequestDTO.getWorkplace()).build()
+														).build()
+						).build();
 	}
 
 	public static CreateUserRequest createUserRequestSubstitute(SignUpWrapperSubstituteDTO substituteRequestDTO) {
 		return CreateUserRequest.newBuilder()
-			.setUser(
-				UserData.newBuilder()
-					.setFirstName(substituteRequestDTO.getFirstName())
-					.setLastName(substituteRequestDTO.getLastName())
-					.setSalt(substituteRequestDTO.getSalt())
-					.setPasswordHash(substituteRequestDTO.getPassword())
-					.setEmail(substituteRequestDTO.getEmail())
-					.setSub(
-						SubstituteObject.newBuilder()
-										.setBirthDate(SharedFactory.toTimestamp(substituteRequestDTO.getBirthDate()))
-										.setBio(substituteRequestDTO.getBio())
-										.setAddress(substituteRequestDTO.getAddress()
-										).build()
-					).build()
-			).build();
+						.setUser(
+										UserData.newBuilder()
+														.setFirstName(substituteRequestDTO.getFirstName())
+														.setLastName(substituteRequestDTO.getLastName())
+														.setSalt(substituteRequestDTO.getSalt())
+														.setPasswordHash(substituteRequestDTO.getPassword())
+														.setEmail(substituteRequestDTO.getEmail())
+														.setSub(
+																		SubstituteObject.newBuilder()
+																						.setBirthDate(SharedFactory.toTimestamp(substituteRequestDTO.getBirthDate()))
+																						.setBio(substituteRequestDTO.getBio())
+																						.setAddress(substituteRequestDTO.getAddress()
+																						).build()
+														).build()
+						).build();
 	}
 
-    public static GetUserRequest getUserRequest(GetUserInfoParamsDTO getEmployerInfoParamsDTO) {
+	public static GetUserRequest getUserRequest(GetUserInfoParamsDTO getEmployerInfoParamsDTO) {
 		return GetUserRequest.newBuilder()
-				.setUser(
-						GetUserParams.newBuilder()
-								.setId(getEmployerInfoParamsDTO.getId())
-								.setRole(GetUserParams.Role.valueOf(GetUserParams.Role.EMPLOYER_VALUE))
-								.build()
-				).build();
-    }
+						.setUser(
+										GetUserParams.newBuilder()
+														.setId(getEmployerInfoParamsDTO.getId())
+														.setRole(GetUserParams.Role.valueOf(getEmployerInfoParamsDTO.getRole().name()))
+														.build()
+						).build();
+	}
 
 	//TODO : De to nedre metoder kunne godt generaliseres lidt
 	public static EmployerInfoDTO employerInfoDTO(GetUserResponse response) {
 		UserInfo info = response.getUser();
 		EmployerObject empInfo = info.getEmp();
 		return new EmployerInfoDTO(
-				info.getFirstName(),
-				info.getLastName(),
-				empInfo.getTitle(),
-				empInfo.getWorkplace()
+						info.getFirstName(),
+						info.getLastName(),
+						empInfo.getTitle(),
+						empInfo.getWorkplace()
 		);
 	}
 
@@ -110,11 +110,11 @@ public class AuthServiceFactory {
 		UserInfo info = response.getUser();
 		SubstituteObject subInfo = info.getSub();
 		return new SubstituteInfoDTO(
-				info.getFirstName(),
-				info.getLastName(),
-				SharedFactory.toLocalDateTime(subInfo.getBirthDate()),
-				subInfo.getBio(),
-				subInfo.getAddress()
+						info.getFirstName(),
+						info.getLastName(),
+						SharedFactory.toLocalDateTime(subInfo.getBirthDate()),
+						subInfo.getBio(),
+						subInfo.getAddress()
 		);
 	}
 
@@ -149,6 +149,15 @@ public class AuthServiceFactory {
 												.setBirthDate(SharedFactory.toTimestamp(dto.getBirthDate()))
 												.build()
 								).build()
+				).build();
+	}
+
+	public static DeleteUserRequest deleteUserRequest(DeleteRequestDTO deleteRequest) {
+		return DeleteUserRequest.newBuilder()
+				.setUser(
+						GetUserParams.newBuilder()
+								.setId(deleteRequest.getId())
+								.setRole(GetUserParams.Role.valueOf(deleteRequest.getRole().toString())).build()
 				).build();
 	}
 }

@@ -20,6 +20,7 @@
         </MudButton>
         
         <AuthorizeView>
+            <MudButton OnClick="@NavigateToMatching" Variant="Variant.Text" Style="color: white">Match</MudButton>
             <MudButton OnClick="@NavigateToChatOverview" Variant="Variant.Text" Style="color: white">Chat</MudButton>
         </AuthorizeView>
     
@@ -74,6 +75,11 @@
         await AuthService.LogoutAsync();
     }
 
+    private void NavigateToMatching()
+    {
+        NavigationManager.NavigateTo("/matching");
+    }
+    
     private async void NavigateToProfile()
     {
         AuthenticationState authState = await AuthState;

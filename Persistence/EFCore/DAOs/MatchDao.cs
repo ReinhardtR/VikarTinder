@@ -229,7 +229,7 @@ public class MatchDao : IMatchDao
         int substituteId = dto.SubstituteId;
         int employerId = dto.EmployerId;
         int gigId = checkDto.GigId;
-        await _chatDao.CreateChatAsync(gigId, substituteId, employerId);
+        await _chatDao.CreateChatAsync(gigId, employerId, substituteId);
 
         return checkDto;
     }

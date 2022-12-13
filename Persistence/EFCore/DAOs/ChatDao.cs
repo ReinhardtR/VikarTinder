@@ -22,6 +22,7 @@ public class ChatDao : IChatDao
     {
         Chat chat = new()
         {
+            GigId = gigId,
             EmployerId = employerId,
             SubstituteId = substituteId
         };

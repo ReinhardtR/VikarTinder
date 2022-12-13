@@ -99,6 +99,7 @@ public class AuthServiceServer : AuthService.AuthServiceBase
         DaoRequestType role = getUserRequest.User.Role == GetUserParams.Types.Role.Substitute
             ? DaoRequestType.Substitute
             : DaoRequestType.Employer;
+        
         User user = await _dao.GetUser(getUserRequest.User.Id, role);
 
         GetUserResponse userResponse = AuthServiceFactory.CreateGetUserResponse(user);

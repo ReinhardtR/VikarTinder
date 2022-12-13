@@ -171,11 +171,8 @@ public class AuthDao : IAuthDao
             ? await _dataContext.Substitutes.FirstOrDefaultAsync(substitute => substitute.Id == id)
             : await _dataContext.Employers.FirstOrDefaultAsync(employer => employer.Id == id);
         
-        if (user == null)
-            throw new DaoNullReference("User not found");
-
-
+        if (user == null) throw new DaoNullReference("User not found");
+        
         return user;
     }
-
 }

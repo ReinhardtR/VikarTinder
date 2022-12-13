@@ -1,0 +1,95 @@
+@using HttpClients.Services
+@using HttpClients
+@using WebClient.Utils
+@inject MatchingService MatchingService
+
+@if (errorLabel != null && !isLoading)
+{
+    <MudText Color="Color.Error">@errorLabel</MudText>   
+}
+else if (isLoading)
+{
+    <MudProgressCircular Color="Color.Secondary" Size="Size.Large" Indeterminate="true"/>
+}
+else if (gigs.Count > 0)
+{
+    GigMatchingDTO gig = gigs.Peek();
+    
+    <MatchingContainer
+        OnAccept="OnAccept"
+        OnDecline="OnDecline"
+    >
+        <MudStack Spacing="4">
+            <MudText>@gig.Id</MudText>
+        </MudStack>    
+    </MatchingContainer>
+}
+else
+{
+    <MudText Color="Color.Info" Typo="Typo.h5">Ikke flere muligheder</MudText>
+}
+
+@code {
+    
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+
+    private Stack<GigMatchingDTO> gigs = new();
+    private bool isLoading = true;
+    private string? errorLabel;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await GetGigsAsync();
+    }
+
+    private async Task GetGigsAsync()
+    {
+        isLoading = true;
+        
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            int userId = AuthClaims.GetUserId(authState);
+            
+            GigMatchingDTOs gigsResult = await MatchingService.GetGigsAsync(userId);
+            
+            gigsResult.PossibleMatches.ToList().ForEach((g) => gigs.Push(g));
+        }
+        catch
+        {
+            errorLabel = "Der skete en fejl";
+        }
+        
+        isLoading = false;
+        StateHasChanged();
+    }
+    
+    private async void OnAccept()
+    {
+        await SendGigMatchRequestAsync(true);
+    }
+    
+    private async void OnDecline()
+    {
+        await SendGigMatchRequestAsync(false);
+    }
+    
+    private async Task SendGigMatchRequestAsync(bool wantsToMatch)
+    {
+        AuthenticationState authState = await AuthState;
+        int userId = AuthClaims.GetUserId(authState);
+        
+        GigMatchingDTO gig = gigs.Pop();
+        
+        await MatchingService.SendGigsMatchRequestAsync(new MatchRequestDTO()
+        {
+            CurrentUser = userId,
+            MatchId = gig.Id,
+            WantsToMatch = wantsToMatch
+        });
+        
+        StateHasChanged();
+    }
+}
+
