@@ -73,7 +73,7 @@ public class AuthServiceServer : AuthService.AuthServiceBase
     public override async Task<UpdateUserResponse> UpdateUser(UpdateUserRequest updateUserRequest,
         ServerCallContext serverCallContext)
     {
-        User user = updateUserRequest.User.UserData.RoleCase == UserData.RoleOneofCase.Sub
+        User user = updateUserRequest.User.RoleCase == UserInfo.RoleOneofCase.Sub
             ? await _dao.UpdateUserAsync(AuthServiceFactory.MakeSubstituteDomainObject(updateUserRequest))
             : await _dao.UpdateUserAsync(AuthServiceFactory.MakeEmployerDomainObject(updateUserRequest));
 
