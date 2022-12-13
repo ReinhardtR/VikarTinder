@@ -68,8 +68,9 @@ public class AuthDao : IAuthDao
 
             return employer.Entity;
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e.Message);
             throw new DaoNotUniqueEmail("Email is already in use");
         }
     }
