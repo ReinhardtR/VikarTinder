@@ -1,7 +1,58 @@
-@page "/Profile/{id}"
+@page "/Profile/{ProfileUserId:Int}"
+@using WebClient.Utils
+@using HttpClients.Services.Interfaces
+@inject IAuthService AuthService
+@attribute [Authorize]
 
-<h3>Profile</h3>
+@if (profile == null && errorLabel == null)
+{
+    <p>Loading...</p>
+}
+else if (errorLabel != null)
+{
+    <p>Error: @errorLabel</p>
+}
+else if (profile != null)
+{
+    <MudStack Spacing="4">
+        <MudStack Spacing="8" Row="true">
+            @profile
+        </MudStack>
+    </MudStack>
+}
 
 @code {
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; }
     
+    [Parameter]
+    public int ProfileUserId { get; set; }
+
+    private string? profile;
+    private string? errorLabel;
+    private bool isEditable = false;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProfileAsync();
+    }
+
+    private async Task GetProfileAsync()
+    {
+        try
+        {
+            await AuthService.GetUserInfoAsync(ProfileUserId);
+
+            AuthenticationState authState = await AuthState;
+            int currentUserId = AuthClaims.GetUserId(authState);
+
+            isEditable = currentUserId == ProfileUserId;
+        }
+        catch
+        {
+            errorLabel = "Der skete en fejl";
+        }
+    }
+
 }

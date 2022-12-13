@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj": {}
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj": {}
   },
   "projects": {
-    "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj": {
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj",
+        "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj",
         "projectName": "EFCore",
-        "projectPath": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj",
-        "packagesPath": "C:\\Users\\simso\\.nuget\\packages\\",
-        "outputPath": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\EFCore\\obj\\",
+        "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj",
+        "packagesPath": "/Users/reinhardt/.nuget/packages/",
+        "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\simso\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -69,21 +69,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
+        "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj",
         "projectName": "Persistence",
-        "projectPath": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
-        "packagesPath": "C:\\Users\\simso\\.nuget\\packages\\",
-        "outputPath": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\Persistence\\obj\\",
+        "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj",
+        "packagesPath": "/Users/reinhardt/.nuget/packages/",
+        "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\simso\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -95,8 +95,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj": {
-                "projectPath": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj"
+              "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj": {
+                "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj"
               }
             }
           }
@@ -145,21 +145,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
         }
       }
     },
-    "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj": {
+    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
+        "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
         "projectName": "UnitTest",
-        "projectPath": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
-        "packagesPath": "C:\\Users\\simso\\.nuget\\packages\\",
-        "outputPath": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\UnitTest\\obj\\",
+        "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
+        "packagesPath": "/Users/reinhardt/.nuget/packages/",
+        "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\simso\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -171,8 +171,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
-                "projectPath": "D:\\Skole\\SEM3\\VikarTinderSEP\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj"
+              "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj": {
+                "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj"
               }
             }
           }
@@ -228,7 +228,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
         }
       }
     }
