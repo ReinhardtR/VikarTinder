@@ -8,7 +8,6 @@ import com.example.businessserver.services.implementations.AuthServiceImpl;
 import com.example.businessserver.services.utils.JWTUtility;
 import com.example.businessserver.services.utils.UserSaltHolder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -16,7 +15,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Arrays;
 import java.util.regex.Pattern;
@@ -80,13 +78,24 @@ public class AuthLogicImpl extends LogicDaddy implements AuthLogic {
     }
 
     @Override
-    public void getEmployerInfo(GetEmployerInfoParamsDTO getEmployerInfoParamsDTO) throws DTOException {
+    public EmployerInfoDTO getEmployerInfo(GetUserInfoParamsDTO getEmployerInfoParamsDTO) throws DTOException {
         objectNullCheck(getEmployerInfoParamsDTO, "employerInfoParams");
         objectNullCheck(getEmployerInfoParamsDTO.getRole(), "Role");
         checkId(getEmployerInfoParamsDTO.getId());
         if (!getEmployerInfoParamsDTO.getRole().equals(LoginUserResponseDTO.Role.EMPLOYER))
             throw new DTOOutOfBoundsException("Wrong role");
-        userService.getEmployerInfo(getEmployerInfoParamsDTO);
+        return userService.getEmployerInfo(getEmployerInfoParamsDTO);
+    }
+
+    @Override
+    public SubstituteInfoDTO getSubstituteInfo(GetUserInfoParamsDTO getUserInfoParamsDTO) throws DTOException {
+        objectNullCheck(getUserInfoParamsDTO, "substituteInfoParams");
+        objectNullCheck(getUserInfoParamsDTO.getRole(), "Role");
+        checkId(getUserInfoParamsDTO.getId());
+        if(!getUserInfoParamsDTO.getRole().equals(LoginUserResponseDTO.Role.EMPLOYER))
+            throw new DTOOutOfBoundsException("Wrong role");
+        userService.getSubstituteInfo(getUserInfoParamsDTO);
+        return null;
     }
 
     public void checkAge(LocalDate dob) throws DTOOutOfBoundsException {

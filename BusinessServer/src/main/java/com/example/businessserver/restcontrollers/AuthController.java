@@ -54,11 +54,21 @@ public class AuthController {
 		authLogic.signUpSubstitute(substituteRequest);
 	}
 
-	@GetMapping("/EmployerInfo/{id}{role}")
-	public void getEmployerInformation(@PathVariable int id, @PathVariable LoginUserResponseDTO.Role role)
+	@GetMapping("/EmployerInfo/{id}")
+	public EmployerInfoDTO getEmployerInformation(@PathVariable int id)
 	{
 		try {
-			authLogic.getEmployerInfo(new GetEmployerInfoParamsDTO(id, role));
+			return authLogic.getEmployerInfo(new GetUserInfoParamsDTO(id, LoginUserResponseDTO.Role.EMPLOYER));
+		} catch (DTOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@GetMapping("/SubstituteInfo/{id}")
+	public SubstituteInfoDTO getSubstituteInformation(@PathVariable int id)
+	{
+		try {
+			return authLogic.getSubstituteInfo(new GetUserInfoParamsDTO(id, LoginUserResponseDTO.Role.SUBSTITUTE));
 		} catch (DTOException e) {
 			throw new RuntimeException(e);
 		}
