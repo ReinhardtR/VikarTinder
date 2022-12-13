@@ -1,19 +1,16 @@
-using System.Net.Http.Headers;
 using System.Security.Claims;
-using HttpClients.Services.Interfaces;
-using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace HttpClients.Services;
 
-public class JwtAuthService : IAuthService
+public class AuthService
 {
     // cache the token
     public static string? Jwt { get; private set; } = "";
 
     private readonly IGeneratedClient _client;
     
-    public JwtAuthService(IGeneratedClient client)
+    public AuthService(IGeneratedClient client)
     {
         _client = client;
     }

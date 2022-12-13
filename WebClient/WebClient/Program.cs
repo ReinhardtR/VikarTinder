@@ -1,6 +1,5 @@
 using HttpClients;
 using HttpClients.Services;
-using HttpClients.Services.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -18,7 +17,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped<HttpClient>();
 builder.Services.AddScoped<IGeneratedClient, GeneratedClient>();
 
-builder.Services.AddScoped<IAuthService, JwtAuthService>();
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ChatService>();
 builder.Services.AddScoped<JobConfirmationService>();
 builder.Services.AddScoped<MatchingService>();

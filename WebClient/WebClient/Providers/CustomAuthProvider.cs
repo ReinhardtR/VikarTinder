@@ -1,14 +1,14 @@
 using System.Security.Claims;
-using HttpClients.Services.Interfaces;
+using HttpClients.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace WebClient.Providers;
 
 public class CustomAuthProvider : AuthenticationStateProvider
 {
-    private readonly IAuthService _authService;
+    private readonly AuthService _authService;
 
-    public CustomAuthProvider(IAuthService authService)
+    public CustomAuthProvider(AuthService authService)
     {
         _authService = authService;
         _authService.OnAuthStateChanged += AuthStateChanged;

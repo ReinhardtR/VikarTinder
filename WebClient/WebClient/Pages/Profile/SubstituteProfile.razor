@@ -1,8 +1,8 @@
-@page "/arbejdsudgiver/{ProfileUserId:int}"
+@page "/vikar/{ProfileUserId:int}"
 @using WebClient.Utils
-@using HttpClients.Services.Interfaces
 @using HttpClients
-@inject IAuthService AuthService
+@using HttpClients.Services
+@inject AuthService AuthService
 @attribute [Authorize]
 
 @if (profile == null && errorLabel == null)
@@ -16,13 +16,21 @@ else if (errorLabel != null)
 else if (profile != null)
 {
     <MudStack Spacing="4">
-        <MudStack Spacing="8" Row="true">
+        <MudStack Spacing="2" Row="true" Justify="Justify.Center" AlignItems="AlignItems.Center">
             <MudAvatar Size="Size.Medium" Color="Color.Secondary">@profile.FirstName[0]</MudAvatar>
             <MudText Typo="Typo.h6">@profile.FirstName @profile.LastName</MudText>
         </MudStack>
 
-        <MudStack Row="true" Spacing="4">
-            <MudText>@profile.Workplace - @profile.Title</MudText>
+        <MudStack Spacing="1">
+            <MudText Typo="Typo.caption">Bio</MudText>
+            <MudPaper Width="100%" Class="pa-4">
+                <MudText>@profile.Bio</MudText>
+            </MudPaper>
+        </MudStack>
+        
+        <MudStack Spacing="4">
+            <MudText>@(DateTime.Today.Year - profile.BirthDate.Year) år gammel</MudText>
+            <MudText>@profile.Address</MudText>
         </MudStack>
     </MudStack>
 }
@@ -35,7 +43,7 @@ else if (profile != null)
     [Parameter]
     public int ProfileUserId { get; set; }
 
-    private EmployerInfoDTO? profile;
+    private SubstituteInfoDTO? profile;
     private string? errorLabel;
     private bool isEditable = false;
     
@@ -48,7 +56,7 @@ else if (profile != null)
     {
         try
         {
-            profile = await AuthService.GetEmployerInfoAsync(ProfileUserId);
+            profile = await AuthService.GetSubstituteInfoAsync(ProfileUserId);
 
             AuthenticationState authState = await AuthState;
             int currentUserId = AuthClaims.GetUserId(authState);

@@ -1,8 +1,8 @@
 @page "/opret/vikar"
 @using System.ComponentModel.DataAnnotations
 @using HttpClients
-@using HttpClients.Services.Interfaces
-@inject IAuthService AuthService
+@using HttpClients.Services
+@inject AuthService AuthService
 @inject NavigationManager NavigationManager
 @inject ISnackbar Snackbar
 
@@ -22,15 +22,14 @@
                         <MudTextField Label="Fornavn" Variant="Variant.Outlined" @bind-Value="formModel.FirstName" For="() => formModel.FirstName"/>
                         <MudTextField Label="Efternavn" Variant="Variant.Outlined" @bind-Value="formModel.LastName" For="() => formModel.LastName"/>
                     </MudStack>
-
-                    <MudTextField Label="Email" Variant="Variant.Outlined" InputType="InputType.Email" @bind-Value="formModel.Email" For="() => formModel.Email"/>
                     
-                    <MudDatePicker Label="Fødselsdato" PickerVariant="PickerVariant.Dialog" Editable="true" @bind-Date="formModel.BirthDate" For="() => formModel.BirthDate" MaxDate="@DateTime.Now.AddYears(-18)" />
+                    <MudDatePicker Label="Fødselsdato" PickerVariant="PickerVariant.Dialog" Variant="Variant.Outlined" Editable="true" @bind-Date="formModel.BirthDate" For="() => formModel.BirthDate" MaxDate="@DateTime.Now.AddYears(-18)" />
                     
                     <MudTextField Label="Adresse" Variant="Variant.Outlined" @bind-Value="formModel.Address" For="() => formModel.Address"/>
 
                     <MudTextField Label="Bio" Variant="Variant.Outlined" @bind-Value="formModel.Bio" For="() => formModel.Bio"/>
 
+                    <MudTextField Label="Email" Variant="Variant.Outlined" InputType="InputType.Email" @bind-Value="formModel.Email" For="() => formModel.Email"/>
                     <MudTextField Label="Password" Variant="Variant.Outlined" InputType="InputType.Password" @bind-Value="formModel.Password" For="() => formModel.Password"/>
                     <MudTextField Label="Gentag Password" Variant="Variant.Outlined" InputType="InputType.Password" @bind-Value="formModel.ConfirmPassword" For="() => formModel.ConfirmPassword"/>
 
