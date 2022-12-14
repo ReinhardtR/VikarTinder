@@ -38,7 +38,7 @@ public class DataContext : DbContext
         
         // Explicit many to many relationships
         modelBuilder.Entity<Substitute>()
-            .HasMany(p => p.Positions)
+            .HasMany(p => p.Gigs)
             .WithMany(p => p.Substitutes)
             .UsingEntity<GigSubstitute>(
                 j => j

@@ -63,7 +63,7 @@ class MatchServiceFactoryTest {
 																		createMatchingSubstitutes(1)
 														)
 														.getPossibleMatches().size()
-										, "List should contain 1 mtach"),
+										, "List should contain 1 match"),
 						() -> assertEquals(
 										5,
 										MatchServiceFactory.substituteMatchingDTOs(
