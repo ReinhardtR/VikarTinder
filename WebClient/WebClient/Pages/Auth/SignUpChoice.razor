@@ -4,7 +4,7 @@
 <MudStack Spacing="4" Justify="Justify.Center" AlignItems="AlignItems.Center">
     <MudText Typo="Typo.h5">Jeg vil oprette mig som</MudText>
     <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="NavigateToRegisterSubstitute">Vikar</MudButton>
-    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="NavigateToRegisterEmployer">Arbejdsudgiver</MudButton>
+    <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="NavigateToRegisterEmployer">Arbejdsgiver</MudButton>
 </MudStack>
 
 @code {
@@ -16,7 +16,7 @@
     
     private void NavigateToRegisterEmployer()
     {
-        NavigationManager.NavigateTo("/opret/arbejdsudgiver");
+        NavigationManager.NavigateTo("/opret/arbejdsgiver");
     }
     
 }
