@@ -5578,39 +5578,32 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\simon\\.nuget\\packages\\": {},
-    "D:\\Visual studio\\Shared\\NuGetPackages": {}
+    "/Users/reinhardt/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
+      "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
       "projectName": "UnitTest",
-      "projectPath": "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\UnitTest.csproj",
-      "packagesPath": "C:\\Users\\simon\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\UnitTest\\obj\\",
+      "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/UnitTest.csproj",
+      "packagesPath": "/Users/reinhardt/.nuget/packages/",
+      "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/UnitTest/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "D:\\Visual studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\simon\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
-              "projectPath": "C:\\Users\\simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj"
+            "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj": {
+              "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj"
             }
           }
         }
@@ -5656,7 +5649,8 @@
           "net47",
           "net471",
           "net472",
-          "net48"
+          "net48",
+          "net481"
         ],
         "assetTargetFallback": true,
         "warn": true,
@@ -5665,7 +5659,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
       }
     }
   }

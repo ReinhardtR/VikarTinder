@@ -230,11 +230,12 @@ public class AuthServiceFactory
     {
         try
         {
-            if (updateUserRequest == null ||updateUserRequest.Id == 0) 
+            if (updateUserRequest == null || updateUserRequest.Id == 0) 
                 throw new FactoryNullReference("UpdateUserRequest object or Id");
 
             return new Substitute
             {
+                Id = updateUserRequest.Id,
                 FirstName = updateUserRequest.User.FirstName,
                 LastName = updateUserRequest.User.LastName,
                 BirthDate = updateUserRequest.User.Sub.BirthDate.ToDateTime(),
@@ -258,6 +259,7 @@ public class AuthServiceFactory
 
             return new Employer
             {
+                Id = updateUserRequest.Id,
                 FirstName = updateUserRequest.User.FirstName,
                 LastName = updateUserRequest.User.LastName,
                 Title = updateUserRequest.User.Emp.Title,

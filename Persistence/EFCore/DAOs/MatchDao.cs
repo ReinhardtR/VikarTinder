@@ -117,6 +117,13 @@ public class MatchDao : IMatchDao
         
         dto.WasAMatch = check.WasAMatch;
         dto.GigId = check.WasAMatch ? check.GigId : 0;
+
+        if (dto.WasAMatch)
+        {
+            // Create chat for the match
+            Console.WriteLine("CREATING CHAT");
+            await _chatDao.CreateChatAsync(dto.GigId, dto.EmployerId, dto.SubstituteId);
+        }
         
         return dto;
     }
@@ -211,6 +218,8 @@ public class MatchDao : IMatchDao
             && joined.empSubs.EmployerId == dto.EmployerId
             && joined.gigSubs.SubstituteId == dto.SubstituteId
         );
+        
+        Console.WriteLine("RESULT " + result);
 
         CheckMatchDto checkDto = result != null
             ? new CheckMatchDto
@@ -222,15 +231,7 @@ public class MatchDao : IMatchDao
             {
                 WasAMatch = false
             };
-
-        if (!checkDto.WasAMatch) return checkDto;
         
-        // Create chat for the match
-        int substituteId = dto.SubstituteId;
-        int employerId = dto.EmployerId;
-        int gigId = checkDto.GigId;
-        await _chatDao.CreateChatAsync(gigId, employerId, substituteId);
-
         return checkDto;
     }
     

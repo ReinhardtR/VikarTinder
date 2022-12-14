@@ -1817,7 +1817,7 @@ namespace HttpClients
                 throw new System.ArgumentNullException("role");
 
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/auth/User/{id}{role}");
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/auth/User/{id}/{role}");
             urlBuilder_.Replace("{id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
             urlBuilder_.Replace("{role}", System.Uri.EscapeDataString(ConvertToString(role, System.Globalization.CultureInfo.InvariantCulture)));
 

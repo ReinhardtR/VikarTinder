@@ -48,6 +48,9 @@
                        <MudMenuItem Icon="@Icons.Filled.Person" OnClick="NavigateToProfile">
                            Se profil
                        </MudMenuItem>
+                      <MudMenuItem Icon="@Icons.Filled.Edit" OnClick="NavigateToEditProfile">
+                          Rediger profil
+                      </MudMenuItem>
                        <MudMenuItem Icon="@Icons.Filled.Logout" OnClick="LogoutHandler">
                            Log ud
                        </MudMenuItem>
@@ -89,12 +92,17 @@
         switch (role)
         {
             case AuthRoles.Employer:
-                NavigationManager.NavigateTo($"/arbejdsugiver/{userId}");
+                NavigationManager.NavigateTo($"/arbejdsudgiver/{userId}");
                 break;
             case AuthRoles.Substitute:
                 NavigationManager.NavigateTo($"/vikar/{userId}");
                 break;
         }
+    }
+
+    private void NavigateToEditProfile()
+    {
+        NavigationManager.NavigateTo("/rediger-profil");
     }
     
     private void NavigateToHome()

@@ -1,5 +1,117 @@
-<h3>EditSubstituteProfile</h3>
+@using System.ComponentModel.DataAnnotations
+@using HttpClients
+@using HttpClients.Services
+@using WebClient.Utils
+@inject AuthService AuthService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<MudPaper Class="pa-16 mx-auto" MaxWidth="600px">
+    <EditForm Model="formModel" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator/>
+
+        <MudStack Spacing="6">
+            <MudText Typo="Typo.h5" Align="Align.Center">Rediger din profil</MudText>
+
+            <MudStack Row="true" Spacing="4">
+                <MudTextField Label="Fornavn" Variant="Variant.Outlined" @bind-Value="formModel.FirstName" For="() => formModel.FirstName"/>
+                <MudTextField Label="Efternavn" Variant="Variant.Outlined" @bind-Value="formModel.LastName" For="() => formModel.LastName"/>
+            </MudStack>
+            
+            <MudDatePicker Label="Fødselsdato" PickerVariant="PickerVariant.Dialog" Variant="Variant.Outlined" Editable="true" @bind-Date="formModel.BirthDate" For="() => formModel.BirthDate" MaxDate="@DateTime.Now.AddYears(-18)" />
+            
+            <MudTextField Label="Adresse" Variant="Variant.Outlined" @bind-Value="formModel.Address" For="() => formModel.Address"/>
+
+            <MudTextField Label="Bio" Variant="Variant.Outlined" @bind-Value="formModel.Bio" For="() => formModel.Bio"/>
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Opdater profil</MudButton>
+            
+            @if (apiError != null)
+            {
+                <MudAlert Severity="Severity.Error">
+                    @apiError
+                </MudAlert>
+            }
+            
+            <MudButton Color="Color.Error" Variant="Variant.Outlined" OnClick="OpenDeleteProfileDialog">Slet din profil</MudButton>
+        </MudStack>
+    </EditForm>
+</MudPaper>
 
 @code {
+    [CascadingParameter] 
+    public Task<AuthenticationState> AuthState { get; set; }
     
+    public class FormModel
+    {
+        [Required]
+        [StringLength(100, MinimumLength = 1)]
+        public string FirstName { get; set; }
+        
+        [Required]
+        [StringLength(100, MinimumLength = 1)]
+        public string LastName { get; set; }
+
+        [Required]
+        public DateTime? BirthDate { get; set; } // is nullable for the datepicker to work
+        
+        [Required]
+        public string Address { get; set; }
+        
+        public string? Bio { get; set; }
+    }
+
+    private FormModel formModel = new();
+    private string? apiError;
+    
+    protected override async Task OnInitializedAsync()
+    {    
+        AuthenticationState authState = await AuthState;
+        int userId = AuthClaims.GetUserId(authState);
+
+        SubstituteInfoDTO employerInfo = await AuthService.GetSubstituteInfoAsync(userId);
+        
+        formModel.FirstName = employerInfo.FirstName;
+        formModel.LastName = employerInfo.LastName;
+        formModel.BirthDate = employerInfo.BirthDate;
+        formModel.Address = employerInfo.Address;
+        formModel.Bio = employerInfo.Bio;
+    }
+    
+    private async void OnValidSubmit()
+    {
+        apiError = null;
+
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            int userId = AuthClaims.GetUserId(authState);
+            
+            await AuthService.UpdateSubstituteProfile(new UpdateSubstituteInfoDTO()
+            {
+                Id = userId,
+                UpdatedInfo = new SubstituteInfoDTO()
+                {
+                    FirstName = formModel.FirstName,
+                    LastName = formModel.LastName,
+                    BirthDate = formModel.BirthDate!.Value,
+                    Address = formModel.Address,
+                    Bio = formModel.Bio
+                }
+            });
+            
+            Snackbar.Add("Din profil er opdateret", Severity.Success);
+        }
+        catch (Exception e)
+        {
+            apiError = e.Message;
+        }
+
+        StateHasChanged();
+    }
+
+    private void OpenDeleteProfileDialog()
+    {
+        DialogService.Show<DeleteProfileDialog>();
+    }
 }

@@ -29,8 +29,7 @@ public class AuthController {
 	}
 
 	@GetMapping("/EmployerInfo/{id}")
-	public EmployerInfoDTO getEmployerInformation(@PathVariable int id)
-	{
+	public EmployerInfoDTO getEmployerInformation(@PathVariable int id) {
 		try {
 			return authLogic.getEmployerInfo(new GetUserInfoParamsDTO(id, LoginUserResponseDTO.Role.EMPLOYER));
 		} catch (DTOException e) {
@@ -39,8 +38,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/EmployerInfo")
-	public void updateEmployerInformation(@RequestBody UpdateEmployerInfoDTO updateRequest)
-	{
+	public void updateEmployerInformation(@RequestBody UpdateEmployerInfoDTO updateRequest) {
 		try {
 			authLogic.updateEmployerInfo(updateRequest);
 		} catch (DTOException e) {
@@ -49,8 +47,7 @@ public class AuthController {
 	}
 
 	@GetMapping("/SubstituteInfo/{id}")
-	public SubstituteInfoDTO getSubstituteInformation(@PathVariable int id)
-	{
+	public SubstituteInfoDTO getSubstituteInformation(@PathVariable int id) {
 		try {
 			return authLogic.getSubstituteInfo(new GetUserInfoParamsDTO(id, LoginUserResponseDTO.Role.SUBSTITUTE));
 		} catch (DTOException e) {
@@ -59,8 +56,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/SubstituteInfo")
-	public void updateSubstituteInformation(@RequestBody UpdateSubstituteInfoDTO updateRequest)
-	{
+	public void updateSubstituteInformation(@RequestBody UpdateSubstituteInfoDTO updateRequest) {
 		try {
 			authLogic.updateSubstituteInfo(updateRequest);
 		} catch (DTOException e) {
@@ -68,9 +64,8 @@ public class AuthController {
 		}
 	}
 
-	@DeleteMapping("/User/{id}{role}")
-	public void deleteUser(@PathVariable int id, @PathVariable LoginUserResponseDTO.Role role)
-	{
+	@DeleteMapping("/User/{id}/{role}")
+	public void deleteUser(@PathVariable int id, @PathVariable LoginUserResponseDTO.Role role) {
 		try {
 			authLogic.deleteUser(new DeleteRequestDTO(id, role));
 		} catch (DTOException e) {

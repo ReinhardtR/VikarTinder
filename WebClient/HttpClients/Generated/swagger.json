@@ -565,7 +565,7 @@
         }
       }
     },
-    "/auth/User/{id}{role}": {
+    "/auth/User/{id}/{role}": {
       "delete": {
         "tags": [
           "auth-controller"

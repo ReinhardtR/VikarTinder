@@ -45,7 +45,6 @@ else if (profile != null)
 
     private SubstituteInfoDTO? profile;
     private string? errorLabel;
-    private bool isEditable = false;
     
     protected override async Task OnInitializedAsync()
     {
@@ -57,11 +56,6 @@ else if (profile != null)
         try
         {
             profile = await AuthService.GetSubstituteInfoAsync(ProfileUserId);
-
-            AuthenticationState authState = await AuthState;
-            int currentUserId = AuthClaims.GetUserId(authState);
-
-            isEditable = currentUserId == ProfileUserId;
         }
         catch
         {

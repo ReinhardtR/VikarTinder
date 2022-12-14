@@ -1,0 +1,50 @@
+@using WebClient.Utils
+@using HttpClients.Services
+@inject AuthService AuthService
+@inject ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+<MudDialog>
+    <DialogContent>
+        Er du sikker på at du vile slette din profil?
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" Variant="Variant.Outlined" OnClick="CancelDeleteHandler">Annuller</MudButton>
+        <MudButton Color="Color.Error" Variant="Variant.Filled" OnClick="ConfirmDeleteHandler">Ja</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    
+    [CascadingParameter]
+    public MudDialogInstance MudDialog { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthState { get; set; } = null!;
+    
+    private void CancelDeleteHandler()
+    {
+        MudDialog.Cancel();
+    }
+    
+    private async Task ConfirmDeleteHandler()
+    {
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            int userId = AuthClaims.GetUserId(authState);
+            string role = AuthClaims.GetRole(authState);
+            
+            await AuthService.DeleteUser(userId, role);
+            
+            Snackbar.Add("Din profil er blevet slettet", Severity.Success);
+            MudDialog.Close(DialogResult.Ok(true));
+            NavigationManager.NavigateTo("/");
+        }
+        catch (Exception e)
+        {
+            Snackbar.Add("Noget gik galt", Severity.Error);
+        }
+    }
+
+}

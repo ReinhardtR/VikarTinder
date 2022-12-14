@@ -1,10 +1,11 @@
 @using System.Security.Claims
-<MudStack>
-    <MudPaper Class="@GetMessageClasses()" Style="@GetMessageStyles()">
+@using System.Globalization
+<MudStack Class="@GetSideClass()">
+    <MudPaper Class="pa-3" Style="@GetMessageStyles()">
         <MudText>@Content</MudText>
     </MudPaper>
     <MudText Typo="Typo.caption" Style="color: lightgray">
-        @DateTime.Now.Subtract(SentAt).ToString()
+        @SentAt.ToLocalTime().ToString(CultureInfo.CurrentCulture)
     </MudText>
 </MudStack>
   
@@ -21,13 +22,11 @@
     [Parameter]
     public DateTime SentAt { get; set; }
 
-    private string GetMessageClasses()
+    private string GetSideClass()
     {
-        const string baseClasses = "pa-3";
-        string uniqueClasses = AuthorId == UserId ? "ml-auto" : "mr-auto";
-        return $"{baseClasses} {uniqueClasses}";
+        return AuthorId == UserId ? "ml-auto align-end" : "mr-auto align-start";
     }
-
+    
     private string GetMessageStyles()
     {
         const string baseStyles = "max-width: 80%; word-break: break-all;";

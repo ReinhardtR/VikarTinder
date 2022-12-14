@@ -28,6 +28,24 @@ public class AuthService
         UpdateJwtToken(jwtResponse.JwtToken);
     }
 
+    public async Task UpdateEmployerProfile(UpdateEmployerInfoDTO dto)
+    {
+        await _client.UpdateEmployerInformationAsync(dto);
+    }
+
+    public async Task UpdateSubstituteProfile(UpdateSubstituteInfoDTO dto)
+    {
+        await _client.UpdateSubstituteInformationAsync(dto);
+    }
+
+    public async Task DeleteUser(int userId, string role)
+    {
+        Role roleAsEnum = Enum.Parse<Role>(role);
+        
+        await _client.DeleteUserAsync(userId, roleAsEnum);
+        await LogoutAsync();
+    }
+    
     public Task LogoutAsync()
     {
         UpdateJwtToken(null);

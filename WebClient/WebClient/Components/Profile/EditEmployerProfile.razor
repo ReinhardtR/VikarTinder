@@ -1,5 +1,110 @@
-<h3>EditEmployerProfile</h3>
+@using System.ComponentModel.DataAnnotations
+@using HttpClients
+@using HttpClients.Services
+@using WebClient.Utils
+@inject AuthService AuthService
+@inject ISnackbar Snackbar
+@inject IDialogService DialogService
+
+<MudPaper Class="pa-16 mx-auto" MaxWidth="600px">
+    <EditForm Model="formModel" OnValidSubmit="OnValidSubmit">
+        <DataAnnotationsValidator/>
+
+        <MudStack Spacing="6">
+            <MudText Typo="Typo.h5" Align="Align.Center">Rediger din profil</MudText>
+
+            <MudStack Row="true" Spacing="4">
+                <MudTextField Label="Fornavn" Variant="Variant.Outlined" @bind-Value="formModel.FirstName" For="() => formModel.FirstName"/>
+                <MudTextField Label="Efternavn" Variant="Variant.Outlined" @bind-Value="formModel.LastName" For="() => formModel.LastName"/>
+            </MudStack>
+
+            <MudTextField Label="Arbejdstitel" Variant="Variant.Outlined" @bind-Value="formModel.Title" For="() => formModel.Title"/>
+            <MudTextField Label="Arbejdssted" Variant="Variant.Outlined" @bind-Value="formModel.Workplace" For="() => formModel.Workplace"/>
+
+            <MudButton Color="Color.Primary" Variant="Variant.Filled" ButtonType="ButtonType.Submit">Opdater profil</MudButton>
+
+            @if (apiError != null)
+            {
+                <MudAlert Severity="Severity.Error">
+                    @apiError
+                </MudAlert>
+            }
+            
+            <MudButton Color="Color.Error" Variant="Variant.Outlined" OnClick="OpenDeleteProfileDialog">Slet din profil</MudButton>
+        </MudStack>
+    </EditForm>
+</MudPaper>
 
 @code {
+    [CascadingParameter] 
+    public Task<AuthenticationState> AuthState { get; set; }
     
+    public class FormModel
+    {
+        [Required]
+        [StringLength(100, MinimumLength = 1)]
+        public string FirstName { get; set; }
+        
+        [Required]
+        [StringLength(100, MinimumLength = 1)]
+        public string LastName { get; set; }
+        
+        [Required]
+        public string Title { get; set; }
+        
+        [Required]
+        public string Workplace { get; set; }
+    }
+
+    private FormModel formModel = new();
+    private string? apiError;
+    
+    protected override async Task OnInitializedAsync()
+    {    
+        AuthenticationState authState = await AuthState;
+        int userId = AuthClaims.GetUserId(authState);
+
+        EmployerInfoDTO employerInfo = await AuthService.GetEmployerInfoAsync(userId);
+        
+        formModel.FirstName = employerInfo.FirstName;
+        formModel.LastName = employerInfo.LastName;
+        formModel.Title = employerInfo.Title;
+        formModel.Workplace = employerInfo.Workplace;
+    }
+    
+    private async void OnValidSubmit()
+    {
+        apiError = null;
+
+        try
+        {
+            AuthenticationState authState = await AuthState;
+            int userId = AuthClaims.GetUserId(authState);
+            
+            await AuthService.UpdateEmployerProfile(new UpdateEmployerInfoDTO()
+            {
+                Id = userId,
+                UpdatedInfo = new EmployerInfoDTO()
+                {
+                    FirstName = formModel.FirstName,
+                    LastName = formModel.LastName,
+                    Title = formModel.Title,
+                    Workplace = formModel.Workplace
+                }
+            });
+            
+            Snackbar.Add("Din profil er opdateret", Severity.Success);
+        }
+        catch (Exception e)
+        {
+            apiError = e.Message;
+        }
+
+        StateHasChanged();
+    }
+    
+    private void OpenDeleteProfileDialog()
+    {
+        DialogService.Show<DeleteProfileDialog>();
+    }
 }

@@ -77,12 +77,14 @@ public class AuthDao : IAuthDao
 
     public async Task<User> UpdateUserAsync(User user)
     {
-        //Tjek db her for at se om den har opdateret det hele korrekt
-        
+        Console.WriteLine("User id: " + user.Id);
         User? userToUpdate = await _dataContext.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
-        if (userToUpdate == null)
-            throw new DaoNullReference("User not found");
         
+        if (userToUpdate == null)
+        {
+            throw new DaoNullReference("User not found");
+        }
+
         if (userToUpdate is Substitute)
         {
             Substitute newSubstituteData = (Substitute)user;
@@ -99,7 +101,8 @@ public class AuthDao : IAuthDao
             await _dataContext.SaveChangesAsync();
             return substituteToUpdate;
         }
-        if(userToUpdate is Employer)
+        
+        if (userToUpdate is Employer)
         {
             Employer newEmployerData = (Employer)user;
             Employer employerToUpdate = (Employer)userToUpdate;
