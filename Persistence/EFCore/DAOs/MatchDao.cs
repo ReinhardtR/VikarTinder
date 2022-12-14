@@ -59,8 +59,6 @@ public class MatchDao : IMatchDao
         if (employer == null)
             throw new DaoNullReference("Employer not found");
         
-        Console.WriteLine(employer.Id + " EMPLOYER");
-
         Substitute? substitute = await GetSubstituteById(dto.MatchId);
         if (substitute == null)
             throw new DaoNullReference("Substitute not found");
@@ -120,8 +118,6 @@ public class MatchDao : IMatchDao
 
         if (dto.WasAMatch)
         {
-            // Create chat for the match
-            Console.WriteLine("CREATING CHAT");
             await _chatDao.CreateChatAsync(dto.GigId, dto.EmployerId, dto.SubstituteId);
         }
         

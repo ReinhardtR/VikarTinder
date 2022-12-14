@@ -38,18 +38,16 @@ public class MatchingService : Persistence.MatchingService.MatchingServiceBase
     
     public override async Task<MatchValidationResponse> SendMatchFromEmployer(MatchRequest request, ServerCallContext context)
     {
-        Console.WriteLine("IDs: [Employer]:" + request.CurrentUser + " [Substitute]:" + request.ToBeMatchedId);
-        
-        //DatabaseKald for at matche
-        IdsForMatchDto matchedSubstitute = await _dao.MatchingSubstitute(MatchFactory.CreateToBeMatchedDto(
-            request.CurrentUser,
-            request.ToBeMatchedId,
-            request.WantToMatch));
+        IdsForMatchDto matchedSubstitute = await _dao.MatchingSubstitute(
+            MatchFactory.CreateToBeMatchedDto(
+                request.CurrentUser,
+                request.ToBeMatchedId,
+                request.WantToMatch
+            )
+        );
    
-        //Conversion
         MatchValidationResponse validation = MatchFactory.ConvertToValidation(matchedSubstitute);
         
-        Console.WriteLine("Conversion success: [SUB ID]"+ validation.SubstituteId + "[ISMATCHED]" + validation.IsMatched);
         return validation;
     }
 
