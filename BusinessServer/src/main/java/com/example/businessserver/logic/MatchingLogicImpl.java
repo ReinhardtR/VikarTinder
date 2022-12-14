@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MatchingLogicImpl implements MatchingLogic {
+public class MatchingLogicImpl extends BasicLogic implements MatchingLogic {
 	@Autowired
 	private MatchingService service;
 
@@ -44,15 +44,5 @@ public class MatchingLogicImpl implements MatchingLogic {
 		objectNullCheck(matchRequest, "Request");
 		checkId(matchRequest.getCurrentUser());
 		checkId(matchRequest.getMatchId());
-	}
-
-	public void checkId(int id) throws DTOOutOfBoundsException {
-		if (id < 1)
-			throw new DTOOutOfBoundsException("Id cannot be < 1!");
-	}
-
-	public void objectNullCheck(Object obj, String subjectName) throws DTONullPointerException {
-		if (obj == null)
-			throw new DTONullPointerException(subjectName + " cannot be Null!");
 	}
 }

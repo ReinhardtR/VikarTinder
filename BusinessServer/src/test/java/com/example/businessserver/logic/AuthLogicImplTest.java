@@ -44,11 +44,13 @@ class AuthLogicImplTest {
     @Test
     void test_checkPassword()
     {
-        String password1 = "Test_test";
-        String password2 = "test_tEst";
+        String passwordNormal = "Test_test";
+        String passwordFindCapInString = "test_tEst";
+        String passwordMinLength = "test_F";
         try {
-            testLogic.checkPassword(password1);
-            testLogic.checkPassword(password2);
+            testLogic.checkPassword(passwordNormal);
+            testLogic.checkPassword(passwordFindCapInString);
+            testLogic.checkPassword(passwordMinLength);
         } catch (DTOException e) {
             fail(e.getMessage() + "\nShould be a legal password");
         }
@@ -58,12 +60,12 @@ class AuthLogicImplTest {
     void test_checkPassword_DTOOutOfBoundsException()
     {
         String passwordNoUppercase = "test_test";
-        String passwordShort = "test";
+        String passwordShort = "Test";
         String passwordEmpty = "";
 
         assertAll(
                 ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkPassword(passwordNoUppercase), "Sees if it can detect no uppercase's"),
-                ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkPassword(passwordShort)),
+                ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkPassword(passwordShort), "Even though theres a big letter, passwords to short"),
                 ()-> assertThrows(DTOOutOfBoundsException.class, ()-> testLogic.checkPassword(passwordEmpty))
                 );
     }
