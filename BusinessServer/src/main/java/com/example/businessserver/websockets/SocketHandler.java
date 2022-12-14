@@ -1,7 +1,7 @@
 package com.example.businessserver.websockets;
 
-import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
 import com.example.businessserver.dtos.chat.message.MessageDTO;
+import com.example.businessserver.dtos.jobconfirmation.JobConfirmationDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,7 +48,6 @@ public class SocketHandler extends TextWebSocketHandler {
 		}
 	}
 
-	// Called by the RestController when a message is sent
 	public void sendJobConfirmation(JobConfirmationDTO jobConfirmation) {
 		if (chatMap.get(jobConfirmation.getChatId()) == null) {
 			return;

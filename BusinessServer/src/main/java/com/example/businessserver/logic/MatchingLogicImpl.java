@@ -2,8 +2,6 @@ package com.example.businessserver.logic;
 
 import com.example.businessserver.dtos.matching.*;
 import com.example.businessserver.exceptions.DTOException;
-import com.example.businessserver.exceptions.DTONullPointerException;
-import com.example.businessserver.exceptions.DTOOutOfBoundsException;
 import com.example.businessserver.logic.interfaces.MatchingLogic;
 import com.example.businessserver.services.interfaces.MatchingService;
 import org.springframework.beans.factory.annotation.Autowired;

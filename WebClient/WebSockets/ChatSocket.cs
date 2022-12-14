@@ -8,6 +8,7 @@ namespace WebSockets;
 public class ChatSocket
 {
     private const string BaseAddress = "ws://localhost:8080";
+    
     private readonly ClientWebSocket _webSocket;
     private readonly Uri _webSocketUrl;
     
@@ -34,7 +35,7 @@ public class ChatSocket
             }
             else
             {
-                await Task.Delay(100);
+                await Task.Delay(1000);
             }
         }
     }
@@ -49,7 +50,7 @@ public class ChatSocket
             }
             else
             {
-                await Task.Delay(100);
+                await Task.Delay(1000);
             }
         }
     }
@@ -58,20 +59,20 @@ public class ChatSocket
     {
         if (!IsConnected())
         {
-            Console.WriteLine("NEW CONNECTION");
+            // Connect to the WebSocket and join the chat
             await _webSocket.ConnectAsync(_webSocketUrl, CancellationToken.None);
             await JoinChatAsync(chatId);
         } 
         else if (IsConnected() && _currentChatId != chatId)
         {
-            Console.WriteLine("NEW CHAT");
+            // Disconnect, connect and join the new chat
             await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Switching chats", CancellationToken.None);
             await _webSocket.ConnectAsync(_webSocketUrl, CancellationToken.None);
             await JoinChatAsync(chatId);
         } 
         else if (IsConnected() && _currentChatId == chatId)
         {
-            Console.WriteLine("ALREADY CONNECTED");
+            // Already connected to the chat
             return;
         }
 
@@ -92,7 +93,9 @@ public class ChatSocket
             {
                 case MessageType.JOB_CONFIRMATION_UPDATE:
                 {
-                    JobConfirmationDTO? jobConfirmationDto = JsonConvert.DeserializeObject<JobConfirmationDTO>(wrapper.Data.ToString());
+                    JobConfirmationDTO? jobConfirmationDto = 
+                        JsonConvert.DeserializeObject<JobConfirmationDTO>(wrapper.Data.ToString());
+                    
                     if (jobConfirmationDto != null) _jobConfirmations.Enqueue(jobConfirmationDto);
                     break;
                 }
