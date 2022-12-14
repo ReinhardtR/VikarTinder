@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj": {}
+    "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {}
   },
   "projects": {
-    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj": {
+    "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj",
+        "projectUniqueName": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj",
         "projectName": "EFCore",
-        "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj",
-        "packagesPath": "/Users/reinhardt/.nuget/packages/",
-        "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/obj/",
+        "projectPath": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj",
+        "packagesPath": "C:\\Users\\Simon\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Simon\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -69,21 +69,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj": {
+    "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj",
+        "projectUniqueName": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
         "projectName": "Persistence",
-        "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/Persistence.csproj",
-        "packagesPath": "/Users/reinhardt/.nuget/packages/",
-        "outputPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/Persistence/obj/",
+        "projectPath": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\Persistence.csproj",
+        "packagesPath": "C:\\Users\\Simon\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\Persistence\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/Users/reinhardt/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Simon\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -95,8 +95,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj": {
-                "projectPath": "/Users/reinhardt/Developer/Repositories/VikarTinder/Persistence/EFCore/EFCore.csproj"
+              "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj": {
+                "projectPath": "C:\\Users\\Simon\\Documents\\GitHub\\VikarTinder\\Persistence\\EFCore\\EFCore.csproj"
               }
             }
           }
@@ -145,7 +145,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

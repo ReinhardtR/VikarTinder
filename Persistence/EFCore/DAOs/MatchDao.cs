@@ -10,6 +10,7 @@ public class MatchDao : IMatchDao
 {
     private readonly DataContext _dataContext;
     private readonly IChatDao _chatDao;
+    private  readonly TimeSpan span= new(1,0,0);
 
     public MatchDao(DataContext dataContext, IChatDao chatDao)
     {
@@ -131,7 +132,6 @@ public class MatchDao : IMatchDao
     public async Task RemoveWhereTimerIsOut(int id, DaoRequestType type)
     {
         DateTime currentDateTime = DateTime.UtcNow;
-        TimeSpan span= new(1,0,0);
 
         switch (type)
         {

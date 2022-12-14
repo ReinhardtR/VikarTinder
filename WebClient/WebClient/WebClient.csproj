@@ -31,13 +31,13 @@
       <_ContentIncludedByDefault Remove="Shared\Matching\MatchingSubstitutes.razor" />
       <_ContentIncludedByDefault Remove="Shared\Profile\EditEmployerProfile.razor" />
       <_ContentIncludedByDefault Remove="Shared\Profile\EditSubstituteProfile.razor" />
+      <_ContentIncludedByDefault Remove="Components\Auth\Login.razor" />
+      <_ContentIncludedByDefault Remove="Components\Auth\SignUpChoice.razor" />
+      <_ContentIncludedByDefault Remove="Components\Auth\SignUpEmployer.razor" />
+      <_ContentIncludedByDefault Remove="Components\Auth\SignUpSubstitute.razor" />
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Components\Auth\Login.razor" />
-      <AdditionalFiles Include="Components\Auth\SignUpChoice.razor" />
-      <AdditionalFiles Include="Components\Auth\SignUpEmployer.razor" />
-      <AdditionalFiles Include="Components\Auth\SignUpSubstitute.razor" />
       <AdditionalFiles Include="Components\Chat\ChatMessage.razor" />
       <AdditionalFiles Include="Components\Chat\ChatsOverview.razor" />
       <AdditionalFiles Include="Components\Chat\GigsOverview.razor" />
