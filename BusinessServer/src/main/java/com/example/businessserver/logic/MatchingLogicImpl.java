@@ -31,13 +31,13 @@ public class MatchingLogicImpl extends BasicLogic implements MatchingLogic {
 	@Override
 	public void gigsMatchRequest(MatchRequestDTO matchRequest) throws DTOException {
 		checkMatch(matchRequest);
-		service.gigsMatchRequest(matchRequest); //Thread når vi når til samling af besked
+		service.gigsMatchRequest(matchRequest);
 	}
 
 	@Override
 	public void substitutesMatchRequest(MatchRequestDTO matchRequest) throws DTOException {
 		checkMatch(matchRequest);
-		service.substitutesMatchRequest(matchRequest); //Thread når vi når til samling af besked
+		service.substitutesMatchRequest(matchRequest);
 	}
 
 	public void checkMatch(MatchRequestDTO matchRequest) throws DTOException {
